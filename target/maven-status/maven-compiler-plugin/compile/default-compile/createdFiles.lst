@@ -1,1 +1,2 @@
-com\airhacks\JAXRSConfiguration.class
+com\acc\apiService\ApiService.class
+com\acc\controller\Controller.class

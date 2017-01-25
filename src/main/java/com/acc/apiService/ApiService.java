@@ -1,4 +1,4 @@
-package com.airhacks;
+package com.acc.apiService;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -7,9 +7,9 @@ import javax.ws.rs.core.Application;
  * Configures a JAX-RS endpoint. Delete this class, if you are not exposing
  * JAX-RS resources in your application.
  *
- * @author airhacks.com
+ * @author acc.com
  */
-@ApplicationPath("resources")
-public class JAXRSConfiguration extends Application {
+@ApplicationPath("api")
+public class ApiService extends Application {
 
 }
