@@ -1,2 +1,6 @@
-com\acc\apiService\ApiService.class
+com\acc\models\Group.class
+com\acc\models\User.class
 com\acc\controller\Controller.class
+com\acc\models\Tag.class
+com\acc\apiService\ApiService.class
+com\acc\models\Problem.class
