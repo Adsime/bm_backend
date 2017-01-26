@@ -1,10 +1,13 @@
 package com.acc.models;
 
+import java.util.List;
+
 /**
  * Created by melsom.adrian on 26.01.2017.
  */
 public class User {
     private String id, firstname, lastname, enterpriseID, email;
+    private List<Tag> tags;
 
     public User(String id, String firstname, String lastname, String enterpriseID, String email) {
         this.id = id;
@@ -52,5 +55,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 }

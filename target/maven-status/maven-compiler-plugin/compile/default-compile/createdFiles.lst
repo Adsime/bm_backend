@@ -1,6 +1,10 @@
-com\acc\models\Group.class
 com\acc\models\User.class
+com\acc\apiService\ApiService.class
+test\database\DbHandler.class
+test\resources\UserControllerUnitTest.class
+com\acc\models\Group.class
 com\acc\controller\Controller.class
 com\acc\models\Tag.class
-com\acc\apiService\ApiService.class
+com\acc\controller\UserController.class
+com\acc\database\DbHandler.class
 com\acc\models\Problem.class
