@@ -1,5 +1,6 @@
 package com.acc.controller;
 
+import com.acc.interfaces.ControllerUserInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.ws.rs.Consumes;
@@ -14,7 +15,7 @@ import javax.ws.rs.core.Response;
  */
 
 @Path("user")
-public class UserController {
+public class UserController implements ControllerUserInterface{
 
     @POST
     @Path("Register")
