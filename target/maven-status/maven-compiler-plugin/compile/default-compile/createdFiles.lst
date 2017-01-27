@@ -1,8 +1,8 @@
 com\acc\models\User.class
+com\acc\interfaces\UserService.class
 com\acc\apiService\ApiService.class
-test\database\DbHandler.class
-test\resources\UserControllerUnitTest.class
 com\acc\models\Group.class
+test\UserControllerMock.class
 com\acc\controller\Controller.class
 com\acc\models\Tag.class
 com\acc\controller\UserController.class

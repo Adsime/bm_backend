@@ -24,6 +24,19 @@ public class Controller {
         return "Pong!";
     }
 
+    @Path("assignments")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAssignments() {
+        System.out.println("GET - assignments");
+        String body = "[\n" +
+                "     {id: 1, problem: \"YOUR MOM\", title: \"oppgave1\", author: this.displayedSupervisorList[0]},\n" +
+                "     {id: 2, problem: \"YOUR DAD\", title: \"oppgave2\", author: this.displayedSupervisorList[0]},\n" +
+                "     {id: 3, problem: \"YOUR HÅKON\", title: \"oppgave3\", author: this.displayedSupervisorList[0]},\n" +
+                "   ]";
+        return Response.accepted(body).header("Access-Control-Allow-Origin", "*").build();
+    }
+
     @Path("supervisors")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,40 +77,6 @@ public class Controller {
 
         return Response.accepted(body).header("Access-Control-Allow-Origin", "*").build();
     }
-
-    /*
-    "[" +
-                "{" +
-                "id: 1," +
-                "firstname: Jostein," +
-                "lastname: Guldal," +
-                "enterpriseid: jostein.guldal," +
-                "tags: supervisor" +
-                "}," +
-                "{" +
-                "id: 2," +
-                "firstname: Joakim," +
-                "lastname: Kartveit," +
-                "enterpriseid: joakim.kartveit," +
-                "tags: supervisor" +
-                "}," +
-                "{" +
-                "id: 3," +
-                "firstname: Simon," +
-                "lastname: Litlehamar," +
-                "enterpriseid: Simon.litlehamar," +
-                "tags: supervisor" +
-                "}," +
-                "{" +
-                "id: 4," +
-                "firstname: Fredrik," +
-                "lastname: Bjørnøy," +
-                "enterpriseid: fredrik.bjornoy," +
-                "tags: supervisor" +
-                "}" +
-                "]";
-     */
-
 
     @Path("post")
     @POST

@@ -1,12 +1,9 @@
 package com.acc.controller;
 
-import com.acc.interfaces.ControllerUserInterface;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -15,7 +12,7 @@ import javax.ws.rs.core.Response;
  */
 
 @Path("user")
-public class UserController implements ControllerUserInterface{
+public class UserController {
 
     @POST
     @Path("Register")
