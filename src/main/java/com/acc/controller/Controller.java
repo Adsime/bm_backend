@@ -29,11 +29,26 @@ public class Controller {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAssignments() {
         System.out.println("GET - assignments");
-        String body = "[\n" +
-                "     {id: 1, problem: \"YOUR MOM\", title: \"oppgave1\", author: this.displayedSupervisorList[0]},\n" +
-                "     {id: 2, problem: \"YOUR DAD\", title: \"oppgave2\", author: this.displayedSupervisorList[0]},\n" +
-                "     {id: 3, problem: \"YOUR HÅKON\", title: \"oppgave3\", author: this.displayedSupervisorList[0]},\n" +
-                "   ]";
+        String body = "{\"data\": [\n" +
+                "{\n" +
+                "  \"id\": \"1\",\n" +
+                "  \"problem\": \"Jostein\",\n" +
+                "  \"title\": \"Guldal\",\n" +
+                "  \"author\": \"1\"\n" +
+                "},\n" +
+                "{\n" +
+                "  \"id\": \"1\",\n" +
+                "  \"problem\": \"Jostein\",\n" +
+                "  \"title\": \"Guldal\",\n" +
+                "  \"author\": \"1\"\n" +
+                "},\n" +
+                "{\n" +
+                "  \"id\": \"1\",\n" +
+                "  \"problem\": \"Jostein\",\n" +
+                "  \"title\": \"Guldal\",\n" +
+                "  \"author\": \"1\"\n" +
+                "}\n" +
+                "]}";
         return Response.accepted(body).header("Access-Control-Allow-Origin", "*").build();
     }
 
