@@ -18,7 +18,7 @@ public class DbHandler implements UserService {
 
     }
 
-    public DbHandler getInstance() {
+    public static DbHandler getInstance() {
         return (db == null) ? db = new DbHandler() : db;
     }
 

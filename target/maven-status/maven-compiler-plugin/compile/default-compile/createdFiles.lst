@@ -2,8 +2,10 @@ com\acc\resources\TagResource.class
 com\acc\models\Supervisor.class
 com\acc\models\User.class
 com\acc\resources\ProblemController.class
+com\acc\resources\StaticResource.class
 test\MockitoResource.class
 com\acc\models\Group.class
+com\acc\providers\CORSfilter.class
 com\acc\models\Tag.class
 test\TagResourceTest.class
 com\acc\database\DbHandler.class
