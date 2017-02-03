@@ -1,1 +1,5 @@
-test\UserControllerMockTest.class
+test\MockitoResource.class
+test\UserResourceTest.class
+test\GroupResourceTest.class
+test\ProblemResourceTest.class
+test\TagResourceTest.class
