@@ -9,7 +9,7 @@ public class UserResourceTest extends MockitoResource {
 
     @Test
     public void getUserTest() {
-        
+
     }
 
     @Test

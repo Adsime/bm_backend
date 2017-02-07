@@ -27,26 +27,26 @@ public class StaticResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAssignments() {
         System.out.println("GET - assignments");
-        String body = "{\"data\": [\n" +
+        String body = "[\n" +
                 "{\n" +
                 "  \"id\": \"1\",\n" +
-                "  \"problem\": \"Jostein\",\n" +
-                "  \"title\": \"Guldal\",\n" +
+                "  \"problem\": \"Dat boi\",\n" +
+                "  \"title\": \"Yes, dat boi\",\n" +
                 "  \"author\": \"1\"\n" +
                 "},\n" +
                 "{\n" +
-                "  \"id\": \"1\",\n" +
-                "  \"problem\": \"Jostein\",\n" +
-                "  \"title\": \"Guldal\",\n" +
+                "  \"id\": \"2\",\n" +
+                "  \"problem\": \"Dette er også en oppgave\",\n" +
+                "  \"title\": \"Det var en gang\",\n" +
                 "  \"author\": \"1\"\n" +
                 "},\n" +
                 "{\n" +
-                "  \"id\": \"1\",\n" +
-                "  \"problem\": \"Jostein\",\n" +
-                "  \"title\": \"Guldal\",\n" +
+                "  \"id\": \"3\",\n" +
+                "  \"problem\": \"Bon bo hue pho bo bahn mi dap mei du ma pho ga\",\n" +
+                "  \"title\": \"Vietnamesisk\",\n" +
                 "  \"author\": \"1\"\n" +
                 "}\n" +
-                "]}";
+                "]";
         return Response.ok(body).build();
     }
 
@@ -55,8 +55,7 @@ public class StaticResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSupervisors() {
         System.out.println("GET - supervisors");
-        String body = "{" +
-                "\"data\": [\n" +
+        String body = "[\n" +
                 " {\n" +
                 "   \"id\": \"1\",\n" +
                 "   \"firstname\": \"Jostein\",\n" +
@@ -85,8 +84,7 @@ public class StaticResource {
                 "   \"enterpriseid\": \"fredrik.bjornoy\",\n" +
                 "   \"tags\": \"supervisor\"\n" +
                 " }\n" +
-                "]" +
-                "}";
+                "]";
 
         return Response.ok(body).build();
     }
