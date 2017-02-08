@@ -16,6 +16,12 @@ import javax.ws.rs.core.Response;
 @Path("groups")
 public class GroupResource {
 
+    private Controller controller;
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
     @GET
     @Path("ping")
     public String groupPong(@Context HttpHeaders headers) {
@@ -29,7 +35,7 @@ public class GroupResource {
     /**
      *
      */
-    public Response getGroup() {
+    public Response getGroup(@PathParam("id") int id) {
         throw new NotImplementedException();
     }
 

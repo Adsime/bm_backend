@@ -35,6 +35,58 @@
             <version>2.6.8</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.grizzly.samples</groupId>
+            <artifactId>grizzly-http-server-samples</artifactId>
+            <version>2.2.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.glassfish.v32</groupId>
+            <artifactId>jersey-gfv3-core</artifactId>
+            <version>1.13-b01</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.glassfish.v32</groupId>
+            <artifactId>jersey-gfv3-core</artifactId>
+            <version>1.13-b01</version>
+        </dependency>
+
+        <!-- Jersey -->
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+            <version>2.25.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-inmemory</artifactId>
+            <version>2.25.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+            <version>2.25.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-simple</artifactId>
+            <version>2.25.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-jetty</artifactId>
+            <version>2.25.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework</groupId>
+            <artifactId>jersey-test-framework-core</artifactId>
+            <version>2.25.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-external</artifactId>
+            <version>2.25.1</version>
+        </dependency>
     </dependencies>
 
     <!-- -->
@@ -71,6 +123,12 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
+    <repository>
+        <id>snapshot-repository.java.net</id>
+        <name>Java.net Snapshot Repository for Maven</name>
+        <url>https://maven.java.net/content/repositories/snapshots/</url>
+        <layout>default</layout>
+    </repository>
 
     <!--
         Testing
