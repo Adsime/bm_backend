@@ -192,4 +192,16 @@ public class StaticResource {
         System.out.println(o);
         return Response.ok("Accepted").build();
     }
+
+    @Path("schools")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSchools() {
+        System.out.println("GET - schools");
+        String body = "[{ \"id\": 1, \"name\": \"HIOA\"},\n" +
+                "{ \"id\": 2, \"name\": \"NTNU\"},\n" +
+                "{ \"id\": 3, \"name\": \"Westerdals\"},\n" +
+                "{ \"id\": 4, \"name\": \"UIO\"}]";
+        return Response.ok(body).build();
+    }
 }
