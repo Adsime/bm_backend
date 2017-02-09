@@ -65,9 +65,9 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="test.UserResourceTest" name="getAllUsersTest" time="0"/>
-  <testcase classname="test.UserResourceTest" name="updateUser" time="0"/>
-  <testcase classname="test.UserResourceTest" name="newUserTest" time="0"/>
   <testcase classname="test.UserResourceTest" name="getUserTest" time="0"/>
+  <testcase classname="test.UserResourceTest" name="getAllUsersTest" time="0"/>
+  <testcase classname="test.UserResourceTest" name="newUserTest" time="0"/>
+  <testcase classname="test.UserResourceTest" name="updateUser" time="0"/>
   <testcase classname="test.UserResourceTest" name="deleteUserTest" time="0"/>
 </testsuite>

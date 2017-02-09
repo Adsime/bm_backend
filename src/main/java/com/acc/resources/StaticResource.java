@@ -1,12 +1,14 @@
 package com.acc.resources;
 
 import com.acc.models.Group;
+import com.sun.org.apache.xalan.internal.xsltc.dom.SimpleResultTreeImpl;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.StringJoiner;
 
 /**
  * Created by melsom.adrian on 03.02.2017.
@@ -48,6 +50,30 @@ public class StaticResource {
                 "}\n" +
                 "]";
         return Response.ok(body).build();
+    }
+
+    @Path("longAssignments")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getLongAssignments() {
+        System.out.println("GET - assignments");
+        StringBuilder sb = new StringBuilder().append("[");
+        for(int i = 0; i < 10000; i++) {
+            sb.append("{\n" +
+                    "  \"id\": \"" + i +"\" ,\n" +
+                    "  \"problem\": \"Dat boi\",\n" +
+                    "  \"title\": \"Yes, dat boi\",\n" +
+                    "  \"author\": \"1\"\n" +
+                    "},\n");
+        }
+        sb.append("{\n" +
+                "  \"id\": \"1000\",\n" +
+                "  \"problem\": \"Bon bo hue pho bo bahn mi dap mei du ma pho ga\",\n" +
+                "  \"title\": \"Vietnamesisk\",\n" +
+                "  \"author\": \"1\"\n" +
+                "}\n]"
+        );
+        return Response.ok(sb.toString()).build();
     }
 
     @Path("supervisors")
@@ -191,5 +217,17 @@ public class StaticResource {
         System.out.println("POST - write");
         System.out.println(o);
         return Response.ok("Accepted").build();
+    }
+
+    @Path("schools")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSchools() {
+        System.out.println("GET - schools");
+        String body = "[{ \"id\": 1, \"name\": \"HIOA\"},\n" +
+                "{ \"id\": 2, \"name\": \"NTNU\"},\n" +
+                "{ \"id\": 3, \"name\": \"Westerdals\"},\n" +
+                "{ \"id\": 4, \"name\": \"UIO\"}]";
+        return Response.ok(body).build();
     }
 }
