@@ -4,19 +4,11 @@ import com.acc.controller.Controller;
 import com.acc.database.DbHandler;
 import com.acc.models.Group;
 import com.acc.models.User;
-import org.eclipse.jetty.http.HttpHeader;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.test.JerseyTest;
-import org.junit.After;
 import org.junit.Before;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +34,8 @@ public class MockitoResource /*extends JerseyTest*/ {
     public String credentials;
     public String badCredentials;
     public List<User> users;
+    public List<Group> groups;
+    public JsonObject jsonGroup;
 
     @Before
     public void create() {
@@ -55,6 +49,14 @@ public class MockitoResource /*extends JerseyTest*/ {
         users.add(new User("2", "Duy", "Nguyen", "nguyen.duy", "nguyen.duy@accenture.com"));
         users.add(new User("3", "Håkon", "Smørvik", "smørvik.håkon", "smørvik.håkon@accenture.com"));
         users.add(new User("4", "Kim", "Vu", "vu.kim", "vu.kim@accenture.com"));
+
+        groups = new ArrayList<>();
+        groups.add(new Group());
+        groups.add(new Group());
+        groups.add(new Group());
+        groups.add(new Group());
+
+        jsonGroup = Json.createObjectBuilder().add("id", 1).build();
 
         authHeaders = new ArrayList<>();
         authHeaders.add(credentials);

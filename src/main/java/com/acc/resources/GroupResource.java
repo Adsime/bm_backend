@@ -2,6 +2,7 @@ package com.acc.resources;
 
 import com.acc.controller.Controller;
 import com.acc.models.Group;
+import org.eclipse.jetty.http.HttpStatus;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
@@ -37,20 +38,20 @@ public class GroupResource {
      */
     public Response getGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
         if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            return Response.status(403).build();
+            return Response.status(HttpStatus.FORBIDDEN_403).build();
         }
         Group group = controller.findGroup(id);
         if(group != null) {
             return Response.ok(group.toString()).build();
         }
-        return Response.status(404).build();
+        return Response.status(HttpStatus.NO_CONTENT_204).build();
     }
 
     @GET
     /**
      *
      */
-    public Response getAllGroups() {
+    public Response getAllGroups(@Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -58,7 +59,7 @@ public class GroupResource {
     /**
      *
      */
-    public Response newGroup(JsonObject o) {
+    public Response newGroup(JsonObject o, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -67,15 +68,17 @@ public class GroupResource {
     /**
      *
      */
-    public Response deleteGroup(@PathParam("id") int id) {
+    public Response deleteGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
     @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
     /**
      *
      */
-    public Response updateGroup() {
+    public Response updateGroup(@PathParam("id") int id, @Context HttpHeaders headers, JsonObject body) {
         throw new NotImplementedException();
     }
 }

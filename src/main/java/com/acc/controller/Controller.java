@@ -4,6 +4,7 @@ import com.acc.database.DbHandler;
 import com.acc.models.Group;
 
 import java.util.Base64;
+import java.util.List;
 
 /**
  * Created by melsom.adrian on 25.01.2017.
@@ -33,7 +34,19 @@ public class Controller {
         return new Group();
     }
 
+    public List<Group> findAllGroups() {
+        return null;
+    }
 
+    public boolean createNewGroup(Group group) {
+        return true;
+    }
 
+    public boolean deleteGroup(int id) {
+        return true;
+    }
 
+    public boolean updateGroup(Group group) {
+        return true;
+    }
 }
