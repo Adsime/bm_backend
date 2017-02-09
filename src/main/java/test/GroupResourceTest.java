@@ -1,54 +1,55 @@
 package test;
 
-import com.acc.controller.Controller;
-import com.acc.database.DbHandler;
-import com.acc.models.Group;
-import com.acc.models.User;
 import com.acc.resources.GroupResource;
-import com.sun.net.httpserver.HttpServer;
-import com.sun.prism.GraphicsPipeline;
-import org.junit.After;
-import org.junit.Before;
+import org.eclipse.jetty.http.HttpGenerator;
+import org.eclipse.jetty.http.HttpStatus;
+import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mock;
 
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
-import java.util.concurrent.ExecutionException;
+import javax.ws.rs.core.*;
+
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by melsom.adrian on 03.02.2017.
  */
 public class GroupResourceTest extends MockitoResource {
 
-    private GroupResource groupResource;
-    private WebTarget target;
-    private HttpServer server;
-
-    @Before
-    public void create() {
-        System.out.println(server.toString());
-
-
-    }
+    /**
+     * There are some global variables which should be used in all test cases.
+     * These are defined in the class MockitoResource. It contains certain mocked
+     * classes and constants like credentials. The variable used to do requests
+     * are global as well.
+     *
+     * @String credentials : contains the credentials used in testing.
+     * @Controller controller : a mocked controller.
+     */
 
     @Test
     public void getGroupSuccessTest() {
-
+        GroupResource groupResource = new GroupResource();
+        groupResource.controller = controller;
+        assertEquals(HttpStatus.OK_200, groupResource.getGroup(1, headers).getStatus());
     }
 
     @Test
     public void getGroupAuthFailTest() {
-
+        GroupResource groupResource = new GroupResource();
+        groupResource.controller = controller;
+        authHeaders = new ArrayList<>();
+        authHeaders.add(badCredentials);
+        initiateHeaders();
+        assertEquals(HttpStatus.FORBIDDEN_403, groupResource.getGroup(1, headers).getStatus());
     }
 
     @Test
     public void getGroupNotFoundTest() {
-
+        GroupResource groupResource = new GroupResource();
+        groupResource.controller = controller;
+        assertEquals(HttpStatus.NOT_FOUND_404, groupResource.getGroup(0, headers).getStatus());
     }
 
-    @After
-    public void tearDown() throws Exception {
-        server.stop(0);
-    }
+
 }

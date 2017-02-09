@@ -22,7 +22,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>RELEASE</version>
+            <version>4.9</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -39,16 +39,6 @@
             <groupId>org.glassfish.grizzly.samples</groupId>
             <artifactId>grizzly-http-server-samples</artifactId>
             <version>2.2.10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey.glassfish.v32</groupId>
-            <artifactId>jersey-gfv3-core</artifactId>
-            <version>1.13-b01</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey.glassfish.v32</groupId>
-            <artifactId>jersey-gfv3-core</artifactId>
-            <version>1.13-b01</version>
         </dependency>
 
         <!-- Jersey -->
@@ -87,7 +77,39 @@
             <artifactId>jersey-test-framework-provider-external</artifactId>
             <version>2.25.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-grizzly2-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-grizzly2-http</artifactId>
+        </dependency>
+        <!-- uncomment this to get JSON support:
+         <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-moxy</artifactId>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>org.glassfish.grizzly</groupId>
+            <artifactId>grizzly-http-server</artifactId>
+            <version>2.3.28</version>
+        </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.glassfish.jersey</groupId>
+                <artifactId>jersey-bom</artifactId>
+                <version>${jersey.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <!-- -->
     <build>
@@ -110,6 +132,21 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>test.Main</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
         <testSourceDirectory>src/main/java/test</testSourceDirectory>
         <testResources>
@@ -122,13 +159,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+        <jersey.version>2.25.1</jersey.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <repository>
-        <id>snapshot-repository.java.net</id>
-        <name>Java.net Snapshot Repository for Maven</name>
-        <url>https://maven.java.net/content/repositories/snapshots/</url>
-        <layout>default</layout>
-    </repository>
 
     <!--
         Testing
