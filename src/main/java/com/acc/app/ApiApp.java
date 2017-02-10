@@ -1,4 +1,4 @@
-package com.acc.apiService;
+package com.acc.app;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -10,6 +10,6 @@ import javax.ws.rs.core.Application;
  * @author acc.com
  */
 @ApplicationPath("api")
-public class ApiService extends Application {
+public class ApiApp extends Application {
 
 }

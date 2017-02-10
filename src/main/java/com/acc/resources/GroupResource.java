@@ -1,15 +1,12 @@
 package com.acc.resources;
 
-import com.acc.controller.Controller;
+import com.acc.controller.GroupService;
 import com.acc.models.Group;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
-import org.glassfish.hk2.api.InheritableThread;
 import org.junit.Before;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -26,7 +23,7 @@ import java.util.List;
 public class GroupResource {
 
     @Inject
-    public Controller controller;
+    public GroupService controller;
 
     public Gson gson;
 
@@ -52,7 +49,7 @@ public class GroupResource {
         if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
-        Group group = controller.findGroup(id);
+        Group group = controller.getGroup(id);
         if(group != null) {
             return Response.ok(group.toString()).build();
         }
@@ -69,7 +66,7 @@ public class GroupResource {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
-            List<Group> groups = controller.findAllGroups();
+            List<Group> groups = controller.getAllGroups();
             if(groups.size() < 1) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
@@ -89,7 +86,7 @@ public class GroupResource {
         }
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
-            controller.createNewGroup(group);
+            controller.newGroup(group);
             return Response.status(HttpStatus.CREATED_201).build();
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();

@@ -5,6 +5,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import javax.json.JsonObject;
 import javax.validation.OverridesAttribute;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -12,7 +15,7 @@ import javax.ws.rs.core.Response;
  */
 
 @Path("problems")
-public class ProblemController {
+public class ProblemResource {
 
     @GET
     @Path("ping")
@@ -22,43 +25,32 @@ public class ProblemController {
 
     @GET
     @Path("{id}")
-    /**
-     *
-     */
-    public Response getProblem(@PathParam("id") int id) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProblem(@PathParam("id") int id, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
     @GET
-    /**
-     *
-     */
-    public Response getAllProblems() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllProblems(@Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
     @POST
-    /**
-     *
-     */
-    public Response newProblem(JsonObject o) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newProblem(@Context HttpHeaders headers) {
+        throw new NotImplementedException();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateProblem(@Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
     @DELETE
     @Path("{id}")
-    /**
-     *
-     */
-    public Response deleteProblem(@PathParam("id") int id) {
-        throw new NotImplementedException();
-    }
-
-    @PUT
-    /**
-     *
-     */
-    public Response updateProblem() {
+    public Response deleteProblem(@Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 }

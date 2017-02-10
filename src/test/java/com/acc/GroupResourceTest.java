@@ -1,6 +1,6 @@
 package com.acc;
 
-import com.acc.controller.Controller;
+import com.acc.controller.GroupService;
 import com.acc.models.Group;
 import com.acc.resources.GroupResource;
 import com.acc.testResources.TestData;
@@ -25,11 +25,9 @@ public class GroupResourceTest {
 
 
     @Mock
-    private Controller controller;
+    private GroupService controller;
 
     public GroupResource groupResource;
-
-    public List<String> authHeaders;
 
     @Before
     public void setup() {
@@ -43,7 +41,7 @@ public class GroupResourceTest {
     public void getGroupSuccessTest() {
         groupResource.controller = controller;
         when(controller.verify(TestData.credentials)).thenReturn(true);
-        when(controller.findGroup(1)).thenReturn(TestData.testGroups().get(0));
+        when(controller.getGroup(1)).thenReturn(TestData.testGroups().get(0));
         assertEquals(HttpStatus.OK_200, groupResource.getGroup(1, TestData.testCredentials()).getStatus());
     }
 
@@ -56,7 +54,7 @@ public class GroupResourceTest {
 
     @Test
     public void getGroupNoEntryTest() {
-        when(controller.findGroup(0)).thenReturn(null);
+        when(controller.getGroup(0)).thenReturn(null);
         when(controller.verify(TestData.credentials)).thenReturn(true);
         groupResource.controller = controller;
         assertEquals(HttpStatus.BAD_REQUEST_400, groupResource.getGroup(0, TestData.testCredentials()).getStatus());
@@ -68,7 +66,7 @@ public class GroupResourceTest {
     @Test
     public void getAllGroupsSuccessTest() {
         groupResource.controller = controller;
-        when(controller.findAllGroups()).thenReturn(TestData.testGroups());
+        when(controller.getAllGroups()).thenReturn(TestData.testGroups());
         when(controller.verify(TestData.credentials)).thenReturn(true);
         assertEquals(HttpStatus.OK_200, groupResource.getAllGroups(TestData.testCredentials()).getStatus());
     }
@@ -82,7 +80,7 @@ public class GroupResourceTest {
 
     @Test
     public void getAllGroupsSuccessInternalFailTest() {
-        when(controller.findAllGroups()).thenThrow(new InternalServerErrorException());
+        when(controller.getAllGroups()).thenThrow(new InternalServerErrorException());
         when(controller.verify(TestData.credentials)).thenReturn(true);
         groupResource.controller = controller;
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR_500, groupResource.getAllGroups(TestData.testCredentials()).getStatus());
@@ -90,7 +88,7 @@ public class GroupResourceTest {
 
     @Test
     public void getAllGroupsNoEntriesTest() {
-        when(controller.findAllGroups()).thenReturn(new ArrayList<Group>());
+        when(controller.getAllGroups()).thenReturn(new ArrayList<Group>());
         when(controller.verify(TestData.credentials)).thenReturn(true);
         groupResource.controller = controller;
         assertEquals(HttpStatus.BAD_REQUEST_400, groupResource.getAllGroups(TestData.testCredentials()).getStatus());
@@ -101,7 +99,7 @@ public class GroupResourceTest {
 
     @Test
     public void newGroupSuccessTest() {
-        when(controller.createNewGroup(TestData.testGroups().get(0))).thenReturn(true);
+        when(controller.newGroup(TestData.testGroups().get(0))).thenReturn(true);
         when(controller.verify(TestData.credentials)).thenReturn(true);
         groupResource.controller = controller;
         assertEquals(HttpStatus.CREATED_201, groupResource.newGroup(TestData.jsonGroup(), TestData.testCredentials()).getStatus());
@@ -109,7 +107,6 @@ public class GroupResourceTest {
 
     @Test
     public void newGroupAuthFailTest() {
-        authHeaders = new ArrayList<>();
         when(controller.verify(TestData.badCredentials)).thenReturn(false);
         groupResource.controller = controller;
         assertEquals(HttpStatus.UNAUTHORIZED_401, groupResource.newGroup(TestData.jsonGroup(), TestData.testBadCredentials()).getStatus());
@@ -117,7 +114,7 @@ public class GroupResourceTest {
 
     @Test
     public void newGroupFailTest() {
-        when(controller.createNewGroup(any())).thenThrow(new InternalServerErrorException());
+        when(controller.newGroup(any())).thenThrow(new InternalServerErrorException());
         when(controller.verify(TestData.credentials)).thenReturn(true);
         groupResource.controller = controller;
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR_500, groupResource.newGroup(TestData.jsonGroup(), TestData.testCredentials()).getStatus());
@@ -136,7 +133,6 @@ public class GroupResourceTest {
 
     @Test
     public void deleteGroupAuthFailTest() {
-        authHeaders = new ArrayList<>();
         when(controller.verify(TestData.badCredentials)).thenReturn(false);
         groupResource.controller = controller;
         assertEquals(HttpStatus.UNAUTHORIZED_401, groupResource.deleteGroup(0, TestData.testBadCredentials()).getStatus());
@@ -172,7 +168,6 @@ public class GroupResourceTest {
     @Test
     public void updateGroupAuthFailTest() {
         when(controller.verify(TestData.badCredentials)).thenReturn(false);
-        authHeaders = new ArrayList<>();
         groupResource.controller = controller;
         assertEquals(HttpStatus.UNAUTHORIZED_401, groupResource.updateGroup(0, TestData.testBadCredentials(), TestData.jsonGroup()).getStatus());
     }
