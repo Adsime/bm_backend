@@ -7,16 +7,24 @@ import java.util.List;
  */
 public class Group {
     String name, school;
-    int assignment;
+    int id;
     List<Student> studentList;
     List<Supervisor> supervisorList;
+
+    public Group(String name, String school, int id, List<Student> studentList, List<Supervisor> supervisorList) {
+        this.name = name;
+        this.school = school;
+        this.id = id;
+        this.studentList = studentList;
+        this.supervisorList = supervisorList;
+    }
 
     @Override
 public String toString() {
         return "Group{" +
                 "name='" + name + '\'' +
                 ", school='" + school + '\'' +
-                ", assignment=" + assignment +
+                ", id=" + id +
                 ", studentList=" + studentList +
                 ", supervisorList=" + supervisorList +
                 '}';

@@ -2,16 +2,20 @@ package com.acc.resources;
 
 import com.acc.controller.Controller;
 import com.acc.models.Group;
+import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
+import org.glassfish.hk2.api.InheritableThread;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by melsom.adrian on 02.02.2017.
@@ -22,6 +26,9 @@ public class GroupResource {
 
     @Inject
     public Controller controller;
+
+    @Inject
+    public Gson gson;
 
     @GET
     @Path("ping")
@@ -38,21 +45,33 @@ public class GroupResource {
      */
     public Response getGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
         if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            return Response.status(HttpStatus.FORBIDDEN_403).build();
+            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         Group group = controller.findGroup(id);
         if(group != null) {
             return Response.ok(group.toString()).build();
         }
-        return Response.status(HttpStatus.NO_CONTENT_204).build();
+        return Response.status(HttpStatus.BAD_REQUEST_400).build();
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     /**
      *
      */
     public Response getAllGroups(@Context HttpHeaders headers) {
-        throw new NotImplementedException();
+        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+        }
+        try {
+            List<Group> groups = controller.findAllGroups();
+            if(groups.size() < 1) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            }
+            return Response.ok(groups).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @POST
@@ -60,7 +79,17 @@ public class GroupResource {
      *
      */
     public Response newGroup(JsonObject o, @Context HttpHeaders headers) {
-        throw new NotImplementedException();
+        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+        }
+        try {
+            Group group = gson.fromJson(o.toString(), Group.class);
+            System.out.println(group);
+            controller.createNewGroup(group);
+            return Response.status(HttpStatus.CREATED_201).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @DELETE

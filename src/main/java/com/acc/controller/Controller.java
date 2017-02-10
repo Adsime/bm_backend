@@ -31,7 +31,7 @@ public class Controller {
     }
 
     public Group findGroup(int id) {
-        return new Group();
+        return null;
     }
 
     public List<Group> findAllGroups() {

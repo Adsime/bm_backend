@@ -3,7 +3,7 @@ package test;
 /**
  * Created by melsom.adrian on 03.02.2017.
  */
-public class TagResourceTest extends MockitoResource {
+public class TagResourceTest {
 
     /**
      * There are some global variables which should be used in all test cases.

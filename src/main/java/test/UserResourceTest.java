@@ -5,7 +5,7 @@ import org.junit.Test;
 /**
  * Created by melsom.adrian on 03.02.2017.
  */
-public class UserResourceTest extends MockitoResource {
+public class UserResourceTest {
 
     /**
      * There are some global variables which should be used in all test cases.

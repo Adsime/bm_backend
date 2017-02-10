@@ -5,4 +5,8 @@ package com.acc.models;
  */
 public class Supervisor {
     int id;
+
+    public Supervisor(int id) {
+        this.id = id;
+    }
 }
