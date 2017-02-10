@@ -5,6 +5,7 @@ import com.acc.models.Group;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.hk2.api.InheritableThread;
+import org.junit.Before;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
@@ -27,8 +28,12 @@ public class GroupResource {
     @Inject
     public Controller controller;
 
-    @Inject
     public Gson gson;
+
+    @Before
+    public void setup() {
+        gson = new Gson();
+    }
 
     @GET
     @Path("ping")
@@ -83,8 +88,7 @@ public class GroupResource {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
-            Group group = gson.fromJson(o.toString(), Group.class);
-            System.out.println(group);
+            Group group = new Gson().fromJson(o.toString(), Group.class);
             controller.createNewGroup(group);
             return Response.status(HttpStatus.CREATED_201).build();
         } catch (InternalServerErrorException isee) {
@@ -98,7 +102,17 @@ public class GroupResource {
      *
      */
     public Response deleteGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
-        throw new NotImplementedException();
+        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+        }
+        try {
+            if(controller.deleteGroup(id)) {
+                return Response.status(HttpStatus.NO_CONTENT_204).build();
+            }
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @PUT
@@ -108,6 +122,17 @@ public class GroupResource {
      *
      */
     public Response updateGroup(@PathParam("id") int id, @Context HttpHeaders headers, JsonObject body) {
-        throw new NotImplementedException();
+        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+        }
+        try {
+            Group group = new Gson().fromJson(body.toString(), Group.class);
+            if(controller.updateGroup(group)) {
+                return Response.ok().build();
+            }
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        }catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 }

@@ -140,11 +140,11 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>test.Main</mainClass>
+                    <mainClass>Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
-        <testSourceDirectory>src/main/java/test</testSourceDirectory>
+        <testSourceDirectory>src/test</testSourceDirectory>
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>

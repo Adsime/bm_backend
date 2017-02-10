@@ -1,11 +1,8 @@
-package test;
+package com.acc;
 
-import com.acc.controller.Controller;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.mockito.Mock;
 
 import java.io.IOException;
 import java.net.URI;

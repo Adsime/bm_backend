@@ -1,4 +1,4 @@
-package test;
+package com.acc;
 
 /**
  * Created by melsom.adrian on 03.02.2017.

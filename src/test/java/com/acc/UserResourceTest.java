@@ -1,9 +1,11 @@
-package test;
+package com.acc;
+
+import org.junit.Test;
 
 /**
  * Created by melsom.adrian on 03.02.2017.
  */
-public class TagResourceTest {
+public class UserResourceTest {
 
     /**
      * There are some global variables which should be used in all test cases.
@@ -15,5 +17,33 @@ public class TagResourceTest {
      * @Controller controller : a mocked controller.
      * @WebTarget target : used to handle http requests in testing.
      */
+
+
+    @Test
+    public void getUserTest() {
+
+    }
+
+    @Test
+    public void getAllUsersTest() {
+
+    }
+
+    @Test
+    public void newUserTest() {
+
+    }
+
+    @Test
+    public void deleteUserTest() {
+
+    }
+
+    @Test
+    public void updateUser() {
+
+    }
+
+
 
 }

@@ -1,23 +1,21 @@
-package test.testResources;
+package com.acc.testResources;
 
 import com.acc.models.Group;
 import com.acc.models.Student;
 import com.acc.models.Supervisor;
 import com.acc.models.User;
-import com.google.gson.Gson;
-import org.eclipse.jetty.http.HttpGenerator;
-import org.eclipse.jetty.http.HttpHeader;
+import org.junit.Before;
 import org.mockito.Mock;
 
 import javax.json.Json;
-import javax.json.JsonBuilderFactory;
 import javax.json.JsonObject;
-import javax.json.JsonWriter;
-import javax.json.stream.JsonGenerator;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * Created by melsom.adrian on 10.02.2017.
@@ -26,6 +24,9 @@ public class TestData {
 
     @Mock
     private static HttpHeaders headers;
+
+    public static String credentials = "username:password";
+    public static String badCredentials = "no:access";
 
     public static List<Group> testGroups() {
         List<Group> groups = new ArrayList<>();
@@ -63,19 +64,25 @@ public class TestData {
     }
 
     public static HttpHeaders testCredentials() {
+        headers = mock(HttpHeaders.class);
         List<String> authHeaders = new ArrayList<>();
-        authHeaders.add("username:password");
+        authHeaders.add(credentials);
         when(headers.getRequestHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeaders);
         return headers;
     }
 
     public static JsonObject jsonGroup() {
-        return new JsonGenerator().;
+        return Json.createObjectBuilder()
+                .add("name", "group 1")
+                .add("school", "hioa")
+                .add("id", 1)
+                .build();
     }
 
     public static HttpHeaders testBadCredentials() {
+        headers = mock(HttpHeaders.class);
         List<String> authHeaders = new ArrayList<>();
-        authHeaders.add("no:access");
+        authHeaders.add(badCredentials);
         when(headers.getRequestHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeaders);
         return headers;
     }
