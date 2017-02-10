@@ -23,7 +23,7 @@ import java.util.List;
 public class GroupResource {
 
     @Inject
-    public GroupService controller;
+    public GroupService service;
 
     public Gson gson;
 
@@ -35,7 +35,7 @@ public class GroupResource {
     @GET
     @Path("ping")
     public String groupPong(@Context HttpHeaders headers) {
-        controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0));
+        service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0));
         return "group pong!";
     }
 
@@ -46,10 +46,10 @@ public class GroupResource {
      *
      */
     public Response getGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
-        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
-        Group group = controller.getGroup(id);
+        Group group = service.getGroup(id);
         if(group != null) {
             return Response.ok(group.toString()).build();
         }
@@ -62,11 +62,11 @@ public class GroupResource {
      *
      */
     public Response getAllGroups(@Context HttpHeaders headers) {
-        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
-            List<Group> groups = controller.getAllGroups();
+            List<Group> groups = service.getAllGroups();
             if(groups.size() < 1) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
@@ -81,12 +81,12 @@ public class GroupResource {
      *
      */
     public Response newGroup(JsonObject o, @Context HttpHeaders headers) {
-        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
-            controller.newGroup(group);
+            service.newGroup(group);
             return Response.status(HttpStatus.CREATED_201).build();
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
@@ -99,11 +99,11 @@ public class GroupResource {
      *
      */
     public Response deleteGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
-        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
-            if(controller.deleteGroup(id)) {
+            if(service.deleteGroup(id)) {
                 return Response.status(HttpStatus.NO_CONTENT_204).build();
             }
             return Response.status(HttpStatus.BAD_REQUEST_400).build();
@@ -119,12 +119,12 @@ public class GroupResource {
      *
      */
     public Response updateGroup(@PathParam("id") int id, @Context HttpHeaders headers, JsonObject body) {
-        if(!controller.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
             Group group = new Gson().fromJson(body.toString(), Group.class);
-            if(controller.updateGroup(group)) {
+            if(service.updateGroup(group)) {
                 return Response.ok().build();
             }
             return Response.status(HttpStatus.BAD_REQUEST_400).build();

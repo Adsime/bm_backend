@@ -1,7 +1,12 @@
 package com.acc.resources;
 
+import com.acc.controller.GroupService;
+import com.acc.controller.ProblemService;
+import com.google.gson.Gson;
+import org.junit.Before;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.validation.OverridesAttribute;
 import javax.ws.rs.*;
@@ -16,6 +21,16 @@ import javax.ws.rs.core.Response;
 
 @Path("problems")
 public class ProblemResource {
+
+    @Inject
+    public ProblemService service;
+
+    public Gson gson;
+
+    @Before
+    public void setup() {
+        gson = new Gson();
+    }
 
     @GET
     @Path("ping")
@@ -38,13 +53,13 @@ public class ProblemResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newProblem(@Context HttpHeaders headers) {
+    public Response newProblem(@Context HttpHeaders headers, JsonObject o) {
         throw new NotImplementedException();
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateProblem(@Context HttpHeaders headers) {
+    public Response updateProblem(@Context HttpHeaders headers, JsonObject o) {
         throw new NotImplementedException();
     }
 

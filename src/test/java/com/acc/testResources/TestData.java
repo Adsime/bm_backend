@@ -1,14 +1,12 @@
 package com.acc.testResources;
 
-import com.acc.models.Group;
-import com.acc.models.Student;
-import com.acc.models.Supervisor;
-import com.acc.models.User;
+import com.acc.models.*;
 import org.junit.Before;
 import org.mockito.Mock;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +69,23 @@ public class TestData {
         return headers;
     }
 
+    public static HttpHeaders testBadCredentials() {
+        headers = mock(HttpHeaders.class);
+        List<String> authHeaders = new ArrayList<>();
+        authHeaders.add(badCredentials);
+        when(headers.getRequestHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeaders);
+        return headers;
+    }
+
+    public static List<Problem> testProblems() {
+        List<Problem> problems = new ArrayList<>();
+        problems.add(new Problem("asdasd", "aasdasd", testUsers().get(0)));
+        problems.add(new Problem("asdasdd", "aasdasdd", testUsers().get(1)));
+        problems.add(new Problem("asdasddd", "aasdasddd", testUsers().get(2)));
+        problems.add(new Problem("asdasdddd", "aasdasdddd", testUsers().get(3)));
+        return problems;
+    }
+
     public static JsonObject jsonGroup() {
         return Json.createObjectBuilder()
                 .add("name", "group 1")
@@ -79,11 +94,11 @@ public class TestData {
                 .build();
     }
 
-    public static HttpHeaders testBadCredentials() {
-        headers = mock(HttpHeaders.class);
-        List<String> authHeaders = new ArrayList<>();
-        authHeaders.add(badCredentials);
-        when(headers.getRequestHeader(HttpHeaders.AUTHORIZATION)).thenReturn(authHeaders);
-        return headers;
+    public static JsonObject jsonProblem() {
+        return Json.createObjectBuilder()
+                .add("title", "problem 1")
+                .add("body", "asdasdasd")
+                .add("user", "user")
+                .build();
     }
 }
