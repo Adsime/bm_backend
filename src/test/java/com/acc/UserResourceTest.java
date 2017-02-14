@@ -2,7 +2,7 @@ package java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.controller.UserService;
-import com.acc.models.User;
+import com.acc.database.pojo.User;
 import com.acc.resources.UserResource;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;

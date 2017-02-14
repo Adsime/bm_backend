@@ -1,9 +1,7 @@
 package com.acc.controller;
 
-import com.acc.database.DbHandler;
-import com.acc.models.Group;
+import com.acc.database.pojo.Group;
 
-import java.util.Base64;
 import java.util.List;
 
 /**

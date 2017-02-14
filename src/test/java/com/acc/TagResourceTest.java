@@ -2,7 +2,7 @@ package java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.controller.TagService;
-import com.acc.models.Tag;
+import com.acc.database.pojo.Tag;
 import com.acc.resources.TagResource;
 import junit.framework.TestResult;
 import org.eclipse.jetty.http.HttpStatus;

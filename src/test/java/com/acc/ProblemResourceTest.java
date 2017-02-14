@@ -2,7 +2,7 @@ package java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.controller.ProblemService;
-import com.acc.models.Problem;
+import com.acc.database.pojo.Problem;
 import com.acc.resources.ProblemResource;
 import java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpHeader;

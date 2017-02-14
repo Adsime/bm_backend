@@ -1,7 +1,7 @@
 package com.acc.controller;
 
-import com.acc.models.Group;
-import com.acc.models.Tag;
+
+import com.acc.database.pojo.Tag;
 
 import java.util.List;
 

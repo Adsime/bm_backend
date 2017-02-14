@@ -1,7 +1,7 @@
 package com.acc.resources;
 
 import com.acc.controller.GroupService;
-import com.acc.models.Group;
+import com.acc.database.pojo.Group;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
