@@ -1,10 +1,7 @@
 package com.acc.resources;
 
 import com.acc.controller.GroupService;
-<<<<<<< HEAD
 import com.acc.database.pojo.Group;
-=======
->>>>>>> updated sql script, ORM mapping (user, problem, group)
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
