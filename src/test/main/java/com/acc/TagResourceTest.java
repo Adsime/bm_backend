@@ -71,8 +71,8 @@ public class TagResourceTest {
     @Test
     public void getTagInternalError() {
         tagResource.service = service;
-        when(service.verify(TestData.credentials)).thenThrow(new InternalServerErrorException());
-        when(service.getTag(0)).thenReturn(null);
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.getTag(0)).thenThrow(new InternalServerErrorException());
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = tagResource.getTag(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -106,7 +106,7 @@ public class TagResourceTest {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         when(service.getAllTags()).thenReturn(new ArrayList<Tag>());
-        expected = HttpStatus.OK_200;
+        expected = HttpStatus.BAD_REQUEST_400;
         actual = tagResource.getAllTags(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
@@ -192,7 +192,7 @@ public class TagResourceTest {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         when(service.updateTag(any())).thenThrow(new InternalServerErrorException());
-        expected = HttpStatus.BAD_REQUEST_400;
+        expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = tagResource.updateTag(TestData.jsonTag(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
@@ -204,7 +204,7 @@ public class TagResourceTest {
     public void deleteTagsSuccess() {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.deleteTag(9)).thenReturn(true);
+        when(service.deleteTag(0)).thenReturn(true);
         expected = HttpStatus.OK_200;
         actual = tagResource.deleteTag(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);

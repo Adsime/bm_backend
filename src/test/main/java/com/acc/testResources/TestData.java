@@ -64,10 +64,10 @@ public class TestData {
 
     public static List<Problem> testProblems() {
         List<Problem> problems = new ArrayList<>();
-        problems.add(new Problem("asdasd"));
-        problems.add(new Problem("asdasdd"));
-        problems.add(new Problem("asdasddd"));
-        problems.add(new Problem("asdasdddd"));
+        problems.add(new Problem(null, testUsers().get(0)));
+        problems.add(new Problem(null, testUsers().get(0)));
+        problems.add(new Problem(null, testUsers().get(0)));
+        problems.add(new Problem(null, testUsers().get(0)));
         return problems;
     }
 
