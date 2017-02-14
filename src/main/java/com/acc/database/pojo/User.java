@@ -20,9 +20,6 @@ public class User implements Serializable {
     private Set<Group> groups;
     private Set<Tag> tags;
 
-    private Problem problem;
-
-
     public User(){}
 
     public User(String firstName, String lastName, String email, String salt, Problem problem) {
@@ -30,7 +27,6 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.salt = salt;
-        this.problem = problem;
     }
 
     @Id
@@ -78,16 +74,6 @@ public class User implements Serializable {
 
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "problem_id")
-    public Problem getProblem() {
-        return problem;
-    }
-
-    public void setProblem(Problem problem) {
-        this.problem = problem;
     }
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -14,11 +14,13 @@ public class Problem {
     private long id;
     private String path;
     private Set<Tag> tags;
+    private User user;
 
     public Problem(){}
 
-    public Problem(String path) {
+    public Problem(String path, User user) {
         this.path = path;
+        this.user = user;
     }
 
     @Id
@@ -52,5 +54,15 @@ public class Problem {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    public User getAuthor() {
+        return user;
+    }
+
+    public void setAuthor(User user) {
+        this.user = user;
     }
 }
