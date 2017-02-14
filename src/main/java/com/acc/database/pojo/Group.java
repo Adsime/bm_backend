@@ -44,16 +44,6 @@ public class Group {
         this.name = name;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "problem_id")
-    public Problem getProblem() {
-        return problem;
-    }
-
-    public void setProblem(Problem problem) {
-        this.problem = problem;
-    }
-
     @ManyToMany(mappedBy = "groups")
     public Set<User> getUsers() {
         return users;
@@ -70,5 +60,15 @@ public class Group {
 
     public void setInstitutions(Set<Institution> institutions) {
         this.institutions = institutions;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "problem_id")
+    public Problem getProblem() {
+        return problem;
+    }
+
+    public void setProblem(Problem problem) {
+        this.problem = problem;
     }
 }
