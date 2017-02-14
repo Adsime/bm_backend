@@ -1,4 +1,4 @@
-package java.com.acc.testResources;
+package main.java.com.acc.testResources;
 
 import com.acc.database.pojo.Group;
 import com.acc.database.pojo.Problem;

@@ -1,19 +1,16 @@
-package java.com.acc;
+package main.java.com.acc;
 
-import com.acc.controller.GroupService;
 import com.acc.controller.TagService;
 import com.acc.database.pojo.Tag;
 import com.acc.resources.TagResource;
-import junit.framework.TestResult;
+import main.java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import javax.ws.rs.InternalServerErrorException;
-import java.com.acc.testResources.TestData;
 import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;

@@ -1,9 +1,9 @@
-package java.com.acc;
+package main.java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.database.pojo.Group;
 import com.acc.resources.GroupResource;
-import java.com.acc.testResources.TestData;
+import main.java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;

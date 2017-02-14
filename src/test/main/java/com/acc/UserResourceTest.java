@@ -1,16 +1,16 @@
-package java.com.acc;
+package main.java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.controller.UserService;
 import com.acc.database.pojo.User;
 import com.acc.resources.UserResource;
+import main.java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import javax.ws.rs.InternalServerErrorException;
-import java.com.acc.testResources.TestData;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertEquals;
@@ -140,16 +140,6 @@ public class UserResourceTest {
         when(service.newUser(any())).thenReturn(true);
         expected = HttpStatus.UNAUTHORIZED_401;
         actual = userResource.newUser(TestData.jsonUser(), TestData.testBadCredentials()).getStatus();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void newUsersNoEntries() {
-        userResource.service = service;
-        when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.newUser(any())).thenReturn(false);
-        expected = HttpStatus.BAD_REQUEST_400;
-        actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
