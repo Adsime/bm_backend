@@ -114,8 +114,12 @@ public class TestData {
     public static JsonObject jsonTag() {
         return Json.createObjectBuilder()
                 .add("tag", "testTag1")
-                .add("tag", "testTag2")
-                .add("tag", "testTag3")
+                .build();
+    }
+
+    public static JsonObject jsonUser() {
+        return Json.createObjectBuilder()
+                .add("name", "name");
                 .build();
     }
 }
