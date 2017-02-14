@@ -178,17 +178,32 @@ public class UserResourceTest {
 
     @Test
     public void updateUsersAuthFail() {
-
+        userResource.service = service;
+        when(service.verify(TestData.badCredentials)).thenReturn(false);
+        when(service.updateUser(any())).thenReturn(true);
+        expected = HttpStatus.UNAUTHORIZED_401;
+        actual = userResource.updateUser(TestData.jsonUser(), TestData.testBadCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void updateUsersNoEntries() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.updateUser(any())).thenReturn(false);
+        expected = HttpStatus.BAD_REQUEST_400;
+        actual = userResource.updateUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void updateUsersInternalError() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.updateUser(any())).thenThrow(new InternalServerErrorException());
+        expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
+        actual = userResource.updateUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     // End updateUser Tests
@@ -196,22 +211,42 @@ public class UserResourceTest {
 
     @Test
     public void deleteUsersSuccess() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.deleteUser(0)).thenReturn(true);
+        expected = HttpStatus.OK_200;
+        actual = userResource.deleteUser(0, TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void deleteUsersAuthFail() {
-
+        userResource.service = service;
+        when(service.verify(TestData.badCredentials)).thenReturn(false);
+        when(service.deleteUser(0)).thenReturn(true);
+        expected = HttpStatus.UNAUTHORIZED_401;
+        actual = userResource.deleteUser(0, TestData.testBadCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void deleteUsersNoEntries() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.deleteUser(0)).thenReturn(false);
+        expected = HttpStatus.BAD_REQUEST_400;
+        actual = userResource.deleteUser(0, TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void deleteUsersInternalError() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.deleteUser(0)).thenThrow(new InternalServerErrorException());
+        expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
+        actual = userResource.deleteUser(0, TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     //End deleteUser Tests
