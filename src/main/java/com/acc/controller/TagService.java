@@ -9,11 +9,12 @@ import java.util.List;
  * Created by melsom.adrian on 10.02.2017.
  */
 public class TagService extends GeneralService {
-    public Group getTag(int id) {
+
+    public Tag getTag(int id) {
         return null;
     }
 
-    public List<Group> getAllTags() {
+    public List<Tag> getAllTags() {
         return null;
     }
 

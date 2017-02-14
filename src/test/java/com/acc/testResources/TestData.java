@@ -1,4 +1,4 @@
-package com.acc.testResources;
+package java.com.acc.testResources;
 
 import com.acc.models.*;
 import org.junit.Before;
@@ -86,6 +86,15 @@ public class TestData {
         return problems;
     }
 
+    public static List<Tag> testTags() {
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag("TestTag1"));
+        tags.add(new Tag("TestTag2"));
+        tags.add(new Tag("TestTag3"));
+        tags.add(new Tag("TestTag4"));
+        return tags;
+    }
+
     public static JsonObject jsonGroup() {
         return Json.createObjectBuilder()
                 .add("name", "group 1")
@@ -99,6 +108,14 @@ public class TestData {
                 .add("title", "problem 1")
                 .add("body", "asdasdasd")
                 .add("user", "user")
+                .build();
+    }
+
+    public static JsonObject jsonTag() {
+        return Json.createObjectBuilder()
+                .add("tag", "testTag1")
+                .add("tag", "testTag2")
+                .add("tag", "testTag3")
                 .build();
     }
 }
