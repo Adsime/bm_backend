@@ -1,11 +1,14 @@
 package com.acc;
 
 import com.acc.controller.GroupService;
+import com.acc.controller.TagService;
 import com.acc.resources.TagResource;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-
+import com.acc.testResources.TestData;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -14,20 +17,25 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class TagResourceTest {
 
     @Mock
-    private GroupService controller;
+    private TagService service;
 
-    public TagResource TagResource;
+    public TagResource tagResource;
+
+    int expected, actual;
 
     @Before
     public void setup() {
         initMocks(this);
-        TagResource = new TagResource();
+        tagResource = new TagResource();
     }
 
     // Start getTag Tests
 
     @Test
     public void getTagSuccess() {
+        tagResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.)
 
     }
 

@@ -1,6 +1,5 @@
 package com.acc.database;
 
-import com.acc.interfaces.UserService;
 import com.acc.models.Tag;
 import com.acc.models.User;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;

@@ -1,6 +1,7 @@
 package com.acc;
 
 import com.acc.controller.GroupService;
+import com.acc.controller.UserService;
 import com.acc.resources.UserResource;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,14 +15,14 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class UserResourceTest {
 
     @Mock
-    private GroupService controller;
+    private UserService service;
 
-    public com.acc.resources.UserResource UserResource;
+    public UserResource userResource;
 
     @Before
     public void setup() {
         initMocks(this);
-        UserResource = new UserResource();
+        userResource = new UserResource();
     }
 
     // Start getUser Tests

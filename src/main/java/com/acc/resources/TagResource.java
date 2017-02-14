@@ -1,7 +1,12 @@
 package com.acc.resources;
 
+import com.acc.controller.ProblemService;
+import com.acc.controller.TagService;
+import com.google.gson.Gson;
+import org.junit.Before;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -12,6 +17,16 @@ import javax.ws.rs.core.Response;
 
 @Path("tags")
 public class TagResource {
+
+    @Inject
+    public TagService service;
+
+    public Gson gson;
+
+    @Before
+    public void setup() {
+        gson = new Gson();
+    }
 
     @GET
     @Path("ping")
