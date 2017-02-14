@@ -1,6 +1,6 @@
 package com.acc.controller;
 
-import com.acc.models.Group;
+import com.acc.database.pojo.Group;
 
 import java.util.List;
 

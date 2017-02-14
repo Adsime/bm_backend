@@ -1,6 +1,5 @@
 package com.acc.resources;
 
-import com.acc.models.Group;
 import com.sun.org.apache.xalan.internal.xsltc.dom.SimpleResultTreeImpl;
 
 import javax.json.JsonArray;
@@ -198,16 +197,6 @@ public class StaticResource {
             retType += "</br></br>";
         }
         return retType;
-    }
-
-
-    @Path("stdoutform")
-    @POST
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response write(GroupModel groupModel) {
-        System.out.println("POST - write");
-        System.out.println(groupModel.toString());
-        return Response.ok("Accepted").build();
     }
 
     @Path("stdout")

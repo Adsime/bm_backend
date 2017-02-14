@@ -1,5 +1,5 @@
-test\UserResourceTest.class
-test\GroupResourceTest.class
-test\ProblemResourceTest.class
-test\TagResourceTest.class
-test\UserControllerMockTest.class
+java\com\acc\ProblemResourceTest.class
+java\com\acc\GroupResourceTest.class
+java\com\acc\testResources\TestData.class
+java\com\acc\TagResourceTest.class
+java\com\acc\UserResourceTest.class

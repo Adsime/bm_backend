@@ -9,6 +9,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 /**
@@ -39,7 +41,7 @@ public class UserResource {
     /**
      *
      */
-    public Response getUser(@PathParam("id") int id) {
+    public Response getUser(@PathParam("id") int id, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -47,7 +49,7 @@ public class UserResource {
     /**
      *
      */
-    public Response getAllUsers() {
+    public Response getAllUsers(@Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -55,7 +57,7 @@ public class UserResource {
     /**
      *
      */
-    public Response newUser(JsonObject o) {
+    public Response newUser(JsonObject o, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -64,7 +66,7 @@ public class UserResource {
     /**
      *
      */
-    public Response deleteUser(@PathParam("id") int id) {
+    public Response deleteUser(@PathParam("id") int id, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -72,7 +74,7 @@ public class UserResource {
     /**
      *
      */
-    public Response updateUser() {
+    public Response updateUser(JsonObject o, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 }

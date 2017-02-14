@@ -1,12 +1,21 @@
-package com.acc;
+package java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.controller.UserService;
+import com.acc.database.pojo.User;
 import com.acc.resources.UserResource;
+import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import javax.ws.rs.InternalServerErrorException;
+import java.com.acc.testResources.TestData;
+import java.util.ArrayList;
+
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
@@ -19,6 +28,7 @@ public class UserResourceTest {
 
     public UserResource userResource;
 
+    int expected, actual;
     @Before
     public void setup() {
         initMocks(this);
@@ -29,22 +39,42 @@ public class UserResourceTest {
 
     @Test
     public void getUserSuccess() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.getUser(0)).thenReturn(TestData.testUsers().get(0));
+        expected = HttpStatus.OK_200;
+        actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void getUserAuthFail() {
-
+        userResource.service = service;
+        when(service.verify(TestData.badCredentials)).thenReturn(false);
+        when(service.getUser(0)).thenReturn(TestData.testUsers().get(0));
+        expected = HttpStatus.UNAUTHORIZED_401;
+        actual = userResource.getUser(0, TestData.testBadCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void getUserNoEntries() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.getUser(0)).thenReturn(null);
+        expected = HttpStatus.BAD_REQUEST_400;
+        actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void getUserInternalError() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.getUser(0)).thenThrow(new InternalServerErrorException());
+        expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
+        actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     // End getUser Tests
@@ -52,22 +82,42 @@ public class UserResourceTest {
 
     @Test
     public void getAllUsersSuccess() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.getAllUsers()).thenReturn(TestData.testUsers());
+        expected = HttpStatus.OK_200;
+        actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void getAllUsersAuthFail() {
-
+        userResource.service = service;
+        when(service.verify(TestData.badCredentials)).thenReturn(false);
+        when(service.getAllUsers()).thenReturn(TestData.testUsers());
+        expected = HttpStatus.UNAUTHORIZED_401;
+        actual = userResource.getAllUsers(TestData.testBadCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void getAllUsersNoEntries() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.getAllUsers()).thenReturn(new ArrayList<User>());
+        expected = HttpStatus.BAD_REQUEST_400;
+        actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void getAllUsersInternalError() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.getAllUsers()).thenThrow(new InternalServerErrorException());
+        expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
+        actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     // End getAllUsers Tests
@@ -75,22 +125,42 @@ public class UserResourceTest {
 
     @Test
     public void newUsersSuccess() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.newUser(any())).thenReturn(true);
+        expected = HttpStatus.OK_200;
+        actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void newUsersAuthFail() {
-
+        userResource.service = service;
+        when(service.verify(TestData.badCredentials)).thenReturn(false);
+        when(service.newUser(any())).thenReturn(true);
+        expected = HttpStatus.UNAUTHORIZED_401;
+        actual = userResource.newUser(TestData.jsonUser(), TestData.testBadCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void newUsersNoEntries() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.newUser(any())).thenReturn(false);
+        expected = HttpStatus.BAD_REQUEST_400;
+        actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
     public void newUsersInternalError() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.newUser(any())).thenThrow(new InternalServerErrorException());
+        expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
+        actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     // End newUser Tests
@@ -98,7 +168,12 @@ public class UserResourceTest {
 
     @Test
     public void updateUsersSuccess() {
-
+        userResource.service = service;
+        when(service.verify(TestData.credentials)).thenReturn(true);
+        when(service.updateUser(any())).thenReturn(true);
+        expected = HttpStatus.OK_200;
+        actual = userResource.updateUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
+        assertEquals(expected, actual);
     }
 
     @Test
