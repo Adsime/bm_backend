@@ -70,19 +70,12 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `bm_database`.`PROBLEM` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `path` VARCHAR(100) NULL,
-<<<<<<< HEAD
+
   `author_id` INT NOT NULL,
   PRIMARY KEY (`id`, `author_id`),
   INDEX `fk_PROBLEM_USER1_idx` (`author_id` ASC),
   CONSTRAINT `fk_PROBLEM_USER1`
     FOREIGN KEY (`author_id`)
-=======
-  `user_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `user_id`),
-  INDEX `fk_PROBLEM_USER1_idx` (`user_id` ASC),
-  CONSTRAINT `fk_PROBLEM_USER1`
-    FOREIGN KEY (`user_id`)
->>>>>>> updated sql script, ORM mapping (user, problem, group)
     REFERENCES `bm_database`.`USER` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
