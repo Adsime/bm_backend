@@ -1,9 +1,9 @@
-package com.acc;
+package java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.models.Group;
 import com.acc.resources.GroupResource;
-import com.acc.testResources.TestData;
+import java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;

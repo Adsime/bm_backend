@@ -8,7 +8,11 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -39,7 +43,7 @@ public class TagResource {
     /**
      *
      */
-    public Response getTag(@PathParam("id") int id) {
+    public Response getTag(@PathParam("id") int id, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -47,7 +51,7 @@ public class TagResource {
     /**
      *
      */
-    public Response getAllTags() {
+    public Response getAllTags(@Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -55,7 +59,7 @@ public class TagResource {
     /**
      *
      */
-    public Response newTags(JsonObject o) {
+    public Response newTag(JsonObject o, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
@@ -64,15 +68,16 @@ public class TagResource {
     /**
      *
      */
-    public Response deleteTags(@PathParam("id") int id) {
+    public Response deleteTag(@PathParam("id") int id, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     /**
      *
      */
-    public Response updateTags() {
+    public Response updateTag(JsonObject o, @Context HttpHeaders headers) {
         throw new NotImplementedException();
     }
 }

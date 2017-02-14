@@ -1,4 +1,4 @@
-package com.acc;
+package java.com.acc;
 
 import com.acc.controller.GroupService;
 import com.acc.controller.UserService;
@@ -29,7 +29,7 @@ public class UserResourceTest {
 
     @Test
     public void getUserSuccess() {
-
+        
     }
 
     @Test
