@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 26.01.2017.
  */
-public class Group {
+public class GroupModel {
     String name, school;
     int id;
     List<Student> studentList;
@@ -21,7 +21,7 @@ public class Group {
 
     @Override
 public String toString() {
-        return "Group{" +
+        return "GroupModel{" +
                 "name='" + name + '\'' +
                 ", school='" + school + '\'' +
                 ", id=" + id +

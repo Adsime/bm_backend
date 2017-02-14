@@ -5,11 +5,11 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 26.01.2017.
  */
-public class User {
+public class UserModel {
     private String id, firstname, lastname, enterpriseID, email;
-    private List<Tag> tags;
+    private List<TagModel> tagModels;
 
-    public User(String id, String firstname, String lastname, String enterpriseID, String email) {
+    public UserModel(String id, String firstname, String lastname, String enterpriseID, String email) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -57,11 +57,11 @@ public class User {
         this.email = email;
     }
 
-    public List<Tag> getTags() {
-        return tags;
+    public List<TagModel> getTagModels() {
+        return tagModels;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setTagModels(List<TagModel> tagModels) {
+        this.tagModels = tagModels;
     }
 }

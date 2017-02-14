@@ -2,6 +2,7 @@ package com.acc.database;
 
 import com.acc.models.Tag;
 import com.acc.models.User;
+import com.acc.interfaces.UserService;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
@@ -22,17 +23,17 @@ public class DbHandler implements UserService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserModel> getUsers() {
         throw new NotImplementedException();
     }
 
     @Override
-    public User getUser(String id) {
+    public UserModel getUser(String id) {
         throw new NotImplementedException();
     }
 
     @Override
-    public List<User> getUserByTag(List<Tag> tags) {
+    public List<UserModel> getUserByTag(List<TagModel> tagModels) {
         throw new NotImplementedException();
     }
 }

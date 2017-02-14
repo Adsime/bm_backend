@@ -3,11 +3,11 @@ package com.acc.models;
 /**
  * Created by melsom.adrian on 26.01.2017.
  */
-public class Problem {
+public class ProblemModel {
     private String title, body;
-    private User author;
+    private UserModel author;
 
-    public Problem(String title, String body, User author) {
+    public ProblemModel(String title, String body, UserModel author) {
         this.title = title;
         this.body = body;
         this.author = author;
@@ -29,11 +29,11 @@ public class Problem {
         this.body = body;
     }
 
-    public User getAuthor() {
+    public UserModel getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserModel author) {
         this.author = author;
     }
 }

@@ -204,9 +204,9 @@ public class StaticResource {
     @Path("stdoutform")
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response write(Group group) {
+    public Response write(GroupModel groupModel) {
         System.out.println("POST - write");
-        System.out.println(group.toString());
+        System.out.println(groupModel.toString());
         return Response.ok("Accepted").build();
     }
 

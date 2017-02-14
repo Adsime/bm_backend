@@ -3,10 +3,10 @@ package com.acc.models;
 /**
  * Created by melsom.adrian on 26.01.2017.
  */
-public class Tag {
+public class TagModel {
     private String tag;
 
-    public Tag(String tag) {
+    public TagModel(String tag) {
         this.tag = tag;
     }
 
