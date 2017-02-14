@@ -1,7 +1,6 @@
 package main.java.com.acc;
 
-import com.acc.controller.GroupService;
-import com.acc.controller.UserService;
+import com.acc.service.UserService;
 import com.acc.database.pojo.User;
 import com.acc.resources.UserResource;
 import main.java.com.acc.testResources.TestData;

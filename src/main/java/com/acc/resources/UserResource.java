@@ -1,12 +1,10 @@
 package com.acc.resources;
 
-import com.acc.controller.ProblemService;
-import com.acc.controller.UserService;
+import com.acc.service.UserService;
 import com.acc.database.pojo.User;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;

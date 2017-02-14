@@ -1,6 +1,6 @@
 package main.java.com.acc;
 
-import com.acc.controller.ProblemService;
+import com.acc.service.ProblemService;
 import com.acc.database.pojo.Problem;
 import com.acc.resources.ProblemResource;
 import main.java.com.acc.testResources.TestData;

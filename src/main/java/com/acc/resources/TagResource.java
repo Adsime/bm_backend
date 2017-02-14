@@ -1,14 +1,12 @@
 package com.acc.resources;
 
-import com.acc.controller.ProblemService;
-import com.acc.controller.TagService;
+import com.acc.service.TagService;
 import com.google.gson.Gson;
 import org.junit.Before;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
