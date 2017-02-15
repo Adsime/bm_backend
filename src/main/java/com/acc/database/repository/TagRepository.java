@@ -1,23 +1,20 @@
 package com.acc.database.repository;
 
-import com.acc.database.pojo.Tag;
+import com.acc.database.pojo.HbnTag;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.Iterator;
-import java.util.List;
-
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
-public class TagRepository extends Repository implements IRepository<Tag>{
+public class TagRepository extends Repository implements IRepository<HbnTag>{
 
     public TagRepository(){
         super();
     }
 
-    public boolean add(Tag newTag){
+    public boolean add(HbnTag newHbnTag){
 
         Session session = sessionFactory.openSession();
         Transaction trans = null;
@@ -26,7 +23,7 @@ public class TagRepository extends Repository implements IRepository<Tag>{
         try{
 
             trans = session.beginTransaction();
-            tagID = (Integer) session.save(newTag);
+            tagID = (Integer) session.save(newHbnTag);
             trans.commit();
         }
         catch (HibernateException e) {
@@ -43,12 +40,12 @@ public class TagRepository extends Repository implements IRepository<Tag>{
     }
 
     @Override
-    public boolean update(Tag item) {
+    public boolean update(HbnTag item) {
         return false;
     }
 
     @Override
-    public boolean remove(Tag item) {
+    public boolean remove(HbnTag item) {
         return false;
     }
 
@@ -59,10 +56,10 @@ public class TagRepository extends Repository implements IRepository<Tag>{
 
         try{
             tx = session.beginTransaction();
-            List employees = session.createQuery("FROM Tag").list();
+            List employees = session.createQuery("FROM HbnTag").list();
             for (Iterator iterator =
                  employees.iterator(); iterator.hasNext();){
-                Tag tag = (Tag) iterator.next();
+                HbnTag tag = (HbnTag) iterator.next();
                 System.out.println("Name: " + tag.getTagName());
                 System.out.println("Desc: " + tag.getDescription());
             }

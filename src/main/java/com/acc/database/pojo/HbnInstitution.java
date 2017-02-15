@@ -8,15 +8,15 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "INSTITUTION")
-public class Institution {
+public class HbnInstitution {
 
     private long id;
     private String name;
-    private Set<Group> groups;
+    private Set<HbnUser> users;
 
-    public Institution(){}
+    public HbnInstitution(){}
 
-    public Institution(String name){
+    public HbnInstitution(String name){
         this.name = name;
     }
 
@@ -40,17 +40,12 @@ public class Institution {
         this.name = name;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "INSTITUTION_AFFILIATION",
-            joinColumns =  @JoinColumn(name = "group_id"),
-            inverseJoinColumns =  @JoinColumn(name = "institution_id")
-    )
-    public Set<Group> getGroups() {
-        return groups;
+    @ManyToMany(mappedBy = "institutions")
+    public Set<HbnUser> getUsers() {
+        return users;
     }
 
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
+    public void setUsers(Set<HbnUser> hbnUsers) {
+        this.users = hbnUsers;
     }
 }

@@ -1,6 +1,5 @@
 package com.acc.database.pojo;
 
-import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,18 +8,18 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "PROBLEM")
-public class Problem {
+public class HbnProblem {
 
     private long id;
     private String path;
-    private Set<Tag> tags;
-    private User user;
+    private Set<HbnTag> tags;
+    private HbnUser user;
 
-    public Problem(){}
+    public HbnProblem(){}
 
-    public Problem(String path, User user) {
+    public HbnProblem(String path, HbnUser hbnUser) {
         this.path = path;
-        this.user = user;
+        this.user = hbnUser;
     }
 
     @Id
@@ -48,21 +47,21 @@ public class Problem {
             joinColumns =  @JoinColumn(name = "tag_id"),
             inverseJoinColumns =  @JoinColumn(name = "problem_id")
     )
-    public Set<Tag> getTags() {
+    public Set<HbnTag> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
+    public void setTags(Set<HbnTag> hbnTags) {
+        this.tags = hbnTags;
     }
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    public User getAuthor() {
+    public HbnUser getUser() {
         return user;
     }
 
-    public void setAuthor(User user) {
-        this.user = user;
+    public void setUser(HbnUser hbnUser) {
+        this.user = hbnUser;
     }
 }

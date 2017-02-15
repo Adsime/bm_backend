@@ -38,7 +38,7 @@ public class ProblemResourceTest {
         problemResource = new ProblemResource();
     }
 
-    // Start getProblem Tests
+    // Start getHbnProblem Tests
 
     @Test
     public void getProblemSuccess() {
@@ -80,7 +80,7 @@ public class ProblemResourceTest {
         assertEquals(expected, actual);
     }
 
-    // End getProblem Tests
+    // End getHbnProblem Tests
     // Start getAllProblems Tests
 
     @Test
