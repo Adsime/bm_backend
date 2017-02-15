@@ -21,8 +21,9 @@ public class Tag {
     public Tag() {
     }
 
-    public Tag(String tagName) {
+    public Tag(String tagName, String description) {
         this.tagName = tagName;
+        this.description = description;
     }
 
     @Id

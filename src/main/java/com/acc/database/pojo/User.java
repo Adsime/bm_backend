@@ -22,7 +22,7 @@ public class User implements Serializable {
 
     public User(){}
 
-    public User(String firstName, String lastName, String email, String salt, Problem problem) {
+    public User(String firstName, String lastName, String email, String salt) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

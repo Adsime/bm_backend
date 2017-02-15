@@ -1,5 +1,9 @@
 package com.acc.database;
 
+import com.acc.database.pojo.Tag;
+import com.acc.database.pojo.User;
+import com.acc.database.repository.TagRepository;
+import com.acc.database.repository.UserRepository;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -16,13 +20,13 @@ public class DatabaseConenctionTest {
 
     public static void main(String[] args) {
 
-        DatabaseConenctionTest DCT = new DatabaseConenctionTest();
-        DCT.setUp();
+        //TagRepository TR = new TagRepository();
+        UserRepository UR = new UserRepository();
+        UR.add(new User("Hohkun","Butterbucht","hb@assenture","SALT"));
+       // TR.add(new Tag("Dickface", "People that totalt Dickfaces"));
     }
 
-    //Set up from Hibernate 5 documentation
     protected void setUp(){
-        // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
@@ -36,14 +40,14 @@ public class DatabaseConenctionTest {
             throw new ExceptionInInitializerError(se);
         }
         catch (Exception e) {
-            // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
-            // so destroy it manually.
-            System.err.println("Failed to create sessionFactory object: \n" + e + "\n -------------------------------------------------------------- \n");
+            System.err.println("Failed to create sessionFactory object: \n" + e
+                    + "\n -------------------------------------------------------------- \n");
             e.printStackTrace();
             StandardServiceRegistryBuilder.destroy( registry );
             throw new ExceptionInInitializerError(e);
         }
     }
+
 
     /*public Integer addPerson(String name, String talent){
         Session session = sessionFactory.openSession();
