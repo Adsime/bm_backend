@@ -1,5 +1,7 @@
 package com.acc.service;
 
+import com.acc.models.Problem;
+
 import java.util.Base64;
 
 /**
@@ -16,8 +18,12 @@ public class GeneralService {
         }
         String pw = credentials.split(":")[1];
         String un = credentials.split(":")[0];
-        System.out.println(un + " " + pw);
         return true;
+    }
+
+    public <T> T getItem(java.lang.Class<T> classOfT) {
+        System.out.println(classOfT == Problem.class);
+        return null;
     }
 
 }
