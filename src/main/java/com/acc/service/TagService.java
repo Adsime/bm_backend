@@ -1,7 +1,6 @@
 package com.acc.service;
 
-
-import com.acc.database.pojo.Tag;
+import com.acc.models.Tag;
 
 import java.util.List;
 

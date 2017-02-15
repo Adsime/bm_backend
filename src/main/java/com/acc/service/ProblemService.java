@@ -1,6 +1,6 @@
 package com.acc.service;
 
-import com.acc.database.pojo.Problem;
+import com.acc.models.Problem;
 
 import java.util.List;
 

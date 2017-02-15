@@ -14,6 +14,13 @@ public class Group {
     private String path, name;
     private ArrayList<Link> links;
 
+    public Group(int id, String path, String name, ArrayList<Link> links) {
+        this.id = id;
+        this.path = path;
+        this.name = name;
+        this.links = links;
+    }
+
     public int getId() {
         return id;
     }

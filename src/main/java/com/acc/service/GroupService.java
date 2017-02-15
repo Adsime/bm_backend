@@ -1,6 +1,6 @@
 package com.acc.service;
 
-import com.acc.database.pojo.Group;
+import com.acc.models.Group;
 
 import java.util.List;
 

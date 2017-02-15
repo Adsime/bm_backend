@@ -1,7 +1,7 @@
 package main.java.com.acc;
 
+import com.acc.models.User;
 import com.acc.service.UserService;
-import com.acc.database.pojo.User;
 import com.acc.resources.UserResource;
 import main.java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;

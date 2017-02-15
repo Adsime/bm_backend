@@ -12,6 +12,13 @@ public class Problem {
     private String title, content;
     private ArrayList<Link> links;
 
+    public Problem(int id, String title, String content, ArrayList<Link> links) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.links = links;
+    }
+
     public int getId() {
         return id;
     }
@@ -53,5 +60,15 @@ public class Problem {
         }
         job.add("links", jab);
         return job.build();
+    }
+
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", links=" + links +
+                '}';
     }
 }

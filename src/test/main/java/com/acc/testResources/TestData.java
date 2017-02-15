@@ -1,13 +1,11 @@
 package main.java.com.acc.testResources;
 
-import com.acc.database.pojo.Group;
-import com.acc.database.pojo.Problem;
-import com.acc.database.pojo.Tag;
-import com.acc.database.pojo.User;
+import com.acc.models.*;
 import org.junit.Before;
 import org.mockito.Mock;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.HttpHeaders;
@@ -31,18 +29,17 @@ public class TestData {
 
     public static List<Group> testGroups() {
         List<Group> groups = new ArrayList<>();
-        groups.add(new Group(1, "group1"));
-        groups.add(new Group(2, "group2"));
-        groups.add(new Group(3, "group3"));
+        groups.add(new Group(1, "asdasd", "dasdasdd", new ArrayList<Link>()));
+        groups.add(new Group(2, "asdasd", "dasdasdd", new ArrayList<Link>()));
+        groups.add(new Group(3, "asdasd", "dasdasdd", new ArrayList<Link>()));
         return groups;
     }
 
     public static List<User> testUsers() {
         List<User> users = new ArrayList<>();
-        users.add(new User("Adrian", "Melsom", "melsom.adrian", "melsom.adrian@accenture.com", testProblems().get(0)));
-        users.add(new User("Duy", "Nguyen", "nguyen.duy", "nguyen.duy@accenture.com", testProblems().get(0)));
-        users.add(new User("Håkon", "Smørvik", "smørvik.håkon", "smørvik.håkon@accenture.com", testProblems().get(0)));
-        users.add(new User("Kim", "Vu", "vu.kim", "vu.kim@accenture.com", testProblems().get(0)));
+        users.add(new User());
+        users.add(new User());
+        users.add(new User());
         return users;
     }
 
@@ -64,19 +61,19 @@ public class TestData {
 
     public static List<Problem> testProblems() {
         List<Problem> problems = new ArrayList<>();
-        problems.add(new Problem(null, testUsers().get(0)));
-        problems.add(new Problem(null, testUsers().get(0)));
-        problems.add(new Problem(null, testUsers().get(0)));
-        problems.add(new Problem(null, testUsers().get(0)));
+        problems.add(new Problem(1, "asdad", "asdasddsa", new ArrayList<Link>()));
+        problems.add(new Problem(2, "asdad", "asdasddsa", new ArrayList<Link>()));
+        problems.add(new Problem(3, "asdad", "asdasddsa", new ArrayList<Link>()));
+        problems.add(new Problem(4, "asdad", "asdasddsa", new ArrayList<Link>()));
         return problems;
     }
 
     public static List<Tag> testTags() {
         List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag("TestTag1"));
-        tags.add(new Tag("TestTag2"));
-        tags.add(new Tag("TestTag3"));
-        tags.add(new Tag("TestTag4"));
+        tags.add(new Tag());
+        tags.add(new Tag());
+        tags.add(new Tag());
+        tags.add(new Tag());
         return tags;
     }
 
@@ -89,10 +86,12 @@ public class TestData {
     }
 
     public static JsonObject jsonProblem() {
+        JsonArrayBuilder jab = Json.createArrayBuilder();
         return Json.createObjectBuilder()
+                .add("id", 1)
                 .add("title", "problem 1")
-                .add("body", "asdasdasd")
-                .add("user", "user")
+                .add("content", "asdasdasd")
+                .add("links", jab)
                 .build();
     }
 

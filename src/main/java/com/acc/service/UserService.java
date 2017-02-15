@@ -1,5 +1,6 @@
 package com.acc.service;
-import com.acc.database.pojo.User;
+import com.acc.models.User;
+
 import java.util.List;
 
 /**

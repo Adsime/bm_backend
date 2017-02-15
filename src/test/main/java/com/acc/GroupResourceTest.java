@@ -1,7 +1,7 @@
 package main.java.com.acc;
 
+import com.acc.models.Group;
 import com.acc.service.GroupService;
-import com.acc.database.pojo.Group;
 import com.acc.resources.GroupResource;
 import main.java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;

@@ -1,6 +1,6 @@
 package com.acc.resources;
 
-import com.acc.database.pojo.Tag;
+import com.acc.models.Tag;
 import com.acc.service.TagService;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
@@ -8,6 +8,8 @@ import org.junit.Before;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -51,7 +53,7 @@ public class TagResource {
                if(tag == null) {
                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
                }
-               return Response.ok(tag.toString()).build();
+               return Response.ok(tag.toJson()).build();
            } catch (InternalServerErrorException isee) {
                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
            }
@@ -69,7 +71,11 @@ public class TagResource {
                 if(tags == null || tags.isEmpty()) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                return Response.ok(tags.toString()).build();
+                JsonArrayBuilder jab = Json.createArrayBuilder();
+                for(Tag tag : tags) {
+                    jab.add(tag.toJson());
+                }
+                return Response.ok(jab.build()).build();
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }

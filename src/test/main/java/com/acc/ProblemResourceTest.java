@@ -1,7 +1,7 @@
 package main.java.com.acc;
 
+import com.acc.models.Problem;
 import com.acc.service.ProblemService;
-import com.acc.database.pojo.Problem;
 import com.acc.resources.ProblemResource;
 import main.java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;
@@ -129,9 +129,9 @@ public class ProblemResourceTest {
     @Test
     public void newProblemsSuccess() {
         problemResource.service = service;
-        when(service.newProblem(TestData.testProblems().get(0))).thenReturn(true);
+        when(service.newProblem(any())).thenReturn(true);
         when(service.verify(TestData.credentials)).thenReturn(true);
-        expected = HttpStatus.OK_200;
+        expected = HttpStatus.CREATED_201;
         actual = problemResource.newProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
         assertEquals(expected, actual);
     }
@@ -149,7 +149,7 @@ public class ProblemResourceTest {
     @Test
     public void newProblemsInternalError() {
         problemResource.service = service;
-        when(service.newProblem(TestData.testProblems().get(0))).thenThrow(new InternalServerErrorException());
+        when(service.newProblem(any())).thenThrow(new InternalServerErrorException());
         when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = problemResource.newProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
@@ -182,7 +182,7 @@ public class ProblemResourceTest {
     @Test
     public void updateProblemsNoEntries() {
         problemResource.service = service;
-        when(service.updateProblem(any())).thenReturn(true);
+        when(service.updateProblem(any())).thenReturn(false);
         when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.BAD_REQUEST_400;
         actual = problemResource.updateProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
@@ -207,8 +207,8 @@ public class ProblemResourceTest {
         problemResource.service = service;
         when(service.deleteProblem(0)).thenReturn(true);
         when(service.verify(TestData.credentials)).thenReturn(true);
-        expected = HttpStatus.OK_200;
-        actual = problemResource.deleteProblem(TestData.testCredentials()).getStatus();
+        expected = HttpStatus.NO_CONTENT_204;
+        actual = problemResource.deleteProblem(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -218,7 +218,7 @@ public class ProblemResourceTest {
         when(service.deleteProblem(0)).thenReturn(true);
         when(service.verify(TestData.badCredentials)).thenReturn(false);
         expected = HttpStatus.UNAUTHORIZED_401;
-        actual = problemResource.deleteProblem(TestData.testBadCredentials()).getStatus();
+        actual = problemResource.deleteProblem(0, TestData.testBadCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -228,7 +228,7 @@ public class ProblemResourceTest {
         when(service.deleteProblem(0)).thenReturn(false);
         when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.BAD_REQUEST_400;
-        actual = problemResource.deleteProblem(TestData.testCredentials()).getStatus();
+        actual = problemResource.deleteProblem(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -238,7 +238,7 @@ public class ProblemResourceTest {
         when(service.deleteProblem(0)).thenThrow(new InternalServerErrorException());
         when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
-        actual = problemResource.deleteProblem(TestData.testCredentials()).getStatus();
+        actual = problemResource.deleteProblem(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 

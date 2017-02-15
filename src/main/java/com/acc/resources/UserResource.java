@@ -1,12 +1,15 @@
 package com.acc.resources;
 
+import com.acc.models.Tag;
+import com.acc.models.User;
 import com.acc.service.UserService;
-import com.acc.database.pojo.User;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -48,7 +51,7 @@ public class UserResource {
                 if(user == null) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                return Response.ok(user.toString()).build();
+                return Response.ok(user.toJson()).build();
             } catch(InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
@@ -67,7 +70,11 @@ public class UserResource {
                 if(users == null || users.isEmpty()) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                return Response.ok(users.toString()).build();
+                JsonArrayBuilder jab = Json.createArrayBuilder();
+                for(User user : users) {
+                    jab.add(user.toJson());
+                }
+                return Response.ok(jab.build()).build();
             } catch(InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }

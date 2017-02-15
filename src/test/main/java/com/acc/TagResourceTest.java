@@ -1,7 +1,7 @@
 package main.java.com.acc;
 
+import com.acc.models.Tag;
 import com.acc.service.TagService;
-import com.acc.database.pojo.Tag;
 import com.acc.resources.TagResource;
 import main.java.com.acc.testResources.TestData;
 import org.eclipse.jetty.http.HttpStatus;
