@@ -1,5 +1,6 @@
 package com.acc.models;
 
+import com.acc.database.pojo.*;
 import com.google.gson.Gson;
 
 import javax.json.*;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  */
 public class Group {
     private int id;
-    private String path, title, content;
+    private String path, name;
     private ArrayList<Link> links;
 
     public int getId() {
@@ -29,22 +30,6 @@ public class Group {
         this.path = path;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public ArrayList<Link> getLinks() {
         return links;
     }
@@ -55,11 +40,12 @@ public class Group {
 
     public JsonObject toJson() {
         JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("id", id).add("title", title).add("content", content);
+        job.add("id", id).add("name", name);
         JsonArrayBuilder jab = Json.createArrayBuilder();
         for(Link link : links) {
-            //jab.add()
+            jab.add(link.toJson());
         }
+        job.add("links", jab);
         return job.build();
     }
 }

@@ -42,13 +42,6 @@ public class GroupResourceTest {
 
     @Test
     public void getGroupSuccessTest() {
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        JsonArrayBuilder jab = Json.createArrayBuilder();
-        for(int i = 0; i < 10; i++) {
-            jab.add(TestData.jsonUser());
-        }
-        job.add("array", jab);
-        System.out.println(job.build());
         groupResource.service = controller;
         when(controller.verify(TestData.credentials)).thenReturn(true);
         when(controller.getGroup(1)).thenReturn(TestData.testGroups().get(0));
