@@ -34,13 +34,13 @@ public class GroupResourceTest {
     public void setup() {
         initMocks(this);
         this.groupResource = new GroupResource();
-        service.getItem(Problem.class);
     }
 
     // Start getGroup tests
 
     @Test
     public void getGroupSuccessTest() {
+        service.getItem(Problem.class);
         groupResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         when(service.getGroup(1)).thenReturn(TestData.testGroups().get(0));
