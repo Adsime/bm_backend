@@ -8,18 +8,16 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "GROUP")
-public class Group {
+public class HbnGroup {
 
     private long id;
     private String name;
-    private Set<User> users;
-    private Set<Institution> institutions;
+    private Set<HbnUser> users;
+    private HbnProblem problem;
 
-    private Problem problem;
+    public HbnGroup(){}
 
-    public Group(){}
-
-    public Group(long id, String name) {
+    public HbnGroup(long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -45,30 +43,21 @@ public class Group {
     }
 
     @ManyToMany(mappedBy = "groups")
-    public Set<User> getUsers() {
+    public Set<HbnUser> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @ManyToMany(mappedBy = "groups")
-    public Set<Institution> getInstitutions() {
-        return institutions;
-    }
-
-    public void setInstitutions(Set<Institution> institutions) {
-        this.institutions = institutions;
+    public void setUsers(Set<HbnUser> hbnUsers) {
+        this.users = hbnUsers;
     }
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "problem_id")
-    public Problem getProblem() {
+    public HbnProblem getHbnProblem() {
         return problem;
     }
 
-    public void setProblem(Problem problem) {
+    public void setHbnProblem(HbnProblem problem) {
         this.problem = problem;
     }
 }

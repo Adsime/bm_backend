@@ -1,11 +1,7 @@
 package com.acc.database.test;
-import com.acc.database.pojo.User;
 import org.dbunit.DBTestCase;
-import org.dbunit.PropertiesBasedJdbcDatabaseTester;
-import org.dbunit.assertion.*;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.junit.Test;
 
 import java.io.FileInputStream;
 

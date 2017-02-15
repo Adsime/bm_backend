@@ -7,15 +7,15 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "PASSWORD")
-public class Password {
+public class HbnPassword {
 
     private long id;
     private String passHash;
     private String eIdHash;
 
-    public Password(){}
+    public HbnPassword(){}
 
-    public Password(String passHash, String eIdHash) {
+    public HbnPassword(String passHash, String eIdHash) {
         this.passHash = passHash;
         this.eIdHash = eIdHash;
     }

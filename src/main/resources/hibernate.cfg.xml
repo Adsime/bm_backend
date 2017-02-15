@@ -11,11 +11,11 @@
         <property name="hibernate.connection.password">admin</property>
         <property name="show_sql">true</property>
 
-        <mapping class="com.acc.database.pojo.Group"/>
-        <mapping class="com.acc.database.pojo.Institution"/>
-        <mapping class="com.acc.database.pojo.Password"/>
-        <mapping class="com.acc.database.pojo.Tag"/>
-        <mapping class="com.acc.database.pojo.Problem"/>
-        <mapping class="com.acc.database.pojo.User"/>
+        <mapping class="com.acc.database.pojo.HbnGroup"/>
+        <mapping class="com.acc.database.pojo.HbnInstitution"/>
+        <mapping class="com.acc.database.pojo.HbnPassword"/>
+        <mapping class="com.acc.database.pojo.HbnTag"/>
+        <mapping class="com.acc.database.pojo.HbnProblem"/>
+        <mapping class="com.acc.database.pojo.HbnUser"/>
     </session-factory>
 </hibernate-configuration>

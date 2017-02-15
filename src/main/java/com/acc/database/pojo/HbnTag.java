@@ -9,19 +9,19 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TAG")
-public class Tag {
+public class HbnTag {
 
     private long id;
     private String tagName;
     private String description;
-    private Set<User> users;
-    private Set<User> problems;
+    private Set<HbnUser> hbnUsers;
+    private Set<HbnUser> problems;
 
 
-    public Tag() {
+    public HbnTag() {
     }
 
-    public Tag(String tagName, String description) {
+    public HbnTag(String tagName, String description) {
         this.tagName = tagName;
         this.description = description;
     }
@@ -55,21 +55,21 @@ public class Tag {
         this.description = description;
     }
 
-    @ManyToMany(mappedBy = "tags")
-    public Set<User> getUsers() {
-        return users;
+    @ManyToMany(mappedBy = "getHbnTags")
+    public Set<HbnUser> getHbnUsers() {
+        return hbnUsers;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setHbnUsers(Set<HbnUser> hbnUsers) {
+        this.hbnUsers = hbnUsers;
     }
 
-    @ManyToMany(mappedBy = "tags")
-    public Set<User> getProblems() {
+    @ManyToMany(mappedBy = "getHbnTags")
+    public Set<HbnUser> getProblems() {
         return problems;
     }
 
-    public void setProblems(Set<User> problems) {
+    public void setProblems(Set<HbnUser> problems) {
         this.problems = problems;
     }
 }

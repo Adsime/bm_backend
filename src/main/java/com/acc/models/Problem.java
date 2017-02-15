@@ -64,7 +64,7 @@ public class Problem {
 
     @Override
     public String toString() {
-        return "Problem{" +
+        return "HbnProblem{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +

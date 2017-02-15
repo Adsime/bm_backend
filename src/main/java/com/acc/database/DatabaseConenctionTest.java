@@ -1,15 +1,11 @@
 package com.acc.database;
 
-import com.acc.database.pojo.Tag;
-import com.acc.database.pojo.User;
-import com.acc.database.repository.TagRepository;
+import com.acc.database.pojo.HbnUser;
 import com.acc.database.repository.UserRepository;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
-import javax.xml.rpc.ServiceException;
 
 /**
  * Created by nguyen.duy.j.khac on 07.02.2017.
@@ -22,8 +18,8 @@ public class DatabaseConenctionTest {
 
         //TagRepository TR = new TagRepository();
         UserRepository UR = new UserRepository();
-        UR.add(new User("Hohkun","Butterbucht","hb@assenture","SALT"));
-       // TR.add(new Tag("Dickface", "People that totalt Dickfaces"));
+        //UR.add(new HbnUser("Hohkun","Butterbucht","hb@assenture","SALT"));
+       // TR.add(new HbnTag("Dickface", "People that totalt Dickfaces"));
     }
 
     protected void setUp(){
