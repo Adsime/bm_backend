@@ -42,7 +42,7 @@ public class GeneralService {
         return null;
     }
 
-    public <T> boolean addItem(java.lang.Class classOfT, IBusinessModel item) {
+    public boolean addItem(java.lang.Class classOfT, IBusinessModel item) {
         try {
             Constructor reco = classOfT.getConstructor();
             IRepository repo = (IRepository) reco.newInstance();

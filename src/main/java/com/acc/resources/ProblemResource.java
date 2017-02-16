@@ -42,7 +42,7 @@ public class ProblemResource {
     @GET
     @Path("ping")
     public String problemPong() {
-        service.getItem(UserRepository.class);
+        service.getItem();
         return "problem pong!";
     }
 
