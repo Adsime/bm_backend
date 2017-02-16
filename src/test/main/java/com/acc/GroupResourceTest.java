@@ -2,6 +2,7 @@ package main.java.com.acc;
 
 import com.acc.models.Group;
 import com.acc.models.Problem;
+import com.acc.service.GeneralService;
 import com.acc.service.GroupService;
 import com.acc.resources.GroupResource;
 import main.java.com.acc.testResources.TestData;
@@ -40,7 +41,7 @@ public class GroupResourceTest {
 
     @Test
     public void getGroupSuccessTest() {
-        service.getItem(Problem.class);
+        GeneralService gs = new GeneralService();
         groupResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         when(service.getGroup(1)).thenReturn(TestData.testGroups().get(0));

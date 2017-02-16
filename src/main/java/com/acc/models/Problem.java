@@ -8,15 +8,33 @@ import java.util.ArrayList;
  */
 public class Problem {
 
-    private int id;
-    private String title, content;
+    private int id, author;
+    private String title, content, path;
     private ArrayList<Link> links;
 
-    public Problem(int id, String title, String content, ArrayList<Link> links) {
+    public Problem(int id, int author, String title, String content, String path, ArrayList<Link> links) {
         this.id = id;
+        this.author = author;
         this.title = title;
         this.content = content;
+        this.path = path;
         this.links = links;
+    }
+
+    public int getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(int author) {
+        this.author = author;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public int getId() {
@@ -54,7 +72,8 @@ public class Problem {
     public JsonObject toJson() {
         JsonObjectBuilder job = Json.createObjectBuilder();
         JsonArrayBuilder jab = Json.createArrayBuilder();
-        job.add("id", id).add("title", title).add("content", content);
+        job.add("id", id).add("title", title).add("content", content)
+        .add("author", author).add("path", path);
         for(Link link : links) {
             jab.add(link.toJson());
         }
@@ -64,10 +83,12 @@ public class Problem {
 
     @Override
     public String toString() {
-        return "HbnProblem{" +
+        return "Problem{" +
                 "id=" + id +
+                ", author=" + author +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", path='" + path + '\'' +
                 ", links=" + links +
                 '}';
     }
