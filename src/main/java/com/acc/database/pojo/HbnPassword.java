@@ -1,13 +1,14 @@
 package com.acc.database.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by nguyen.duy.j.khac on 08.02.2017.
  */
 @Entity
 @Table(name = "PASSWORD")
-public class HbnPassword {
+public class HbnPassword implements Serializable {
 
     private long id;
     private String passHash;

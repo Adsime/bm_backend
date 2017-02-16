@@ -8,7 +8,7 @@ import org.hibernate.Transaction;
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
-public class TagRepository extends Repository implements IRepository<HbnTag>{
+public class TagRepository implements IRepository<HbnTag>{
 
     public TagRepository(){
         super();
@@ -16,7 +16,7 @@ public class TagRepository extends Repository implements IRepository<HbnTag>{
 
     public boolean add(HbnTag newHbnTag){
 
-        Session session = sessionFactory.openSession();
+        /*Session session = sessionFactory.openSession();
         Transaction trans = null;
         Integer tagID = null;
 
@@ -36,7 +36,7 @@ public class TagRepository extends Repository implements IRepository<HbnTag>{
 
             session.close();
             return true;
-        }
+        }*/return false;
     }
 
     @Override

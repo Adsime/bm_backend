@@ -1,6 +1,9 @@
 package com.acc.database;
 
 import com.acc.database.pojo.HbnUser;
+import com.acc.database.repository.ProblemRepository;
+import com.acc.models.Problem;
+import com.acc.models.User;
 import com.acc.database.repository.UserRepository;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -17,9 +20,13 @@ public class DatabaseConenctionTest {
     public static void main(String[] args) {
 
         //TagRepository TR = new TagRepository();
-        UserRepository UR = new UserRepository();
-        //UR.add(new HbnUser("Hohkun","Butterbucht","hb@assenture","SALT"));
        // TR.add(new HbnTag("Dickface", "People that totalt Dickfaces"));
+        DatabaseConenctionTest DBCT = new DatabaseConenctionTest();
+        DBCT.setUp();
+        UserRepository UR = new UserRepository(sessionFactory);
+        UR.add(new User());
+        ProblemRepository PR = new ProblemRepository(sessionFactory);
+        PR.add
     }
 
     protected void setUp(){
@@ -43,24 +50,4 @@ public class DatabaseConenctionTest {
             throw new ExceptionInInitializerError(e);
         }
     }
-
-
-    /*public Integer addPerson(String name, String talent){
-        Session session = sessionFactory.openSession();
-        Transaction tx = null;
-        Integer personID = null;
-        try{
-            tx = session.beginTransaction();
-            Person person = new Person(name, talent);
-            personID = (Integer) session.save(person);
-            tx.commit();
-        }catch (HibernateException e)
-        {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return personID;
-    }*/
 }

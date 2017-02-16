@@ -1,5 +1,7 @@
 package com.acc.database.repository;
 
+import org.hibernate.SessionFactory;
+
 import java.util.List;
 
 /**

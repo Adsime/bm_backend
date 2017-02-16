@@ -1,6 +1,7 @@
 package com.acc.database.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "GROUP")
-public class HbnGroup {
+public class HbnGroup implements Serializable {
 
     private long id;
     private String name;

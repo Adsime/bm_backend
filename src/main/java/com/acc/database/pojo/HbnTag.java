@@ -1,6 +1,7 @@
 package com.acc.database.pojo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TAG")
-public class HbnTag {
+public class HbnTag implements Serializable {
 
     private long id;
     private String tagName;
@@ -55,7 +56,7 @@ public class HbnTag {
         this.description = description;
     }
 
-    @ManyToMany(mappedBy = "getHbnTags")
+    @ManyToMany(mappedBy = "tags")
     public Set<HbnUser> getHbnUsers() {
         return hbnUsers;
     }
@@ -64,7 +65,7 @@ public class HbnTag {
         this.hbnUsers = hbnUsers;
     }
 
-    @ManyToMany(mappedBy = "getHbnTags")
+    @ManyToMany(mappedBy = "tags")
     public Set<HbnUser> getProblems() {
         return problems;
     }
