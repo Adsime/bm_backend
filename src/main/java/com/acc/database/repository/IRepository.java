@@ -1,6 +1,6 @@
 package com.acc.database.repository;
 
-import org.hibernate.SessionFactory;
+import com.acc.database.specification.Specification;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ public interface IRepository<T> {
     boolean add(T item);
     boolean update(T item);
     boolean remove(T item);
-    //List<T> query(Specification specification);
+    List<T> query(Specification specification);
 }

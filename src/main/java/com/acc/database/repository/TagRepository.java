@@ -1,9 +1,12 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnTag;
+import com.acc.database.specification.Specification;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.List;
 
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
@@ -47,6 +50,11 @@ public class TagRepository implements IRepository<HbnTag>{
     @Override
     public boolean remove(HbnTag item) {
         return false;
+    }
+
+    @Override
+    public List<HbnTag> query(Specification specification) {
+        return null;
     }
 
     /*public boolean listEmployees( ){

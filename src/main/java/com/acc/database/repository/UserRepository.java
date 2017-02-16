@@ -1,11 +1,14 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnUser;
+import com.acc.database.specification.Specification;
 import com.acc.models.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+
+import java.util.List;
 
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
@@ -52,5 +55,10 @@ public class UserRepository implements IRepository<User>{
     @Override
     public boolean remove(User user) {
         return false;
+    }
+
+    @Override
+    public List<User> query(Specification specification) {
+        return null;
     }
 }

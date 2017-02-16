@@ -19,21 +19,18 @@ public class DatabaseConenctionTest {
 
     public static void main(String[] args) {
 
-        //TagRepository TR = new TagRepository();
-       // TR.add(new HbnTag("Dickface", "People that totalt Dickfaces"));
-        DatabaseConenctionTest DBCT = new DatabaseConenctionTest();
-        DBCT.setUp();
-        UserRepository UR = new UserRepository(sessionFactory);
-        UR.add(new User());
-        ProblemRepository PR = new ProblemRepository(sessionFactory);
-        PR.add
+        //DatabaseConenctionTest DBCT = new DatabaseConenctionTest();
+        //DBCT.setUp();
+        Problem problem = new Problem(1,1,"nesten den kuleste oppgaven ever","lag en en kul app bro", "c://kulapp.exe", null);
+        ProblemRepository PR = new ProblemRepository();
+        PR.add(problem);
     }
 
-    protected void setUp(){
+    /*protected void setUp(){
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
-        try {
+            try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
         }
         catch (org.hibernate.service.spi.ServiceException se) {
@@ -49,5 +46,5 @@ public class DatabaseConenctionTest {
             StandardServiceRegistryBuilder.destroy( registry );
             throw new ExceptionInInitializerError(e);
         }
-    }
+    }*/
 }
