@@ -1,6 +1,7 @@
 package com.acc.resources;
 
 import com.acc.database.repository.TagRepository;
+import com.acc.database.repository.UserRepository;
 import com.acc.models.Problem;
 import com.acc.service.ProblemService;
 import com.google.gson.Gson;
@@ -41,7 +42,7 @@ public class ProblemResource {
     @GET
     @Path("ping")
     public String problemPong() {
-        service.getItem(TagRepository.class);
+        service.getItem(UserRepository.class);
         return "problem pong!";
     }
 

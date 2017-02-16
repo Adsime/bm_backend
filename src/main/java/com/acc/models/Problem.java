@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
-public class Problem {
+public class Problem implements IBusinessModel {
 
     private int id, author;
     private String title, content, path;

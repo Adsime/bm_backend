@@ -7,7 +7,7 @@ import javax.json.JsonObjectBuilder;
 /**
  * Created by melsom.adrian on 15.02.2017.
  */
-public class Link {
+public class Link implements IBusinessModel {
 
     private String rel, href;
 

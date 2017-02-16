@@ -1,8 +1,12 @@
 package com.acc.service;
 
 import com.acc.database.repository.IRepository;
+import com.acc.database.repository.TagRepository;
+import com.acc.models.IBusinessModel;
 import com.acc.models.Problem;
+import org.hibernate.SessionFactory;
 
+import java.lang.reflect.Constructor;
 import java.util.Base64;
 
 /**
@@ -24,11 +28,10 @@ public class GeneralService {
         return true;
     }
 
-    public <T> T getItem(java.lang.Class<T> classOfT) {
+    public <T> T getItem(java.lang.Class classOfT) {
         try {
-            IRepository repo = (IRepository)classOfT.newInstance();
-            System.out.println(classOfT);
-            System.out.println("It's alive!" + " " + repo);
+            Constructor reco = classOfT.getConstructor();
+            IRepository repo = (IRepository) reco.newInstance();
         } catch (IllegalAccessException iae) {
             System.out.println(iae.getStackTrace());
         } catch (InstantiationException ie) {
@@ -36,8 +39,22 @@ public class GeneralService {
         } catch(Exception e) {
             System.out.println(e.getStackTrace());
         }
-
         return null;
+    }
+
+    public <T> boolean addItem(java.lang.Class classOfT, IBusinessModel item) {
+        try {
+            Constructor reco = classOfT.getConstructor();
+            IRepository repo = (IRepository) reco.newInstance();
+            return repo.add(item);
+        } catch (IllegalAccessException iae) {
+            System.out.println(iae.getStackTrace());
+        } catch (InstantiationException ie) {
+            System.out.println(ie.getStackTrace());
+        } catch(Exception e) {
+            System.out.println(e.getStackTrace());
+        }
+        return false;
     }
 
 }
