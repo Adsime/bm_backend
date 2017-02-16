@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
-public class Group {
+public class Group implements IBusinessModel {
     private int id;
     private String path, name;
     private ArrayList<Link> links;
