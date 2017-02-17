@@ -1,5 +1,6 @@
 package com.acc.resources;
 
+import com.acc.database.repository.ProblemRepository;
 import com.acc.database.repository.TagRepository;
 import com.acc.database.repository.UserRepository;
 import com.acc.models.Problem;
@@ -42,7 +43,7 @@ public class ProblemResource {
     @GET
     @Path("ping")
     public String problemPong() {
-        service.getItem();
+        service.getItem(ProblemRepository.class);
         return "problem pong!";
     }
 
