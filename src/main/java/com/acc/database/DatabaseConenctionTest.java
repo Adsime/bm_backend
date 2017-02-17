@@ -27,8 +27,8 @@ public class DatabaseConenctionTest {
         Problem problem = new Problem(1,1,"nesten den kuleste oppgaven ever","lag en en kul app bro", "c://duma.exe", null);
         ProblemRepository PR = new ProblemRepository();
         PR.add(problem);
-        ProblemByIdSpec spec = new ProblemByIdSpec(1);
-        System.out.println(Arrays.toString(PR.query(spec).toArray()));
+        //ProblemByIdSpec spec = new ProblemByIdSpec(1);
+        //System.out.println(Arrays.toString(PR.query(spec).toArray()));
     }
 
     /*protected void setUp(){
