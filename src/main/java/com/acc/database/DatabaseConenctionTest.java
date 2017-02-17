@@ -25,7 +25,9 @@ public class DatabaseConenctionTest {
         //DatabaseConenctionTest DBCT = new DatabaseConenctionTest();
         //DBCT.setUp();
         Problem problem = new Problem(1,1,"nesten den kuleste oppgaven ever","lag en en kul app bro", "c://duma.exe", null);
+        UserRepository UR = new UserRepository();
         ProblemRepository PR = new ProblemRepository();
+        UR.add(new User()); //Hardkodet User i USERREPO
         PR.add(problem);
         //ProblemByIdSpec spec = new ProblemByIdSpec(1);
         //System.out.println(Arrays.toString(PR.query(spec).toArray()));

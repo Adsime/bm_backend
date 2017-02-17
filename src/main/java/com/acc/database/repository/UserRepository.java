@@ -13,38 +13,17 @@ import java.util.List;
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
-public class UserRepository implements IRepository<User>{
+public class UserRepository extends AbstractRepository<HbnUser> implements IRepository<User>{
 
-    SessionFactory sessionFactory;
-
-    public UserRepository( SessionFactory sessionFactory){
-        this.sessionFactory = sessionFactory;
+    public UserRepository(){
+        super();
     }
 
     @Override
     public boolean add(User user){
 
         HbnUser mappedUser = new HbnUser("testfn","HAHAHA","testmail","saltty");
-        Session session = sessionFactory.openSession();
-        Transaction tx = null;
-
-        try{
-
-            tx = session.beginTransaction();
-            session.save(mappedUser);
-            tx.commit();
-        }
-        catch (HibernateException e) {
-
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-            return false;
-        }
-        finally {
-
-            session.close();
-            return true;
-        }
+        return super.addToDb(mappedUser);
     }
 
     @Override
