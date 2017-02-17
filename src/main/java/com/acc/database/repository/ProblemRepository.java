@@ -2,14 +2,13 @@ package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnProblem;
 import com.acc.database.pojo.HbnUser;
+import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Problem;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,8 +38,21 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
     }
 
     @Override
-    public List<Problem> query(Specification specification) {
-        return null;
+    public List<Problem> query(Specification spec) {
+        List<HbnProblem> readData = super.queryFromDb((HqlSpecification) spec);
+        List<Problem> result = new ArrayList<>();
+
+        for (HbnProblem readProblem : readData){
+            result.add(new Problem(
+                    (int)readProblem.getId(),
+                    (int)readProblem.getUser().getId(),
+                    "",
+                    "",
+                    readProblem.getPath(),
+                    null));
+        }
+
+        return result;
     }
 
     private HbnUser getAuthor(long authorId){

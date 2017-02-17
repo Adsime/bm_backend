@@ -1,13 +1,18 @@
 package com.acc.database.repository;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import com.acc.database.pojo.HbnProblem;
+import com.acc.database.specification.HqlSpecification;
+import com.acc.models.Problem;
+import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
@@ -46,6 +51,35 @@ public abstract class AbstractRepository<T>{
             session.close();
             return true;
         }
+    }
+
+    public List<T> queryFromDb (HqlSpecification spec) {
+        List<T> result = new ArrayList<>();
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+
+        try{
+
+            tx = session.beginTransaction();
+            TypedQuery<T> query = session.createQuery("Select * from PROBLEM");
+            result = query.getResultList();
+            tx.commit();
+        }
+        catch (HibernateException he) {
+
+            if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            he.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+
+            session.close();
+            return result;
+        }
+
     }
 
     protected void setUp(){
