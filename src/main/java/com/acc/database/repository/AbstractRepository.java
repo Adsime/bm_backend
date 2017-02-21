@@ -4,9 +4,11 @@ import com.acc.database.pojo.HbnProblem;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.models.Problem;
 import org.hibernate.*;
+import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import javax.persistence.TypedQuery;
@@ -87,7 +89,14 @@ public abstract class AbstractRepository<T>{
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
-            sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+            //sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+            /*MetadataSources ms = new MetadataSources(registry);
+            Metadata md = ms.buildMetadata();
+            sessionFactory = md.buildSessionFactory();*/
+            Configuration c = new Configuration();
+            c = c.configure();
+            sessionFactory = c.buildSessionFactory();
+            System.out.println("her");
         }
         catch (org.hibernate.service.spi.ServiceException se) {
             System.err.println("Failed to connect to server");

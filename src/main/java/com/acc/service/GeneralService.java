@@ -38,6 +38,7 @@ public class GeneralService {
             System.out.println(ie.getStackTrace());
         } catch(Exception e) {
             System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
         return null;
     }
