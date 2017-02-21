@@ -64,7 +64,7 @@ public abstract class AbstractRepository<T>{
         try{
 
             tx = session.beginTransaction();
-            TypedQuery<T> query = session.createQuery("Select * from PROBLEM");
+            TypedQuery<T> query = session.createQuery(spec.toHqlQuery());
             result = query.getResultList();
             tx.commit();
         }
