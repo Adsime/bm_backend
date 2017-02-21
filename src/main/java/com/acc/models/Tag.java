@@ -9,6 +9,6 @@ import javax.json.JsonObject;
 public class Tag implements IBusinessModel {
 
     public JsonObject toJson() {
-        return null;
+        return Json.createObjectBuilder().add("hello", "hello").build();
     }
 }

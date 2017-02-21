@@ -1,6 +1,7 @@
 package com.acc.service;
 
 import com.acc.database.repository.IRepository;
+import com.acc.database.repository.ProblemRepository;
 import com.acc.database.repository.TagRepository;
 import com.acc.models.IBusinessModel;
 import com.acc.models.Problem;

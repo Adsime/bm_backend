@@ -89,13 +89,13 @@ public abstract class AbstractRepository<T>{
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
-            //sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+            sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
             /*MetadataSources ms = new MetadataSources(registry);
             Metadata md = ms.buildMetadata();
             sessionFactory = md.buildSessionFactory();*/
-            Configuration c = new Configuration();
+            /*Configuration c = new Configuration();
             c = c.configure();
-            sessionFactory = c.buildSessionFactory();
+            sessionFactory = c.buildSessionFactory();*/
             System.out.println("her");
         }
         catch (org.hibernate.service.spi.ServiceException se) {

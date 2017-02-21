@@ -1,6 +1,6 @@
 package com.acc.models;
 
-import javax.json.JsonObject;
+import javax.json.*;
 
 /**
  * Created by melsom.adrian on 15.02.2017.
@@ -8,6 +8,6 @@ import javax.json.JsonObject;
 public class User implements IBusinessModel {
 
     public JsonObject toJson() {
-        return null;
+        return Json.createObjectBuilder().add("Hello", "hello").build();
     }
 }
