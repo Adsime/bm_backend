@@ -12,6 +12,6 @@ public class ProblemByIdSpec implements HqlSpecification {
 
     @Override
     public String toHqlQuery() {
-        return "from PROBLEM";
+        return "from HbnProblem";
     }
 }
