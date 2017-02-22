@@ -33,17 +33,14 @@ public class ProblemResource {
     @Inject
     public ProblemService service;
 
-    public Gson gson;
-
     @Before
     public void setup() {
-        gson = new Gson();
     }
 
     @GET
     @Path("ping")
     public String problemPong() {
-        service.getItem(ProblemRepository.class);
+        service.newProblem(new Problem(1, 1, "Dette funker?", "asdasdasdasd", "/omg/omg/LOL", null));
         return "problem pong!";
     }
 

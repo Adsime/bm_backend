@@ -1,5 +1,5 @@
 FROM njmittet/alpine-wildfly:10.0.0.Final
-COPY target/bm-rest-api.war /opt/jboss/wildfly/standalone/deployments/bm-rest-api.war
+COPY ./target/bm-rest-api.war /opt/jboss/wildfly/standalone/deployments/bm-rest-api.war
 
 #
 # Important note: If volumes are blocked by a firewall, a new

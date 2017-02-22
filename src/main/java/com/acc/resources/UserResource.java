@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
@@ -19,23 +20,20 @@ import java.util.List;
  * Created by melsom.adrian on 03.02.2017.
  */
 
-@Path("userModels")
+@Path("users")
 public class UserResource {
 
     @Inject
     public UserService service;
 
-    public Gson gson;
-
     @Before
     public void setup() {
-        gson = new Gson();
     }
 
     @GET
     @Path("ping")
     public String userPong() {
-        return "user pong!";
+        return "User pong!";
     }
 
     @GET
@@ -75,7 +73,7 @@ public class UserResource {
                     jab.add(user.toJson());
                 }
                 return Response.ok(jab.build()).build();
-            } catch(InternalServerErrorException isee) {
+            } catch(Exception e) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
         } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
@@ -92,7 +90,7 @@ public class UserResource {
                 if(service.newUser(new Gson().fromJson(o.toString(), User.class))) {
                     return Response.ok().build();
                 }
-            } catch(InternalServerErrorException isee) {
+            } catch(Exception e) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
         } return Response.status(HttpStatus.UNAUTHORIZED_401).build();

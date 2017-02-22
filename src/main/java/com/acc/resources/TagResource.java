@@ -28,11 +28,9 @@ public class TagResource {
     @Inject
     public TagService service;
 
-    public Gson gson;
-
     @Before
     public void setup() {
-        gson = new Gson();
+
     }
 
     @GET

@@ -1,8 +1,5 @@
 package com.acc.models;
 
-import com.acc.database.pojo.*;
-import com.google.gson.Gson;
-
 import javax.json.*;
 import java.util.ArrayList;
 

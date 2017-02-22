@@ -83,7 +83,11 @@ public class UserResourceTest {
     public void getAllUsersSuccess() {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.getAllUsers()).thenReturn(TestData.testUsers());
+        try {
+            when(service.getAllUsers()).thenReturn(TestData.testUsers());
+        } catch (Exception e) {
+
+        }
         expected = HttpStatus.OK_200;
         actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -93,7 +97,11 @@ public class UserResourceTest {
     public void getAllUsersAuthFail() {
         userResource.service = service;
         when(service.verify(TestData.badCredentials)).thenReturn(false);
-        when(service.getAllUsers()).thenReturn(TestData.testUsers());
+        try {
+            when(service.getAllUsers()).thenReturn(TestData.testUsers());
+        } catch (Exception e) {
+
+        }
         expected = HttpStatus.UNAUTHORIZED_401;
         actual = userResource.getAllUsers(TestData.testBadCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -103,7 +111,12 @@ public class UserResourceTest {
     public void getAllUsersNoEntries() {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.getAllUsers()).thenReturn(new ArrayList<User>());
+        try {
+            when(service.getAllUsers()).thenReturn(new ArrayList<User>());
+        } catch (Exception e) {
+
+        }
+
         expected = HttpStatus.BAD_REQUEST_400;
         actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -113,7 +126,12 @@ public class UserResourceTest {
     public void getAllUsersInternalError() {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.getAllUsers()).thenThrow(new InternalServerErrorException());
+        try {
+            when(service.getAllUsers()).thenThrow(new InternalServerErrorException());
+        } catch (Exception e) {
+
+        }
+
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -126,7 +144,12 @@ public class UserResourceTest {
     public void newUsersSuccess() {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.newUser(any())).thenReturn(true);
+        try {
+            when(service.newUser(any())).thenReturn(true);
+        } catch (Exception e) {
+
+        }
+
         expected = HttpStatus.OK_200;
         actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -136,7 +159,11 @@ public class UserResourceTest {
     public void newUsersAuthFail() {
         userResource.service = service;
         when(service.verify(TestData.badCredentials)).thenReturn(false);
-        when(service.newUser(any())).thenReturn(true);
+        try {
+            when(service.newUser(any())).thenReturn(true);
+        } catch (Exception e) {
+
+        }
         expected = HttpStatus.UNAUTHORIZED_401;
         actual = userResource.newUser(TestData.jsonUser(), TestData.testBadCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -146,7 +173,12 @@ public class UserResourceTest {
     public void newUsersInternalError() {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.newUser(any())).thenThrow(new InternalServerErrorException());
+        try {
+            when(service.newUser(any())).thenThrow(new InternalServerErrorException());
+        } catch (Exception e) {
+
+        }
+
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);

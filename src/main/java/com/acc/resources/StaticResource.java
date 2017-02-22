@@ -219,4 +219,22 @@ public class StaticResource {
                 "{ \"id\": 4, \"name\": \"UIO\"}]";
         return Response.ok(body).build();
     }
+
+    @Path("tags")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTags() {
+        System.out.println("GET - schools");
+        String body = "[\n" +
+                "    {\n" +
+                "        \"id\":\"0\",\n" +
+                "        \"name\":\"2017\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"id\":\"1\",\n" +
+                "        \"name\":\"Student\"\n" +
+                "    }\n" +
+                "]";
+        return Response.ok(body).build();
+    }
 }

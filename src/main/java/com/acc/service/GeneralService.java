@@ -1,11 +1,7 @@
 package com.acc.service;
 
 import com.acc.database.repository.IRepository;
-import com.acc.database.repository.ProblemRepository;
-import com.acc.database.repository.TagRepository;
 import com.acc.models.IBusinessModel;
-import com.acc.models.Problem;
-import org.hibernate.SessionFactory;
 
 import java.lang.reflect.Constructor;
 import java.util.Base64;

@@ -20,7 +20,6 @@ com\acc\resources\InstitutionResource.class
 com\acc\service\ProblemService.class
 com\acc\resources\ProblemResource.class
 com\acc\service\SupervisorService.class
-com\acc\database\DatabaseConenctionTest.class
 com\acc\models\Supervisor.class
 com\acc\models\User.class
 com\acc\database\pojo\HbnProblem.class

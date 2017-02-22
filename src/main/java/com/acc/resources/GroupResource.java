@@ -25,11 +25,10 @@ public class GroupResource {
     @Inject
     public GroupService service;
 
-    public Gson gson;
 
     @Before
     public void setup() {
-        gson = new Gson();
+
     }
 
     @GET
