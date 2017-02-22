@@ -13,6 +13,5 @@ public class GetProblemByIdSpec implements HqlSpecification {
     @Override
     public String toHqlQuery() {
         return "FROM HbnProblem WHERE id='" + id + "'";
-
     }
 }
