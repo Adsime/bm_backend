@@ -2,9 +2,6 @@ package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnTag;
 import com.acc.database.specification.Specification;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -13,8 +10,7 @@ import java.util.List;
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
 
-@Transactional
-public class TagRepository implements IRepository<HbnTag>{
+public class TagRepository implements Repository<HbnTag> {
 
     public TagRepository(){
         super();

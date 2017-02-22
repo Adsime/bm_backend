@@ -13,7 +13,6 @@
         <property name="show_sql">true</property>
 
         <mapping class="com.acc.database.pojo.HbnGroup"/>
-        <mapping class="com.acc.database.pojo.HbnInstitution"/>
         <mapping class="com.acc.database.pojo.HbnPassword"/>
         <mapping class="com.acc.database.pojo.HbnTag"/>
         <mapping class="com.acc.database.pojo.HbnProblem"/>

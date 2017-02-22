@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
-public class ProblemRepository extends AbstractRepository<HbnProblem> implements IRepository<Problem> {
+public class ProblemRepository extends AbstractRepository<HbnProblem> implements Repository<Problem> {
 
     public ProblemRepository() {
         super();
@@ -23,8 +23,8 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
     @Override
     public boolean add(Problem problem) {
 
-        HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()));
-        return super.addToDb(mappedProblem);
+       // HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()));
+        return false;//super.addToDb(mappedProblem);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
         return result;
     }
 
-    private HbnUser getAuthor(long authorId){
+    /*private HbnUser getAuthor(long authorId){
 
         Session session = super.getSessionFactory().openSession();
         HbnUser author = null;
@@ -75,6 +75,6 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
             session.close();
             return author;
         }
-    }
+    }*/
 }
 

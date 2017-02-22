@@ -3,6 +3,7 @@ package com.acc.database.repository;
 import com.acc.database.pojo.HbnProblem;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.models.Problem;
+import com.sun.org.apache.regexp.internal.RE;
 import org.hibernate.*;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -13,7 +14,12 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.hibernate.service.ServiceRegistry;
 
+import javax.annotation.Resource;
+import javax.inject.Inject;
 import javax.persistence.TypedQuery;
+import javax.transaction.Status;
+import javax.transaction.TransactionSynchronizationRegistry;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,22 +29,21 @@ import java.util.List;
  */
 public abstract class AbstractRepository<T>{
 
-    private static SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     public AbstractRepository(){
-        if (sessionFactory == null) setUp();
+        if (sessionFactory == null) buildSessionFactory();
     }
 
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
+    public Session getSession() {
+        return sessionFactory.openSession();
     }
 
     public boolean addToDb(T item) {
 
-        Session session = sessionFactory.openSession();
         Transaction tx = null;
 
-        try{
+        try( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
             session.save(item);
@@ -50,20 +55,16 @@ public abstract class AbstractRepository<T>{
             he.printStackTrace();
             return false;
         }
-        finally {
-
-            session.close();
-            return true;
-        }
+        return true;
     }
 
     public List<T> queryFromDb (HqlSpecification spec) {
-        List<T> result = new ArrayList<>();
 
-        Session session = sessionFactory.openSession();
+        List<T> result = new ArrayList<>();
         Transaction tx = null;
 
-        try{
+        try( Session session = sessionFactory.openSession();
+        ){
 
             tx = session.beginTransaction();
             TypedQuery<T> query = session.createQuery(spec.toHqlQuery());
@@ -78,20 +79,17 @@ public abstract class AbstractRepository<T>{
         catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
-
-            session.close();
-            return result;
-        }
+        return result;
 
     }
 
-    protected void setUp(){
+    protected void buildSessionFactory(){
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+
             /*MetadataSources ms = new MetadataSources(registry);
             Metadata md = ms.buildMetadata();
             sessionFactory = md.buildSessionFactory();*/
@@ -100,6 +98,7 @@ public abstract class AbstractRepository<T>{
             sessionFactory = c.buildSessionFactory();*/
 
             System.out.println("her");
+
         }
         catch (org.hibernate.service.spi.ServiceException se) {
             System.err.println("Failed to connect to server");
@@ -115,36 +114,4 @@ public abstract class AbstractRepository<T>{
             throw new ExceptionInInitializerError(e);
         }
     }
-
-    private static void buildSessionFactory()
-    {
-        try
-        {
-            // Create session factory from cfg.xml
-            Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
-
-            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                    .configure()
-                    .build();
-
-            /*.addAnnotatedClass(User.class) */
-
-            Metadata Meta = new MetadataSources(serviceRegistry)
-                    .addAnnotatedClass(HbnProblem.class)
-                    .addAnnotatedClassName("com.acc.database.pojo.hbnproblem")
-                    .getMetadataBuilder()
-                    .build();
-
-            SessionFactory sessionFactory = Meta.getSessionFactoryBuilder()
-                    .build();
-
-        }
-        catch (Throwable ex)
-        {
-            System.err.println("Initial session factory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
-
 }

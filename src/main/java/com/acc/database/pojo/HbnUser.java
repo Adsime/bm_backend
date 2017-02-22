@@ -17,17 +17,18 @@ public class HbnUser implements Serializable {
     private String lastName;
     private String email;
     private String salt;
+    private String enterpriseId;
     private Set<HbnGroup> groups;
-    private Set<HbnInstitution> institutions;
     private Set<HbnTag> tags;
 
     public HbnUser(){}
 
-    public HbnUser(String firstName, String lastName, String email, String salt) {
+    public HbnUser(String firstName, String lastName, String email, String salt, String enterpriseId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.salt = salt;
+        this.enterpriseId = enterpriseId;
     }
 
     @Id
@@ -77,6 +78,15 @@ public class HbnUser implements Serializable {
         this.salt = salt;
     }
 
+    @Column(name = "enterprise_id")
+    public String getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(String enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "GROUP_ASSOCIATE",
@@ -89,20 +99,6 @@ public class HbnUser implements Serializable {
 
     public void setGroups(Set<HbnGroup> groups) {
         this.groups = groups;
-    }
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "INSTITUTION_AFFILIATION",
-            joinColumns =  @JoinColumn(name = "user_id"),
-            inverseJoinColumns =  @JoinColumn(name = "institution_id")
-    )
-    public Set<HbnInstitution> getInstitutions() {
-        return institutions;
-    }
-
-    public void setInstitutions(Set<HbnInstitution> hbnInstitutions) {
-        this.institutions = hbnInstitutions;
     }
 
     @ManyToMany(cascade = CascadeType.ALL)
