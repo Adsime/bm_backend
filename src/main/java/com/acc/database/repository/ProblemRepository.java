@@ -28,12 +28,12 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
     }
 
     @Override
-    public boolean update(Problem problem) {
+    public boolean update(Problem problem, long id) {
         return false;
     }
 
     @Override
-    public boolean remove(Problem problem) {
+    public boolean remove(Problem problem, long id) {
         return false;
     }
 

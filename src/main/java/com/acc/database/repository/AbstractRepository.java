@@ -39,7 +39,7 @@ public abstract class AbstractRepository<T>{
         return sessionFactory.openSession();
     }
 
-    public boolean addToDb(T item) {
+    public boolean addEntity(T item) {
 
         Transaction tx = null;
 
@@ -58,13 +58,50 @@ public abstract class AbstractRepository<T>{
         return true;
     }
 
-    public List<T> queryFromDb (HqlSpecification spec) {
+    public boolean updateEntity(T item)  {
+
+        Transaction tx = null;
+
+        try( Session session = sessionFactory.openSession()){
+
+            tx = session.beginTransaction();
+            session.update(item);
+            tx.commit();
+        }
+        catch (HibernateException he) {
+
+            if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            he.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean removeEntity(T item) {
+
+        Transaction tx = null;
+
+        try ( Session session = sessionFactory.openSession()){
+
+            tx = session.beginTransaction();
+            session.remove(item);
+            tx.commit();
+        }
+        catch (HibernateException he){
+            if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            he.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
+        public List<T> queryFromDb (HqlSpecification spec) {
 
         List<T> result = new ArrayList<>();
         Transaction tx = null;
 
-        try( Session session = sessionFactory.openSession();
-        ){
+        try( Session session = sessionFactory.openSession();){
 
             tx = session.beginTransaction();
             TypedQuery<T> query = session.createQuery(spec.toHqlQuery());
