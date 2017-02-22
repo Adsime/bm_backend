@@ -37,7 +37,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements IRepo
     }
 
     @Override
-    public List<User> query(Specification specification) {
+    public List<User> getQuery(Specification specification) {
         return null;
     }
 }

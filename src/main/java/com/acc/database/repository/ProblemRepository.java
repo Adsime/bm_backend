@@ -38,12 +38,12 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
     }
 
     @Override
-    public List<Problem> query(Specification spec) {
+    public List<Problem> getQuery(Specification spec) {
         List<HbnProblem> readData = super.queryFromDb((HqlSpecification) spec);
         List<Problem> result = new ArrayList<>();
 
         for (HbnProblem readProblem : readData){
-            result.add(new Problem(
+            result.add( new Problem(
                     (int)readProblem.getId(),
                     (int)readProblem.getUser().getId(),
                     "",

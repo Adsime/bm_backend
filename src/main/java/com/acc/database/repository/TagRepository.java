@@ -6,11 +6,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
+
+@Transactional
 public class TagRepository implements IRepository<HbnTag>{
 
     public TagRepository(){
@@ -53,7 +56,7 @@ public class TagRepository implements IRepository<HbnTag>{
     }
 
     @Override
-    public List<HbnTag> query(Specification specification) {
+    public List<HbnTag> getQuery(Specification specification) {
         return null;
     }
 

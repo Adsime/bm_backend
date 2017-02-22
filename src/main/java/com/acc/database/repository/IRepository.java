@@ -11,5 +11,5 @@ public interface IRepository<T> {
     boolean add(T item);
     boolean update(T item);
     boolean remove(T item);
-    List<T> query(Specification specification); // <- not all Repos will need this one . . .
+    List<T> getQuery(Specification specification); // <- not all Repos will need this one . . .
 }

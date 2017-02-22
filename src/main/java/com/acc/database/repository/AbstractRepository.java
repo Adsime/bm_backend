@@ -6,10 +6,12 @@ import com.acc.models.Problem;
 import org.hibernate.*;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public abstract class AbstractRepository<T>{
 
-    private SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
 
     public AbstractRepository(){
         if (sessionFactory == null) setUp();
@@ -96,6 +98,7 @@ public abstract class AbstractRepository<T>{
             /*Configuration c = new Configuration();
             c = c.configure();
             sessionFactory = c.buildSessionFactory();*/
+
             System.out.println("her");
         }
         catch (org.hibernate.service.spi.ServiceException se) {
@@ -112,4 +115,36 @@ public abstract class AbstractRepository<T>{
             throw new ExceptionInInitializerError(e);
         }
     }
+
+    private static void buildSessionFactory()
+    {
+        try
+        {
+            // Create session factory from cfg.xml
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .configure()
+                    .build();
+
+            /*.addAnnotatedClass(User.class) */
+
+            Metadata Meta = new MetadataSources(serviceRegistry)
+                    .addAnnotatedClass(HbnProblem.class)
+                    .addAnnotatedClassName("com.acc.database.pojo.hbnproblem")
+                    .getMetadataBuilder()
+                    .build();
+
+            SessionFactory sessionFactory = Meta.getSessionFactoryBuilder()
+                    .build();
+
+        }
+        catch (Throwable ex)
+        {
+            System.err.println("Initial session factory creation failed." + ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
 }

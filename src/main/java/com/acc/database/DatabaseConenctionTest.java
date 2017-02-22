@@ -1,15 +1,11 @@
 package com.acc.database;
 
-import com.acc.database.pojo.HbnUser;
 import com.acc.database.repository.ProblemRepository;
-import com.acc.database.specification.ProblemByIdSpec;
+import com.acc.database.specification.GetProblemAllSpec;
+import com.acc.database.specification.GetProblemByIdSpec;
 import com.acc.models.Problem;
-import com.acc.models.User;
 import com.acc.database.repository.UserRepository;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 import java.util.Arrays;
 
@@ -29,8 +25,10 @@ public class DatabaseConenctionTest {
         ProblemRepository PR = new ProblemRepository();
         //UR.add(new User()); //Hardkodet User i USERREPO
         //PR.add(problem);
-        ProblemByIdSpec spec = new ProblemByIdSpec(1);
-        System.out.println(Arrays.toString(PR.query(spec).toArray()));
+        GetProblemByIdSpec specById = new GetProblemByIdSpec(1);
+        GetProblemAllSpec specAll = new GetProblemAllSpec();
+        System.out.println("\n" + Arrays.toString(PR.getQuery(specById).toArray()) + "\n");
+        System.out.println("\n" + Arrays.toString(PR.getQuery(specAll).toArray()));
     }
 
     /*protected void setUp(){
