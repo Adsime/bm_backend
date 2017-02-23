@@ -2,14 +2,17 @@ package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnGroup;
 import com.acc.database.pojo.HbnProblem;
+import com.acc.database.pojo.HbnTag;
 import com.acc.database.pojo.HbnUser;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Group;
+import com.acc.models.Tag;
 import com.acc.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
@@ -53,23 +56,35 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                     readUser.getLastName(),
                     readUser.getEmail(),
                     readUser.getEnterpriseId(),
-                    null,
-                    null
+                    getGroupIds(readUser.getGroups()),
+                    getUserTags(readUser)
             ));
         }
 
         return result;
     }
 
-    private List<Group> getGroupList(List<HbnGroup> hbnList){
-        List<Group> groupList = new ArrayList<>();
+    private List<Integer> getGroupIds(Set<HbnGroup> hbnGroupList){
+        List<Integer> idList = new ArrayList<>();
 
-        for(HbnGroup hbnGroup : hbnList){
-            groupList.add(
-                    new Group((int)hbnGroup.getId(),
-                            hbnGroup.getName(),
-                            "",
-                            null));
+        for(HbnGroup hbnGroup : hbnGroupList){
+            idList.add((int)hbnGroup.getId());
         }
+
+        return idList;
+    }
+
+    private List<Tag> getUserTags (HbnUser hbnUser){
+        List<Tag> tagList = new ArrayList<>();
+
+        for (HbnTag hbnTag : hbnUser.getTags()){
+            tagList.add(new Tag(
+                    (int)hbnTag.getId(),
+                    hbnTag.getType(),
+                    hbnTag.getDescription()
+            ));
+        }
+
+        return tagList;
     }
 }

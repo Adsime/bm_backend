@@ -101,8 +101,9 @@ public abstract class AbstractRepository<T>{
         try( Session session = sessionFactory.openSession();){
 
             tx = session.beginTransaction();
-            TypedQuery<T> query = session.createQuery(spec.toHqlQuery());
-            result = query.getResultList();
+            result = session
+                    .createQuery(spec.toHqlQuery())
+                    .list();
             tx.commit();
         }
         catch (HibernateException he) {

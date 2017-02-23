@@ -15,6 +15,7 @@ public class HbnTag implements Serializable {
     private long id;
     private String tagName;
     private String description;
+    private String type;
     private Set<HbnUser> users;
     private Set<HbnUser> problems;
 
@@ -54,6 +55,15 @@ public class HbnTag implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @ManyToMany(mappedBy = "tags")

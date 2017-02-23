@@ -14,7 +14,6 @@ public class User implements IBusinessModel {
     private String lastName;
     private String email;
     private String enterpriseID;
-    private List<Group> groups;
     private List<Tag> tags;
 
     public User(String firstName, String lastName, String email, String enterpriseID) {
@@ -24,13 +23,12 @@ public class User implements IBusinessModel {
         this.enterpriseID = enterpriseID;
     }
 
-    public User(long id, String firstName, String lastName, String email, String enterpriseID, List<Group> groups, List<Tag> tags) {
+    public User(long id, String firstName, String lastName, String email, String enterpriseID, List<Integer> groupIds, List<Tag> tags) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.enterpriseID = enterpriseID;
-        this.groups = groups;
         this.tags = tags;
     }
 
@@ -72,14 +70,6 @@ public class User implements IBusinessModel {
 
     public void setEnterpriseID(String enterpriseID) {
         this.enterpriseID = enterpriseID;
-    }
-
-    public List<Group> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
     }
 
     public List<Tag> getTags() {
