@@ -85,9 +85,12 @@ public class UserResource {
      *
      */
     public Response newUser(JsonObject o, @Context HttpHeaders headers) {
+        System.out.println(o);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
-                if(service.newUser(new Gson().fromJson(o.toString(), User.class))) {
+                User user = new Gson().fromJson(o.toString(), User.class);
+                System.out.println(user.toJson());
+                if(service.newUser(user)) {
                     return Response.ok().build();
                 }
             } catch(Exception e) {

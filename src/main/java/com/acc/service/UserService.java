@@ -20,7 +20,8 @@ public class UserService extends GeneralService {
 
 
     public User getUser(int id) {
-        return userRepository.getQuery(new GetUserByIdSpec(id)).get(0);
+        List<User> users = userRepository.getQuery(new GetUserByIdSpec(id));
+        return users.isEmpty() ? null : users.get(0);
     }
 
     public List<User> getAllUsers() throws Exception{

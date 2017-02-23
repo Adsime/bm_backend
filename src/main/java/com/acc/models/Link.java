@@ -11,6 +11,11 @@ public class Link implements IBusinessModel {
 
     private String rel, href;
 
+    public Link(String rel, String href) {
+        this.rel = rel;
+        this.href = href;
+    }
+
     public String getRel() {
         return rel;
     }
@@ -27,9 +32,5 @@ public class Link implements IBusinessModel {
         this.href = href;
     }
 
-    public JsonObject toJson() {
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("rel", rel).add("href", href);
-        return job.build();
-    }
+
 }

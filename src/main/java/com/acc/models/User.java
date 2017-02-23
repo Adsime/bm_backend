@@ -1,8 +1,11 @@
 package com.acc.models;
 
+import com.acc.providers.Links;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by melsom.adrian on 15.02.2017.
@@ -15,8 +18,11 @@ public class User implements IBusinessModel {
     private String email;
     private String enterpriseID;
     private List<Tag> tags;
+    private Map<String, List<Link>> links;
 
-    public User(String firstName, String lastName, String email, String enterpriseID) {
+
+    public User(String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
+        this.tags = tags;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -76,8 +82,8 @@ public class User implements IBusinessModel {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void addLinks(String pluralType, List<Link> links) {
+        this.links.put(pluralType, links);
     }
 
     public String toJson() {

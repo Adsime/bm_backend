@@ -1,7 +1,9 @@
 package com.acc.service;
 
+import com.acc.database.repository.TagRepository;
 import com.acc.models.Tag;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -9,7 +11,11 @@ import java.util.List;
  */
 public class TagService extends GeneralService {
 
+    @Inject
+    public TagRepository tagRepository;
+
     public Tag getTag(int id) {
+        //List<Tag> tags = tagRepository.getQuery()
         return null;
     }
 

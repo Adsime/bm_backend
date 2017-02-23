@@ -1,5 +1,7 @@
 package com.acc.models;
 
+import com.google.gson.Gson;
+
 import javax.json.*;
 import java.util.ArrayList;
 
@@ -69,16 +71,8 @@ public class Problem implements IBusinessModel {
         this.links = links;
     }
 
-    public JsonObject toJson() {
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        JsonArrayBuilder jab = Json.createArrayBuilder();
-        job.add("id", id).add("title", title).add("content", content)
-        .add("author", author).add("path", path);
-        for(Link link : links) {
-            jab.add(link.toJson());
-        }
-        job.add("links", jab);
-        return job.build();
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 
     @Override
