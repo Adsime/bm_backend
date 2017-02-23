@@ -15,7 +15,7 @@ public class HbnTag implements Serializable {
     private long id;
     private String tagName;
     private String description;
-    private Set<HbnUser> hbnUsers;
+    private Set<HbnUser> users;
     private Set<HbnUser> problems;
 
 
@@ -58,11 +58,11 @@ public class HbnTag implements Serializable {
 
     @ManyToMany(mappedBy = "tags")
     public Set<HbnUser> getHbnUsers() {
-        return hbnUsers;
+        return users;
     }
 
-    public void setHbnUsers(Set<HbnUser> hbnUsers) {
-        this.hbnUsers = hbnUsers;
+    public void setHbnUsers(Set<HbnUser> users) {
+        this.users = users;
     }
 
     @ManyToMany(mappedBy = "tags")

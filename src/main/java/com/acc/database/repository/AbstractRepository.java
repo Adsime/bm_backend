@@ -3,15 +3,23 @@ package com.acc.database.repository;
 import com.acc.database.pojo.HbnProblem;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.models.Problem;
+import com.sun.org.apache.regexp.internal.RE;
 import org.hibernate.*;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.hibernate.service.ServiceRegistry;
 
+import javax.annotation.Resource;
+import javax.inject.Inject;
 import javax.persistence.TypedQuery;
+import javax.transaction.Status;
+import javax.transaction.TransactionSynchronizationRegistry;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,19 +32,18 @@ public abstract class AbstractRepository<T>{
     private SessionFactory sessionFactory;
 
     public AbstractRepository(){
-        if (sessionFactory == null) setUp();
+        if (sessionFactory == null) buildSessionFactory();
     }
 
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
+    public Session getSession() {
+        return sessionFactory.openSession();
     }
 
-    public boolean addToDb(T item) {
+    public boolean addEntity(T item) {
 
-        Session session = sessionFactory.openSession();
         Transaction tx = null;
 
-        try{
+        try( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
             session.save(item);
@@ -48,23 +55,56 @@ public abstract class AbstractRepository<T>{
             he.printStackTrace();
             return false;
         }
-        finally {
-
-            session.close();
-            return true;
-        }
+        return true;
     }
 
-    public List<T> queryFromDb (HqlSpecification spec) {
-        List<T> result = new ArrayList<>();
+    public boolean updateEntity(T item)  {
 
-        Session session = sessionFactory.openSession();
         Transaction tx = null;
 
-        try{
+        try( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
-            TypedQuery<T> query = session.createQuery("Select * from PROBLEM");
+            session.update(item);
+            tx.commit();
+        }
+        catch (HibernateException he) {
+
+            if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            he.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean removeEntity(T item) {
+
+        Transaction tx = null;
+
+        try ( Session session = sessionFactory.openSession()){
+
+            tx = session.beginTransaction();
+            session.remove(item);
+            tx.commit();
+        }
+        catch (HibernateException he){
+            if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            he.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+
+        public List<T> queryFromDb (HqlSpecification spec) {
+
+        List<T> result = new ArrayList<>();
+        Transaction tx = null;
+
+        try( Session session = sessionFactory.openSession();){
+
+            tx = session.beginTransaction();
+            TypedQuery<T> query = session.createQuery(spec.toHqlQuery());
             result = query.getResultList();
             tx.commit();
         }
@@ -76,27 +116,26 @@ public abstract class AbstractRepository<T>{
         catch (Exception e) {
             e.printStackTrace();
         }
-        finally {
-
-            session.close();
-            return result;
-        }
+        return result;
 
     }
 
-    protected void setUp(){
+    protected void buildSessionFactory(){
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+
             /*MetadataSources ms = new MetadataSources(registry);
             Metadata md = ms.buildMetadata();
             sessionFactory = md.buildSessionFactory();*/
             /*Configuration c = new Configuration();
             c = c.configure();
             sessionFactory = c.buildSessionFactory();*/
+
             System.out.println("her");
+
         }
         catch (org.hibernate.service.spi.ServiceException se) {
             System.err.println("Failed to connect to server");

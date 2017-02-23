@@ -1,6 +1,6 @@
 package com.acc.service;
 
-import com.acc.database.repository.IRepository;
+import com.acc.database.repository.Repository;
 import com.acc.models.IBusinessModel;
 
 import java.lang.reflect.Constructor;
@@ -28,7 +28,7 @@ public class GeneralService {
     public <T> T getItem(java.lang.Class classOfT) {
         try {
             Constructor reco = classOfT.getConstructor();
-            IRepository repo = (IRepository) reco.newInstance();
+            Repository repo = (Repository) reco.newInstance();
         } catch (IllegalAccessException iae) {
             System.out.println(iae.getStackTrace());
         } catch (InstantiationException ie) {
@@ -43,7 +43,7 @@ public class GeneralService {
     public boolean addItem(java.lang.Class classOfT, IBusinessModel item) {
         try {
             Constructor reco = classOfT.getConstructor();
-            IRepository repo = (IRepository) reco.newInstance();
+            Repository repo = (Repository) reco.newInstance();
             return repo.add(item);
         } catch (IllegalAccessException iae) {
             System.out.println(iae.getStackTrace());

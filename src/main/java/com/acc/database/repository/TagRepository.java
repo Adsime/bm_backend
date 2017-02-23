@@ -2,16 +2,15 @@ package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnTag;
 import com.acc.database.specification.Specification;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
-public class TagRepository implements IRepository<HbnTag>{
+
+public class TagRepository implements Repository<HbnTag> {
 
     public TagRepository(){
         super();
@@ -43,17 +42,17 @@ public class TagRepository implements IRepository<HbnTag>{
     }
 
     @Override
-    public boolean update(HbnTag item) {
+    public boolean update(HbnTag item, long id) {
         return false;
     }
 
     @Override
-    public boolean remove(HbnTag item) {
+    public boolean remove(HbnTag item, long id) {
         return false;
     }
 
     @Override
-    public List<HbnTag> query(Specification specification) {
+    public List<HbnTag> getQuery(Specification specification) {
         return null;
     }
 
