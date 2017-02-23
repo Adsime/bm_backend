@@ -42,12 +42,12 @@ public class TagRepository implements Repository<HbnTag> {
     }
 
     @Override
-    public boolean update(HbnTag item, long id) {
+    public boolean update(HbnTag item) {
         return false;
     }
 
     @Override
-    public boolean remove(HbnTag item, long id) {
+    public boolean remove(long id) {
         return false;
     }
 

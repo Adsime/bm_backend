@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface Repository<T> {
     boolean add(T item);
-    boolean update(T item, long id);
-    boolean remove(T item, long id);
+    boolean update(T item);
+    boolean remove(long id);
     List<T> getQuery(Specification specification); // <- not all Repos will need this one . . .
 }
