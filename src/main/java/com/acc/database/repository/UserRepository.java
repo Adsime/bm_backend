@@ -26,15 +26,15 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
     }
 
     @Override
-    public boolean update(User user, long id) {
+    public boolean update(User user) {
         HbnUser mappedUser = new HbnUser(user.getFirstName(), user.getLastName(), user.getEmail(),"",user.getEnterpriseID());
-        mappedUser.setId(id);
+        mappedUser.setId(user.getId());
         return super.updateEntity(mappedUser);
     }
 
     @Override
-    public boolean remove(User user, long id) {
-        HbnUser mappedUser = new HbnUser(user.getFirstName(), user.getLastName(), user.getEmail(),"",user.getEnterpriseID());
+    public boolean remove(long id) {
+        HbnUser mappedUser = new HbnUser();
         mappedUser.setId(id);
         return super.removeEntity(mappedUser);
     }

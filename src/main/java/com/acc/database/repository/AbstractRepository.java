@@ -1,6 +1,7 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnProblem;
+import com.acc.database.pojo.HbnUser;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.models.Problem;
 import com.sun.org.apache.regexp.internal.RE;
@@ -84,7 +85,7 @@ public abstract class AbstractRepository<T>{
         try ( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
-            session.remove(item);
+            session.delete(item);
             tx.commit();
         }
         catch (HibernateException he){

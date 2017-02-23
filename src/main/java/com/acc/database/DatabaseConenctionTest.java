@@ -18,13 +18,13 @@ import java.util.Arrays;
 public class DatabaseConenctionTest {
 
     public static void main(String[] args) {
-        /*
-        UserRepository UR = new UserRepository();
+
+        //UserRepository UR = new UserRepository();
         //UR.add(new User("Johnny","Ronny","TøffeTog@oslo.no","johnny@accenture"));
 
-        System.out.println("\n" + Arrays.toString(UR.getQuery(new GetUserAllSpec()).toArray()));
-        System.out.println("\n" + Arrays.toString(UR.getQuery(new GetUserByIdSpec(5)).toArray()));
-        UR.remove(new User("Lars","Ronny","TøffeTog@oslo.no","johnny@accenture"),5);*/
+        /*System.out.println("\n" + Arrays.toString(UR.getQuery(new GetUserAllSpec()).toArray()));
+        System.out.println("\n" + Arrays.toString(UR.getQuery(new GetUserByIdSpec(5)).toArray()));*/
+        //UR.remove(7);
 
     }
 
