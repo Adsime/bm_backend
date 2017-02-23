@@ -1,5 +1,9 @@
 package com.acc.service;
 import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetProblemAllSpec;
+import com.acc.database.specification.GetUserAllSpec;
+import com.acc.database.specification.GetUserByIdSpec;
+import com.acc.database.specification.Specification;
 import com.acc.models.User;
 
 import javax.inject.Inject;
@@ -11,14 +15,16 @@ import java.util.List;
 public class UserService extends GeneralService {
 
     @Inject
-    private UserRepository userRepository;
+    public UserRepository userRepository;
+
+
 
     public User getUser(int id) {
-        return null; //userRepository.query();
+        return userRepository.getQuery(new GetUserByIdSpec(id)).get(0);
     }
 
     public List<User> getAllUsers() throws Exception{
-        return null;
+        return userRepository.getQuery(new GetUserAllSpec());
     }
 
     public boolean newUser(User user) throws Exception {
@@ -26,10 +32,10 @@ public class UserService extends GeneralService {
     }
 
     public boolean deleteUser(int id) {
-        return userRepository.remove();
+        return true;
     }
 
     public boolean updateUser(User user) {
-        return true;
+        return userRepository.update(user, user.getId());
     }
 }
