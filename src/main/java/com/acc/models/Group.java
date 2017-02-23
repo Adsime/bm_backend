@@ -2,14 +2,13 @@ package com.acc.models;
 
 import com.google.gson.Gson;
 
-import javax.json.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
-public class Group implements IBusinessModel {
+public class Group extends HateOAS {
     private int id;
     private String name;
     private List<User> users;

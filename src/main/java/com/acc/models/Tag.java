@@ -2,13 +2,10 @@ package com.acc.models;
 
 import com.google.gson.Gson;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
-public class Tag implements IBusinessModel {
+public class Tag {
 
     private int id;
     private String name, type, description;

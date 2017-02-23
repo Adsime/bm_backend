@@ -15,11 +15,12 @@ public class TagService extends GeneralService {
     public TagRepository tagRepository;
 
     public Tag getTag(int id) {
-        //List<Tag> tags = tagRepository.getQuery()
+        //List<Tag> tags = tagRepository.getQuery();
         return null;
     }
 
     public List<Tag> getAllTags() {
+        //List<Tag> tags = tagRepository.getQuery();
         return null;
     }
 

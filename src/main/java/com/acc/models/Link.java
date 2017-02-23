@@ -1,13 +1,9 @@
 package com.acc.models;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-
 /**
  * Created by melsom.adrian on 15.02.2017.
  */
-public class Link implements IBusinessModel {
+public class Link {
 
     private String rel, href;
 

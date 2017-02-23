@@ -2,13 +2,12 @@ package com.acc.models;
 
 import com.google.gson.Gson;
 
-import javax.json.*;
 import java.util.ArrayList;
 
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
-public class Problem implements IBusinessModel {
+public class Problem extends HateOAS {
 
     private int id, author;
     private String title, content, path;

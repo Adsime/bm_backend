@@ -1,7 +1,6 @@
 package com.acc.service;
 
 import com.acc.database.repository.Repository;
-import com.acc.models.IBusinessModel;
 
 import java.lang.reflect.Constructor;
 import java.util.Base64;
@@ -23,36 +22,6 @@ public class GeneralService {
         String pw = credentials.split(":")[1];
         String un = credentials.split(":")[0];
         return true;
-    }
-
-    public <T> T getItem(java.lang.Class classOfT) {
-        try {
-            Constructor reco = classOfT.getConstructor();
-            Repository repo = (Repository) reco.newInstance();
-        } catch (IllegalAccessException iae) {
-            System.out.println(iae.getStackTrace());
-        } catch (InstantiationException ie) {
-            System.out.println(ie.getStackTrace());
-        } catch(Exception e) {
-            System.out.println(e.getStackTrace());
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public boolean addItem(java.lang.Class classOfT, IBusinessModel item) {
-        try {
-            Constructor reco = classOfT.getConstructor();
-            Repository repo = (Repository) reco.newInstance();
-            return repo.add(item);
-        } catch (IllegalAccessException iae) {
-            System.out.println(iae.getStackTrace());
-        } catch (InstantiationException ie) {
-            System.out.println(ie.getStackTrace());
-        } catch(Exception e) {
-            System.out.println(e.getStackTrace());
-        }
-        return false;
     }
 
 }
