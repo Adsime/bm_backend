@@ -36,10 +36,6 @@ public abstract class AbstractRepository<T>{
         if (sessionFactory == null) buildSessionFactory();
     }
 
-    public Session getSession() {
-        return sessionFactory.openSession();
-    }
-
     public boolean addEntity(T item) {
 
         Transaction tx = null;

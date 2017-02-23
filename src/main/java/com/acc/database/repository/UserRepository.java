@@ -1,9 +1,11 @@
 package com.acc.database.repository;
 
+import com.acc.database.pojo.HbnGroup;
 import com.acc.database.pojo.HbnProblem;
 import com.acc.database.pojo.HbnUser;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
+import com.acc.models.Group;
 import com.acc.models.User;
 
 import java.util.ArrayList;
@@ -51,10 +53,23 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                     readUser.getLastName(),
                     readUser.getEmail(),
                     readUser.getEnterpriseId(),
-                    null,null
+                    null,
+                    null
             ));
         }
 
         return result;
+    }
+
+    private List<Group> getGroupList(List<HbnGroup> hbnList){
+        List<Group> groupList = new ArrayList<>();
+
+        for(HbnGroup hbnGroup : hbnList){
+            groupList.add(
+                    new Group((int)hbnGroup.getId(),
+                            hbnGroup.getName(),
+                            "",
+                            null));
+        }
     }
 }
