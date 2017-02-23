@@ -1,20 +1,24 @@
 package com.acc.models;
 
+import com.google.gson.Gson;
+
 import javax.json.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
 public class Group implements IBusinessModel {
     private int id;
-    private String path, name;
+    private String name;
+    private List<User> users;
     private ArrayList<Link> links;
 
-    public Group(int id, String path, String name, ArrayList<Link> links) {
+    public Group(int id, String name, List<User> users, ArrayList<Link> links) {
         this.id = id;
-        this.path = path;
         this.name = name;
+        this.users = users;
         this.links = links;
     }
 
@@ -26,12 +30,20 @@ public class Group implements IBusinessModel {
         this.id = id;
     }
 
-    public String getPath() {
-        return path;
+    public String getName() {
+        return name;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public ArrayList<Link> getLinks() {
@@ -42,14 +54,7 @@ public class Group implements IBusinessModel {
         this.links = links;
     }
 
-    public JsonObject toJson() {
-        JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("id", id).add("name", name);
-        JsonArrayBuilder jab = Json.createArrayBuilder();
-        for(Link link : links) {
-            jab.add(link.toJson());
-        }
-        job.add("links", jab);
-        return job.build();
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 }

@@ -32,10 +32,10 @@ public class UserService extends GeneralService {
     }
 
     public boolean deleteUser(int id) {
-        return true;
+        return userRepository.remove((long)id);
     }
 
     public boolean updateUser(User user) {
-        return userRepository.update(user, user.getId());
+        return userRepository.update(user);
     }
 }
