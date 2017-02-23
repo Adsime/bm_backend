@@ -14,7 +14,7 @@ public class UserService extends GeneralService {
     private UserRepository userRepository;
 
     public User getUser(int id) {
-        return null;
+        return null; //userRepository.query();
     }
 
     public List<User> getAllUsers() throws Exception{
@@ -26,7 +26,7 @@ public class UserService extends GeneralService {
     }
 
     public boolean deleteUser(int id) {
-        return true;
+        return userRepository.remove();
     }
 
     public boolean updateUser(User user) {
