@@ -29,9 +29,9 @@ public class TestData {
 
     public static List<Group> testGroups() {
         List<Group> groups = new ArrayList<>();
-        groups.add(new Group(1, "asdasd", "dasdasdd", new ArrayList<Link>()));
-        groups.add(new Group(2, "asdasd", "dasdasdd", new ArrayList<Link>()));
-        groups.add(new Group(3, "asdasd", "dasdasdd", new ArrayList<Link>()));
+        groups.add(new Group(1, "asdasd",null, new ArrayList<Link>()));
+        groups.add(new Group(2, "asdasd",null, new ArrayList<Link>()));
+        groups.add(new Group(3, "asdasd",null, new ArrayList<Link>()));
         return groups;
     }
 
@@ -70,10 +70,10 @@ public class TestData {
 
     public static List<Tag> testTags() {
         List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag());
-        tags.add(new Tag());
-        tags.add(new Tag());
-        tags.add(new Tag());
+        tags.add(new Tag(1, "test", "testdata"));
+        tags.add(new Tag(2, "test", "testdata"));
+        tags.add(new Tag(3, "test", "testdata"));
+        tags.add(new Tag(4, "test", "testdata"));
         return tags;
 
     }
