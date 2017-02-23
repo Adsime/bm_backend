@@ -70,10 +70,10 @@ public class TestData {
 
     public static List<Tag> testTags() {
         List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag(1, "test", "testdata"));
-        tags.add(new Tag(2, "test", "testdata"));
-        tags.add(new Tag(3, "test", "testdata"));
-        tags.add(new Tag(4, "test", "testdata"));
+        tags.add(new Tag(1, "name", "test", "testdata"));
+        tags.add(new Tag(2, "name","test", "testdata"));
+        tags.add(new Tag(3, "name","test", "testdata"));
+        tags.add(new Tag(4, "name","test", "testdata"));
         return tags;
 
     }

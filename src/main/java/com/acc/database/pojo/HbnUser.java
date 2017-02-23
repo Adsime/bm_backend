@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "USER")
-public class HbnUser implements Serializable {
+public class HbnUser implements Serializable, HbnPOJO {
 
     private long id;
     private String firstName;

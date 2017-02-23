@@ -1,86 +1,61 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnTag;
+import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
+import com.acc.models.Tag;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
 
-public class TagRepository implements Repository<HbnTag> {
+
+// TODO: 23.02.2017 Validate tags?
+
+public class TagRepository extends AbstractRepository<HbnTag> implements Repository<Tag> {
 
     public TagRepository(){
         super();
     }
 
-    public boolean add(HbnTag newHbnTag){
-
-        /*Session session = sessionFactory.openSession();
-        Transaction trans = null;
-        Integer tagID = null;
-
-        try{
-
-            trans = session.beginTransaction();
-            tagID = (Integer) session.save(newHbnTag);
-            trans.commit();
-        }
-        catch (HibernateException e) {
-
-            if (trans!=null) trans.rollback();
-            e.printStackTrace();
-            return false;
-        }
-        finally {
-
-            session.close();
-            return true;
-        }*/return false;
+    @Override
+    public boolean add(Tag tag){
+        HbnTag mappedTag = new HbnTag(tag.getName(),tag.getDescription(), tag.getType());
+        return super.addEntity(mappedTag);
     }
 
     @Override
-    public boolean update(HbnTag item) {
-        return false;
+    public boolean update(Tag tag) {
+        HbnTag mappedTag = new HbnTag(tag.getName(),tag.getDescription(), tag.getType());
+        mappedTag.setId(tag.getId());
+        return super.updateEntity(mappedTag);
     }
 
     @Override
     public boolean remove(long id) {
-        return false;
+        HbnTag mappedTag = new HbnTag();
+        mappedTag.setId(id);
+        return super.removeEntity(mappedTag);
     }
 
     @Override
-    public List<HbnTag> getQuery(Specification specification) {
-        return null;
-    }
+    public List<Tag> getQuery(Specification spec) {
+        List<HbnTag> readData = super.queryFromDb((HqlSpecification) spec);
+        List<Tag> result = new ArrayList<>();
 
-    /*public boolean listEmployees( ){
-
-        Session session = sessionFactory.openSession();
-        Transaction tx = null;
-
-        try{
-            tx = session.beginTransaction();
-            List employees = session.createQuery("FROM HbnTag").list();
-            for (Iterator iterator =
-                 employees.iterator(); iterator.hasNext();){
-                HbnTag tag = (HbnTag) iterator.next();
-                System.out.println("Name: " + tag.getTagName());
-                System.out.println("Desc: " + tag.getDescription());
-            }
-            tx.commit();
-        }catch (HibernateException e) {
-
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-            return false;
-
-        }finally {
-
-            session.close();
-            return true;
+        for (HbnTag readTag : readData){
+            result.add( new Tag(
+                    (int)readTag.getId(),
+                    readTag.getTagName(),
+                    readTag.getType(),
+                    readTag.getDescription()
+            ));
         }
-    }*/
+
+        return result;
+    }
 }

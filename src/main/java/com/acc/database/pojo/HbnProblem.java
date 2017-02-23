@@ -9,7 +9,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "PROBLEM")
-public class HbnProblem implements Serializable {
+public class HbnProblem implements Serializable, HbnPOJO {
 
     private long id;
     private String path;

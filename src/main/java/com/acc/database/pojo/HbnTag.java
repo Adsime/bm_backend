@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TAG")
-public class HbnTag implements Serializable {
+public class HbnTag implements Serializable, HbnPOJO {
 
     private long id;
     private String tagName;
@@ -23,9 +23,10 @@ public class HbnTag implements Serializable {
     public HbnTag() {
     }
 
-    public HbnTag(String tagName, String description) {
+    public HbnTag(String tagName, String description, String type) {
         this.tagName = tagName;
         this.description = description;
+        this.type = type;
     }
 
     @Id
@@ -67,11 +68,11 @@ public class HbnTag implements Serializable {
     }
 
     @ManyToMany(mappedBy = "tags")
-    public Set<HbnUser> getHbnUsers() {
+    public Set<HbnUser> getUsers() {
         return users;
     }
 
-    public void setHbnUsers(Set<HbnUser> users) {
+    public void setUsers(Set<HbnUser> users) {
         this.users = users;
     }
 

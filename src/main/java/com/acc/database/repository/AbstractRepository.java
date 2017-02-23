@@ -1,28 +1,15 @@
 package com.acc.database.repository;
 
-import com.acc.database.pojo.HbnProblem;
-import com.acc.database.pojo.HbnUser;
+import com.acc.database.pojo.HbnPOJO;
 import com.acc.database.specification.HqlSpecification;
-import com.acc.models.Problem;
-import com.sun.org.apache.regexp.internal.RE;
 import org.hibernate.*;
-import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
-import org.hibernate.service.ServiceRegistry;
 
-import javax.annotation.Resource;
-import javax.inject.Inject;
-import javax.persistence.TypedQuery;
-import javax.transaction.Status;
-import javax.transaction.TransactionSynchronizationRegistry;
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 
 /**
@@ -98,12 +85,41 @@ public abstract class AbstractRepository<T>{
         List<T> result = new ArrayList<>();
         Transaction tx = null;
 
-        try( Session session = sessionFactory.openSession();){
+        try( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
             result = session
                     .createQuery(spec.toHqlQuery())
                     .list();
+            tx.commit();
+        }
+        catch (HibernateException he) {
+
+            if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            he.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+
+    }
+
+    //To be able to do query of different types of objects in the repositories
+    public Set<HbnPOJO> queryByIdSpec (List<HqlSpecification> idSpecs) {
+
+        Set<HbnPOJO> result = new HashSet<>();
+        Transaction tx = null;
+
+        try( Session session = sessionFactory.openSession()){
+
+            tx = session.beginTransaction();
+            for (HqlSpecification spec : idSpecs){
+                result.add( (HbnPOJO) session
+                        .createQuery(spec.toHqlQuery())
+                        .list()
+                        .get(0));
+            }
             tx.commit();
         }
         catch (HibernateException he) {
