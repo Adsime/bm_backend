@@ -23,7 +23,7 @@ public class TagService extends GeneralService {
     public List<Tag> getAllTags() {
         return tagRepository.getQuery(new GetTagAllSpec());
     }
-
+    
     public boolean newTag(Tag tag) {
         return true;
     }

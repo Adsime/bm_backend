@@ -77,10 +77,6 @@ public class User extends HateOAS {
         return tags;
     }
 
-    public String toString() {
-        return new Gson().toJson(this);
-    }
-
     public String toJson() {
         return new Gson().toJson(this);
     }
