@@ -1,12 +1,9 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnProblem;
-import com.acc.database.pojo.HbnUser;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Problem;
-import org.hibernate.*;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 import java.util.ArrayList;
 import java.util.List;

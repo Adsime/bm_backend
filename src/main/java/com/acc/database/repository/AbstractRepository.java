@@ -71,6 +71,7 @@ public abstract class AbstractRepository<T>{
             session.delete(item);
             tx.commit();
         }
+        // TODO: 24.02.2017 throw custom exception?  
         catch (HibernateException he){
             if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
@@ -82,7 +83,7 @@ public abstract class AbstractRepository<T>{
 
         public List<T> queryFromDb (HqlSpecification spec) {
 
-        List<T> result = new ArrayList<>();
+        List<T> result = new ArrayList<T>();
         Transaction tx = null;
 
         try( Session session = sessionFactory.openSession()){
@@ -126,6 +127,10 @@ public abstract class AbstractRepository<T>{
 
             if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
+        }
+        // TODO: 24.02.2017 Throw a custom exception
+        catch (IndexOutOfBoundsException iobe) {
+            throw new IllegalArgumentException();
         }
         catch (Exception e) {
             e.printStackTrace();

@@ -13,9 +13,6 @@ import java.util.List;
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
 
-
-// TODO: 23.02.2017 Validate tags?
-
 public class TagRepository extends AbstractRepository<HbnTag> implements Repository<Tag> {
 
     public TagRepository(){
