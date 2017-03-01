@@ -5,7 +5,6 @@ import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Tag;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 

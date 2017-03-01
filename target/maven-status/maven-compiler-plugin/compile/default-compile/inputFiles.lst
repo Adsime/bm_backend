@@ -87,4 +87,8 @@ C:\Users\nguyen.duy.j.khac\Desktop\git_repos\bm_backend\src\main\java\com\acc\se
 C:\Users\nguyen.duy.j.khac\Desktop\git_repos\bm_backend\src\main\java\com\acc\resources\ProblemResource.java
 C:\Users\nguyen.duy.j.khac\Desktop\git_repos\bm_backend\src\main\java\com\acc\database\pojo\HbnPassword.java
 C:\Users\nguyen.duy.j.khac\Desktop\git_repos\bm_backend\src\main\java\com\acc\resources\SupervisorResource.java
+<<<<<<< HEAD
 >>>>>>> fixed HQuery
+=======
+>>>>>>> 02ec34357ab8f96a4c452e973d0d4f581a920dd7
+>>>>>>> 77e9e49375da9e4df362b4dd6c4e9ad326326b49

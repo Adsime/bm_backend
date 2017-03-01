@@ -24,7 +24,11 @@ com\acc\service\SupervisorService.class
 <<<<<<< HEAD
 com\acc\database\specification\GetUserByIdSpec.class
 =======
+<<<<<<< HEAD
 >>>>>>> fixed HQuery
+=======
+>>>>>>> 02ec34357ab8f96a4c452e973d0d4f581a920dd7
+>>>>>>> 77e9e49375da9e4df362b4dd6c4e9ad326326b49
 com\acc\database\DatabaseConenctionTest.class
 com\acc\models\Supervisor.class
 com\acc\models\User.class
@@ -46,7 +50,11 @@ com\acc\database\specification\GetUserAllSpec.class
 =======
 com\acc\database\pojo\HbnInstitution.class
 com\acc\database\specification\ProblemByIdSpec.class
+<<<<<<< HEAD
 >>>>>>> fixed HQuery
+=======
+>>>>>>> 02ec34357ab8f96a4c452e973d0d4f581a920dd7
+>>>>>>> 77e9e49375da9e4df362b4dd6c4e9ad326326b49
 com\acc\models\Student.class
 com\acc\database\repository\ProblemRepository.class
 com\acc\app\ApiApp.class

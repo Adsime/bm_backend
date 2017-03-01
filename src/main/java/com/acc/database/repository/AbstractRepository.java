@@ -171,4 +171,5 @@ public abstract class AbstractRepository<T>{
             throw new ExceptionInInitializerError(e);
         }
     }
+
 }
