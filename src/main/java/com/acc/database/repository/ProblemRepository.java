@@ -18,10 +18,10 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
     }
 
     @Override
-    public boolean add(Problem problem) {
+    public Problem add(Problem problem) {
 
        // HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()));
-        return false;//super.addToDb(mappedProblem);
+        return null;//super.addToDb(mappedProblem);
     }
 
     @Override

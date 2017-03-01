@@ -19,14 +19,29 @@ public class TagRepository extends AbstractRepository<HbnTag> implements Reposit
     }
 
     @Override
-    public boolean add(Tag tag){
-        HbnTag mappedTag = new HbnTag(tag.getName(),tag.getDescription(), tag.getType());
-        return super.addEntity(mappedTag);
+    public Tag add(Tag tag){
+        HbnTag mappedTag = new HbnTag(
+                tag.getName(),
+                tag.getDescription(),
+                tag.getType());
+
+        int id = super.addEntity(mappedTag);
+
+        return new Tag(
+                id,
+                tag.getName(),
+                tag.getType(),
+                tag.getDescription()
+        );
     }
 
     @Override
     public boolean update(Tag tag) {
-        HbnTag mappedTag = new HbnTag(tag.getName(),tag.getDescription(), tag.getType());
+        HbnTag mappedTag = new HbnTag(
+                tag.getName(),
+                tag.getDescription(),
+                tag.getType());
+
         mappedTag.setId(tag.getId());
         return super.updateEntity(mappedTag);
     }

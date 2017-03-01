@@ -4,13 +4,12 @@ import com.acc.database.pojo.HbnPOJO;
 import com.acc.database.specification.HqlSpecification;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
-import org.hibernate.service.ServiceRegistry;
 
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 
@@ -25,23 +24,23 @@ public abstract class AbstractRepository<T>{
         if (sessionFactory == null) buildSessionFactory();
     }
 
-    public boolean addEntity(T item) {
-
+    public int addEntity(T item) throws EntityNotFoundException {
+        int itemId;
         Transaction tx = null;
 
         try( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
-            session.save(item);
+            itemId = (int)session.save(item);
             tx.commit();
         }
         catch (HibernateException he) {
 
             if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
-            return false;
+            return 0;
         }
-        return true;
+        return itemId;
     }
 
     public boolean updateEntity(T item)  {
@@ -85,7 +84,7 @@ public abstract class AbstractRepository<T>{
 
         public List<T> queryFromDb (HqlSpecification spec) {
 
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         Transaction tx = null;
 
         try( Session session = sessionFactory.openSession()){
@@ -148,12 +147,6 @@ public abstract class AbstractRepository<T>{
         try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
 
-            /*MetadataSources ms = new MetadataSources(registry);
-            Metadata md = ms.buildMetadata();
-            sessionFactory = md.buildSessionFactory();*/
-            /*Configuration c = new Configuration();
-            c = c.configure();
-            sessionFactory = c.buildSessionFactory();*/
             System.out.println("her");
 
         }

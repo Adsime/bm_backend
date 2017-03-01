@@ -8,11 +8,14 @@ import com.acc.models.Tag;
 import com.acc.models.User;
 import com.acc.providers.Links;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
+
+// TODO: 01.03.2017 Return User instead of boolean
 public class UserRepository extends AbstractRepository<HbnUser> implements Repository<User> {
 
     public UserRepository(){
@@ -20,7 +23,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
     }
 
     @Override
-    public boolean add(User user) throws IllegalArgumentException{
+    public User add(User user) throws EntityNotFoundException{
 
         Set<HbnTag> tags = getHbnTagSet(user.getTags());
 
@@ -33,7 +36,15 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         );
 
         mappedUser.setTags(tags);
-        return super.addEntity(mappedUser);
+        int id = super.addEntity(mappedUser);
+
+        return new User(
+                id,
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getEnterpriseID(),
+                user.getTags());
     }
 
     // TODO: 24.02.2017 generate salt 
@@ -71,7 +82,6 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                     readUser.getLastName(),
                     readUser.getEmail(),
                     readUser.getEnterpriseId(),
-                    toGroupIdList(readUser.getGroups()),
                     mapTagToHbnTag(readUser.getTags())
             );
 

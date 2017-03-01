@@ -24,7 +24,7 @@ public class User extends HateOAS {
         this.enterpriseID = enterpriseID;
     }
 
-    public User(long id, String firstName, String lastName, String email, String enterpriseID, List<Integer> groupIds, List<Tag> tags) {
+    public User(long id, String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
