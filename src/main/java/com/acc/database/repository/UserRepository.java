@@ -4,8 +4,10 @@ import com.acc.database.pojo.*;
 import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
+import com.acc.models.Link;
 import com.acc.models.Tag;
 import com.acc.models.User;
+import com.acc.providers.Links;
 
 import java.util.*;
 
@@ -18,7 +20,6 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         super();
     }
 
-    // TODO: 24.02.2017 gruppe?
     @Override
     public boolean add(User user) throws IllegalArgumentException{
 
@@ -66,7 +67,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
 
         // TODO: 24.02.2017 SEND LIST AV ID
         for (HbnUser readUser : readData){
-            result.add( new User(
+            User user = new User(
                     readUser.getId(),
                     readUser.getFirstName(),
                     readUser.getLastName(),
@@ -74,7 +75,10 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                     readUser.getEnterpriseId(),
                     getGroupIdList(readUser.getGroups()),
                     mapTagToHbnTag(readUser.getTags())
-            ));
+            );
+
+            user.addLinks(Links.TAGS,null);
+            result.add(user);
         }
 
         return result;
