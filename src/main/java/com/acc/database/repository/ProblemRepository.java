@@ -45,8 +45,7 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
                     (int)readProblem.getUser().getId(),
                     "",
                     "",
-                    readProblem.getPath(),
-                    null));
+                    readProblem.getPath()));
         }
 
         return result;

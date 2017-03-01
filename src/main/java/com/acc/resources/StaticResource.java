@@ -41,7 +41,7 @@ public class StaticResource {
                 "  \"title\": \"Det var en gang\",\n" +
                 "  \"author\": \"1\"\n" +
                 "},\n" +
-                "{\n" +
+                 "{\n" +
                 "  \"id\": \"3\",\n" +
                 "  \"problem\": \"Bon bo hue pho bo bahn mi dap mei du ma pho ga\",\n" +
                 "  \"title\": \"Vietnamesisk\",\n" +
@@ -121,8 +121,8 @@ public class StaticResource {
         System.out.println("GET - groups");
         String body = "[\n" +
                 " {\n" +
-                "   \"name\": \"Adrian\",\n" +
-                "   \"school\": \"Melsom\",\n" +
+                "   \"name\": \"Bachelor Manager\",\n" +
+                "   \"school\": \"HiOA\",\n" +
                 "   \"assignment\": \"1\",\n" +
                 "   \"studentList\": [\n" +
                 "     {\n" +
@@ -145,8 +145,8 @@ public class StaticResource {
                 "   ]\n" +
                 " },\n" +
                 " {\n" +
-                "   \"name\": \"Bjørn og Binna\",\n" +
-                "   \"school\": \"Skogen\",\n" +
+                "   \"name\": \"Nytt OS\",\n" +
+                "   \"school\": \"HiOA\",\n" +
                 "   \"assignment\": \"1\",\n" +
                 "   \"studentList\": [\n" +
                 "     {\n" +

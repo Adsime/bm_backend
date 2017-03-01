@@ -43,6 +43,7 @@ public class UserResource {
      *
      */
     public Response getUser(@PathParam("id") int id, @Context HttpHeaders headers) {
+        System.out.println("ACTION: GET - user | ID = " + id);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 User user = service.getUser(id);
@@ -62,17 +63,14 @@ public class UserResource {
      *
      */
     public Response getAllUsers(@Context HttpHeaders headers) {
+        System.out.println("ACTION: GET - user | ALL");
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 List<User> users = service.getAllUsers();
                 if(users == null || users.isEmpty()) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                JsonArrayBuilder jab = Json.createArrayBuilder();
-                for(User user : users) {
-                    jab.add(user.toJson());
-                }
-                return Response.ok(jab.build()).build();
+                return Response.ok(users.toString()).build();
             } catch(Exception e) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
@@ -85,7 +83,7 @@ public class UserResource {
      *
      */
     public Response newUser(JsonObject o, @Context HttpHeaders headers) {
-        System.out.println(o);
+        System.out.println("ACTION: POST - user | ITEM =\n" + o.toString());
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 User user = new Gson().fromJson(o.toString(), User.class);
@@ -105,6 +103,7 @@ public class UserResource {
      *
      */
     public Response deleteUser(@PathParam("id") int id, @Context HttpHeaders headers) {
+        System.out.println("ACTION: DELETE - user | ID = " + id);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 if(service.deleteUser(id)) {
@@ -122,6 +121,7 @@ public class UserResource {
      *
      */
     public Response updateUser(JsonObject o, @Context HttpHeaders headers) {
+        System.out.println("ACTION: PUT - user | ITEM = \n" + o.toString());
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 if(service.updateUser(new Gson().fromJson(o.toString(), User.class))) {

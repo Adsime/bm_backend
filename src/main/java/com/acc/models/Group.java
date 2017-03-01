@@ -12,13 +12,11 @@ public class Group extends HateOAS {
     private int id;
     private String name;
     private List<User> users;
-    private ArrayList<Link> links;
 
-    public Group(int id, String name, List<User> users, ArrayList<Link> links) {
+    public Group(int id, String name, List<User> users) {
         this.id = id;
         this.name = name;
         this.users = users;
-        this.links = links;
     }
 
     public int getId() {
@@ -43,14 +41,6 @@ public class Group extends HateOAS {
 
     public void setUsers(List<User> users) {
         this.users = users;
-    }
-
-    public ArrayList<Link> getLinks() {
-        return links;
-    }
-
-    public void setLinks(ArrayList<Link> links) {
-        this.links = links;
     }
 
     public String toJson() {

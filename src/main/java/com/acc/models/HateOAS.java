@@ -16,4 +16,12 @@ abstract class HateOAS {
         }
         this.links.put(pluralType, links);
     }
+
+    public Map<String, List<Link>> getLinks() {
+        return links;
+    }
+
+    public void setLinks(Map<String, List<Link>> links) {
+        this.links = links;
+    }
 }

@@ -7,13 +7,13 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\GroupService.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\SupervisorService.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetProblemByIdSpec.java
-C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\InstitutionResource.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\HqlSpecification.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\AbstractRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetUserAllSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\pojo\HbnGroup.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\Specification.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\DatabaseConenctionTest.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\HateOAS.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Tag.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Link.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\TagService.java
@@ -22,9 +22,9 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\pojo\HbnPassword.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\ProblemResource.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\pojo\HbnTag.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\providers\Links.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\UserService.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\providers\CORSfilter.java
-C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Institution.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\TagRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetProblemAllSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\UserResource.java
@@ -33,10 +33,8 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\UserRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Problem.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\app\ApiApp.java
-C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\IBusinessModel.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\StaticResource.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\StudentResource.java
-C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\InstitutionService.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\User.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\GroupResource.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\pojo\HbnProblem.java

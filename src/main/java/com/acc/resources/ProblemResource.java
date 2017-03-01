@@ -35,12 +35,12 @@ public class ProblemResource {
 
     @Before
     public void setup() {
+
     }
 
     @GET
     @Path("ping")
     public String problemPong() {
-        service.newProblem(new Problem(1, 1, "Dette funker?", "asdasdasdasd", "/omg/omg/LOL", null));
         return "problem pong!";
     }
 

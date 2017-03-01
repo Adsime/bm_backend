@@ -11,15 +11,13 @@ public class Problem extends HateOAS {
 
     private int id, author;
     private String title, content, path;
-    private ArrayList<Link> links;
 
-    public Problem(int id, int author, String title, String content, String path, ArrayList<Link> links) {
+    public Problem(int id, int author, String title, String content, String path) {
         this.id = id;
         this.author = author;
         this.title = title;
         this.content = content;
         this.path = path;
-        this.links = links;
     }
 
     public int getAuthor() {
@@ -62,14 +60,6 @@ public class Problem extends HateOAS {
         this.content = content;
     }
 
-    public ArrayList<Link> getLinks() {
-        return links;
-    }
-
-    public void setLinks(ArrayList<Link> links) {
-        this.links = links;
-    }
-
     public String toJson() {
         return new Gson().toJson(this);
     }
@@ -82,7 +72,6 @@ public class Problem extends HateOAS {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", path='" + path + '\'' +
-                ", links=" + links +
                 '}';
     }
 }

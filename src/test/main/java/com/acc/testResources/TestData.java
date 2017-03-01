@@ -29,9 +29,9 @@ public class TestData {
 
     public static List<Group> testGroups() {
         List<Group> groups = new ArrayList<>();
-        groups.add(new Group(1, "asdasd",null, new ArrayList<Link>()));
-        groups.add(new Group(2, "asdasd",null, new ArrayList<Link>()));
-        groups.add(new Group(3, "asdasd",null, new ArrayList<Link>()));
+        groups.add(new Group(1, "asdasd",null));
+        groups.add(new Group(2, "asdasd",null));
+        groups.add(new Group(3, "asdasd",null));
         return groups;
     }
 
@@ -61,10 +61,10 @@ public class TestData {
 
     public static List<Problem> testProblems() {
         List<Problem> problems = new ArrayList<>();
-        problems.add(new Problem(1, 1,"asdad", "asdasddsa", "path", new ArrayList<Link>()));
-        problems.add(new Problem(2, 1,"asdad", "asdasddsa", "path", new ArrayList<Link>()));
-        problems.add(new Problem(3, 1,"asdad", "asdasddsa", "path", new ArrayList<Link>()));
-        problems.add(new Problem(4, 1,"asdad", "asdasddsa", "path", new ArrayList<Link>()));
+        problems.add(new Problem(1, 1,"asdad", "asdasddsa", "path"));
+        problems.add(new Problem(2, 1,"asdad", "asdasddsa", "path"));
+        problems.add(new Problem(3, 1,"asdad", "asdasddsa", "path"));
+        problems.add(new Problem(4, 1,"asdad", "asdasddsa", "path"));
         return problems;
     }
 

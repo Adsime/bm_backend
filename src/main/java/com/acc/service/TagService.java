@@ -15,8 +15,8 @@ public class TagService extends GeneralService {
     public TagRepository tagRepository;
 
     public Tag getTag(int id) {
-        //List<Tag> tags = tagRepository.getQuery();
         return null;
+        //List<Tag> tags = tagRepository.getQuery();
     }
 
     public List<Tag> getAllTags() {
