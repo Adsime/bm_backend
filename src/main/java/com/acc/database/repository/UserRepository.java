@@ -4,7 +4,6 @@ import com.acc.database.pojo.*;
 import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
-import com.acc.models.Link;
 import com.acc.models.Tag;
 import com.acc.models.User;
 import com.acc.providers.Links;
@@ -62,22 +61,22 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
 
     @Override
     public List<User> getQuery(Specification spec) {
-        List<HbnUser> readData = super.queryFromDb((HqlSpecification) spec);
+        List<HbnUser> readUsers = super.queryFromDb((HqlSpecification) spec);
         List<User> result = new ArrayList<>();
 
-        // TODO: 24.02.2017 SEND LIST AV ID
-        for (HbnUser readUser : readData){
+        for (HbnUser readUser : readUsers){
             User user = new User(
                     readUser.getId(),
                     readUser.getFirstName(),
                     readUser.getLastName(),
                     readUser.getEmail(),
                     readUser.getEnterpriseId(),
-                    getGroupIdList(readUser.getGroups()),
+                    toGroupIdList(readUser.getGroups()),
                     mapTagToHbnTag(readUser.getTags())
             );
 
-            user.addLinks(Links.TAGS,null);
+            user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG,toTagIdList(readUser.getTags())));
+            user.addLinks(Links.GROUPS,Links.generateLinks(Links.GROUP,toGroupIdList(readUser.getGroups())));
             result.add(user);
         }
 
@@ -98,8 +97,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         return tagSet;
     }
 
-    // TODO: 23.02.2017 make private
-    public Set<HbnTag> getHbnTagSet (List<Tag> userTags){
+    private Set<HbnTag> getHbnTagSet (List<Tag> userTags){
         Set<HbnPOJO> hbnPOJOSet;
         Set<HbnTag> hbnTagSet = new HashSet<>();
 
@@ -133,7 +131,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         return tagList;
     }
 
-    public List<Integer> getGroupIdList(Set<HbnGroup> hbnGroupSet){
+    public List<Integer> toGroupIdList(Set<HbnGroup> hbnGroupSet){
         List<Integer> groupIdList = new ArrayList<>();
 
         for(HbnGroup hbnGroup : hbnGroupSet){
@@ -141,5 +139,15 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         }
 
         return groupIdList;
+    }
+
+    public List<Integer> toTagIdList(Set<HbnTag> hbnTagSet){
+        List<Integer> tagIdList = new ArrayList<>();
+
+        for(HbnTag hbnTag : hbnTagSet){
+            tagIdList.add((int)hbnTag.getId());
+        }
+
+        return tagIdList;
     }
 }
