@@ -2,11 +2,11 @@ com\acc\models\HateOAS.class
 com\acc\resources\TagResource.class
 com\acc\database\pojo\HbnPassword.class
 com\acc\service\StudentService.class
-com\acc\database\repository\Repository.class
 com\acc\providers\CORSfilter.class
 com\acc\database\repository\AbstractRepository.class
 com\acc\service\UserService.class
 com\acc\database\pojo\HbnUser.class
+com\acc\models\IBusinessModel.class
 com\acc\service\GeneralService.class
 com\acc\resources\UserResource.class
 com\acc\models\Link.class
@@ -21,7 +21,10 @@ com\acc\service\ProblemService.class
 com\acc\providers\Links.class
 com\acc\resources\ProblemResource.class
 com\acc\service\SupervisorService.class
+<<<<<<< HEAD
 com\acc\database\specification\GetUserByIdSpec.class
+=======
+>>>>>>> 02ec34357ab8f96a4c452e973d0d4f581a920dd7
 com\acc\database\DatabaseConenctionTest.class
 com\acc\models\Supervisor.class
 com\acc\models\User.class
@@ -38,7 +41,12 @@ com\acc\database\repository\TagRepository.class
 com\acc\resources\GroupResource.class
 com\acc\service\GroupService.class
 com\acc\service\TagService.class
+<<<<<<< HEAD
 com\acc\database\specification\GetUserAllSpec.class
+=======
+com\acc\database\pojo\HbnInstitution.class
+com\acc\database\specification\ProblemByIdSpec.class
+>>>>>>> 02ec34357ab8f96a4c452e973d0d4f581a920dd7
 com\acc\models\Student.class
 com\acc\database\repository\ProblemRepository.class
 com\acc\app\ApiApp.class

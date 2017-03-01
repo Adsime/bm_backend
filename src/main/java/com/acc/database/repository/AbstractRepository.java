@@ -4,9 +4,11 @@ import com.acc.database.pojo.HbnPOJO;
 import com.acc.database.specification.HqlSpecification;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.hibernate.service.ServiceRegistry;
 
 
 import java.util.*;
@@ -17,7 +19,7 @@ import java.util.*;
  */
 public abstract class AbstractRepository<T>{
 
-    private SessionFactory sessionFactory;
+    private static SessionFactory sessionFactory;
 
     public AbstractRepository(){
         if (sessionFactory == null) buildSessionFactory();
@@ -170,4 +172,5 @@ public abstract class AbstractRepository<T>{
             throw new ExceptionInInitializerError(e);
         }
     }
+
 }
