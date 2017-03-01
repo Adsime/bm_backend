@@ -45,16 +45,25 @@ public class UserService extends GeneralService {
         }
     }
 
-    public User newUser(User user) throws Exception {
-        return null;
-        //return userRepository.add(user);
+    public User newUser(User user) throws InternalServerErrorException {
+        return userRepository.add(user);
     }
 
     public boolean deleteUser(int id) {
-        return userRepository.remove((long)id);
+        try {
+            return userRepository.remove((long)id);
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
+
     }
 
     public boolean updateUser(User user) {
-        return userRepository.update(user);
+        try {
+            return userRepository.update(user);
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
+
     }
 }

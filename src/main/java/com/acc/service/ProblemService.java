@@ -22,7 +22,7 @@ public class ProblemService extends GeneralService{
         return null;
     }
 
-    public boolean newProblem(Problem problem) {
+    public Problem newProblem(Problem problem) {
         return problemRepository.add(problem);
     }
 

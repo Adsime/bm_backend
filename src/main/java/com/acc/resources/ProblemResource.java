@@ -87,10 +87,11 @@ public class ProblemResource {
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 Problem problem = new Gson().fromJson(o.toString(), Problem.class);
-                if(!service.newProblem(problem)) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
+                problem = service.newProblem(problem);
+                if(problem != null) {
+                    return Response.status(HttpStatus.CREATED_201).build();
                 }
-                return Response.status(HttpStatus.CREATED_201).build();
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }

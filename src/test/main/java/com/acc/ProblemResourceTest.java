@@ -129,7 +129,7 @@ public class ProblemResourceTest {
     @Test
     public void newProblemsSuccess() {
         problemResource.service = service;
-        when(service.newProblem(any())).thenReturn(true);
+        when(service.newProblem(any())).thenReturn(TestData.testProblems().get(0));
         when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.CREATED_201;
         actual = problemResource.newProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
@@ -139,7 +139,7 @@ public class ProblemResourceTest {
     @Test
     public void newProblemsAuthFail() {
         problemResource.service = service;
-        when(service.newProblem(TestData.testProblems().get(0))).thenReturn(true);
+        when(service.newProblem(any())).thenReturn(TestData.testProblems().get(0));
         when(service.verify(TestData.badCredentials)).thenReturn(false);
         expected = HttpStatus.UNAUTHORIZED_401;
         actual = problemResource.newProblem(TestData.testBadCredentials(), TestData.jsonProblem()).getStatus();
