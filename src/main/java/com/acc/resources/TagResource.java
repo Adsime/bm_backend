@@ -88,7 +88,7 @@ public class TagResource {
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 if(service.newTag(new Gson().fromJson(o.toString(), Tag.class))) {
-                    return Response.ok().build();
+                    return Response.status(HttpStatus.CREATED_201).build();
                 }
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
@@ -107,7 +107,7 @@ public class TagResource {
                 if(!service.deleteTag(id)) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                return Response.ok().build();
+                return Response.status(HttpStatus.NO_CONTENT_204).build();
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }

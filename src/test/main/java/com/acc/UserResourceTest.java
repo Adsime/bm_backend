@@ -145,7 +145,7 @@ public class UserResourceTest {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         try {
-            when(service.newUser(any())).thenReturn(true);
+            when(service.newUser(any())).thenReturn(TestData.testUsers().get(0));
         } catch (Exception e) {
 
         }
@@ -160,7 +160,7 @@ public class UserResourceTest {
         userResource.service = service;
         when(service.verify(TestData.badCredentials)).thenReturn(false);
         try {
-            when(service.newUser(any())).thenReturn(true);
+            when(service.newUser(any())).thenReturn(TestData.testUsers().get(0));
         } catch (Exception e) {
 
         }

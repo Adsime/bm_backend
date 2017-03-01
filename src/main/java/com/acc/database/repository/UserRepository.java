@@ -71,7 +71,6 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                     readUser.getLastName(),
                     readUser.getEmail(),
                     readUser.getEnterpriseId(),
-<<<<<<< HEAD
                     toGroupIdList(readUser.getGroups()),
                     mapTagToHbnTag(readUser.getTags())
             );
@@ -79,12 +78,6 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
             user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG,toTagIdList(readUser.getTags())));
             user.addLinks(Links.GROUPS,Links.generateLinks(Links.GROUP,toGroupIdList(readUser.getGroups())));
             result.add(user);
-=======
-                    null, null
-                    //getGroupIds(readUser.getGroups()),
-                    //getUserTags(readUser)
-            ));
->>>>>>> Fixed Links so that it now takes ids rather than complete linke
         }
 
         return result;
