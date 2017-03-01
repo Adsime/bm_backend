@@ -107,7 +107,7 @@ public class UserResource {
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 if(service.deleteUser(id)) {
-                    return Response.ok().build();
+                    return Response.status(HttpStatus.OK_200).build();
                 }
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             } catch(InternalServerErrorException isee) {

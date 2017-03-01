@@ -1,6 +1,8 @@
 package com.acc.service;
 
 import com.acc.database.repository.TagRepository;
+import com.acc.database.specification.GetTagAllSpec;
+import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.models.Tag;
 
 import javax.inject.Inject;
@@ -15,13 +17,11 @@ public class TagService extends GeneralService {
     public TagRepository tagRepository;
 
     public Tag getTag(int id) {
-        return null;
-        //List<Tag> tags = tagRepository.getQuery();
+        return tagRepository.getQuery(new GetTagByIdSpec((long)id)).get(0);
     }
 
     public List<Tag> getAllTags() {
-        //List<Tag> tags = tagRepository.getQuery();
-        return null;
+        return tagRepository.getQuery(new GetTagAllSpec());
     }
 
     public boolean newTag(Tag tag) {
