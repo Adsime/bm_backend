@@ -6,7 +6,6 @@ com\acc\providers\CORSfilter.class
 com\acc\database\repository\AbstractRepository.class
 com\acc\service\UserService.class
 com\acc\database\pojo\HbnUser.class
-com\acc\models\IBusinessModel.class
 com\acc\service\GeneralService.class
 com\acc\resources\UserResource.class
 com\acc\models\Link.class
