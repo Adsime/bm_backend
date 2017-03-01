@@ -28,8 +28,9 @@ public class UserService extends GeneralService {
         return userRepository.getQuery(new GetUserAllSpec());
     }
 
-    public boolean newUser(User user) throws Exception {
-        return userRepository.add(user);
+    public User newUser(User user) throws Exception {
+        return null;
+        //return userRepository.add(user);
     }
 
     public boolean deleteUser(int id) {

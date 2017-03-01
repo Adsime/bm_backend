@@ -87,9 +87,8 @@ public class UserResource {
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 User user = new Gson().fromJson(o.toString(), User.class);
-                System.out.println(user.toJson());
-                if(service.newUser(user)) {
-                    return Response.ok().build();
+                if((user = service.newUser(user)) != null) {
+                    return Response.status(HttpStatus.CREATED_201).entity(user.toJson()).build();
                 }
             } catch(Exception e) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();

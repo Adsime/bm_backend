@@ -129,7 +129,7 @@ public class TagResourceTest {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         when(service.newTag(any())).thenReturn(true);
-        expected = HttpStatus.OK_200;
+        expected = HttpStatus.CREATED_201;
         actual = tagResource.newTag(TestData.jsonTag(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
@@ -205,7 +205,7 @@ public class TagResourceTest {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         when(service.deleteTag(0)).thenReturn(true);
-        expected = HttpStatus.OK_200;
+        expected = HttpStatus.NO_CONTENT_204;
         actual = tagResource.deleteTag(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }

@@ -150,7 +150,7 @@ public class UserResourceTest {
 
         }
 
-        expected = HttpStatus.OK_200;
+        expected = HttpStatus.CREATED_201;
         actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
@@ -235,7 +235,7 @@ public class UserResourceTest {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
         when(service.deleteUser(0)).thenReturn(true);
-        expected = HttpStatus.OK_200;
+        expected = HttpStatus.NO_CONTENT_204;
         actual = userResource.deleteUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
