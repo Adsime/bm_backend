@@ -12,6 +12,7 @@ public class Group extends HateOAS {
     private int id;
     private String name;
     private List<User> users;
+    private Problem problem;
 
     public Group(int id, String name, List<User> users) {
         this.id = id;
@@ -41,6 +42,14 @@ public class Group extends HateOAS {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public Problem getProblem() {
+        return problem;
+    }
+
+    public void setProblem(Problem problem) {
+        this.problem = problem;
     }
 
     public String toJson() {

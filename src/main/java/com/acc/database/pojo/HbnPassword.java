@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "PASSWORD")
-public class HbnPassword implements Serializable, HbnPOJO {
+public class HbnPassword implements Serializable, HbnEntity {
 
     private long id;
     private String passHash;

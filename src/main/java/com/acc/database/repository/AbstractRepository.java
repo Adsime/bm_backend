@@ -1,6 +1,6 @@
 package com.acc.database.repository;
 
-import com.acc.database.pojo.HbnPOJO;
+import com.acc.database.pojo.HbnEntity;
 import com.acc.database.specification.HqlSpecification;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
@@ -24,14 +24,14 @@ public abstract class AbstractRepository<T>{
         if (sessionFactory == null) buildSessionFactory();
     }
 
-    public int addEntity(T item) throws EntityNotFoundException {
-        int itemId;
+    public long addEntity(T item) throws EntityNotFoundException {
+        long itemId;
         Transaction tx = null;
 
         try( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
-            itemId = (int)session.save(item);
+            itemId = (long) session.save(item);
             tx.commit();
         }
         catch (HibernateException he) {
@@ -82,7 +82,7 @@ public abstract class AbstractRepository<T>{
     }
 
 
-        public List<T> queryFromDb (HqlSpecification spec) {
+    public List<T> queryFromDb (HqlSpecification spec) {
 
         List<T> result = new ArrayList<>();
         Transaction tx = null;
@@ -93,7 +93,7 @@ public abstract class AbstractRepository<T>{
             result = session
                     .createQuery(spec.toHqlQuery())
                     .list();
-            tx.commit();
+                tx.commit();
         }
         catch (HibernateException he) {
 
@@ -108,16 +108,16 @@ public abstract class AbstractRepository<T>{
     }
 
     //To be able to do query of different types of objects in the repositories
-    public Set<HbnPOJO> queryByIdSpec (List<HqlSpecification> idSpecs) {
+    public Set<HbnEntity> queryByIdSpec (List<HqlSpecification> idSpecs) {
 
-        Set<HbnPOJO> result = new HashSet<>();
+        Set<HbnEntity> result = new HashSet<>();
         Transaction tx = null;
 
         try( Session session = sessionFactory.openSession()){
 
             tx = session.beginTransaction();
             for (HqlSpecification spec : idSpecs){
-                result.add( (HbnPOJO) session
+                result.add( (HbnEntity) session
                         .createQuery(spec.toHqlQuery())
                         .list()
                         .get(0));
@@ -146,8 +146,6 @@ public abstract class AbstractRepository<T>{
                 .build();
         try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-
-            System.out.println("her");
 
         }
         catch (org.hibernate.service.spi.ServiceException se) {

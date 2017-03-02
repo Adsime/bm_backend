@@ -8,18 +8,17 @@ import java.util.Set;
  * Created by nguyen.duy.j.khac on 08.02.2017.
  */
 @Entity
-@Table(name = "GROUP")
-public class HbnGroup implements Serializable {
+@Table(name = "BACHELOR_GROUP")
+public class HbnBachelorGroup implements Serializable {
 
     private long id;
     private String name;
     private Set<HbnUser> users;
     private HbnProblem problem;
 
-    public HbnGroup(){}
+    public HbnBachelorGroup(){}
 
-    public HbnGroup(long id, String name) {
-        this.id = id;
+    public HbnBachelorGroup(String name) {
         this.name = name;
     }
 

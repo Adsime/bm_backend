@@ -25,7 +25,7 @@ public class TagRepository extends AbstractRepository<HbnTag> implements Reposit
                 tag.getDescription(),
                 tag.getType());
 
-        int id = super.addEntity(mappedTag);
+        int id = (int)super.addEntity(mappedTag);
 
         return new Tag(
                 id,

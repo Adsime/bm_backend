@@ -20,8 +20,9 @@ public class ProblemRepository extends AbstractRepository<HbnProblem> implements
     @Override
     public Problem add(Problem problem) {
 
-       // HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()));
-        return null;//super.addToDb(mappedProblem);
+        // HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()));
+        // super.addToDb(mappedProblem);
+        return null;
     }
 
     @Override

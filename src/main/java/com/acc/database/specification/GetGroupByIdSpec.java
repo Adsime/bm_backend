@@ -13,6 +13,6 @@ public class GetGroupByIdSpec implements HqlSpecification{
 
     @Override
     public String toHqlQuery() {
-        return "FROM HbnGroup WHERE id='" + id + "'";
+        return "FROM HbnBachelorGroup WHERE id='" + id + "'";
     }
 }

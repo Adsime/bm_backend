@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TAG")
-public class HbnTag implements Serializable, HbnPOJO {
+public class HbnTag implements Serializable, HbnEntity {
 
     private long id;
     private String tagName;

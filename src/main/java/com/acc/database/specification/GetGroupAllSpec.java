@@ -9,6 +9,6 @@ public class GetGroupAllSpec implements HqlSpecification{
 
     @Override
     public String toHqlQuery() {
-        return "FROM HbnGroup";
+        return "FROM HbnBachelorGroup";
     }
 }

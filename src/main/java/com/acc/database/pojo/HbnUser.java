@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "USER")
-public class HbnUser implements Serializable, HbnPOJO {
+public class HbnUser implements Serializable, HbnEntity {
 
     private long id;
     private String firstName;
@@ -18,7 +18,7 @@ public class HbnUser implements Serializable, HbnPOJO {
     private String email;
     private String salt;
     private String enterpriseId;
-    private Set<HbnGroup> groups;
+    private Set<HbnBachelorGroup> groups;
     private Set<HbnTag> tags;
 
     public HbnUser(){}
@@ -87,21 +87,21 @@ public class HbnUser implements Serializable, HbnPOJO {
         this.enterpriseId = enterpriseId;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "GROUP_ASSOCIATE",
             joinColumns =  @JoinColumn(name = "user_id"),
-            inverseJoinColumns =  @JoinColumn(name = "group_id")
+            inverseJoinColumns =  @JoinColumn(name = "bachelor_group_id")
     )
-    public Set<HbnGroup> getGroups(){
+    public Set<HbnBachelorGroup> getGroups(){
         return groups;
     }
 
-    public void setGroups(Set<HbnGroup> groups) {
+    public void setGroups(Set<HbnBachelorGroup> groups) {
         this.groups = groups;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_TAG",
             joinColumns =  @JoinColumn(name = "user_id"),

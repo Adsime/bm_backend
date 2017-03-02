@@ -36,7 +36,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         );
 
         mappedUser.setTags(tags);
-        int id = super.addEntity(mappedUser);
+        long id = super.addEntity(mappedUser);
 
         return new User(
                 id,
@@ -75,6 +75,17 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         List<HbnUser> readUsers = super.queryFromDb((HqlSpecification) spec);
         List<User> result = new ArrayList<>();
 
+        System.out.println(Arrays.toString(readUsers
+                .get(0)
+                .getTags()
+                .toArray()));
+
+        System.out.println(Arrays.toString(readUsers
+                .get(0)
+                .getGroups()
+                .toArray()));
+
+
         for (HbnUser readUser : readUsers){
             User user = new User(
                     readUser.getId(),
@@ -108,7 +119,6 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
     }
 
     private Set<HbnTag> getHbnTagSet (List<Tag> userTags){
-        Set<HbnPOJO> hbnPOJOSet;
         Set<HbnTag> hbnTagSet = new HashSet<>();
 
         List<HqlSpecification> specList = new ArrayList<>();
@@ -117,9 +127,9 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
             specList.add(new GetTagByIdSpec(tags.getId()));
         }
 
-        hbnPOJOSet = super.queryByIdSpec(specList);
+        Set<HbnEntity> hbnEntitySet = super.queryByIdSpec(specList);
 
-        for (HbnPOJO pojo : hbnPOJOSet){
+        for (HbnEntity pojo : hbnEntitySet){
             hbnTagSet.add((HbnTag)pojo);
         }
 
@@ -141,11 +151,11 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         return tagList;
     }
 
-    public List<Integer> toGroupIdList(Set<HbnGroup> hbnGroupSet){
+    public List<Integer> toGroupIdList(Set<HbnBachelorGroup> hbnBachelorGroupSet){
         List<Integer> groupIdList = new ArrayList<>();
 
-        for(HbnGroup hbnGroup : hbnGroupSet){
-            groupIdList.add((int)hbnGroup.getId());
+        for(HbnBachelorGroup hbnBachelorGroup : hbnBachelorGroupSet){
+            groupIdList.add((int) hbnBachelorGroup.getId());
         }
 
         return groupIdList;

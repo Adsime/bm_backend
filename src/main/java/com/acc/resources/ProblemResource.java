@@ -92,6 +92,7 @@ public class ProblemResource {
                     return Response.status(HttpStatus.CREATED_201).build();
                 }
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
+
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
