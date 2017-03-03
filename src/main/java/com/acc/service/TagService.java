@@ -18,7 +18,13 @@ public class TagService extends GeneralService {
     public TagRepository tagRepository;
 
     public Tag getTag(int id) {
-        return tagRepository.getQuery(new GetTagByIdSpec((long)id)).get(0);
+        try {
+            return tagRepository.getQuery(new GetTagByIdSpec((long)id)).get(0);
+        } catch (NumberFormatException nfe) {
+            return null;
+        } catch (NoSuchEntityException nsee) {
+            return null;
+        }
     }
 
     public List<Tag> getAllTags() {
@@ -40,6 +46,11 @@ public class TagService extends GeneralService {
     }
 
     public boolean updateTag(Tag tag) {
-        return tagRepository.update(tag);
+        try {
+            return tagRepository.update(tag);
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
+
     }
 }
