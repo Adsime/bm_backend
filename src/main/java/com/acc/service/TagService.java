@@ -5,6 +5,7 @@ import com.acc.database.specification.GetTagAllSpec;
 import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.models.Tag;
 
+import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -24,15 +25,21 @@ public class TagService extends GeneralService {
         return tagRepository.getQuery(new GetTagAllSpec());
     }
     
-    public boolean newTag(Tag tag) {
-        return true;
+    public Tag newTag(Tag tag) {
+        return tagRepository.add(tag);
     }
 
     public boolean deleteTag(int id) {
-        return true;
+        try {
+            return tagRepository.remove((long)id);
+        } catch (NumberFormatException nfe) {
+            return false;
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
     }
 
     public boolean updateTag(Tag tag) {
-        return true;
+        return tagRepository.update(tag);
     }
 }

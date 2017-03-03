@@ -41,6 +41,7 @@ public class TagResource {
 
     @GET
     @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     /**
      *
      */
@@ -59,6 +60,7 @@ public class TagResource {
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     /**
      *
      */
@@ -69,11 +71,7 @@ public class TagResource {
                 if(tags == null || tags.isEmpty()) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                JsonArrayBuilder jab = Json.createArrayBuilder();
-                for(Tag tag : tags) {
-                    jab.add(tag.toJson());
-                }
-                return Response.ok(jab.build()).build();
+                return Response.ok(tags.toString()).build();
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
@@ -87,7 +85,8 @@ public class TagResource {
     public Response newTag(JsonObject o, @Context HttpHeaders headers) {
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
-                if(service.newTag(new Gson().fromJson(o.toString(), Tag.class))) {
+                Tag tag = service.newTag(new Gson().fromJson(o.toString(), Tag.class));
+                if(tag != null) {
                     return Response.status(HttpStatus.CREATED_201).build();
                 }
             } catch (InternalServerErrorException isee) {

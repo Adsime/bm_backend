@@ -128,7 +128,7 @@ public class TagResourceTest {
     public void newTagsSuccess() {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        when(service.newTag(any())).thenReturn(true);
+        when(service.newTag(any())).thenReturn(TestData.testTags().get(0));
         expected = HttpStatus.CREATED_201;
         actual = tagResource.newTag(TestData.jsonTag(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -138,7 +138,7 @@ public class TagResourceTest {
     public void newTagsAuthFail() {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(false);
-        when(service.newTag(any())).thenReturn(true);
+        when(service.newTag(any())).thenReturn(TestData.testTags().get(0));
         expected = HttpStatus.UNAUTHORIZED_401;
         actual = tagResource.newTag(TestData.jsonTag(), TestData.testBadCredentials()).getStatus();
         assertEquals(expected, actual);

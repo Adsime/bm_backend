@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
-public class Tag {
+public class Tag extends HateOAS {
 
     private int id;
     private String name, type, description;
@@ -47,6 +47,11 @@ public class Tag {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 
     public String toJson() {

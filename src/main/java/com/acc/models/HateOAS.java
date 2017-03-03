@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by melsom.adrian on 23.02.2017.
  */
-abstract class HateOAS {
+public abstract class HateOAS {
     private Map<String, List<Link>> links;
 
     public void addLinks(String pluralType, List<Link> links) {
