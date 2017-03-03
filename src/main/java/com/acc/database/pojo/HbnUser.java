@@ -87,12 +87,7 @@ public class HbnUser implements Serializable, HbnEntity {
         this.enterpriseId = enterpriseId;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "GROUP_ASSOCIATE",
-            joinColumns =  @JoinColumn(name = "user_id"),
-            inverseJoinColumns =  @JoinColumn(name = "bachelor_group_id")
-    )
+    @ManyToMany(mappedBy = "users")
     public Set<HbnBachelorGroup> getGroups(){
         return groups;
     }

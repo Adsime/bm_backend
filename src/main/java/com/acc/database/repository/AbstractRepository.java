@@ -1,7 +1,11 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.HbnEntity;
+import com.acc.database.pojo.HbnTag;
+import com.acc.models.HateOAS;
+import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
+import com.acc.models.Tag;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -139,6 +143,27 @@ public abstract class AbstractRepository<T>{
         return result;
 
     }
+
+    //All business models extends from HateOAS
+    //specList must be filled with corresponding spec
+    public Set<HbnTag> toHbnTagSet (List<Tag> userTags){
+        Set<HbnTag> hbnTagSet = new HashSet<>();
+
+        List<HqlSpecification> specList = new ArrayList<>();
+
+        for (Tag tags : userTags){
+            specList.add(new GetTagByIdSpec(tags.getId()));
+        }
+
+        Set<HbnEntity> hbnEntitySet = queryByIdSpec(specList);
+
+        for (HbnEntity pojo : hbnEntitySet){
+            hbnTagSet.add((HbnTag)pojo);
+        }
+
+        return hbnTagSet;
+    }
+
 
     protected void buildSessionFactory(){
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()

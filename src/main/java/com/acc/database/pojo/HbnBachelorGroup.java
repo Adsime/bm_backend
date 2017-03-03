@@ -42,8 +42,12 @@ public class HbnBachelorGroup implements Serializable {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy = "groups")
-    public Set<HbnUser> getUsers() {
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "GROUP_ASSOCIATE",
+            joinColumns =  @JoinColumn(name = "bachelor_group_id"),
+            inverseJoinColumns =  @JoinColumn(name = "user_id")
+    )    public Set<HbnUser> getUsers() {
         return users;
     }
 

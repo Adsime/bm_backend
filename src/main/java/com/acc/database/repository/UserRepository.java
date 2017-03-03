@@ -7,6 +7,7 @@ import com.acc.database.specification.Specification;
 import com.acc.models.Tag;
 import com.acc.models.User;
 import com.acc.providers.Links;
+import com.sun.xml.internal.bind.v2.TODO;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -25,7 +26,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
     @Override
     public User add(User user) throws EntityNotFoundException{
 
-        Set<HbnTag> tags = getHbnTagSet(user.getTags());
+        Set<HbnTag> tags = super.toHbnTagSet(user.getTags());
 
         HbnUser mappedUser = new HbnUser(
                 user.getFirstName(),
@@ -118,25 +119,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         return tagSet;
     }
 
-    private Set<HbnTag> getHbnTagSet (List<Tag> userTags){
-        Set<HbnTag> hbnTagSet = new HashSet<>();
-
-        List<HqlSpecification> specList = new ArrayList<>();
-
-        for (Tag tags : userTags){
-            specList.add(new GetTagByIdSpec(tags.getId()));
-        }
-
-        Set<HbnEntity> hbnEntitySet = super.queryByIdSpec(specList);
-
-        for (HbnEntity pojo : hbnEntitySet){
-            hbnTagSet.add((HbnTag)pojo);
-        }
-
-        return hbnTagSet;
-    }
-
-    public List<Tag> mapTagToHbnTag(Set<HbnTag> tagSet){
+    private List<Tag> mapTagToHbnTag(Set<HbnTag> tagSet){
         List<Tag> tagList = new ArrayList<>();
 
         for (HbnTag hbnTag : tagSet){

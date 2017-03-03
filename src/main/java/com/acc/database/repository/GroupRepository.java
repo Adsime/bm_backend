@@ -1,12 +1,12 @@
 package com.acc.database.repository;
 
-import com.acc.database.pojo.HbnBachelorGroup;
-import com.acc.database.pojo.HbnEntity;
-import com.acc.database.pojo.HbnUser;
+import com.acc.database.pojo.*;
+import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Group;
+import com.acc.models.Tag;
 import com.acc.models.User;
 
 import java.util.ArrayList;
@@ -21,16 +21,17 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
 
     @Override
     public Group add(Group group) {
-        // TODO: 01.03.2017 Validate users
-        Set<HbnUser> hbnUsers = getUserSet(group.getUsers());
-        // TODO: 01.03.2017 Map object
+        Set<HbnUser> hbnUsers = toHbnUserSet(group.getUsers());
+
         HbnBachelorGroup hbnBachelorGroup = new HbnBachelorGroup(group.getName());
-        /*hbnBachelorGroup.setHbnProblem(new HbnProblem(
-                group.getProblem().getPath(),
-                group.getProblem().getAuthor()
-        ));*/
-        // TODO: 01.03.2017 Call super addEntity method
-        return null;
+        hbnBachelorGroup.setUsers(hbnUsers);
+        long id = super.addEntity(hbnBachelorGroup);
+
+        return new Group(
+                (int)id,
+                group.getName(),
+                group.getUsers()
+        );
     }
 
     @Override
@@ -52,8 +53,8 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         return null;
     }
 
-    // TODO: 01.03.2017 getUserSet
-    private Set<HbnUser> getUserSet(List<User> users){
+    // TODO: 01.03.2017 toHbnUserSet
+    private Set<HbnUser> toHbnUserSet(List<User> users){
         Set<HbnUser> hbnUserSet = new HashSet<>();
 
         List<HqlSpecification> specList = new ArrayList<>();
@@ -69,5 +70,6 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         }
         return hbnUserSet;
     }
+
     // TODO: 01.03.2017 AssignToGroup
 }
