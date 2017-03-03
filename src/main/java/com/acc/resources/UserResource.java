@@ -72,6 +72,7 @@ public class UserResource {
                 }
                 return Response.ok(users.toString()).build();
             } catch(Exception e) {
+                e.printStackTrace();
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
         } return Response.status(HttpStatus.UNAUTHORIZED_401).build();

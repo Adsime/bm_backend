@@ -1,7 +1,8 @@
 com\acc\models\HateOAS.class
 com\acc\resources\TagResource.class
+com\acc\database\specification\GetGroupByIdSpec.class
 com\acc\database\pojo\HbnPassword.class
-com\acc\service\StudentService.class
+com\acc\database\repository\Repository.class
 com\acc\providers\CORSfilter.class
 com\acc\database\repository\AbstractRepository.class
 com\acc\service\UserService.class
@@ -17,43 +18,29 @@ com\acc\database\specification\GetProblemByIdSpec.class
 com\acc\database\specification\GetProblemAllSpec.class
 com\acc\database\repository\UserRepository.class
 com\acc\service\ProblemService.class
+com\acc\database\specification\GetTagByIdSpec.class
 com\acc\providers\Links.class
 com\acc\resources\ProblemResource.class
 com\acc\service\SupervisorService.class
-<<<<<<< HEAD
 com\acc\database\specification\GetUserByIdSpec.class
-=======
-<<<<<<< HEAD
->>>>>>> fixed HQuery
-=======
->>>>>>> 02ec34357ab8f96a4c452e973d0d4f581a920dd7
->>>>>>> 77e9e49375da9e4df362b4dd6c4e9ad326326b49
 com\acc\database\DatabaseConenctionTest.class
 com\acc\models\Supervisor.class
 com\acc\models\User.class
 com\acc\database\pojo\HbnProblem.class
-com\acc\resources\StudentResource.class
 com\acc\resources\SupervisorResource.class
+com\acc\database\specification\GetTagAllSpec.class
 com\acc\resources\StaticResource.class
 com\acc\database\specification\Specification.class
+com\acc\database\repository\GroupRepository.class
 com\acc\models\Group.class
 com\acc\models\Tag.class
-com\acc\database\CloseableSession.class
 com\acc\models\Problem.class
 com\acc\database\repository\TagRepository.class
+com\acc\database\specification\GetGroupAllSpec.class
 com\acc\resources\GroupResource.class
 com\acc\service\GroupService.class
 com\acc\service\TagService.class
-<<<<<<< HEAD
 com\acc\database\specification\GetUserAllSpec.class
-=======
-com\acc\database\pojo\HbnInstitution.class
-com\acc\database\specification\ProblemByIdSpec.class
-<<<<<<< HEAD
->>>>>>> fixed HQuery
-=======
->>>>>>> 02ec34357ab8f96a4c452e973d0d4f581a920dd7
->>>>>>> 77e9e49375da9e4df362b4dd6c4e9ad326326b49
-com\acc\models\Student.class
+com\acc\database\pojo\HbnPOJO.class
 com\acc\database\repository\ProblemRepository.class
 com\acc\app\ApiApp.class

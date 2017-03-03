@@ -1,6 +1,7 @@
 package com.acc.resources;
 
 import com.sun.org.apache.xalan.internal.xsltc.dom.SimpleResultTreeImpl;
+import org.eclipse.jetty.http.HttpStatus;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -236,5 +237,12 @@ public class StaticResource {
                 "    }\n" +
                 "]";
         return Response.ok(body).build();
+    }
+
+    @Path("getParam")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getParam(@QueryParam("id") int id, @QueryParam("name") String name) {
+        return Response.status(HttpStatus.OK_200).entity(id + " " + name).build();
     }
 }

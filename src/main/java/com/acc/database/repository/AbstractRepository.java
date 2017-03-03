@@ -146,7 +146,6 @@ public abstract class AbstractRepository<T>{
                 .build();
         try {
             sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-
         }
         catch (org.hibernate.service.spi.ServiceException se) {
             System.err.println("Failed to connect to server");
