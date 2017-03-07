@@ -11,13 +11,15 @@ import java.util.List;
 public class Group extends HateOAS {
     private int id;
     private String name;
-    private List<User> users;
+    private List<User> students, supervisors;
     private Problem problem;
 
-    public Group(int id, String name, List<User> users) {
+    public Group(int id, String name, List<User> students, List<User> supervisors, Problem problem) {
         this.id = id;
         this.name = name;
-        this.users = users;
+        this.students = students;
+        this.supervisors = supervisors;
+        this.problem = problem;
     }
 
     public int getId() {
@@ -36,12 +38,20 @@ public class Group extends HateOAS {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<User> getStudents() {
+        return students;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setStudents(List<User> students) {
+        this.students = students;
+    }
+
+    public List<User> getSupervisors() {
+        return supervisors;
+    }
+
+    public void setSupervisors(List<User> supervisors) {
+        this.supervisors = supervisors;
     }
 
     public Problem getProblem() {
@@ -56,11 +66,8 @@ public class Group extends HateOAS {
         return new Gson().toJson(this);
     }
 
-    public List<Integer> getUserIdList(){
-        List<Integer> idList = new ArrayList<>();
-
-        // TODO: 06.03.2017 if users is initialized?
-        for (User user : users) idList.add(user.getId());
-        return idList;
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

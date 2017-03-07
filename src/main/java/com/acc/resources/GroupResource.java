@@ -82,12 +82,13 @@ public class GroupResource {
      *
      */
     public Response newGroup(JsonObject o, @Context HttpHeaders headers) {
-        System.out.println("ACTION: POST - user | item = \n" + o.toString());
+        System.out.println("ACTION: POST - GROUP | item = \n" + o.toString());
         if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
+            System.out.println(group);
             group = service.newGroup(group);
             if(group != null) {
                 return Response.status(HttpStatus.CREATED_201).build();
