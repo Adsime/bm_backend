@@ -19,6 +19,8 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
 
     @Override
     public Group add(Group group) {
+        // TODO: 07.03.2017 check supervisor
+        // TODO: 07.03.2017 add users except supervisors
         HbnBachelorGroup mappedGroup = new HbnBachelorGroup(group.getName());
 
         boolean noUsers = group.getUsers() != null || !(group.getUsers().isEmpty());
@@ -45,8 +47,9 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
     public boolean update(Group group) {
         HbnBachelorGroup hbnBachelorGroup = new HbnBachelorGroup(group.getName());
         hbnBachelorGroup.setId(group.getId());
-        hbnBachelorGroup.setUsers(toHbnUserSet(group.getUsers()));
-        hbnBachelorGroup.setHbnProblem(toHbnProblem(group.getProblem()));
+
+        if (group.getUsers() != null) hbnBachelorGroup.setUsers(toHbnUserSet(group.getUsers()));
+        if (group.getProblem() != null) hbnBachelorGroup.setHbnProblem(toHbnProblem(group.getProblem()));
 
         return super.updateEntity(hbnBachelorGroup);
     }
@@ -124,6 +127,13 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         return hbnProblem;
     }
 
+
     // TODO: 01.03.2017 AssignUserToGroup
+    public boolean assignUserToGroup(User user){
+        // TODO: 07.03.2017 map user to hbnuser
+        // TODO: 07.03.2017 update group
+        return false;
+    }
+
     // TODO: 03.03.2017 AssignProblemToGroup
 }
