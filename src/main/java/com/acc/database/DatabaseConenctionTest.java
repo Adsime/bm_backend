@@ -3,7 +3,9 @@ package com.acc.database;
 import com.acc.database.repository.GroupRepository;
 import com.acc.database.repository.TagRepository;
 import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetGroupAllSpec;
 import com.acc.database.specification.GetUserAllSpec;
+import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.models.Group;
 import com.acc.models.User;
 import java.util.ArrayList;
@@ -22,10 +24,10 @@ public class DatabaseConenctionTest {
         //ArrayList<Tag> tags = new ArrayList<>();
         //tags.add (new Tag(1, "FETPERSON","KULHETS-TAG","FOR KULE OG FETE PERSONER"));
        // UR.add(new User("Alexis","Matrovic","shadyserbian@hotmail.com","alex.matrovic",tags));
-        //System.out.println(Arrays.toString(UR.getQuery(new GetUserByIdSpec(1)).toArray()));
-        ArrayList<User> users = new ArrayList<>();
-        users.add(new User(1,"Alexis","Matrovic","shadyserbian@hotmail.com","alex.matrovic",null));
-        Group group = new Group(1,"Shady Slavs",users);
-        GR.add(group);
+        System.out.println(Arrays.toString(GR.getQuery(new GetGroupAllSpec()).toArray()));
+        //ArrayList<User> users = new ArrayList<>();
+        //users.add(new User(2,"Edin","Dzekovic","bosniandiamond@hotmail.com","edin.dzekovic",null));
+        //Group group = new Group(1,"Spurs Gang", null);
+        //GR.add(group);
     }
 }

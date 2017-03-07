@@ -55,4 +55,12 @@ public class Group extends HateOAS {
     public String toJson() {
         return new Gson().toJson(this);
     }
+
+    public List<Integer> getUserIdList(){
+        List<Integer> idList = new ArrayList<>();
+
+        // TODO: 06.03.2017 if users is initialized?
+        for (User user : users) idList.add(user.getId());
+        return idList;
+    }
 }

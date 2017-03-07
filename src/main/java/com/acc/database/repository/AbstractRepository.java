@@ -1,11 +1,14 @@
 package com.acc.database.repository;
 
+import com.acc.database.pojo.HbnBachelorGroup;
 import com.acc.database.pojo.HbnEntity;
 import com.acc.database.pojo.HbnTag;
-import com.acc.models.HateOAS;
+import com.acc.database.pojo.HbnUser;
 import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.models.Tag;
+import com.acc.models.User;
+import com.acc.providers.Links;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -20,6 +23,8 @@ import java.util.*;
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
+
+// TODO: 07.03.2017 VERY BLOATED CLASS
 public abstract class AbstractRepository<T>{
 
     private static SessionFactory sessionFactory;
@@ -80,11 +85,10 @@ public abstract class AbstractRepository<T>{
         catch (HibernateException he){
             if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
-            return false;
+            throw new EntityNotFoundException();
         }
         return true;
     }
-
 
     public List<T> queryFromDb (HqlSpecification spec) {
 
@@ -141,11 +145,39 @@ public abstract class AbstractRepository<T>{
             e.printStackTrace();
         }
         return result;
-
     }
 
-    //All business models extends from HateOAS
-    //specList must be filled with corresponding spec
+    public HbnEntity queryByIdSpec (HqlSpecification idSpec) {
+
+        HbnEntity result = null;
+        Transaction tx = null;
+
+        try( Session session = sessionFactory.openSession()){
+
+            tx = session.beginTransaction();
+
+            result = (HbnEntity) session
+                    .createQuery(idSpec.toHqlQuery())
+                    .list()
+                    .get(0);
+
+            tx.commit();
+        }
+        catch (HibernateException he) {
+
+            if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            he.printStackTrace();
+        }
+        // TODO: 24.02.2017 Throw a custom exception
+        catch (IndexOutOfBoundsException iobe) {
+            throw new IllegalArgumentException();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public Set<HbnTag> toHbnTagSet (List<Tag> userTags){
         Set<HbnTag> hbnTagSet = new HashSet<>();
 
@@ -164,13 +196,60 @@ public abstract class AbstractRepository<T>{
         return hbnTagSet;
     }
 
+    public List<Tag> toTagList(Set<HbnTag> tagSet){
+        List<Tag> tagList = new ArrayList<>();
 
-    protected void buildSessionFactory(){
+        for (HbnTag hbnTag : tagSet){
+            tagList.add(new Tag(
+                    (int) hbnTag.getId(),
+                    hbnTag.getTagName(),
+                    hbnTag.getType(),
+                    hbnTag.getDescription()
+            ));
+        }
+
+        return tagList;
+    }
+
+    public List<Integer> toGroupIdList(Set<HbnBachelorGroup> hbnBachelorGroupSet){
+        List<Integer> groupIdList = new ArrayList<>();
+
+        for(HbnBachelorGroup hbnBachelorGroup : hbnBachelorGroupSet){
+            groupIdList.add((int) hbnBachelorGroup.getId());
+        }
+
+        return groupIdList;
+    }
+
+    public List<User> toUserList (List<HbnUser> hbnUserList){
+        List <User> userList = new ArrayList<>();
+
+        for (HbnUser hbnUser : hbnUserList){
+            User user = new User(
+                    (int)hbnUser.getId(),
+                    hbnUser.getFirstName(),
+                    hbnUser.getLastName(),
+                    hbnUser.getEmail(),
+                    hbnUser.getEnterpriseId(),
+                    toTagList(hbnUser.getTags())
+            );
+
+            user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
+            user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
+            userList.add(user);
+        }
+
+        return userList;
+    }
+
+    private void buildSessionFactory(){
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
-            sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+            sessionFactory = new MetadataSources( registry )
+                    .buildMetadata()
+                    .buildSessionFactory();
         }
         catch (org.hibernate.service.spi.ServiceException se) {
             System.err.println("Failed to connect to server");

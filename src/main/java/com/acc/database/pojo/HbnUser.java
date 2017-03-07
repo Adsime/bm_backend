@@ -87,7 +87,7 @@ public class HbnUser implements Serializable, HbnEntity {
         this.enterpriseId = enterpriseId;
     }
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     public Set<HbnBachelorGroup> getGroups(){
         return groups;
     }
