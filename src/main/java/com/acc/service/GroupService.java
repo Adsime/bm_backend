@@ -1,7 +1,9 @@
 package com.acc.service;
 
+import com.acc.database.repository.GroupRepository;
 import com.acc.models.Group;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -9,6 +11,9 @@ import java.util.List;
  */
 
 public class GroupService extends GeneralService{
+
+    @Inject
+    public GroupRepository groupRepository;
 
     public Group getGroup(int id) {
         return null;
@@ -18,8 +23,8 @@ public class GroupService extends GeneralService{
         return null;
     }
 
-    public boolean newGroup(Group group) {
-        return true;
+    public Group newGroup(Group group) {
+        return groupRepository.add(group);
     }
 
     public boolean deleteGroup(int id) {

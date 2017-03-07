@@ -25,27 +25,29 @@ public class Links {
     public static final String TAGS = "tags";
     public static final String PROBLEMS = "problems";
 
+    private static final String COMBINE = "/";
+
     public static List<Link> generateLinks(String type, List<Integer> ids) {
         List<Link> retVal = new ArrayList<>();
         switch (type) {
             case USER: {
                 for(int id : ids) {
-                    retVal.add(new Link(type, USER_LINK + id));
+                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
                 }
                 break;
             } case GROUP: {
                 for(int id : ids) {
-                    retVal.add(new Link(type, GROUP_LINK + id));
+                    retVal.add(new Link(type, GROUP_LINK + COMBINE + id));
                 }
                 break;
             } case TAG: {
                 for(int id : ids) {
-                    retVal.add(new Link(type, TAG_LINK + id));
+                    retVal.add(new Link(type, TAG_LINK + COMBINE + id));
                 }
                 break;
             } case PROBLEM: {
                 for(int id : ids) {
-                    retVal.add(new Link(type, PROBLEM_LINK + id));
+                    retVal.add(new Link(type, PROBLEM_LINK + COMBINE + id));
                 }
                 break;
             }

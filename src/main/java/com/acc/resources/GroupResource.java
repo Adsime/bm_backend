@@ -45,6 +45,7 @@ public class GroupResource {
      *
      */
     public Response getGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
+        System.out.println("ACTION: GET - group | ID = " + id);
         if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
@@ -61,6 +62,7 @@ public class GroupResource {
      *
      */
     public Response getAllGroups(@Context HttpHeaders headers) {
+        System.out.println("ACTION: GET - user | ALL");
         if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
@@ -80,13 +82,17 @@ public class GroupResource {
      *
      */
     public Response newGroup(JsonObject o, @Context HttpHeaders headers) {
+        System.out.println("ACTION: POST - user | item = \n" + o.toString());
         if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
-            service.newGroup(group);
-            return Response.status(HttpStatus.CREATED_201).build();
+            group = service.newGroup(group);
+            if(group != null) {
+                return Response.status(HttpStatus.CREATED_201).build();
+            }
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -98,6 +104,7 @@ public class GroupResource {
      *
      */
     public Response deleteGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
+        System.out.println("ACTION: DELETE - user | ID = " + id);
         if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
@@ -112,17 +119,17 @@ public class GroupResource {
     }
 
     @PUT
-    @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     /**
      *
      */
-    public Response updateGroup(@PathParam("id") int id, @Context HttpHeaders headers, JsonObject body) {
+    public Response updateGroup(@Context HttpHeaders headers, JsonObject o) {
+        System.out.println("ACTION: GET - user | item = \n" + o.toString());
         if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             return Response.status(HttpStatus.UNAUTHORIZED_401).build();
         }
         try {
-            Group group = new Gson().fromJson(body.toString(), Group.class);
+            Group group = new Gson().fromJson(o.toString(), Group.class);
             if(service.updateGroup(group)) {
                 return Response.ok().build();
             }
