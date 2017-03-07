@@ -7,6 +7,7 @@ import com.acc.models.Tag;
 
 import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,7 +29,12 @@ public class TagService extends GeneralService {
     }
 
     public List<Tag> getAllTags() {
-        return tagRepository.getQuery(new GetTagAllSpec());
+        try {
+            return tagRepository.getQuery(new GetTagAllSpec());
+        } catch (NoSuchEntityException nsee) {
+            return Arrays.asList();
+        }
+
     }
     
     public Tag newTag(Tag tag) {

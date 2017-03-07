@@ -1,9 +1,13 @@
 package com.acc.service;
 
 import com.acc.database.repository.ProblemRepository;
+import com.acc.database.specification.GetProblemAllSpec;
+import com.acc.database.specification.GetProblemByIdSpec;
 import com.acc.models.Problem;
 
+import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,11 +19,19 @@ public class ProblemService extends GeneralService{
     public ProblemRepository problemRepository;
 
     public Problem getProblem(int id) {
-        return null;
+        try {
+            return problemRepository.getQuery(new GetProblemByIdSpec((long)id)).get(0);
+        } catch (NoSuchEntityException nsee) {
+            return null;
+        }
     }
 
     public List<Problem> getAllProblems() {
-        return null;
+        try {
+            return problemRepository.getQuery(new GetProblemAllSpec());
+        } catch (NoSuchEntityException nsee) {
+            return Arrays.asList();
+        }
     }
 
     public Problem newProblem(Problem problem) {
@@ -27,10 +39,19 @@ public class ProblemService extends GeneralService{
     }
 
     public boolean deleteProblem(int id) {
-        return true;
+        try {
+            return problemRepository.remove((long)id);
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
+
     }
 
     public boolean updateProblem(Problem problem) {
-        return true;
+        try {
+            return problemRepository.update(problem);
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
     }
 }
