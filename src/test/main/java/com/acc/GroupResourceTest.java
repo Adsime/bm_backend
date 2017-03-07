@@ -102,7 +102,7 @@ public class GroupResourceTest {
 
     @Test
     public void newGroupSuccessTest() {
-        when(service.newGroup(TestData.testGroups().get(0))).thenReturn(true);
+        when(service.newGroup(any())).thenReturn(TestData.testGroups().get(0));
         when(service.verify(TestData.credentials)).thenReturn(true);
         groupResource.service = service;
         assertEquals(HttpStatus.CREATED_201, groupResource.newGroup(TestData.jsonGroup(), TestData.testCredentials()).getStatus());
@@ -165,14 +165,14 @@ public class GroupResourceTest {
         when(service.updateGroup(any())).thenReturn(true);
         when(service.verify(TestData.credentials)).thenReturn(true);
         groupResource.service = service;
-        assertEquals(HttpStatus.OK_200, groupResource.updateGroup(0, TestData.testCredentials(), TestData.jsonGroup()).getStatus());
+        assertEquals(HttpStatus.OK_200, groupResource.updateGroup(TestData.testCredentials(), TestData.jsonGroup()).getStatus());
     }
 
     @Test
     public void updateGroupAuthFailTest() {
         when(service.verify(TestData.badCredentials)).thenReturn(false);
         groupResource.service = service;
-        assertEquals(HttpStatus.UNAUTHORIZED_401, groupResource.updateGroup(0, TestData.testBadCredentials(), TestData.jsonGroup()).getStatus());
+        assertEquals(HttpStatus.UNAUTHORIZED_401, groupResource.updateGroup(TestData.testBadCredentials(), TestData.jsonGroup()).getStatus());
     }
 
     @Test
@@ -180,7 +180,7 @@ public class GroupResourceTest {
         when(service.updateGroup(any())).thenReturn(false);
         when(service.verify(TestData.credentials)).thenReturn(true);
         groupResource.service = service;
-        assertEquals(HttpStatus.BAD_REQUEST_400, groupResource.updateGroup(0, TestData.testCredentials(), TestData.jsonGroup()).getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST_400, groupResource.updateGroup(TestData.testCredentials(), TestData.jsonGroup()).getStatus());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class GroupResourceTest {
         when(service.updateGroup(any())).thenThrow(new InternalServerErrorException());
         when(service.verify(TestData.credentials)).thenReturn(true);
         groupResource.service = service;
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR_500, groupResource.updateGroup(0, TestData.testCredentials(), TestData.jsonGroup()).getStatus());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR_500, groupResource.updateGroup(TestData.testCredentials(), TestData.jsonGroup()).getStatus());
     }
 
     // End updateGroup Tests

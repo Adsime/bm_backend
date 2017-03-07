@@ -126,12 +126,7 @@ public class UserResourceTest {
     public void getAllUsersInternalError() {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
-        try {
-            when(service.getAllUsers()).thenThrow(new InternalServerErrorException());
-        } catch (Exception e) {
-
-        }
-
+        when(service.getAllUsers()).thenThrow(new InternalServerErrorException());
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);

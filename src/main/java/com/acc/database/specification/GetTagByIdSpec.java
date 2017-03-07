@@ -1,5 +1,7 @@
 package com.acc.database.specification;
 
+import com.acc.models.Tag;
+
 /**
  * Created by nguyen.duy.j.khac on 23.02.2017.
  */
@@ -14,4 +16,5 @@ public class GetTagByIdSpec implements HqlSpecification{
     public String toHqlQuery() {
         return "FROM HbnTag WHERE id='" + id + "'";
     }
+
 }
