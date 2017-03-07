@@ -1,14 +1,11 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.*;
-import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.*;
 import com.acc.providers.Links;
-import com.sun.xml.internal.bind.v2.TODO;
-import org.apache.commons.collections.ArrayStack;
 
 import java.util.ArrayList;
 import java.util.HashSet;
