@@ -1,13 +1,11 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.*;
-import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Tag;
 import com.acc.models.User;
 import com.acc.providers.Links;
-import com.sun.xml.internal.bind.v2.TODO;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -25,9 +23,6 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
 
     @Override
     public User add(User user) throws EntityNotFoundException{
-
-        Set<HbnTag> tags = super.toHbnTagSet(user.getTags());
-
         HbnUser mappedUser = new HbnUser(
                 user.getFirstName(),
                 user.getLastName(),
@@ -36,16 +31,18 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                 user.getEnterpriseID()
         );
 
-        mappedUser.setTags(tags);
+        if (user.getTags() != null) mappedUser.setTags(super.toHbnTagSet(user.getTags()));
         long id = super.addEntity(mappedUser);
 
         return new User(
-                id,
+                (int) id,
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
                 user.getEnterpriseID(),
                 user.getTags());
+
+        // TODO: 06.03.2017 with Links! 
     }
 
     // TODO: 24.02.2017 generate salt 
@@ -73,35 +70,8 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
 
     @Override
     public List<User> getQuery(Specification spec) {
-        List<HbnUser> readUsers = super.queryFromDb((HqlSpecification) spec);
-        List<User> result = new ArrayList<>();
-
-        System.out.println(Arrays.toString(readUsers
-                .get(0)
-                .getTags()
-                .toArray()));
-
-        System.out.println(Arrays.toString(readUsers
-                .get(0)
-                .getGroups()
-                .toArray()));
-
-
-        for (HbnUser readUser : readUsers){
-            User user = new User(
-                    readUser.getId(),
-                    readUser.getFirstName(),
-                    readUser.getLastName(),
-                    readUser.getEmail(),
-                    readUser.getEnterpriseId(),
-                    mapTagToHbnTag(readUser.getTags())
-            );
-
-            user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG,toTagIdList(readUser.getTags())));
-            user.addLinks(Links.GROUPS,Links.generateLinks(Links.GROUP,toGroupIdList(readUser.getGroups())));
-            result.add(user);
-        }
-
+        List<HbnUser> readData = super.queryFromDb((HqlSpecification) spec);
+        List<User> result = super.toUserList(readData);
         return result;
     }
 
@@ -119,38 +89,4 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
         return tagSet;
     }
 
-    private List<Tag> mapTagToHbnTag(Set<HbnTag> tagSet){
-        List<Tag> tagList = new ArrayList<>();
-
-        for (HbnTag hbnTag : tagSet){
-            tagList.add(new Tag(
-                    (int) hbnTag.getId(),
-                    hbnTag.getTagName(),
-                    hbnTag.getType(),
-                    hbnTag.getDescription()
-            ));
-        }
-
-        return tagList;
-    }
-
-    public List<Integer> toGroupIdList(Set<HbnBachelorGroup> hbnBachelorGroupSet){
-        List<Integer> groupIdList = new ArrayList<>();
-
-        for(HbnBachelorGroup hbnBachelorGroup : hbnBachelorGroupSet){
-            groupIdList.add((int) hbnBachelorGroup.getId());
-        }
-
-        return groupIdList;
-    }
-
-    public List<Integer> toTagIdList(Set<HbnTag> hbnTagSet){
-        List<Integer> tagIdList = new ArrayList<>();
-
-        for(HbnTag hbnTag : hbnTagSet){
-            tagIdList.add((int)hbnTag.getId());
-        }
-
-        return tagIdList;
-    }
 }

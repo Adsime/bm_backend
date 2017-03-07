@@ -1,7 +1,9 @@
 package com.acc.models;
 
 import com.google.gson.Gson;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ import java.util.List;
  */
 public class User extends HateOAS {
 
-    private long id;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -24,7 +26,7 @@ public class User extends HateOAS {
         this.enterpriseID = enterpriseID;
     }
 
-    public User(long id, String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
+    public User(int id, String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,11 +35,11 @@ public class User extends HateOAS {
         this.tags = tags;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -83,5 +85,11 @@ public class User extends HateOAS {
 
     public String toJson() {
         return new Gson().toJson(this);
+    }
+
+    public List<Integer> getTagIdList (){
+        List<Integer> idList = new ArrayList<>();
+        for (Tag tag : tags) idList.add(tag.getId());
+        return idList;
     }
 }
