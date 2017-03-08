@@ -166,7 +166,6 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         return super.updateEntity(group);
     }
 
-    // TODO: 03.03.2017 test AssignProblemToGroup
     public boolean assignProblemToGroup(long problemId, long groupId){
         HbnProblem problem = (HbnProblem) super.queryByIdSpec(new GetProblemByIdSpec(problemId));
         HbnBachelorGroup group = (HbnBachelorGroup) super.queryByIdSpec(new GetGroupByIdSpec(groupId));

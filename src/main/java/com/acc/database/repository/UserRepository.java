@@ -56,7 +56,7 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                 user.getEnterpriseID()
         );
 
-        if (!user.getTags().isEmpty()) mappedUser.setTags(getHbnUserTags(user));
+        if (!user.getTags().isEmpty()) mappedUser.setTags(toHbnTagSet(user.getTags()));
         mappedUser.setId(user.getId());
         return super.updateEntity(mappedUser);
     }

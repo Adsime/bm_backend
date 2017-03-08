@@ -21,10 +21,13 @@ public class DatabaseConenctionTest {
         UserRepository UR = new UserRepository();
         TagRepository TR = new TagRepository();
         GroupRepository GR = new GroupRepository();
-        //TR.update(new Tag(1, "FETPERSON","kewl-TAG","FOR KULE OG FETE PERSONER"));
-        //ArrayList<Tag> tags = new ArrayList<>();
-        //tags.add (new Tag(1, "FETPERSON","KULHETS-TAG","FOR KULE OG FETE PERSONER"));
-        //UR.add(new User("Alexis","Matrovic","shadyserbian@hotmail.com","alex.matrovic",tags));
+
+        Tag tag = new Tag(5,"test",null,null);
+        ArrayList<Tag> tags = new ArrayList<>();
+        tags.add (tag);
+
+        UR.update(new User("Alexis","Matrovic","shadyserbian@hotmail.com","alex.matrovic",tags));
+
         //GR.update(new Group(1,"Spurs Gang", null));
         //ArrayList<User> users = new ArrayList<>();
         //UR.add(new User(5,"Zlatan","Ibrahimovic","zlatan@zlatan-mail.com","zlatan.zlatan",null));
