@@ -10,6 +10,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
@@ -29,9 +30,9 @@ public class TestData {
 
     public static List<Group> testGroups() {
         List<Group> groups = new ArrayList<>();
-        groups.add(new Group(1, "asdasd",null));
-        groups.add(new Group(2, "asdasd",null));
-        groups.add(new Group(3, "asdasd",null));
+        groups.add(new Group(1, "asdasd",null, null, null));
+        groups.add(new Group(2, "asdasd",null, null, null));
+        groups.add(new Group(3, "asdasd",null, null, null));
         return groups;
     }
 
