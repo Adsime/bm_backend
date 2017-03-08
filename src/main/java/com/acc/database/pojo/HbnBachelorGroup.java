@@ -9,7 +9,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "BACHELOR_GROUP")
-public class HbnBachelorGroup implements Serializable {
+public class HbnBachelorGroup implements Serializable, HbnEntity {
 
     private long id;
     private String name;

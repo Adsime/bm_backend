@@ -1,9 +1,7 @@
 package com.acc.database.repository;
 
 import com.acc.database.pojo.*;
-import com.acc.database.specification.GetUserByIdSpec;
-import com.acc.database.specification.HqlSpecification;
-import com.acc.database.specification.Specification;
+import com.acc.database.specification.*;
 import com.acc.models.*;
 import com.acc.providers.Links;
 import org.apache.poi.hssf.util.HSSFColor;
@@ -142,28 +140,6 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         return result;
     }
 
-    private List<User> toUserList (Set<HbnUser> hbnUserSet){
-        List <User> userList = new ArrayList<>();
-
-        for (HbnUser hbnUser : hbnUserSet){
-            User user = new User(
-                    (int)hbnUser.getId(),
-                    hbnUser.getFirstName(),
-                    hbnUser.getLastName(),
-                    hbnUser.getEmail(),
-                    hbnUser.getEnterpriseId(),
-                    super.toTagList(hbnUser.getTags())
-            );
-
-            user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
-            user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, super.toGroupIdList(hbnUser.getGroups())));
-            userList.add(user);
-        }
-
-        return userList;
-    }
-
-
     private HbnProblem toHbnProblem (Problem problem){
         HbnUser hbnUser = (HbnUser) super.queryByIdSpec(new GetUserByIdSpec(problem.getAuthor()));
 
@@ -182,12 +158,19 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         return false;
     }
 
-    // TODO: 01.03.2017 AssignUserToGroup
-    public boolean assignUserToGroup(User user){
-        // TODO: 07.03.2017 map user to hbnuser
-        // TODO: 07.03.2017 update group
-        return false;
+    // TODO: 01.03.2017 ILLEGALSTATEEXCEPTION when assigning already assigned user
+    public boolean assignUserToGroup(long userId, long groupId){
+        HbnUser groupAssociate = (HbnUser) super.queryByIdSpec(new GetUserByIdSpec(userId));
+        HbnBachelorGroup group = (HbnBachelorGroup) super.queryByIdSpec(new GetGroupByIdSpec(groupId));
+        group.getUsers().add(groupAssociate);
+        return super.updateEntity(group);
     }
 
-    // TODO: 03.03.2017 AssignProblemToGroup
+    // TODO: 03.03.2017 test AssignProblemToGroup
+    public boolean assignProblemToGroup(long problemId, long groupId){
+        HbnProblem problem = (HbnProblem) super.queryByIdSpec(new GetProblemByIdSpec(problemId));
+        HbnBachelorGroup group = (HbnBachelorGroup) super.queryByIdSpec(new GetGroupByIdSpec(groupId));
+        group.setProblem(problem);
+        return super.updateEntity(group);
+    }
 }

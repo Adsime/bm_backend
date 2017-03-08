@@ -27,12 +27,11 @@ public class DatabaseConenctionTest {
         //UR.add(new User("Alexis","Matrovic","shadyserbian@hotmail.com","alex.matrovic",tags));
         //GR.update(new Group(1,"Spurs Gang", null));
         //ArrayList<User> users = new ArrayList<>();
-        //users.add(new User(2,"Edin","Dzekovic","bosniandiamond@hotmail.com","edin.dzekovic",null));
+        //UR.add(new User(5,"Zlatan","Ibrahimovic","zlatan@zlatan-mail.com","zlatan.zlatan",null));
         //Group group = new Group(6,"Zlatan's Financial Group", null, null,null);
         //GR.add(group);
         //System.out.println(Arrays.toString(GR.getQuery(new GetGroupAllSpec()).toArray()));
         //GR.remove(4);
         //GR.update(group);
-
     }
 }
