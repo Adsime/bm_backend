@@ -17,10 +17,10 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.*;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.model.File;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class DriveApi {
     public static Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                DriveApi.class.getResourceAsStream("./client_secret.json");
+                DriveApi.class.getResourceAsStream("/client_secret.json");
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -102,20 +102,24 @@ public class DriveApi {
 
     public static void main(String[] args) throws IOException {
         // Build a new authorized API client service.
+        boolean children = false;
         Drive service = getDriveService();
-
+        About about = service.about().get().execute();
         // Print the names and IDs for up to 10 files.
         FileList result = service.files().list()
                 .setPageSize(10)
-                .setFields("nextPageToken, files(id, name)")
+                .setQ("mimeType = 'application/vnd.google-apps.folder'")
+                .setFields("nextPageToken, files(id, name, parents)")
                 .execute();
         List<File> files = result.getFiles();
+        List<File> updated = new ArrayList<>();
         if (files == null || files.size() == 0) {
             System.out.println("No files found.");
-        } else {
+        }
+        else {
             System.out.println("Files:");
             for (File file : files) {
-                System.out.printf("%s (%s)\n", file.getName(), file.getId());
+
             }
         }
     }
