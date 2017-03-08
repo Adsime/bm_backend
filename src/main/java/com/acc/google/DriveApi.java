@@ -17,10 +17,17 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.*;
 import com.google.api.services.drive.Drive;
+<<<<<<< HEAD
 import com.google.api.services.drive.model.File;
 
 import java.io.*;
 import java.util.ArrayList;
+=======
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+>>>>>>> 0af4ceeeac05e7d89d488e6999448fe05bbdca0b
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,7 +76,11 @@ public class DriveApi {
     public static Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
+<<<<<<< HEAD
                 DriveApi.class.getResourceAsStream("/client_secret.json");
+=======
+                DriveApi.class.getResourceAsStream("./client_secret.json");
+>>>>>>> 0af4ceeeac05e7d89d488e6999448fe05bbdca0b
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
