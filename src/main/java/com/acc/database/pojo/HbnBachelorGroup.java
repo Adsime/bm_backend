@@ -57,11 +57,11 @@ public class HbnBachelorGroup implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "problem_id")
-    public HbnProblem getHbnProblem() {
+    public HbnProblem getProblem() {
         return problem;
     }
 
-    public void setHbnProblem(HbnProblem problem) {
+    public void setProblem(HbnProblem problem) {
         this.problem = problem;
     }
 }

@@ -6,7 +6,9 @@ import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.*;
 import com.acc.providers.Links;
+import org.apache.poi.hssf.util.HSSFColor;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,38 +20,44 @@ import java.util.Set;
 public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implements Repository<Group> {
 
     @Override
-    public Group add(Group group) {
-        // TODO: 07.03.2017 check supervisor
-        // TODO: 07.03.2017 add users except supervisors
+    public Group add(Group group) throws EntityNotFoundException{
+        Set<HbnUser> groupAssociates = new HashSet<>();
+
+        if (group.getSupervisors() != null) groupAssociates.addAll(toHbnUserSet(group.getSupervisors()));
+        if (group.getStudents() != null) groupAssociates.addAll(toHbnUserSet(group.getStudents()));
+
         HbnBachelorGroup mappedGroup = new HbnBachelorGroup(group.getName());
-
-        boolean noUsers = group.getUsers() != null || !(group.getUsers().isEmpty());
-        boolean noProblem = group.getProblem() != null;
-
-        if (noUsers) mappedGroup.setUsers(toHbnUserSet(group.getUsers()));
-        if (noProblem) mappedGroup.setHbnProblem(toHbnProblem(group.getProblem()));
+        if (group.getProblem() != null) mappedGroup.setProblem(toHbnProblem(group.getProblem()));
+        mappedGroup.setUsers(groupAssociates);
 
         long id = super.addEntity(mappedGroup);
 
         Group addedGroup = new Group(
                 (int)id,
                 group.getName(),
-                group.getUsers()
+                group.getStudents(),
+                group.getSupervisors(),
+                group.getProblem()
         );
 
-        // TODO: 06.03.2017 generate links with one id
-        //addedGroup.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, group.getProblem().getId()));
+        List<Integer> problemId = new ArrayList<>();
+        if (group.getProblem() != null )problemId.add(group.getProblem().getId());
+        addedGroup.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
 
         return addedGroup;
     }
 
     @Override
     public boolean update(Group group) {
+        List<User> groupAssociates = new ArrayList<>();
         HbnBachelorGroup hbnBachelorGroup = new HbnBachelorGroup(group.getName());
         hbnBachelorGroup.setId(group.getId());
 
-        if (group.getUsers() != null) hbnBachelorGroup.setUsers(toHbnUserSet(group.getUsers()));
-        if (group.getProblem() != null) hbnBachelorGroup.setHbnProblem(toHbnProblem(group.getProblem()));
+        if (group.getSupervisors() != null) groupAssociates.addAll(group.getSupervisors());
+        if (group.getStudents() != null) groupAssociates.addAll(group.getStudents());
+        hbnBachelorGroup.setUsers(toHbnUserSet(groupAssociates));
+
+        if (group.getProblem() != null) hbnBachelorGroup.setProblem(toHbnProblem(group.getProblem()));
 
         return super.updateEntity(hbnBachelorGroup);
     }
@@ -67,19 +75,54 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         List<Group> result = new ArrayList<>();
 
         for (HbnBachelorGroup readBachelorGroup : readData ){
+            Problem groupProblem = new Problem(
+                    (int) readBachelorGroup.getProblem().getId(),
+                    (int) readBachelorGroup.getProblem().getUser().getId(),
+                    "",
+                    "",
+                    readBachelorGroup.getProblem().getPath()
+            );
+            List<Integer> authorId = new ArrayList<>(groupProblem.getAuthor());
+            groupProblem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+
             Group group = new Group(
                     (int) readBachelorGroup.getId(),
                     readBachelorGroup.getName(),
-                    toUserList(readBachelorGroup.getUsers())
+                    new ArrayList<User>(),
+                    new ArrayList<User>(),
+                    groupProblem
+
             );
-            // TODO: 07.03.2017 add problem link! 
+
+            for (HbnUser hbnUser : readBachelorGroup.getUsers()){
+                User user = new User(
+                        (int)hbnUser.getId(),
+                        hbnUser.getFirstName(),
+                        hbnUser.getLastName(),
+                        hbnUser.getEmail(),
+                        hbnUser.getEnterpriseId(),
+                        super.toTagList(hbnUser.getTags())
+                );
+
+                // TODO: 08.03.2017 should add a to groupIdList user ?
+                user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
+                user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, super.toGroupIdList(hbnUser.getGroups())));
+
+                if (hasStudentTag(hbnUser.getTags())) group.getStudents().add(user);
+                else group.getSupervisors().add(user);
+            }
+
+            List<Integer> problemId = new ArrayList<>();
+            if (group.getProblem() != null )problemId.add(group.getProblem().getId());
+            group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
+
             result.add(group);
         }
         return result;
     }
 
     private Set<HbnUser> toHbnUserSet(List<User> users){
-        Set<HbnUser> hbnUserSet = new HashSet<>();
+        Set<HbnUser> result = new HashSet<>();
 
         List<HqlSpecification> specList = new ArrayList<>();
 
@@ -90,9 +133,9 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         Set<HbnEntity> hbnEntitySet = super.queryByIdSpec(specList);
 
         for (HbnEntity pojo : hbnEntitySet){
-            hbnUserSet.add((HbnUser) pojo);
+            result.add((HbnUser) pojo);
         }
-        return hbnUserSet;
+        return result;
     }
 
     private List<User> toUserList (Set<HbnUser> hbnUserSet){
@@ -116,6 +159,7 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         return userList;
     }
 
+
     private HbnProblem toHbnProblem (Problem problem){
         HbnUser hbnUser = (HbnUser) super.queryByIdSpec(new GetUserByIdSpec(problem.getAuthor()));
 
@@ -127,6 +171,12 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         return hbnProblem;
     }
 
+    private boolean hasStudentTag(Set<HbnTag> tags){
+        for (HbnTag hbnTag : tags){
+            if (hbnTag.getTagName().toLowerCase().equals("student")) return true;
+        }
+        return false;
+    }
 
     // TODO: 01.03.2017 AssignUserToGroup
     public boolean assignUserToGroup(User user){

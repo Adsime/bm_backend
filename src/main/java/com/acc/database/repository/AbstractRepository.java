@@ -116,7 +116,7 @@ public abstract class AbstractRepository<T>{
     }
 
     //To be able to do query of different types of objects in the repositories
-    public Set<HbnEntity> queryByIdSpec (List<HqlSpecification> idSpecs) {
+    public Set<HbnEntity> queryByIdSpec (List<HqlSpecification> idSpecs) throws EntityNotFoundException{
 
         Set<HbnEntity> result = new HashSet<>();
         Transaction tx = null;
@@ -139,7 +139,7 @@ public abstract class AbstractRepository<T>{
         }
         // TODO: 24.02.2017 Throw a custom exception
         catch (IndexOutOfBoundsException iobe) {
-            throw new IllegalArgumentException();
+            throw new EntityNotFoundException();
         }
         catch (Exception e) {
             e.printStackTrace();
