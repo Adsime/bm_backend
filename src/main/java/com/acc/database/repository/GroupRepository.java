@@ -75,15 +75,20 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
         List<Group> result = new ArrayList<>();
 
         for (HbnBachelorGroup readBachelorGroup : readData ){
-            Problem groupProblem = new Problem(
-                    (int) readBachelorGroup.getProblem().getId(),
-                    (int) readBachelorGroup.getProblem().getUser().getId(),
-                    "",
-                    "",
-                    readBachelorGroup.getProblem().getPath()
-            );
-            List<Integer> authorId = new ArrayList<>(groupProblem.getAuthor());
-            groupProblem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+            Problem groupProblem;
+
+            if (readBachelorGroup.getProblem() != null){
+                groupProblem = new Problem(
+                        (int) readBachelorGroup.getProblem().getId(),
+                        (int) readBachelorGroup.getProblem().getUser().getId(),
+                        "",
+                        "",
+                        readBachelorGroup.getProblem().getPath()
+                );
+                List<Integer> authorId = new ArrayList<>(groupProblem.getAuthor());
+                groupProblem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+            }
+            else groupProblem = null;
 
             Group group = new Group(
                     (int) readBachelorGroup.getId(),
@@ -91,7 +96,6 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
                     new ArrayList<User>(),
                     new ArrayList<User>(),
                     groupProblem
-
             );
 
             for (HbnUser hbnUser : readBachelorGroup.getUsers()){
