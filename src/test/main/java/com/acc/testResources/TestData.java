@@ -62,10 +62,10 @@ public class TestData {
 
     public static List<Problem> testProblems() {
         List<Problem> problems = new ArrayList<>();
-        problems.add(new Problem(1, 1,"asdad", "asdasddsa", "path"));
-        problems.add(new Problem(2, 1,"asdad", "asdasddsa", "path"));
-        problems.add(new Problem(3, 1,"asdad", "asdasddsa", "path"));
-        problems.add(new Problem(4, 1,"asdad", "asdasddsa", "path"));
+        problems.add(new Problem(1, 1,"asdad", "asdasddsa", "path", null));
+        problems.add(new Problem(2, 1,"asdad", "asdasddsa", "path", null));
+        problems.add(new Problem(3, 1,"asdad", "asdasddsa", "path", null));
+        problems.add(new Problem(4, 1,"asdad", "asdasddsa", "path", null));
         return problems;
     }
 

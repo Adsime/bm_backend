@@ -42,7 +42,7 @@ public class HbnProblem implements Serializable, HbnEntity {
         this.path = path;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "PROBLEM_TAG",
             joinColumns =  @JoinColumn(name = "tag_id"),
@@ -56,7 +56,7 @@ public class HbnProblem implements Serializable, HbnEntity {
         this.tags = hbnTags;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     public HbnUser getUser() {
         return user;

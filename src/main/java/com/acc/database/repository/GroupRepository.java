@@ -81,8 +81,9 @@ public class GroupRepository extends AbstractRepository<HbnBachelorGroup> implem
                         (int) readBachelorGroup.getProblem().getUser().getId(),
                         "",
                         "",
-                        readBachelorGroup.getProblem().getPath()
-                );
+                        readBachelorGroup.getProblem().getPath(),
+                        super.toTagList(readBachelorGroup.getProblem().getTags()
+                ));
                 List<Integer> authorId = new ArrayList<>(groupProblem.getAuthor());
                 groupProblem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             }
