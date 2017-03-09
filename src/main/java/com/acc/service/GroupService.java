@@ -1,9 +1,13 @@
 package com.acc.service;
 
 import com.acc.database.repository.GroupRepository;
+import com.acc.database.specification.GetGroupAllSpec;
+import com.acc.database.specification.GetGroupByIdSpec;
 import com.acc.models.Group;
 
+import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,11 +20,19 @@ public class GroupService extends GeneralService{
     public GroupRepository groupRepository;
 
     public Group getGroup(int id) {
-        return null;
+        try {
+            return groupRepository.getQuery(new GetGroupByIdSpec((long)id)).get(0);
+        } catch (NoSuchEntityException nsee) {
+            return null;
+        }
     }
 
     public List<Group> getAllGroups() {
-        return null;
+        try {
+            return groupRepository.getQuery(new GetGroupAllSpec());
+        } catch (NoSuchEntityException nsee) {
+            return Arrays.asList();
+        }
     }
 
     public Group newGroup(Group group) {
@@ -28,10 +40,18 @@ public class GroupService extends GeneralService{
     }
 
     public boolean deleteGroup(int id) {
-        return true;
+        try {
+            return groupRepository.remove((long) id);
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
     }
 
     public boolean updateGroup(Group group) {
-        return true;
+        try {
+            return groupRepository.update(group);
+        } catch (NoSuchEntityException nsee) {
+            return false;
+        }
     }
 }

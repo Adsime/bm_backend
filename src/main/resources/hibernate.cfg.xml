@@ -6,8 +6,8 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:5051/bm_database</property>
-        <!--<property name="hibernate.connection.url">jdbc:mysql://34.251.165.59:80/bm_database</property>-->
+        <!--<property name="hibernate.connection.url">jdbc:mysql://localhost:5051/bm_database</property>-->
+        <property name="hibernate.connection.url">jdbc:mysql://34.251.165.59:80/bm_database</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">admin</property>
         <property name="hibernate.show_sql">true</property>
