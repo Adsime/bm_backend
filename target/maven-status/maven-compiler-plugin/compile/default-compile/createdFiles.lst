@@ -1,5 +1,5 @@
-com\acc\models\HateOAS.class
 com\acc\database\pojo\HbnBachelorGroup.class
+<<<<<<< HEAD
 com\acc\resources\TagResource.class
 com\acc\database\specification\GetGroupByIdSpec.class
 com\acc\database\pojo\HbnPassword.class
@@ -8,6 +8,31 @@ com\acc\providers\CORSfilter.class
 com\acc\database\repository\AbstractRepository.class
 com\acc\service\UserService.class
 com\acc\database\pojo\HbnUser.class
+=======
+com\acc\database\pojo\HbnPassword.class
+com\acc\database\repository\Repository.class
+com\acc\service\UserService.class
+com\acc\database\pojo\HbnUser.class
+com\acc\resources\UserResource.class
+com\acc\database\test\DBTest.class
+com\acc\database\repository\UserRepository.class
+com\acc\service\ProblemService.class
+com\acc\resources\ProblemResource.class
+com\acc\models\Supervisor.class
+com\acc\models\User.class
+com\acc\database\pojo\HbnProblem.class
+com\acc\resources\StaticResource.class
+com\acc\database\repository\GroupRepository.class
+com\acc\database\repository\TagRepository.class
+com\acc\database\pojo\HbnEntity.class
+com\acc\database\specification\GetUserAllSpec.class
+com\acc\google\DriveApi.class
+com\acc\models\HateOAS.class
+com\acc\resources\TagResource.class
+com\acc\database\specification\GetGroupByIdSpec.class
+com\acc\providers\CORSfilter.class
+com\acc\database\repository\AbstractRepository.class
+>>>>>>> Wtitten API method for listing files. Working on downloading and updating
 com\acc\service\GeneralService.class
 com\acc\resources\UserResource.class
 com\acc\models\Link.class
@@ -16,6 +41,7 @@ com\acc\database\test\DBTest.class
 com\acc\database\pojo\HbnTag.class
 com\acc\database\specification\GetProblemByIdSpec.class
 com\acc\database\specification\GetProblemAllSpec.class
+<<<<<<< HEAD
 com\acc\database\repository\UserRepository.class
 com\acc\service\ProblemService.class
 com\acc\database\specification\GetTagByIdSpec.class
@@ -36,11 +62,27 @@ com\acc\models\Group.class
 com\acc\models\Tag.class
 com\acc\models\Problem.class
 com\acc\database\repository\TagRepository.class
+=======
+com\acc\database\specification\GetTagByIdSpec.class
+com\acc\providers\Links.class
+com\acc\service\SupervisorService.class
+com\acc\database\specification\GetUserByIdSpec.class
+com\acc\database\DatabaseConenctionTest.class
+com\acc\resources\SupervisorResource.class
+com\acc\database\specification\GetTagAllSpec.class
+com\acc\database\specification\Specification.class
+com\acc\models\Group.class
+com\acc\models\Tag.class
+com\acc\models\Problem.class
+>>>>>>> Wtitten API method for listing files. Working on downloading and updating
 com\acc\database\specification\GetGroupAllSpec.class
 com\acc\resources\GroupResource.class
 com\acc\service\GroupService.class
 com\acc\service\TagService.class
+<<<<<<< HEAD
 com\acc\database\pojo\HbnEntity.class
 com\acc\database\specification\GetUserAllSpec.class
+=======
+>>>>>>> Wtitten API method for listing files. Working on downloading and updating
 com\acc\database\repository\ProblemRepository.class
 com\acc\app\ApiApp.class
