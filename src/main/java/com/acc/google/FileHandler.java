@@ -6,6 +6,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -15,9 +16,17 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.sun.deploy.config.Config;
+import com.sun.mail.iap.ByteArray;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.glassfish.grizzly.http.server.util.MimeType;
+import sun.misc.Cache;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -71,8 +80,6 @@ public class FileHandler {
                         .build();
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        System.out.println(
-                "Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
     }
 
@@ -92,6 +99,11 @@ public class FileHandler {
     /** End google required methods
         Start of custom methods for API calls to google drive API */
 
+    /**
+     * Grabs all folders from the application Google Drive. It then creates a tree structure
+     * by comparing the parents of the items in the list.
+     * @return List of Folders
+     */
     public List<Folder> getTreeStructure() {
         try {
             Drive service = getDriveService();
@@ -107,6 +119,11 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Finds the child items of a folder based on ID
+     * @param id
+     * @return List of google files, which includes folders
+     */
     public List<File> getFolder(String id) {
         try {
             Drive service = getDriveService();
@@ -116,29 +133,101 @@ public class FileHandler {
                     .execute();
             return res.getFiles();
         } catch (IOException ioe) {
+            ioe.printStackTrace();
             return Arrays.asList();
         }
     }
 
+    /**
+     * Will update an existing file on Google Drive based on content and name.
+     * @param id
+     * @param newName
+     * @param newContent
+     * @return boolean indicating if the action was successfull.
+     */
     public boolean updateFile(String id, String newName, String newContent) {
+        Path path = null;
         try {
-            Drive serive = getDriveService();
+            Drive service = getDriveService();
+
+            /** Downloading a specific file from Google Drive */
             OutputStream outputStream = new ByteArrayOutputStream();
-            serive.files().export(id, "text/plain").executeMediaAndDownloadTo(outputStream);
-            /*File file = serive
+            service.files().export(id, "text/plain").executeMediaAndDownloadTo(outputStream);
+            File file = service
                     .files()
                     .get(id)
                     .execute();
-            System.out.println(file.getWebContentLink());
-            file.setName(newName == null ? file.getName() : newName)
-                    .setDescription(newContent == null ? file.getDescription() : newContent);
-            serive.files().update(id, file);*/
-            System.out.println(outputStream);
+
+            /** Creating a file locally to update the file stored on Google Drive */
+            File updatedFile = new File()
+                    .setName(newName == null ? file.getName() : newName);
+            FileContent fileContent = getFileContent(file.getName(), outputStream.toString(), newName, newContent);
+            path = fileContent.getFile().toPath();
+
+            /** Uploading the new file to replace the content of the current file */
+            service.files().update(id, updatedFile, fileContent).setUseContentAsIndexableText(true).execute();
+
+            /** Cleaning up file from cache */
+            Files.delete(path);
             return true;
         } catch (IOException ioe) {
             ioe.printStackTrace();
+            if(path != null) {
+                try {
+                    Files.delete(path);
+                } catch (IOException ioEx) {
+
+                }
+            }
             return false;
         }
+    }
+
+    /**
+     * Creates a new file which is pushed on to Google Drive.
+     * @param name
+     * @param content
+     * @param parents
+     * @return boolean indicating if the action was successfull.
+     */
+    public boolean createFile(String name, String content, List<String> parents) {
+        Path path = null;
+        try {
+            Drive service = getDriveService();
+
+            /** Creates a file and sets appropriate values */
+            FileContent fileContent = getFileContent(name, content, null, null);
+            path = fileContent.getFile().toPath();
+            File file = new File();
+            file.setName(name);
+            file.setParents(parents);
+            file.setMimeType("application/vnd.google-apps.document");
+
+            /** Tried to upload the file to Google drive */
+            service.files().create(file, fileContent).execute();
+
+            /** Deletes the file from local cache */
+            Files.delete(path);
+            return true;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            try {
+                Files.delete(path);
+            } catch (IOException ioEx) {
+
+            }
+            return false;
+        }
+
+    }
+
+    private FileContent getFileContent(String oldName, String oldContent, String newName, String newContent) throws IOException {
+        String name = (newName == null || newName.isEmpty() ? oldName : newName);
+        List<String> content = new ArrayList<>();
+        content.add(newContent == null ? oldContent : newContent);
+        java.io.File file = new java.io.File(Config.getCacheDirectory(), name);
+        Files.write(Paths.get(Config.getCacheDirectory() + "\\" + name), content, Charset.forName("UTF-8"));
+        return new FileContent("text/plain", file);
     }
 
     private List<Folder> build(List<File> list, String root) {
@@ -159,6 +248,4 @@ public class FileHandler {
         }
         return folders;
     }
-
-
 }
