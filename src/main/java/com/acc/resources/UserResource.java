@@ -1,9 +1,11 @@
 package com.acc.resources;
 
+import com.acc.database.repository.Repository;
 import com.acc.models.Tag;
 import com.acc.models.User;
 import com.acc.service.UserService;
 import com.google.gson.Gson;
+import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 
@@ -57,12 +59,12 @@ public class UserResource {
         } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
     }
 
-    @GET
+    /*@GET
     @Produces(MediaType.APPLICATION_JSON)
     /**
      *
      */
-    public Response getAllUsers(@Context HttpHeaders headers) {
+    /*public Response getAllUsers(@Context HttpHeaders headers) {
         System.out.println("ACTION: GET - user | ALL");
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
@@ -72,6 +74,29 @@ public class UserResource {
                 }
                 return Response.ok(users.toString()).build();
             } catch(Exception e) {
+                e.printStackTrace();
+                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+            }
+        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+    }*/
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    /**
+     *
+     */
+    public Response queryUsers(@Context HttpHeaders headers,
+                               @QueryParam("tags") List<Integer> tags,
+                               @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
+        System.out.println("ACTION: GET - user | QUERY:\n" + tags);
+        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+            try {
+                List<User> users = tags.isEmpty() ? service.getAllUsers() : service.getUserByTags(tags, hasAll);
+                if(users == null || users.isEmpty()) {
+                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
+                }
+                return Response.ok(users.toString()).build();
+            } catch (Exception e) {
                 e.printStackTrace();
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }

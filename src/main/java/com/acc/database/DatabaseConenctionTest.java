@@ -6,6 +6,7 @@ import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetGroupAllSpec;
 import com.acc.database.specification.GetUserAllSpec;
 import com.acc.database.specification.GetUserByIdSpec;
+import com.acc.database.specification.GetUserByTagSpec;
 import com.acc.models.Group;
 import com.acc.models.Tag;
 import com.acc.models.User;
@@ -22,11 +23,11 @@ public class DatabaseConenctionTest {
         TagRepository TR = new TagRepository();
         GroupRepository GR = new GroupRepository();
 
-        Tag tag = new Tag(5,"test",null,null);
-        ArrayList<Tag> tags = new ArrayList<>();
-        tags.add (tag);
+        for(User u : UR.getQuery(new GetUserByTagSpec(
+                Arrays.asList(1, 2, 3), false))) {
+            System.out.println(u);
+        }
 
-        UR.update(new User("Alexis","Matrovic","shadyserbian@hotmail.com","alex.matrovic",tags));
 
         //GR.update(new Group(1,"Spurs Gang", null));
         //ArrayList<User> users = new ArrayList<>();

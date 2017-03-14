@@ -16,6 +16,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
 
+import javax.ejb.NoSuchEntityException;
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
@@ -107,6 +108,7 @@ public abstract class AbstractRepository<T>{
 
             if (tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
+            throw new EntityNotFoundException( );
         }
         catch (Exception e) {
             e.printStackTrace();

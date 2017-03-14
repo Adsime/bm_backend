@@ -1,9 +1,6 @@
 package com.acc.service;
 import com.acc.database.repository.UserRepository;
-import com.acc.database.specification.GetProblemAllSpec;
-import com.acc.database.specification.GetUserAllSpec;
-import com.acc.database.specification.GetUserByIdSpec;
-import com.acc.database.specification.Specification;
+import com.acc.database.specification.*;
 import com.acc.models.User;
 
 import javax.ejb.NoSuchEntityException;
@@ -35,6 +32,15 @@ public class UserService extends GeneralService {
             return null;
         }
 
+    }
+
+    public List<User> getUserByTags(List<Integer> tags, boolean hasAll) {
+        try {
+            List<User> users = userRepository.getQuery(new GetUserByTagSpec(tags, hasAll));
+            return users.isEmpty() ? null : users;
+        } catch (NoSuchEntityException nsee) {
+            return null;
+        }
     }
 
     public List<User> getAllUsers() throws InternalServerErrorException {

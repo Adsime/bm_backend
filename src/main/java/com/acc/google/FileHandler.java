@@ -6,7 +6,6 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.AbstractInputStreamContent;
 import com.google.api.client.http.FileContent;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -16,12 +15,6 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.sun.deploy.config.Config;
-import com.sun.mail.iap.ByteArray;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-import org.glassfish.grizzly.http.server.util.MimeType;
-import sun.misc.Cache;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -225,8 +218,8 @@ public class FileHandler {
         String name = (newName == null || newName.isEmpty() ? oldName : newName);
         List<String> content = new ArrayList<>();
         content.add(newContent == null ? oldContent : newContent);
-        java.io.File file = new java.io.File(Config.getCacheDirectory(), name);
-        Files.write(Paths.get(Config.getCacheDirectory() + "\\" + name), content, Charset.forName("UTF-8"));
+        java.io.File file = java.io.File.createTempFile(name, null); // new java.io.File(Config.getCacheDirectory(), name);
+        Files.write(Paths.get(file.getPath()), content, Charset.forName("UTF-8"));
         return new FileContent("text/plain", file);
     }
 

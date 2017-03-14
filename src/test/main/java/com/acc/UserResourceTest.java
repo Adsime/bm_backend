@@ -79,7 +79,7 @@ public class UserResourceTest {
     // End getUser Tests
     // Start getAllUsers Tests
 
-    @Test
+    /*@Test
     public void getAllUsersSuccess() {
         userResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
@@ -130,7 +130,7 @@ public class UserResourceTest {
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.getAllUsers(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }
+    }*/
 
     // End getAllUsers Tests
     // Start newUser Tests
