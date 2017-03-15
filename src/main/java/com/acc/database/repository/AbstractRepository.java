@@ -11,12 +11,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
-
-<<<<<<< HEAD
-
 import javax.ejb.NoSuchEntityException;
-=======
->>>>>>> Unit Test and CRUD functions for repos
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
 import java.util.*;
