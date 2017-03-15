@@ -1,9 +1,9 @@
 package com.acc.database.repository;
 
-import com.acc.database.pojo.*;
+import com.acc.database.entity.*;
+import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
-import com.acc.models.Tag;
 import com.acc.models.User;
 import com.acc.providers.Links;
 
@@ -14,8 +14,7 @@ import java.util.*;
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
 
-// TODO: 01.03.2017 Return User instead of boolean
-public class UserRepository extends AbstractRepository<HbnUser> implements Repository<User> {
+public class UserRepository extends AbstractRepository implements Repository<User> {
 
     public UserRepository(){
         super();
@@ -40,9 +39,10 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
                 user.getLastName(),
                 user.getEmail(),
                 user.getEnterpriseID(),
-                user.getTags());
+                user.getTags()
+        );
 
-        // TODO: 06.03.2017 with Links! 
+        // TODO: 09.03.2017 add links yo
     }
 
     // TODO: 24.02.2017 generate salt 
@@ -63,30 +63,37 @@ public class UserRepository extends AbstractRepository<HbnUser> implements Repos
 
     @Override
     public boolean remove(long id) {
-        HbnUser mappedUser = new HbnUser();
-        mappedUser.setId(id);
+        HbnUser mappedUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
+        if (mappedUser.getProblems() != null){
+            for (HbnProblem problem : mappedUser.getProblems()){
+                problem.setUser(null);
+                super.updateEntity(problem);
+            }
+        }
         return super.removeEntity(mappedUser);
     }
 
     @Override
     public List<User> getQuery(Specification spec) {
-        List<HbnUser> readData = super.queryFromDb((HqlSpecification) spec);
-        List<User> result = super.toUserList(readData);
+        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<User> result =  new ArrayList<>();
+
+        for (HbnEntity entity : readData){
+            HbnUser hbnUser = (HbnUser)entity;
+
+            User user = new User(
+                    (int)hbnUser.getId(),
+                    hbnUser.getFirstName(),
+                    hbnUser.getLastName(),
+                    hbnUser.getEmail(),
+                    hbnUser.getEnterpriseId(),
+                    hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
+            );
+
+            user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
+            user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
+            result.add(user);
+        }
         return result;
     }
-
-    private Set<HbnTag> getHbnUserTags (User user){
-        Set<HbnTag> tagSet = new HashSet<>();
-
-        for (Tag tag : user.getTags()){
-            tagSet.add(new HbnTag(
-                    tag.getName(),
-                    tag.getDescription(),
-                    tag.getType()
-            ));
-        }
-
-        return tagSet;
-    }
-
 }

@@ -1,19 +1,19 @@
 package com.acc.database.repository;
 
-import com.acc.database.pojo.HbnTag;
+import com.acc.database.entity.HbnEntity;
+import com.acc.database.entity.HbnTag;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
  */
 
-public class TagRepository extends AbstractRepository<HbnTag> implements Repository<Tag> {
+public class TagRepository extends AbstractRepository implements Repository<Tag> {
 
     public TagRepository(){
         super();
@@ -41,8 +41,8 @@ public class TagRepository extends AbstractRepository<HbnTag> implements Reposit
         HbnTag mappedTag = new HbnTag(
                 tag.getName(),
                 tag.getDescription(),
-                tag.getType());
-
+                tag.getType()
+        );
         mappedTag.setId(tag.getId());
         return super.updateEntity(mappedTag);
     }
@@ -56,18 +56,18 @@ public class TagRepository extends AbstractRepository<HbnTag> implements Reposit
 
     @Override
     public List<Tag> getQuery(Specification spec) {
-        List<HbnTag> readData = super.queryFromDb((HqlSpecification) spec);
+        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
         List<Tag> result = new ArrayList<>();
 
-        for (HbnTag readTag : readData){
+        for (HbnEntity entity : readData){
+            HbnTag hbnTag = (HbnTag) entity;
             result.add( new Tag(
-                    (int)readTag.getId(),
-                    readTag.getTagName(),
-                    readTag.getType(),
-                    readTag.getDescription()
+                    (int)hbnTag.getId(),
+                    hbnTag.getTagName(),
+                    hbnTag.getType(),
+                    hbnTag.getDescription()
             ));
         }
-
         return result;
     }
 }

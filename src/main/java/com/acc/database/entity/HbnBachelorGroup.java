@@ -1,4 +1,4 @@
-package com.acc.database.pojo;
+package com.acc.database.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,10 +7,10 @@ import java.util.Set;
 /**
  * Created by nguyen.duy.j.khac on 08.02.2017.
  */
+// TODO: 15.03.2017 implement tag set 
 @Entity
 @Table(name = "BACHELOR_GROUP")
 public class HbnBachelorGroup implements Serializable, HbnEntity {
-
     private long id;
     private String name;
     private Set<HbnUser> users;
@@ -42,7 +42,7 @@ public class HbnBachelorGroup implements Serializable, HbnEntity {
         this.name = name;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "GROUP_ASSOCIATE",
             joinColumns =  @JoinColumn(name = "bachelor_group_id"),
@@ -55,7 +55,7 @@ public class HbnBachelorGroup implements Serializable, HbnEntity {
         this.users = hbnUsers;
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "problem_id")
     public HbnProblem getProblem() {
         return problem;

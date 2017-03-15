@@ -1,4 +1,4 @@
-package com.acc.database.pojo;
+package com.acc.database.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -42,11 +42,11 @@ public class HbnProblem implements Serializable, HbnEntity {
         this.path = path;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "PROBLEM_TAG",
-            joinColumns =  @JoinColumn(name = "tag_id"),
-            inverseJoinColumns =  @JoinColumn(name = "problem_id")
+            joinColumns =  @JoinColumn(name = "problem_id"),
+            inverseJoinColumns =  @JoinColumn(name = "tag_id")
     )
     public Set<HbnTag> getTags() {
         return tags;
@@ -56,7 +56,7 @@ public class HbnProblem implements Serializable, HbnEntity {
         this.tags = hbnTags;
     }
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne (cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     public HbnUser getUser() {
         return user;

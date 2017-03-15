@@ -1,4 +1,4 @@
-package com.acc.database.pojo;
+package com.acc.database.entity;
 
 /**
  * Created by nguyen.duy.j.khac on 08.02.2017.
@@ -20,6 +20,7 @@ public class HbnUser implements Serializable, HbnEntity {
     private String enterpriseId;
     private Set<HbnBachelorGroup> groups;
     private Set<HbnTag> tags;
+    private Set<HbnProblem> problems;
 
     public HbnUser(){}
 
@@ -96,7 +97,7 @@ public class HbnUser implements Serializable, HbnEntity {
         this.groups = groups;
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USER_TAG",
             joinColumns =  @JoinColumn(name = "user_id"),
@@ -110,5 +111,12 @@ public class HbnUser implements Serializable, HbnEntity {
         this.tags = hbnTags;
     }
 
+    @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
+    public Set<HbnProblem> getProblems() {
+        return problems;
+    }
 
+    public void setProblems(Set<HbnProblem> problems) {
+        this.problems = problems;
+    }
 }
