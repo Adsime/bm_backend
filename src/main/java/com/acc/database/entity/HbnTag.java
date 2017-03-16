@@ -18,6 +18,7 @@ public class HbnTag implements Serializable, HbnEntity {
     private String type;
     private Set<HbnUser> users;
     private Set<HbnProblem> problems;
+    private Set<HbnBachelorGroup> groups;
 
 
     public HbnTag() {
@@ -83,6 +84,15 @@ public class HbnTag implements Serializable, HbnEntity {
 
     public void setProblems(Set<HbnProblem> problems) {
         this.problems = problems;
+    }
+
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
+    public Set<HbnBachelorGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<HbnBachelorGroup> groups) {
+        this.groups = groups;
     }
 }
 

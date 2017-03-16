@@ -11,7 +11,6 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
-import javax.ejb.NoSuchEntityException;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
 import java.util.*;
@@ -22,6 +21,9 @@ import java.util.*;
  */
 
 // TODO: 15.03.2017 Properly implement exceptions
+// TODO: 16.03.2017 Every registration must have a full rollback! (GROUP)
+// TODO: 16.03.2017 Control the text input
+    
 // TODO: 07.03.2017 VERY BLOATED CLASS
 public abstract class AbstractRepository{
 

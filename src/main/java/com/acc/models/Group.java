@@ -2,6 +2,7 @@ package com.acc.models;
 
 import com.google.gson.Gson;
 
+import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ public class Group extends HateOAS {
     private List<User> students, supervisors;
     private List<Tag> tags;
     private Problem problem;
+    private List<Tag> tags;
+
 
     public Group(int id, String name, List<User> students, List<User> supervisors, List<Tag> tags, Problem problem) {
         this.id = id;
@@ -72,8 +75,22 @@ public class Group extends HateOAS {
         this.tags = tags;
     }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public String toString() {
         return new Gson().toJson(this);
+    }
+
+    public List<Integer> getTagIdList (){
+        List<Integer> idList = new ArrayList<>();
+        if (tags != null) for (Tag tag : tags) idList.add(tag.getId());
+        return idList;
     }
 }

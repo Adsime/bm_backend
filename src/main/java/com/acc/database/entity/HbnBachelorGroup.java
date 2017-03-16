@@ -15,6 +15,7 @@ public class HbnBachelorGroup implements Serializable, HbnEntity {
     private String name;
     private Set<HbnUser> users;
     private HbnProblem problem;
+    private Set<HbnTag> tags;
 
     public HbnBachelorGroup(){}
 
@@ -63,5 +64,19 @@ public class HbnBachelorGroup implements Serializable, HbnEntity {
 
     public void setProblem(HbnProblem problem) {
         this.problem = problem;
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "GROUP_TAG",
+            joinColumns =  @JoinColumn(name = "bachelor_group_id"),
+            inverseJoinColumns =  @JoinColumn(name = "tag_id")
+    )
+    public Set<HbnTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<HbnTag> tags) {
+        this.tags = tags;
     }
 }

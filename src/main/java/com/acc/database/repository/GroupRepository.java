@@ -27,6 +27,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
 
         HbnBachelorGroup mappedGroup = new HbnBachelorGroup(group.getName());
+
+        if (group.getTags() != null) mappedGroup.setTags(super.toHbnTagSet(group.getTags()));
         if (group.getProblem() != null) mappedGroup.setProblem(toHbnProblem(group.getProblem()));
         mappedGroup.setUsers(groupAssociates);
 
@@ -39,11 +41,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 group.getSupervisors(),
                 group.getProblem()
         );
-
-        List<Integer> problemId = new ArrayList<>();
-        if (group.getProblem() != null )problemId.add(group.getProblem().getId());
-        addedGroup.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
-
         return addedGroup;
     }
 
@@ -56,6 +53,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         if (group.getSupervisors() != null) groupAssociates.addAll(group.getSupervisors());
         if (group.getStudents() != null) groupAssociates.addAll(group.getStudents());
         hbnBachelorGroup.setUsers(toHbnUserSet(groupAssociates));
+        if (group.getTags() != null) hbnBachelorGroup.setTags(super.toHbnTagSet(group.getTags()));
         if (group.getProblem() != null) hbnBachelorGroup.setProblem(toHbnProblem(group.getProblem()));
 
         return super.updateEntity(hbnBachelorGroup);
@@ -98,6 +96,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                     new ArrayList<>(),
                     groupProblem
             );
+            if (hbnBachelorGroup.getTags() != null) group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
 
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()){
                 User user = new User(
@@ -106,6 +105,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         hbnUser.getLastName(),
                         hbnUser.getEmail(),
                         hbnUser.getEnterpriseId(),
+                        hbnUser.getAccessLevel(),
                         super.toTagList(hbnUser.getTags())
                 );
 
@@ -119,7 +119,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             List<Integer> problemId = new ArrayList<>();
             if (group.getProblem() != null )problemId.add(group.getProblem().getId());
             group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
-
+            group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
             result.add(group);
         }
         return result;
@@ -169,7 +169,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         user.getLastName(),
                         user.getEmail(),
                         "",
-                        user.getEnterpriseID()
+                        user.getEnterpriseID(),
+                        user.getAccessLevel()
                 );
 
                 hbnUser.setTags(super.toHbnTagSet(user.getTags()));

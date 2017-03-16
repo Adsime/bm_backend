@@ -52,8 +52,8 @@ public class DatabaseConenctionTest {
         Problem p2 = new Problem(6,5,"To Zlatan, Love Zlatann","Zlatan","Zlatan", new ArrayList<>());
         Problem p3 = new Problem(6,2,"To Zlatan, Love Zlatann","Zlatan","Zlatan", new ArrayList<>());
 
-        User u1 = new User("David", "Silva", "merlin@mcfc.co.uk", "silva.d", null);
-        User u2 = new User(4,"Zlatan", "Ibrahimovic", "zlatan@zlatan.se", "zlatan.zlatan", lt2);
-        User u3 = new User("PSG", "FC", "blew40@cl", "cash.fail", null);
+        User u1 = new User("David", "Silva", "merlin@mcfc.co.uk", "silva.d","1", null);
+        User u2 = new User(4,"Zlatan", "Ibrahimovic", "zlatan@zlatan.se", "zlatan.zlatan", "10",lt2);
+        User u3 = new User("PSG", "FC", "blew40@cl", "cash.fail","0", null);
     }
 }

@@ -18,18 +18,20 @@ public class HbnUser implements Serializable, HbnEntity {
     private String email;
     private String salt;
     private String enterpriseId;
+    private String accessLevel;
     private Set<HbnBachelorGroup> groups;
     private Set<HbnTag> tags;
     private Set<HbnProblem> problems;
 
     public HbnUser(){}
 
-    public HbnUser(String firstName, String lastName, String email, String salt, String enterpriseId) {
+    public HbnUser(String firstName, String lastName, String email, String salt, String enterpriseId, String accessLevel) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.salt = salt;
         this.enterpriseId = enterpriseId;
+        this.accessLevel = accessLevel;
     }
 
     @Id
@@ -86,6 +88,15 @@ public class HbnUser implements Serializable, HbnEntity {
 
     public void setEnterpriseId(String enterpriseId) {
         this.enterpriseId = enterpriseId;
+    }
+
+    @Column(name = "access_level")
+    public String getAccessLevel() {
+        return accessLevel;
+    }
+
+    public void setAccessLevel(String accessLevel) {
+        this.accessLevel = accessLevel;
     }
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
