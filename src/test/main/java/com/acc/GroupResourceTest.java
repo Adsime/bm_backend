@@ -25,7 +25,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
  */
 public class GroupResourceTest {
 
-
     @Mock
     private GroupService service;
 

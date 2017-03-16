@@ -1,4 +1,4 @@
-package com.acc.database.pojo;
+package com.acc.database.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by nguyen.duy.j.khac on 08.02.2017.
  */
-
+// TODO: 15.03.2017 implement group set 
 @Entity
 @Table(name = "TAG")
 public class HbnTag implements Serializable, HbnEntity {
@@ -17,7 +17,7 @@ public class HbnTag implements Serializable, HbnEntity {
     private String description;
     private String type;
     private Set<HbnUser> users;
-    private Set<HbnUser> problems;
+    private Set<HbnProblem> problems;
 
 
     public HbnTag() {
@@ -67,7 +67,7 @@ public class HbnTag implements Serializable, HbnEntity {
         this.type = type;
     }
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
     public Set<HbnUser> getUsers() {
         return users;
     }
@@ -76,12 +76,12 @@ public class HbnTag implements Serializable, HbnEntity {
         this.users = users;
     }
 
-    @ManyToMany(mappedBy = "tags")
-    public Set<HbnUser> getProblems() {
+    @ManyToMany(mappedBy = "tags", cascade = CascadeType.ALL)
+    public Set<HbnProblem> getProblems() {
         return problems;
     }
 
-    public void setProblems(Set<HbnUser> problems) {
+    public void setProblems(Set<HbnProblem> problems) {
         this.problems = problems;
     }
 }

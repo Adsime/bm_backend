@@ -18,11 +18,11 @@ public class User extends HateOAS {
     private List<Tag> tags;
 
     public User(String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
-        this.tags = tags;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.enterpriseID = enterpriseID;
+        this.tags = tags;
     }
 
     public User(int id, String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
@@ -88,7 +88,7 @@ public class User extends HateOAS {
 
     public List<Integer> getTagIdList (){
         List<Integer> idList = new ArrayList<>();
-        for (Tag tag : tags) idList.add(tag.getId());
+        if (tags != null) for (Tag tag : tags) idList.add(tag.getId());
         return idList;
     }
 }

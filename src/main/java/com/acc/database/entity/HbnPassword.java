@@ -1,4 +1,4 @@
-package com.acc.database.pojo;
+package com.acc.database.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -6,16 +6,21 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+<<<<<<< HEAD
         <!--<property name="hibernate.connection.url">jdbc:mysql://localhost:5051/bm_database</property>-->
         <property name="hibernate.connection.url">jdbc:mysql://34.251.165.59:80/bm_database</property>
+=======
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:5050/bm_database</property>
+        <!--<property name="hibernate.connection.url">jdbc:mysql://34.251.165.59:80/bm_database</property>-->
+>>>>>>> Unit Test and CRUD functions for repos
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">admin</property>
         <property name="hibernate.show_sql">true</property>
 
-        <mapping class="com.acc.database.pojo.HbnBachelorGroup"/>
-        <mapping class="com.acc.database.pojo.HbnPassword"/>
-        <mapping class="com.acc.database.pojo.HbnTag"/>
-        <mapping class="com.acc.database.pojo.HbnProblem"/>
-        <mapping class="com.acc.database.pojo.HbnUser"/>
+        <mapping class="com.acc.database.entity.HbnBachelorGroup"/>
+        <mapping class="com.acc.database.entity.HbnPassword"/>
+        <mapping class="com.acc.database.entity.HbnTag"/>
+        <mapping class="com.acc.database.entity.HbnProblem"/>
+        <mapping class="com.acc.database.entity.HbnUser"/>
     </session-factory>
 </hibernate-configuration>

@@ -38,7 +38,7 @@ public class TestData {
 
     public static List<User> testUsers() {
         List<User> users = new ArrayList<>();
-        users.add(new User("Adrian", "Melsom", "asdasdasd@asdasdad.com", "melsom.adrian", null));
+        users.add(new User("David", "Silva", "davids@mcfc.co.uk", "melsom.adrian", null));
         users.add(new User("Adrian", "Melsom", "asdasdasd@asdasdad.com", "melsom.adrian", null));
         users.add(new User("Adrian", "Melsom", "asdasdasd@asdasdad.com", "melsom.adrian", null));
         return users;
@@ -62,10 +62,10 @@ public class TestData {
 
     public static List<Problem> testProblems() {
         List<Problem> problems = new ArrayList<>();
-        problems.add(new Problem(1, 1,"asdad", "asdasddsa", "path"));
-        problems.add(new Problem(2, 1,"asdad", "asdasddsa", "path"));
-        problems.add(new Problem(3, 1,"asdad", "asdasddsa", "path"));
-        problems.add(new Problem(4, 1,"asdad", "asdasddsa", "path"));
+        problems.add(new Problem(1, 1,"asdad", "asdasddsa", "path", null));
+        problems.add(new Problem(2, 1,"asdad", "asdasddsa", "path", null));
+        problems.add(new Problem(3, 1,"asdad", "asdasddsa", "path", null));
+        problems.add(new Problem(4, 1,"asdad", "asdasddsa", "path", null));
         return problems;
     }
 
