@@ -27,7 +27,8 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getLastName(),
                 user.getEmail(),
                 "",
-                user.getEnterpriseID()
+                user.getEnterpriseID(),
+                user.getAccessLevel()
         );
 
         if (user.getTags() != null) mappedUser.setTags(super.toHbnTagSet(user.getTags()));
@@ -39,6 +40,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getLastName(),
                 user.getEmail(),
                 user.getEnterpriseID(),
+                user.getAccessLevel(),
                 user.getTags()
         );
 
@@ -53,7 +55,8 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getLastName(),
                 user.getEmail(),
                 "",
-                user.getEnterpriseID()
+                user.getEnterpriseID(),
+                user.getAccessLevel()
         );
 
         if (!user.getTags().isEmpty()) mappedUser.setTags(toHbnTagSet(user.getTags()));
@@ -87,6 +90,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                     hbnUser.getLastName(),
                     hbnUser.getEmail(),
                     hbnUser.getEnterpriseId(),
+                    hbnUser.getAccessLevel(),
                     hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
             );
 

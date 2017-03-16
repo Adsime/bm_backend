@@ -10,27 +10,30 @@ import java.util.List;
  */
 public class User extends HateOAS {
 
-    private int id, accessLevel;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
     private String enterpriseID;
+    private String accessLevel;
     private List<Tag> tags;
 
-    public User(String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
+    public User(String firstName, String lastName, String email, String enterpriseID, String accessLevel, List<Tag> tags) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.enterpriseID = enterpriseID;
+        this.accessLevel =  accessLevel;
         this.tags = tags;
     }
 
-    public User(int id, String firstName, String lastName, String email, String enterpriseID, List<Tag> tags) {
+    public User(int id, String firstName, String lastName, String email, String enterpriseID, String accessLevel, List<Tag> tags) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.enterpriseID = enterpriseID;
+        this.accessLevel =  accessLevel;
         this.tags = tags;
     }
 
@@ -82,11 +85,11 @@ public class User extends HateOAS {
         return new Gson().toJson(this);
     }
 
-    public int getAccessLevel() {
+    public String getAccessLevel() {
         return accessLevel;
     }
 
-    public void setAccessLevel(int accessLevel) {
+    public void setAccessLevel(String accessLevel) {
         this.accessLevel = accessLevel;
     }
 
