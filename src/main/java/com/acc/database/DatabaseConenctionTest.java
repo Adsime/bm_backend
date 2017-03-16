@@ -24,7 +24,7 @@ public class DatabaseConenctionTest {
         GroupRepository GR = new GroupRepository();
 
         for(User u : UR.getQuery(new GetUserByTagSpec(
-                Arrays.asList(1, 2, 3), false))) {
+                Arrays.asList("student"), false))) {
             System.out.println(u);
         }
 

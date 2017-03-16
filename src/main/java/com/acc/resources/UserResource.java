@@ -86,7 +86,7 @@ public class UserResource {
      *
      */
     public Response queryUsers(@Context HttpHeaders headers,
-                               @QueryParam("tags") List<Integer> tags,
+                               @QueryParam("tags") List<String> tags,
                                @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
         System.out.println("ACTION: GET - user | QUERY:\n" + tags);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {

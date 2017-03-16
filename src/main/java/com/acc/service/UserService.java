@@ -34,7 +34,7 @@ public class UserService extends GeneralService {
 
     }
 
-    public List<User> getUserByTags(List<Integer> tags, boolean hasAll) {
+    public List<User> getUserByTags(List<String> tags, boolean hasAll) {
         try {
             List<User> users = userRepository.getQuery(new GetUserByTagSpec(tags, hasAll));
             return users.isEmpty() ? null : users;

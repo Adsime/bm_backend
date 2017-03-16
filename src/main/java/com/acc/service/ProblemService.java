@@ -3,6 +3,7 @@ package com.acc.service;
 import com.acc.database.repository.ProblemRepository;
 import com.acc.database.specification.GetProblemAllSpec;
 import com.acc.database.specification.GetProblemByIdSpec;
+import com.acc.google.FileHandler;
 import com.acc.models.Problem;
 
 import javax.ejb.NoSuchEntityException;
@@ -13,7 +14,10 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 10.02.2017.
  */
-public class ProblemService extends GeneralService{
+public class ProblemService extends GeneralService {
+
+    @Inject
+    public FileHandler fileHandler;
 
     @Inject
     public ProblemRepository problemRepository;
@@ -35,7 +39,12 @@ public class ProblemService extends GeneralService{
     }
 
     public Problem newProblem(Problem problem) {
-        return problemRepository.add(problem);
+        String path = fileHandler.createFile(problem.getTitle(), problem.getContent(), Arrays.asList("0ByI1HjM5emiFcXRtSVplQmJ6YjA"));
+        if(path != null) {
+            problem.setPath(path);
+            return problemRepository.add(problem);
+        }
+        return null;
     }
 
     public boolean deleteProblem(int id) {

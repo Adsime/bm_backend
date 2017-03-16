@@ -181,9 +181,9 @@ public class FileHandler {
      * @param name
      * @param content
      * @param parents
-     * @return boolean indicating if the action was successfull.
+     * @return boolean indicating if the action was successful.
      */
-    public boolean createFile(String name, String content, List<String> parents) {
+    public String createFile(String name, String content, List<String> parents) {
         Path path = null;
         try {
             Drive service = getDriveService();
@@ -197,11 +197,11 @@ public class FileHandler {
             file.setMimeType("application/vnd.google-apps.document");
 
             /** Tried to upload the file to Google drive */
-            service.files().create(file, fileContent).execute();
+            File temp = service.files().create(file, fileContent).execute();
 
             /** Deletes the file from local cache */
             Files.delete(path);
-            return true;
+            return temp.getId();
         } catch (IOException ioe) {
             ioe.printStackTrace();
             try {
@@ -209,7 +209,7 @@ public class FileHandler {
             } catch (IOException ioEx) {
 
             }
-            return false;
+            return null;
         }
 
     }

@@ -1,6 +1,7 @@
 package main.java.com.acc;
 
 import com.acc.database.repository.ProblemRepository;
+import com.acc.google.FileHandler;
 import com.acc.models.Problem;
 import com.acc.service.ProblemService;
 import main.java.com.acc.testResources.TestData;
@@ -17,6 +18,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -27,6 +30,9 @@ public class ProblemServiceTest {
     @Mock
     ProblemRepository problemRepository;
 
+    @Mock
+    FileHandler fileHandler;
+
     ProblemService service;
 
 
@@ -36,6 +42,7 @@ public class ProblemServiceTest {
         initMocks(this);
         service = new ProblemService();
         service.problemRepository = problemRepository;
+        service.fileHandler = fileHandler;
     }
 
     //Start getProblem()
@@ -99,14 +106,17 @@ public class ProblemServiceTest {
 
     @Test
     public void newProblemSuccess() {
-        when(problemRepository.add(any())).thenReturn(TestData.testProblems().get(0));
-        String expected = TestData.testProblems().get(0).toString();
-        String actual = service.newProblem(TestData.testProblems().get(0)).toString();
+        Problem problem = TestData.testProblems().get(0);
+        when(problemRepository.add(any())).thenReturn(problem);
+        when(fileHandler.createFile(anyString(), anyString(), anyList())).thenReturn(problem.getPath());
+        String expected = problem.toString();
+        String actual = service.newProblem(problem).toString();
         assertEquals(expected, actual);
     }
 
     @Test(expected = InternalServerErrorException.class)
     public void newProblemFail() {
+        when(fileHandler.createFile(anyString(), anyString(), anyList())).thenReturn("");
         when(problemRepository.add(any())).thenThrow(new InternalServerErrorException());
         service.newProblem(TestData.testProblems().get(0));
     }
