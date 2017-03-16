@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class User extends HateOAS {
 
-    private int id, accessLevel;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
@@ -77,14 +77,6 @@ public class User extends HateOAS {
         this.enterpriseID = enterpriseID;
     }
 
-    public String getAccessLevel() {
-        return accessLevel;
-    }
-
-    public void setAccessLevel(String accessLevel) {
-        this.accessLevel = accessLevel;
-    }
-
     public List<Tag> getTags() {
         return tags;
     }
@@ -93,11 +85,11 @@ public class User extends HateOAS {
         return new Gson().toJson(this);
     }
 
-    public int getAccessLevel() {
+    public String getAccessLevel() {
         return accessLevel;
     }
 
-    public void setAccessLevel(int accessLevel) {
+    public void setAccessLevel(String accessLevel) {
         this.accessLevel = accessLevel;
     }
 
