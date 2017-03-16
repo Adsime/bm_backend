@@ -12,13 +12,15 @@ public class Group extends HateOAS {
     private int id;
     private String name;
     private List<User> students, supervisors;
+    private List<Tag> tags;
     private Problem problem;
 
-    public Group(int id, String name, List<User> students, List<User> supervisors, Problem problem) {
+    public Group(int id, String name, List<User> students, List<User> supervisors, List<Tag> tags, Problem problem) {
         this.id = id;
         this.name = name;
         this.students = students;
         this.supervisors = supervisors;
+        this.tags = tags;
         this.problem = problem;
     }
 
@@ -62,8 +64,12 @@ public class Group extends HateOAS {
         this.problem = problem;
     }
 
-    public String toJson() {
-        return new Gson().toJson(this);
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override

@@ -88,7 +88,6 @@ public class GroupResource {
         }
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
-            System.out.println(group);
             group = service.newGroup(group);
             if(group != null) {
                 return Response.status(HttpStatus.CREATED_201).build();
