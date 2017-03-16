@@ -116,7 +116,6 @@ public abstract class AbstractRepository{
         catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
-            throw new EntityNotFoundException( );
         }
         return result;
     }

@@ -8,6 +8,7 @@ import com.acc.models.Problem;
 
 import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +43,13 @@ public class ProblemService extends GeneralService {
         String path = fileHandler.createFile(problem.getTitle(), problem.getContent(), Arrays.asList("0ByI1HjM5emiFcXRtSVplQmJ6YjA"));
         if(path != null) {
             problem.setPath(path);
-            return problemRepository.add(problem);
+            try {
+                return problemRepository.add(problem);
+            } catch (EntityNotFoundException enfe) {
+                fileHandler.deleteFile(path);
+                return null;
+            }
+
         }
         return null;
     }

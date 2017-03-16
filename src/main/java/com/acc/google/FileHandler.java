@@ -60,7 +60,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                DriveApi.class.getResourceAsStream("/client_secret.json");
+                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -185,6 +186,7 @@ public class FileHandler {
      */
     public String createFile(String name, String content, List<String> parents) {
         Path path = null;
+        String id = null;
         try {
             Drive service = getDriveService();
 
@@ -201,17 +203,30 @@ public class FileHandler {
 
             /** Deletes the file from local cache */
             Files.delete(path);
-            return temp.getId();
+            id = temp.getId();
+            return id;
         } catch (IOException ioe) {
             ioe.printStackTrace();
             try {
                 Files.delete(path);
+                if(id != null) {
+                    deleteFile(id);
+                }
             } catch (IOException ioEx) {
 
             }
             return null;
         }
+    }
 
+    public boolean deleteFile(String id) {
+        try {
+            Drive service = getDriveService();
+            service.files().delete(id).execute();
+            return true;
+        } catch (IOException ioe) {
+            return false;
+        }
     }
 
     private FileContent getFileContent(String oldName, String oldContent, String newName, String newContent) throws IOException {
