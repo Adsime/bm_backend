@@ -52,7 +52,7 @@ public class UserResource {
                 if(user == null) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                return Response.ok(user).build();
+                return Response.ok(user.toString()).build();
             } catch(InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
@@ -114,7 +114,7 @@ public class UserResource {
             try {
                 User user = new Gson().fromJson(o.toString(), User.class);
                 if((user = service.newUser(user)) != null) {
-                    return Response.status(HttpStatus.CREATED_201).entity(user).build();
+                    return Response.status(HttpStatus.CREATED_201).entity(user.toString()).build();
                 }
             } catch(Exception e) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();

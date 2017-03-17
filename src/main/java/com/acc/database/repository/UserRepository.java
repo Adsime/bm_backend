@@ -28,7 +28,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getEmail(),
                 "",
                 user.getEnterpriseID(),
-                user.getAccessLevel()
+                (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
         );
 
         if (user.getTags() != null) mappedUser.setTags(super.toHbnTagSet(user.getTags()));

@@ -51,7 +51,7 @@ public class GroupResource {
         }
         Group group = service.getGroup(id);
         if(group != null) {
-            return Response.ok(group).build();
+            return Response.ok(group.toString()).build();
         }
         return Response.status(HttpStatus.BAD_REQUEST_400).build();
     }

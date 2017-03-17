@@ -170,7 +170,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         user.getEmail(),
                         "",
                         user.getEnterpriseID(),
-                        user.getAccessLevel()
+                        (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
+
                 );
 
                 hbnUser.setTags(super.toHbnTagSet(user.getTags()));
