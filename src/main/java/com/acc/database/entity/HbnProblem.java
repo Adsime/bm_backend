@@ -15,12 +15,14 @@ public class HbnProblem implements Serializable, HbnEntity {
     private String path;
     private Set<HbnTag> tags;
     private HbnUser user;
+    private String title;
 
     public HbnProblem(){}
 
-    public HbnProblem(String path, HbnUser hbnUser) {
+    public HbnProblem(String path, HbnUser hbnUser, String title) {
         this.path = path;
         this.user = hbnUser;
+        this.title = title;
     }
 
     @Id
@@ -64,5 +66,14 @@ public class HbnProblem implements Serializable, HbnEntity {
 
     public void setUser(HbnUser hbnUser) {
         this.user = hbnUser;
+    }
+
+    @Column(name = "title")
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -94,7 +94,7 @@ public class TestHibernateData {
 
     public static List<HbnProblem> getHbnProblemList() {
         List<HbnProblem> hbnProblemList = new ArrayList<>();
-        HbnProblem hbnProblem = new HbnProblem("path",getHbnUserList().get(0));
+        HbnProblem hbnProblem = new HbnProblem("path",getHbnUserList().get(0),"title");
         hbnProblem.setId(1);
         hbnProblemList.add(hbnProblem);
         return hbnProblemList;
