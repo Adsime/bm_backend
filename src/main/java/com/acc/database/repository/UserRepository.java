@@ -49,7 +49,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
     // TODO: 24.02.2017 generate salt 
     @Override
-    public boolean update(User user) {
+    public boolean update(User user) throws EntityNotFoundException {
         HbnUser mappedUser = new HbnUser(
                 user.getFirstName(),
                 user.getLastName(),
@@ -61,7 +61,16 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         if (!user.getTags().isEmpty()) mappedUser.setTags(toHbnTagSet(user.getTags()));
         mappedUser.setId(user.getId());
-        return super.updateEntity(mappedUser);
+
+        boolean OK;
+        try {
+            OK = super.updateEntity(mappedUser);
+
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Failed to update: \nUser with id: " + user.getId() + ", not found.");
+        }
+
+        return OK;
     }
 
     @Override
@@ -73,7 +82,9 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 super.updateEntity(problem);
             }
         }
-        return super.removeEntity(mappedUser);
+        boolean OK;
+        OK = super.removeEntity(mappedUser);
+        return OK;
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
+import java.rmi.ServerException;
 import java.util.*;
 
 
@@ -60,7 +61,6 @@ public abstract class AbstractRepository{
             session.update(item);
             tx.commit();
         }
-        //Hibernate actually throws this exception when id is incorrect
         catch (OptimisticLockException ole){
             throw new EntityNotFoundException();
         }
@@ -84,7 +84,7 @@ public abstract class AbstractRepository{
             tx.commit();
         }
         catch(OptimisticLockException ole){
-            throw new EntityNotFoundException("THIS SHIT WRONG SON");
+            throw new EntityNotFoundException();
         }
         catch (HibernateException he){
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
