@@ -16,6 +16,7 @@ public class Group extends HateOAS {
     private Problem problem;
     private List<Tag> tags;
 
+    public Group() {}
 
     public Group(int id, String name, List<User> students, List<User> supervisors, Problem problem) {
         this.id = id;

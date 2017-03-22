@@ -1,7 +1,6 @@
 FROM mysql/mysql-server:5.6
 COPY /bachelor_manager.sql /docker-entrypoint-initdb.d/test.sql
 
-
 ########################### DEPLOY ##########################
 # - Docker build -t <name of image> .                       #
 # Name of image MUST be lower case.                         #

@@ -100,4 +100,25 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         }
         return result;
     }
+
+    @Override
+    public List<User> getMinimalQuery(Specification spec) {
+        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<User> result =  new ArrayList<>();
+
+        for (HbnEntity entity : readData){
+            HbnUser hbnUser = (HbnUser)entity;
+
+            User user = new User();
+            user.setId((int)hbnUser.getId());
+            user.setFirstName(hbnUser.getFirstName());
+            user.setFirstName(hbnUser.getLastName());
+            user.setTags(super.toTagList(hbnUser.getTags()));
+
+            if (!user.getTags().isEmpty()) user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
+            if (hbnUser.getGroups() != null) user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
+            result.add(user);
+        }
+        return result;
+    }
 }

@@ -92,22 +92,81 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             Group group = new Group(
                     (int) hbnBachelorGroup.getId(),
                     hbnBachelorGroup.getName(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
                     groupProblem
             );
 
-            if (hbnBachelorGroup.getTags() != null) {
-                group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
-                group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
+            for (HbnUser hbnUser : hbnBachelorGroup.getUsers()){
+                User user = new User(
+                        (int)hbnUser.getId(),
+                        hbnUser.getFirstName(),
+                        hbnUser.getLastName(),
+                        hbnUser.getEmail(),
+                        hbnUser.getEnterpriseId(),
+                        hbnUser.getAccessLevel(),
+                        super.toTagList(hbnUser.getTags())
+                );
+
+                if (hasStudentTag(hbnUser.getTags())) group.getStudents().add(user);
+                else group.getSupervisors().add(user);
             }
 
             List<Integer> userIdList = new ArrayList();
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
             group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
 
-            List<Integer> problemId = new ArrayList<>();
             if (group.getProblem() != null ) {
+                List<Integer> problemId = new ArrayList<>();
                 problemId.add(group.getProblem().getId());
                 group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
+            }
+
+            if (hbnBachelorGroup.getTags() != null) {
+                group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
+                group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
+            }
+
+            result.add(group);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Group> getMinimalQuery(Specification spec) {
+        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<Group> result = new ArrayList<>();
+
+        for (HbnEntity entity : readData ){
+            Problem groupProblem;
+            HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
+            HbnProblem hbnProblem = hbnBachelorGroup.getProblem();
+
+            if (hbnProblem != null){
+                groupProblem = new Problem();
+                groupProblem.setId((int)hbnProblem.getId());
+                groupProblem.setTitle(hbnProblem.getTitle());
+            }
+
+            Group group = new Group();
+            group.setId((int)hbnBachelorGroup.getId());
+            group.setName(hbnBachelorGroup.getName());
+            group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
+
+
+            List<Integer> userIdList = new ArrayList();
+            for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
+            group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
+
+            if (hbnProblem != null ) {
+                List<Integer> problemId = new ArrayList<>();
+                problemId.add(group.getProblem().getId());
+                group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
+            }
+
+            if (hbnBachelorGroup.getTags() != null) {
+                group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
+                group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
             }
 
             result.add(group);

@@ -18,6 +18,8 @@ public class User extends HateOAS {
     private String accessLevel;
     private List<Tag> tags;
 
+    public User(){}
+
     public User(String firstName, String lastName, String email, String enterpriseID, String accessLevel, List<Tag> tags) {
         this.firstName = firstName;
         this.lastName = lastName;

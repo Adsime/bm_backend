@@ -14,6 +14,8 @@ public class Problem extends HateOAS {
     private String title, content, path;
     private List<Tag> tags;
 
+    public Problem() {}
+
     public Problem(int id, int author, String title, String content, String path, List<Tag> tags) {
         this.id = id;
         this.author = author;

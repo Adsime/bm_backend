@@ -70,4 +70,19 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         }
         return result;
     }
+
+    @Override
+    public List<Tag> getMinimalQuery(Specification spec) {
+        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<Tag> result = new ArrayList<>();
+
+        for (HbnEntity entity : readData){
+            HbnTag hbnTag = (HbnTag) entity;
+            Tag tag = new Tag();
+            tag.setId((int)hbnTag.getId());
+            tag.setName(hbnTag.getTagName());
+            tag.setType(hbnTag.getType());
+        }
+        return result;
+    }
 }

@@ -10,6 +10,8 @@ public class Tag extends HateOAS {
     private int id;
     private String name, type, description;
 
+    public Tag() {}
+
     public Tag(int id, String name, String type, String description) {
         this.id = id;
         this.name = name;

@@ -11,5 +11,8 @@ public interface Repository<T> {
     T add(T item);
     boolean update(T item);
     boolean remove(long id);
-    List<T> getQuery(Specification specification); // <- not all Repos will need this one . . .
+    //Entitites have full information
+    List<T> getQuery(Specification specification);
+    //Entities have minimal information required for a list view in front-end
+    List<T> getMinimalQuery(Specification specification);
 }

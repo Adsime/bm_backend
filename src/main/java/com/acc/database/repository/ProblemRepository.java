@@ -67,9 +67,32 @@ public class ProblemRepository extends AbstractRepository implements Repository<
             Problem problem = new Problem(
                     (int)hbnProblem.getId(),
                     (int)hbnProblem.getUser().getId(),
-                    "",
+                    hbnProblem.getTitle(),
                     "",
                     hbnProblem.getPath(),
+                    hbnProblem.getTags() != null ? super.toTagList(hbnProblem.getTags()) : new ArrayList<>()
+            );
+
+            List<Integer> authorId = new ArrayList<>(problem.getAuthor());
+            problem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+            if (!problem.getTags().isEmpty()) problem.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, problem.getTagIdList()));
+            result.add(problem);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Problem> getMinimalQuery(Specification spec) {
+        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<Problem> result = new ArrayList<>();
+
+        for (HbnEntity entity : readData){
+            HbnProblem hbnProblem = (HbnProblem) entity;
+
+            Problem problem = new Problem();
+            problem.setId((int)hbnProblem.getId());
+            problem.setTitle(hbnProblem.getTitle());
+            problem.setTags(
                     hbnProblem.getTags() != null ? super.toTagList(hbnProblem.getTags()) : new ArrayList<>()
             );
 
