@@ -25,10 +25,15 @@ public class ProblemService extends GeneralService {
 
     public Problem getProblem(int id) {
         try {
-            return problemRepository.getQuery(new GetProblemByIdSpec((long)id)).get(0);
+            Problem problem = problemRepository.getQuery(new GetProblemByIdSpec((long)id)).get(0);
+            if(problem == null) return null;
+            return fileHandler.insertFileContent(problem);
         } catch (NoSuchEntityException nsee) {
-            return null;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return null;
     }
 
     public List<Problem> getAllProblems() {

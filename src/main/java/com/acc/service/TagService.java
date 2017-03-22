@@ -7,6 +7,7 @@ import com.acc.models.Tag;
 
 import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,19 +23,24 @@ public class TagService extends GeneralService {
         try {
             return tagRepository.getQuery(new GetTagByIdSpec((long)id)).get(0);
         } catch (NumberFormatException nfe) {
-            return null;
+
         } catch (NoSuchEntityException nsee) {
-            return null;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return null;
     }
 
     public List<Tag> getAllTags() {
         try {
             return tagRepository.getQuery(new GetTagAllSpec());
         } catch (NoSuchEntityException nsee) {
-            return Arrays.asList();
-        }
 
+        } catch (EntityNotFoundException enfe) {
+
+        }
+        return Arrays.asList();
     }
     
     public Tag newTag(Tag tag) {
@@ -45,18 +51,24 @@ public class TagService extends GeneralService {
         try {
             return tagRepository.remove((long)id);
         } catch (NumberFormatException nfe) {
-            return false;
+
         } catch (NoSuchEntityException nsee) {
-            return false;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return false;
     }
 
     public boolean updateTag(Tag tag) {
         try {
             return tagRepository.update(tag);
         } catch (NoSuchEntityException nsee) {
-            return false;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return false;
 
     }
 }

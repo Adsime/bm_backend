@@ -54,7 +54,7 @@ public class ProblemResource {
                 if(problem == null) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                return Response.ok(problem.toJson()).build();
+                return Response.ok(problem.toString()).build();
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
@@ -70,11 +70,7 @@ public class ProblemResource {
                 if(problems == null || problems.isEmpty()) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                JsonArrayBuilder jab = Json.createArrayBuilder();
-                for(Problem problem : problems) {
-                    jab.add(problem.toJson());
-                }
-                return Response.ok(jab.build()).build();
+                return Response.ok(new Gson().toJson(problems)).build();
             } catch (InternalServerErrorException isee) {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }

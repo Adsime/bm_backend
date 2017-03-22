@@ -203,7 +203,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
                 group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
             }
-
             result.add(group);
         }
         return result;

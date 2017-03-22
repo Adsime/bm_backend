@@ -50,6 +50,7 @@ public class ProblemServiceTest {
     @Test
     public void getProblemSuccessTest() {
         when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
         Problem expected = TestData.testProblems().get(0);
         Problem actual = service.getProblem(0);
         assertEquals(expected.toString(), actual.toString());

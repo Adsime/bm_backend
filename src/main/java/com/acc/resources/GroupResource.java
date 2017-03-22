@@ -51,7 +51,7 @@ public class GroupResource {
         }
         Group group = service.getGroup(id);
         if(group != null) {
-            return Response.ok(group.toString()).build();
+            return Response.ok(new Gson().toJson(group)).build();
         }
         return Response.status(HttpStatus.BAD_REQUEST_400).build();
     }
@@ -71,7 +71,7 @@ public class GroupResource {
             if(groups.size() < 1) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-            return Response.ok(groups.toString()).build();
+            return Response.ok(new Gson().toJson(groups)).build();
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }

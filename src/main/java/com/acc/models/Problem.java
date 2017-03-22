@@ -73,19 +73,9 @@ public class Problem extends HateOAS {
         this.tags = tags;
     }
 
-    public String toJson() {
-        return new Gson().toJson(this);
-    }
-
     @Override
     public String toString() {
-        return "Problem{" +
-                "id=" + id +
-                ", author=" + author +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", path='" + path + '\'' +
-                '}';
+        return new Gson().toJson(this);
     }
 
     public List<Integer> getTagIdList (){

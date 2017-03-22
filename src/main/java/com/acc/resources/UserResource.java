@@ -95,7 +95,7 @@ public class UserResource {
                 if(users == null || users.isEmpty()) {
                     return Response.status(HttpStatus.BAD_REQUEST_400).build();
                 }
-                return Response.ok(users.toString()).build();
+                return Response.ok(new Gson().toJson(users)).build();
             } catch (Exception e) {
                 e.printStackTrace();
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();

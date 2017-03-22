@@ -1,5 +1,6 @@
 package com.acc.google;
 
+import com.acc.models.Problem;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -145,8 +146,7 @@ public class FileHandler {
             Drive service = getDriveService();
 
             /** Downloading a specific file from Google Drive */
-            OutputStream outputStream = new ByteArrayOutputStream();
-            service.files().export(id, "text/plain").executeMediaAndDownloadTo(outputStream);
+            OutputStream outputStream = getFileContent(id, service);
             File file = service
                     .files()
                     .get(id)
@@ -155,7 +155,7 @@ public class FileHandler {
             /** Creating a file locally to update the file stored on Google Drive */
             File updatedFile = new File()
                     .setName(newName == null ? file.getName() : newName);
-            FileContent fileContent = getFileContent(file.getName(), outputStream.toString(), newName, newContent);
+            FileContent fileContent = createFileContent(file.getName(), outputStream.toString(), newName, newContent);
             path = fileContent.getFile().toPath();
 
             /** Uploading the new file to replace the content of the current file */
@@ -177,6 +177,12 @@ public class FileHandler {
         }
     }
 
+    private OutputStream getFileContent(String id, Drive service) throws IOException {
+        OutputStream outputStream = new ByteArrayOutputStream();
+        service.files().export(id, "text/plain").executeMediaAndDownloadTo(outputStream);
+        return outputStream;
+    }
+
     /**
      * Creates a new file which is pushed on to Google Drive.
      * @param name
@@ -191,7 +197,7 @@ public class FileHandler {
             Drive service = getDriveService();
 
             /** Creates a file and sets appropriate values */
-            FileContent fileContent = getFileContent(name, content, null, null);
+            FileContent fileContent = createFileContent(name, content, null, null);
             path = fileContent.getFile().toPath();
             File file = new File();
             file.setName(name);
@@ -229,7 +235,7 @@ public class FileHandler {
         }
     }
 
-    private FileContent getFileContent(String oldName, String oldContent, String newName, String newContent) throws IOException {
+    private FileContent createFileContent(String oldName, String oldContent, String newName, String newContent) throws IOException {
         String name = (newName == null || newName.isEmpty() ? oldName : newName);
         List<String> content = new ArrayList<>();
         content.add(newContent == null ? oldContent : newContent);
@@ -237,6 +243,16 @@ public class FileHandler {
         Files.write(Paths.get(file.getPath()), content, Charset.forName("UTF-8"));
         return new FileContent("text/plain", file);
     }
+
+    public Problem insertFileContent(Problem problem) {
+        try {
+            Drive service = getDriveService();
+            problem.setContent(getFileContent(problem.getPath(), service).toString());
+            return problem;
+        } catch (IOException ioe) {
+            return null;
+        }
+     }
 
     private List<Folder> build(List<File> list, String root) {
         ArrayList<Folder> folders = new ArrayList<>();
