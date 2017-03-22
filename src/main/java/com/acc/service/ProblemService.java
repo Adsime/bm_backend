@@ -40,8 +40,11 @@ public class ProblemService extends GeneralService {
         try {
             return problemRepository.getQuery(new GetProblemAllSpec());
         } catch (NoSuchEntityException nsee) {
-            return Arrays.asList();
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return Arrays.asList();
     }
 
     public Problem newProblem(Problem problem) {
@@ -61,18 +64,38 @@ public class ProblemService extends GeneralService {
 
     public boolean deleteProblem(int id) {
         try {
-            return problemRepository.remove((long)id);
+            Problem problem = getProblem(id);
+            if(problem == null) return false;
+            boolean deleted = problemRepository.remove(id);
+            if(deleted) {
+                fileHandler.deleteFile(problem.getPath());
+            }
+            return deleted;
         } catch (NoSuchEntityException nsee) {
-            return false;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return false;
 
     }
 
     public boolean updateProblem(Problem problem) {
         try {
-            return problemRepository.update(problem);
+            Problem old = getProblem(problem.getId());
+            if(old == null) {
+                return false;
+            }
+            boolean updated = problemRepository.update(problem);
+            if(updated) {
+                fileHandler.updateFile(old.getPath(), problem.getTitle(), problem.getContent());
+            }
+            return updated;
         } catch (NoSuchEntityException nsee) {
-            return false;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return false;
     }
 }

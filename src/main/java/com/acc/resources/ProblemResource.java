@@ -48,6 +48,7 @@ public class ProblemResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProblem(@PathParam("id") int id, @Context HttpHeaders headers) {
+        System.out.println("ACTION: GET - problem | id = " + id);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 Problem problem = service.getProblem(id);
@@ -64,6 +65,7 @@ public class ProblemResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllProblems(@Context HttpHeaders headers) {
+        System.out.println("ACTION: GET - problem | ALL");
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 List<Problem> problems = service.getAllProblems();
@@ -80,6 +82,7 @@ public class ProblemResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newProblem(@Context HttpHeaders headers, JsonObject o) {
+        System.out.println("ACTION: POST - problem | problem:\n" + o);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 Problem problem = new Gson().fromJson(o.toString(), Problem.class);
@@ -98,6 +101,7 @@ public class ProblemResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateProblem(@Context HttpHeaders headers, JsonObject o) {
+        System.out.println("ACTION: UPDATE - problem | problem:\n" + o);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 Problem problem = new Gson().fromJson(o.toString(), Problem.class);
@@ -114,6 +118,7 @@ public class ProblemResource {
     @DELETE
     @Path("{id}")
     public Response deleteProblem(@PathParam("id") int id, @Context HttpHeaders headers) {
+        System.out.println("ACTION: DELETE - problem | id = " + id);
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 if(!service.deleteProblem(id)) {

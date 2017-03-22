@@ -17,6 +17,7 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
@@ -127,28 +128,40 @@ public class ProblemServiceTest {
 
     @Test
     public void deleteProblemSuccess() {
-        when(problemRepository.remove(0)).thenReturn(true);
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(problemRepository.remove(anyLong())).thenReturn(true);
+        when(fileHandler.deleteFile(anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
         boolean acutal = service.deleteProblem(0);
         assertTrue(acutal);
     }
 
     @Test
     public void deleteProblemNoEntry() {
-        when(problemRepository.remove(0)).thenReturn(false);
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(problemRepository.remove(anyLong())).thenReturn(false);
+        when(fileHandler.deleteFile(anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
         boolean actual = service.deleteProblem(0);
         assertFalse(actual);
     }
 
     @Test
     public void deleteProblemNoEntryNull() {
-        when(problemRepository.remove(0)).thenThrow(new NoSuchEntityException());
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(problemRepository.remove(anyLong())).thenThrow(new NoSuchEntityException());
+        when(fileHandler.deleteFile(anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
         boolean actual = service.deleteProblem(0);
         assertFalse(actual);
     }
 
     @Test(expected = InternalServerErrorException.class)
     public void deleteProblemInternalError() {
-        when(problemRepository.remove(0)).thenThrow(new InternalServerErrorException());
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(problemRepository.remove(anyLong())).thenThrow(new InternalServerErrorException());
+        when(fileHandler.deleteFile(anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
         service.deleteProblem(0);
     }
 
@@ -157,7 +170,10 @@ public class ProblemServiceTest {
 
     @Test
     public void updateProblemSuccess() {
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
         when(problemRepository.update(any())).thenReturn(true);
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
         boolean actual = service.updateProblem(TestData.testProblems().get(0));
         assertTrue(actual);
     }
@@ -165,6 +181,9 @@ public class ProblemServiceTest {
     @Test
     public void updateProblemFail() {
         when(problemRepository.update(any())).thenReturn(false);
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
         boolean actual = service.updateProblem(TestData.testProblems().get(0));
         assertFalse(actual);
     }
@@ -172,6 +191,9 @@ public class ProblemServiceTest {
     @Test
     public void updateProblemNoEntry() {
         when(problemRepository.update(any())).thenThrow(new NoSuchEntityException());
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
         boolean actual = service.updateProblem(TestData.testProblems().get(0));
         assertFalse(actual);
     }
@@ -179,6 +201,9 @@ public class ProblemServiceTest {
     @Test(expected = InternalServerErrorException.class)
     public void updateProblemInternalError() {
         when(problemRepository.update(any())).thenThrow(new InternalServerErrorException());
+        when(problemRepository.getQuery(any())).thenReturn(TestData.testProblems());
+        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testProblems().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
         service.updateProblem(TestData.testProblems().get(0));
     }
 }
