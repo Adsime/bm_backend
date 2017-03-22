@@ -75,7 +75,7 @@ public class ProblemRepository extends AbstractRepository implements Repository<
 
             List<Integer> authorId = new ArrayList<>(problem.getAuthor());
             problem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
-            problem.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, problem.getTagIdList()));
+            if (!problem.getTags().isEmpty()) problem.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, problem.getTagIdList()));
             result.add(problem);
         }
         return result;

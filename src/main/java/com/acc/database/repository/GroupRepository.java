@@ -92,34 +92,24 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             Group group = new Group(
                     (int) hbnBachelorGroup.getId(),
                     hbnBachelorGroup.getName(),
-                    new ArrayList<>(),
-                    new ArrayList<>(),
                     groupProblem
             );
-            if (hbnBachelorGroup.getTags() != null) group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
 
-            for (HbnUser hbnUser : hbnBachelorGroup.getUsers()){
-                User user = new User(
-                        (int)hbnUser.getId(),
-                        hbnUser.getFirstName(),
-                        hbnUser.getLastName(),
-                        hbnUser.getEmail(),
-                        hbnUser.getEnterpriseId(),
-                        hbnUser.getAccessLevel(),
-                        super.toTagList(hbnUser.getTags())
-                );
-
-                user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
-                user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, super.toGroupIdList(hbnUser.getGroups())));
-
-                if (hasStudentTag(hbnUser.getTags())) group.getStudents().add(user);
-                else group.getSupervisors().add(user);
+            if (hbnBachelorGroup.getTags() != null) {
+                group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
+                group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
             }
 
+            List<Integer> userIdList = new ArrayList();
+            for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
+            group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
+
             List<Integer> problemId = new ArrayList<>();
-            if (group.getProblem() != null )problemId.add(group.getProblem().getId());
-            group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
-            group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
+            if (group.getProblem() != null ) {
+                problemId.add(group.getProblem().getId());
+                group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
+            }
+
             result.add(group);
         }
         return result;

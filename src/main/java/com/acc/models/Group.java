@@ -25,6 +25,12 @@ public class Group extends HateOAS {
         this.problem = problem;
     }
 
+    public Group(int id, String name, Problem problem) {
+        this.id = id;
+        this.name = name;
+        this.problem = problem;
+    }
+
     public int getId() {
         return id;
     }
