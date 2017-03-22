@@ -71,7 +71,7 @@ public class GroupResource {
             if(groups.size() < 1) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-            return Response.ok(groups).build();
+            return Response.ok(groups.toString()).build();
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }

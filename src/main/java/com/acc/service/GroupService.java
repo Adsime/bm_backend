@@ -7,6 +7,7 @@ import com.acc.models.Group;
 
 import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,16 +24,22 @@ public class GroupService extends GeneralService{
         try {
             return groupRepository.getQuery(new GetGroupByIdSpec((long)id)).get(0);
         } catch (NoSuchEntityException nsee) {
-            return null;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return null;
     }
 
     public List<Group> getAllGroups() {
         try {
             return groupRepository.getQuery(new GetGroupAllSpec());
         } catch (NoSuchEntityException nsee) {
-            return Arrays.asList();
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return Arrays.asList();
     }
 
     public Group newGroup(Group group) {
@@ -43,15 +50,21 @@ public class GroupService extends GeneralService{
         try {
             return groupRepository.remove((long) id);
         } catch (NoSuchEntityException nsee) {
-            return false;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return false;
     }
 
     public boolean updateGroup(Group group) {
         try {
             return groupRepository.update(group);
         } catch (NoSuchEntityException nsee) {
-            return false;
+
+        } catch (EntityNotFoundException enfe) {
+
         }
+        return false;
     }
 }
