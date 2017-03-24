@@ -71,15 +71,12 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         mappedUser.setId(user.getId());
 
-        boolean OK;
         try {
-            OK = super.updateEntity(mappedUser);
+            return super.updateEntity(mappedUser);
 
         }catch (EntityNotFoundException enf){
             throw new EntityNotFoundException("Feil i oppdatering: \nBruker med id: " + user.getId() + " finnes ikke");
         }
-
-        return OK;
     }
 
     @Override

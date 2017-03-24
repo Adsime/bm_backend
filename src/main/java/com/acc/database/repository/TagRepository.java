@@ -6,6 +6,7 @@ import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Tag;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     }
 
     @Override
-    public Tag add(Tag tag){
+    public Tag add(Tag tag) {
         HbnTag mappedTag = new HbnTag(
                 tag.getName(),
                 tag.getDescription(),
@@ -37,26 +38,41 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     }
 
     @Override
-    public boolean update(Tag tag) {
+    public boolean update(Tag tag) throws EntityNotFoundException{
         HbnTag mappedTag = new HbnTag(
                 tag.getName(),
                 tag.getDescription(),
                 tag.getType()
         );
         mappedTag.setId(tag.getId());
-        return super.updateEntity(mappedTag);
+
+        try {
+            return super.updateEntity(mappedTag);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i oppdatering: \nMerknad med id: " + tag.getId() + " finnes ikke");
+        }
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(long id) throws EntityNotFoundException{
         HbnTag mappedTag = new HbnTag();
         mappedTag.setId(id);
-        return super.removeEntity(mappedTag);
+        try{
+            return super.removeEntity(mappedTag);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i oppdatering: \nMerknad med id: " + id + " finnes ikke");
+        }
     }
 
     @Override
-    public List<Tag> getQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+    public List<Tag> getQuery(Specification spec) throws EntityNotFoundException{
+        List<HbnEntity> readData;
+        try {
+            readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i henting: \nEn eller flere merknader finnes ikke");
+        }
+
         List<Tag> result = new ArrayList<>();
 
         for (HbnEntity entity : readData){
@@ -72,8 +88,14 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     }
 
     @Override
-    public List<Tag> getMinimalQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+    public List<Tag> getMinimalQuery(Specification spec) throws EntityNotFoundException{
+        List<HbnEntity> readData;
+        try {
+            readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i henting: \nEn eller flere merknader finnes ikke");
+        }
+
         List<Tag> result = new ArrayList<>();
 
         for (HbnEntity entity : readData){
