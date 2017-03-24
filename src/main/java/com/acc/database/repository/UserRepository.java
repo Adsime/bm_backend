@@ -1,3 +1,4 @@
+
 package com.acc.database.repository;
 
 import com.acc.database.entity.*;
@@ -31,7 +32,12 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
         );
 
-        if (user.getTags() != null) mappedUser.setTags(super.toHbnTagSet(user.getTags()));
+        try {
+            if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i registrering: En eller flere merknader finnes ikke");
+        }
+
         long id = super.addEntity(mappedUser);
 
         return new User(
@@ -43,8 +49,6 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getAccessLevel(),
                 user.getTags()
         );
-
-        // TODO: 09.03.2017 add links yo
     }
 
     // TODO: 24.02.2017 generate salt 
@@ -59,7 +63,12 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getAccessLevel()
         );
 
-        if (!user.getTags().isEmpty()) mappedUser.setTags(toHbnTagSet(user.getTags()));
+        try {
+            if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i oppdatering: \nEn eller flere merknader finnes ikke");
+        }
+
         mappedUser.setId(user.getId());
 
         boolean OK;
@@ -67,29 +76,44 @@ public class UserRepository extends AbstractRepository implements Repository<Use
             OK = super.updateEntity(mappedUser);
 
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Failed to update: \nUser with id: " + user.getId() + ", not found.");
+            throw new EntityNotFoundException("Feil i oppdatering: \nBruker med id: " + user.getId() + " finnes ikke");
         }
 
         return OK;
     }
 
     @Override
-    public boolean remove(long id) {
-        HbnUser mappedUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
-        if (mappedUser.getProblems() != null){
-            for (HbnProblem problem : mappedUser.getProblems()){
+    public boolean remove(long id) throws EntityNotFoundException{
+        HbnUser readUser;
+        try {
+            readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i sletting: \nBruker med id: " + id + " finnes ikke");
+        }
+
+        if (readUser.getProblems() != null){
+            for (HbnProblem problem : readUser.getProblems()){
                 problem.setUser(null);
-                super.updateEntity(problem);
+
+                try {
+                    super.updateEntity(problem);
+                }catch (EntityNotFoundException enf){
+                    throw new EntityNotFoundException("Feil i sletting: \nOppgave: \"" +  problem.getTitle() + "\" , " + "til bruker finnes ikke");
+                }
             }
         }
-        boolean OK;
-        OK = super.removeEntity(mappedUser);
-        return OK;
+        return super.removeEntity(readUser);
     }
 
     @Override
-    public List<User> getQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+    public List<User> getQuery(Specification spec) throws EntityNotFoundException {
+        List<HbnEntity> readData;
+        try {
+           readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf) {
+            throw new EntityNotFoundException("Feil i henting: En eller flere brukere finnes ikke!");
+        }
+
         List<User> result =  new ArrayList<>();
 
         for (HbnEntity entity : readData){
@@ -113,8 +137,13 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     }
 
     @Override
-    public List<User> getMinimalQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+    public List<User> getMinimalQuery(Specification spec) throws EntityNotFoundException {
+        List<HbnEntity> readData;
+        try {
+            readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf) {
+            throw new EntityNotFoundException("Feil i henting: En eller flere brukere finnes ikke!");
+        }
         List<User> result =  new ArrayList<>();
 
         for (HbnEntity entity : readData){

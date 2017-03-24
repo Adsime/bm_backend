@@ -13,7 +13,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
-import java.rmi.ServerException;
 import java.util.*;
 
 
@@ -52,7 +51,7 @@ public abstract class AbstractRepository{
     }
 
 
-    public boolean updateEntity(HbnEntity item) throws EntityNotFoundException{
+    public boolean updateEntity(HbnEntity item) {
         Transaction tx = null;
 
         try( Session session = sessionFactory.openSession()){
@@ -63,9 +62,8 @@ public abstract class AbstractRepository{
         }
         catch (OptimisticLockException ole){
             throw new EntityNotFoundException();
-        }
-        catch (HibernateException he) {
 
+        } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
             return false;
@@ -89,13 +87,13 @@ public abstract class AbstractRepository{
         catch (HibernateException he){
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
-            throw new EntityNotFoundException();
         }
         return true;
     }
 
-    public List<HbnEntity> queryToDb (HqlSpecification spec) throws EntityNotFoundException{
-        List<HbnEntity> result = new ArrayList<>();
+    public List<HbnEntity> queryToDb (HqlSpecification spec) {
+        // TODO: 24.03.2017 List<HbnEntity> gives a warning
+        List result = new ArrayList<>();
         Transaction tx = null;
         try( Session session = sessionFactory.openSession()){
 
@@ -111,10 +109,6 @@ public abstract class AbstractRepository{
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
         }
-        catch (IndexOutOfBoundsException iobe) {
-            if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
-            throw new EntityNotFoundException();
-        }
         catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
@@ -123,12 +117,12 @@ public abstract class AbstractRepository{
     }
 
     //To be able to do query of different types of objects in the repositories
-    public Set<HbnEntity> queryToDb (List<HqlSpecification> specs) throws EntityNotFoundException{
+    // TODO: 24.03.2017 refactor name to reflect return type
+    public Set<HbnEntity> queryToDb (List<HqlSpecification> specs){
         Set<HbnEntity> result = new HashSet<>();
         Transaction tx = null;
 
         try( Session session = sessionFactory.openSession()){
-
             tx = session.beginTransaction();
             for (HqlSpecification spec : specs){
                 result.add((HbnEntity) session
@@ -136,20 +130,24 @@ public abstract class AbstractRepository{
                         .list().get(0));
             }
             tx.commit();
-        }
-        catch (HibernateException he) {
 
+        } catch (OptimisticLockException ole){
+            if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            throw new EntityNotFoundException();
+
+        } catch (IndexOutOfBoundsException ioe){
+            if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
+            throw new EntityNotFoundException();
+
+        } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
-        }
-        catch (IndexOutOfBoundsException iobe) {
-            throw new EntityNotFoundException();
         }
         return result;
     }
 
     //Finds the corresponding hibernate entity tags with the provided IDs
-    public Set<HbnTag> toHbnTagSet (List<Tag> userTags){
+    public Set<HbnTag> getHbnTagSet(List<Tag> userTags){
         Set<HbnTag> hbnTagSet = new HashSet<>();
         List<HqlSpecification> specList = new ArrayList<>();
         for (Tag tags : userTags) specList.add(new GetTagByIdSpec(tags.getId()));

@@ -27,7 +27,7 @@ public class ProblemRepository extends AbstractRepository implements Repository<
     public Problem add(Problem problem) {
 
         HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()), problem.getTitle());
-        if (problem.getTags() != null) mappedProblem.setTags(super.toHbnTagSet(problem.getTags()));
+        if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
         long id = super.addEntity(mappedProblem);
 
         Problem addedProblem = new Problem(
@@ -45,7 +45,7 @@ public class ProblemRepository extends AbstractRepository implements Repository<
     public boolean update(Problem problem) {
         HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()), problem.getTitle());
         mappedProblem.setId(problem.getId());
-        if (problem.getTags() != null) mappedProblem.setTags(super.toHbnTagSet(problem.getTags()));
+        if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
         return super.updateEntity(mappedProblem);
     }
 

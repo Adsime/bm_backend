@@ -28,7 +28,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
         HbnBachelorGroup mappedGroup = new HbnBachelorGroup(group.getName());
 
-        if (group.getTags() != null) mappedGroup.setTags(super.toHbnTagSet(group.getTags()));
+        if (group.getTags() != null) mappedGroup.setTags(super.getHbnTagSet(group.getTags()));
         if (group.getProblem() != null) mappedGroup.setProblem(toHbnProblem(group.getProblem()));
         mappedGroup.setUsers(groupAssociates);
 
@@ -53,7 +53,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         if (group.getSupervisors() != null) groupAssociates.addAll(group.getSupervisors());
         if (group.getStudents() != null) groupAssociates.addAll(group.getStudents());
         hbnBachelorGroup.setUsers(toHbnUserSet(groupAssociates));
-        if (group.getTags() != null) hbnBachelorGroup.setTags(super.toHbnTagSet(group.getTags()));
+        if (group.getTags() != null) hbnBachelorGroup.setTags(super.getHbnTagSet(group.getTags()));
         if (group.getProblem() != null) hbnBachelorGroup.setProblem(toHbnProblem(group.getProblem()));
 
         return super.updateEntity(hbnBachelorGroup);
@@ -223,7 +223,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
                 );
 
-                hbnUser.setTags(super.toHbnTagSet(user.getTags()));
+                hbnUser.setTags(super.getHbnTagSet(user.getTags()));
                 super.addEntity(hbnUser);
                 groupAssociates.add(hbnUser);
             }
