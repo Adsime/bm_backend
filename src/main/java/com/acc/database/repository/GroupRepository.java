@@ -23,13 +23,23 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     @Override
     public Group add(Group group) throws EntityNotFoundException{
         Set<HbnUser> groupAssociates = new HashSet<>();
+        //addIfNotExist() throws EntityNotFoundException
         if (group.getSupervisors() != null) groupAssociates.addAll(addIfNotExist(group.getSupervisors()));
         if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
 
         HbnBachelorGroup mappedGroup = new HbnBachelorGroup(group.getName());
 
-        if (group.getTags() != null) mappedGroup.setTags(super.getHbnTagSet(group.getTags()));
-        if (group.getProblem() != null) mappedGroup.setProblem(toHbnProblem(group.getProblem()));
+        try {
+            if (group.getTags() != null) mappedGroup.setTags(super.getHbnTagSet(group.getTags()));
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i registrering av gruppe: \nEn eller flere merknader finnes ikke");
+        }
+
+        try {
+            if (group.getProblem() != null) mappedGroup.setProblem(getHbnProblem(group.getProblem()));
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i registrering av gruppe: \nOppgave med id: " + group.getProblem().getId() + " finnes ikke");
+        }
         mappedGroup.setUsers(groupAssociates);
 
         long id = super.addEntity(mappedGroup);
@@ -54,7 +64,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         if (group.getStudents() != null) groupAssociates.addAll(group.getStudents());
         hbnBachelorGroup.setUsers(toHbnUserSet(groupAssociates));
         if (group.getTags() != null) hbnBachelorGroup.setTags(super.getHbnTagSet(group.getTags()));
-        if (group.getProblem() != null) hbnBachelorGroup.setProblem(toHbnProblem(group.getProblem()));
+        if (group.getProblem() != null) hbnBachelorGroup.setProblem(getHbnProblem(group.getProblem()));
 
         return super.updateEntity(hbnBachelorGroup);
     }
@@ -183,7 +193,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return result;
     }
 
-    private HbnProblem toHbnProblem (Problem problem){
+    private HbnProblem getHbnProblem(Problem problem){
         return (HbnProblem) super.queryToDb(new GetProblemByIdSpec(problem.getId())).get(0);
     }
 
@@ -220,15 +230,23 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         "",
                         user.getEnterpriseID(),
                         (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
-
                 );
 
-                hbnUser.setTags(super.getHbnTagSet(user.getTags()));
+                try {
+                    if (user.getTags() != null) hbnUser.setTags(super.getHbnTagSet(user.getTags()));
+                }catch (EntityNotFoundException enf){
+                    throw new EntityNotFoundException("Feil i registrering av gruppe (ny bruker): \nEn eller flere merknader finnes ikke");
+                }
                 super.addEntity(hbnUser);
                 groupAssociates.add(hbnUser);
             }
             else {
-                HbnUser hbnUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(user.getId())).get(0);
+                HbnUser hbnUser;
+                try {
+                    hbnUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(user.getId())).get(0);
+                }catch (EntityNotFoundException enf){
+                    throw new EntityNotFoundException("Feil i registrering av gruppe (eksisterende bruker): \nBruker med id: " + user.getId() + " finnes ikke");
+                }
                 groupAssociates.add(hbnUser);
             }
         }

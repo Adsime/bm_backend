@@ -35,7 +35,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i registrering av bruker: En eller flere merknader finnes ikke");
+            throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
         }
 
         long id = super.addEntity(mappedUser);
@@ -108,7 +108,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
            readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf) {
-            throw new EntityNotFoundException("Feil i henting av bruker: En eller flere brukere finnes ikke!");
+            throw new EntityNotFoundException("Feil i henting av bruker: \nEn eller flere brukere finnes ikke!");
         }
 
         List<User> result =  new ArrayList<>();
@@ -139,7 +139,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf) {
-            throw new EntityNotFoundException("Feil i henting av bruker: En eller flere brukere finnes ikke!");
+            throw new EntityNotFoundException("Feil i henting av bruker: \nEn eller flere brukere finnes ikke!");
         }
         List<User> result =  new ArrayList<>();
 
