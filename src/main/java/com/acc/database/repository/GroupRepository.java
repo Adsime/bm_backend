@@ -55,30 +55,50 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     }
 
     @Override
-    public boolean update(Group group) {
-        List<User> groupAssociates = new ArrayList<>();
+    public boolean update(Group group) throws EntityNotFoundException{
+        // TODO: 24.03.2017 update user at the same time?
+        Set<HbnUser> groupAssociates = new HashSet<>();
         HbnBachelorGroup hbnBachelorGroup = new HbnBachelorGroup(group.getName());
         hbnBachelorGroup.setId(group.getId());
+        if (group.getSupervisors() != null) groupAssociates.addAll(addIfNotExist(group.getSupervisors()));
+        if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
+        hbnBachelorGroup.setUsers(groupAssociates);
 
-        if (group.getSupervisors() != null) groupAssociates.addAll(group.getSupervisors());
-        if (group.getStudents() != null) groupAssociates.addAll(group.getStudents());
-        hbnBachelorGroup.setUsers(toHbnUserSet(groupAssociates));
-        if (group.getTags() != null) hbnBachelorGroup.setTags(super.getHbnTagSet(group.getTags()));
-        if (group.getProblem() != null) hbnBachelorGroup.setProblem(getHbnProblem(group.getProblem()));
+        try {
+            if (group.getTags() != null) hbnBachelorGroup.setTags(super.getHbnTagSet(group.getTags()));
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nEn eller flere merknader finnes ikke");
+        }
+
+        try {
+            if (group.getProblem() != null) hbnBachelorGroup.setProblem(getHbnProblem(group.getProblem()));
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nOppgave med id: " + group.getProblem().getId() + " finnes ikke");
+        }
 
         return super.updateEntity(hbnBachelorGroup);
     }
 
     @Override
-    public boolean remove(long id) {
+    public boolean remove(long id) throws EntityNotFoundException{
         HbnBachelorGroup hbnBachelorGroup = new HbnBachelorGroup();
         hbnBachelorGroup.setId(id);
-        return super.removeEntity(hbnBachelorGroup);
+        try {
+            return super.removeEntity(hbnBachelorGroup);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i sletting av gruppe: \nGruppe med id: " + id + " finnes ikke");
+        }
     }
 
     @Override
     public List<Group> getQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<HbnEntity> readData;
+        try{
+            readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
+        }
+
         List<Group> result = new ArrayList<>();
 
         for (HbnEntity entity : readData ){
@@ -144,7 +164,13 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
     @Override
     public List<Group> getMinimalQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<HbnEntity> readData;
+        try{
+            readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
+        }
+
         List<Group> result = new ArrayList<>();
 
         for (HbnEntity entity : readData ){
@@ -184,7 +210,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return result;
     }
 
-    private Set<HbnUser> toHbnUserSet(List<User> users){
+    private Set<HbnUser> getHbnUserSet(List<User> users){
         Set<HbnUser> result = new HashSet<>();
         List<HqlSpecification> specList = new ArrayList<>();
         for (User user : users) specList.add(new GetUserByIdSpec(user.getId()));
