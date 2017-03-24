@@ -9,6 +9,7 @@ import com.acc.database.specification.Specification;
 import com.acc.models.Problem;
 import com.acc.providers.Links;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +25,19 @@ public class ProblemRepository extends AbstractRepository implements Repository<
     }
 
     @Override
-    public Problem add(Problem problem) {
+    public Problem add(Problem problem) throws EntityNotFoundException {
 
+        //getAuthor() throws EntityNotFoundException
         HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()), problem.getTitle());
-        if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
+
+        try {
+             if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i registrering av oppgave: \nEn eller flere merknader finnes ikke");
+        }
         long id = super.addEntity(mappedProblem);
 
-        Problem addedProblem = new Problem(
+        return new Problem(
                 (int) id,
                 problem.getAuthor(),
                 problem.getTitle(),
@@ -38,27 +45,49 @@ public class ProblemRepository extends AbstractRepository implements Repository<
                 problem.getPath(),
                 problem.getTags()
         );
-        return addedProblem;
     }
 
     @Override
-    public boolean update(Problem problem) {
+    public boolean update(Problem problem) throws EntityNotFoundException{
+        //getAuthor() throws EntityNotFoundException
         HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()), problem.getTitle());
         mappedProblem.setId(problem.getId());
-        if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
-        return super.updateEntity(mappedProblem);
+
+        try {
+            if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
+        }catch (EntityNotFoundException enf){
+           throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nEn eller flere merknader finnes ikke");
+        }
+
+        try{
+            return super.updateEntity(mappedProblem);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nOppgave med id: " + problem.getId() + " finnes ikke");
+        }
+
     }
 
     @Override
     public boolean remove(long id) {
         HbnProblem mappedProblem = new HbnProblem();
         mappedProblem.setId(id);
-        return super.removeEntity(mappedProblem);
+
+        try{
+            return super.removeEntity(mappedProblem);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i sletting av oppgave: \nOppgave med id: " + id + " finnes ikke");
+        }
     }
 
     @Override
     public List<Problem> getQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+        List<HbnEntity> readData;
+        try{
+            readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i henting av oppgave: \nEn eller flere oppgaver finnes ikke");
+        }
+
         List<Problem> result = new ArrayList<>();
 
         for (HbnEntity entity : readData){
@@ -82,8 +111,13 @@ public class ProblemRepository extends AbstractRepository implements Repository<
     }
 
     @Override
-    public List<Problem> getMinimalQuery(Specification spec) {
-        List<HbnEntity> readData = super.queryToDb((HqlSpecification) spec);
+    public List<Problem> getMinimalQuery(Specification spec) throws EntityNotFoundException{
+        List<HbnEntity> readData;
+        try{
+            readData = super.queryToDb((HqlSpecification) spec);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i henting av oppgave: \nEn eller flere oppgaver finnes ikke");
+        }
         List<Problem> result = new ArrayList<>();
 
         for (HbnEntity entity : readData){
@@ -105,7 +139,11 @@ public class ProblemRepository extends AbstractRepository implements Repository<
     }
 
     private HbnUser getAuthor(long authorId){
-        return (HbnUser) queryToDb(new GetUserByIdSpec(authorId)).get(0);
+        try {
+            return (HbnUser) queryToDb(new GetUserByIdSpec(authorId)).get(0);
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i legg registrering av oppgave: \nForfatter med id: " + authorId + " finnes ikke");
+        }
     }
 }
 

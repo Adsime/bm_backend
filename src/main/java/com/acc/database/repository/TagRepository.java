@@ -49,7 +49,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         try {
             return super.updateEntity(mappedTag);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i oppdatering: \nMerknad med id: " + tag.getId() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av merknad: \nMerknad med id: " + tag.getId() + " finnes ikke");
         }
     }
 
@@ -60,7 +60,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         try{
             return super.removeEntity(mappedTag);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i oppdatering: \nMerknad med id: " + id + " finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av merknad: \nMerknad med id: " + id + " finnes ikke");
         }
     }
 
@@ -70,7 +70,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         try {
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i henting: \nEn eller flere merknader finnes ikke");
+            throw new EntityNotFoundException("Feil i henting av merknad: \nEn eller flere merknader finnes ikke");
         }
 
         List<Tag> result = new ArrayList<>();
@@ -93,7 +93,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         try {
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i henting: \nEn eller flere merknader finnes ikke");
+            throw new EntityNotFoundException("Feil i henting av merknad: \nEn eller flere merknader finnes ikke");
         }
 
         List<Tag> result = new ArrayList<>();
