@@ -210,15 +210,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return result;
     }
 
-    private Set<HbnUser> getHbnUserSet(List<User> users){
-        Set<HbnUser> result = new HashSet<>();
-        List<HqlSpecification> specList = new ArrayList<>();
-        for (User user : users) specList.add(new GetUserByIdSpec(user.getId()));
-        Set<HbnEntity> hbnEntitySet = super.queryToDb(specList);
-        for (HbnEntity entity : hbnEntitySet) result.add((HbnUser) entity);
-        return result;
-    }
-
     private HbnProblem getHbnProblem(Problem problem){
         return (HbnProblem) super.queryToDb(new GetProblemByIdSpec(problem.getId())).get(0);
     }
@@ -273,6 +264,12 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 }catch (EntityNotFoundException enf){
                     throw new EntityNotFoundException("Feil i registrering av gruppe (eksisterende bruker): \nBruker med id: " + user.getId() + " finnes ikke");
                 }
+
+                hbnUser.setFirstName(user.getFirstName());
+                hbnUser.setLastName(user.getLastName());
+                hbnUser.setEmail(user.getEmail());
+                hbnUser.setEnterpriseId(user.getEnterpriseID());
+                hbnUser.setAccessLevel((user.getAccessLevel() == null) ? "0" : user.getAccessLevel());
                 groupAssociates.add(hbnUser);
             }
         }

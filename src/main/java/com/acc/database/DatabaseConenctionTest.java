@@ -5,6 +5,7 @@ import com.acc.database.repository.ProblemRepository;
 import com.acc.database.repository.TagRepository;
 import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetUserByTagSpec;
+import com.acc.models.Group;
 import com.acc.models.Problem;
 import com.acc.models.Tag;
 import com.acc.models.User;
@@ -55,5 +56,6 @@ public class DatabaseConenctionTest {
         User u1 = new User("David", "Silva", "merlin@mcfc.co.uk", "silva.d","1", null);
         User u2 = new User(4,"Zlatan", "Ibrahimovic", "zlatan@zlatan.se", "zlatan.zlatan", "10",lt2);
         User u3 = new User("PSG", "FC", "blew40@cl", "cash.fail","0", null);
+
     }
 }
