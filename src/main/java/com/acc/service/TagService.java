@@ -42,6 +42,23 @@ public class TagService extends GeneralService {
         }
         return Arrays.asList();
     }
+
+    public List<Tag> queryTags(List<String> names) {
+        try {
+            List<Tag> tags = tagRepository.getQuery(new GetTagAllSpec());
+            if(names.isEmpty()) {
+                return tags;
+            }
+            names.forEach(name -> name = name.toLowerCase());
+            tags.removeIf(tag -> !names.contains(tag.getName().toLowerCase()));
+            return tags;
+        }catch (NoSuchEntityException nsee) {
+
+        } catch (EntityNotFoundException enfe) {
+
+        }
+        return Arrays.asList();
+    }
     
     public Tag newTag(Tag tag) {
         return tagRepository.add(tag);

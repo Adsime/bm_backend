@@ -81,7 +81,7 @@ public class TagResourceTest {
     // End getTag Tests
     // Start getAllTags Tests
 
-    @Test
+    /*@Test
     public void getAllTagsSuccess() {
         tagResource.service = service;
         when(service.verify(TestData.credentials)).thenReturn(true);
@@ -119,7 +119,7 @@ public class TagResourceTest {
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = tagResource.getAllTags(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }
+    }*/
 
     // End getAllTags Tests
     // Start newTag Tests

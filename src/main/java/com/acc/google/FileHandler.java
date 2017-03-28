@@ -61,8 +61,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
+                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -123,7 +123,7 @@ public class FileHandler {
         try {
             Drive service = getDriveService();
             FileList res = service.files().list()
-                    .setQ("'" + id + "'" + " in parents")
+                    .setQ("'" + id + "'" + " in parents" + " and trashed = false")
                     .setFields("nextPageToken, files(id, name, mimeType, iconLink, webViewLink)")
                     .execute();
             return res.getFiles();
@@ -177,9 +177,18 @@ public class FileHandler {
         }
     }
 
+    public OutputStream asdasd(String id) {
+        try {
+            Drive service = getDriveService();
+            return getFileContent(id, service);
+        }catch (IOException ioe) {
+            return null;
+        }
+    }
+
     private OutputStream getFileContent(String id, Drive service) throws IOException {
         OutputStream outputStream = new ByteArrayOutputStream();
-        service.files().export(id, "text/plain").executeMediaAndDownloadTo(outputStream);
+        service.files().export(id, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").executeMediaAndDownloadTo(outputStream);
         return outputStream;
     }
 

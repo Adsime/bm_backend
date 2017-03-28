@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -61,10 +62,29 @@ public class TagResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    public Response queryTags(@Context HttpHeaders headers,
+                              @QueryParam("name") List<String> names) {
+        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+            try {
+                List<Tag> tags = service.queryTags(names);
+                if(tags.isEmpty()) {
+                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
+                }
+                return Response.ok(tags.toString()).build();
+            } catch (InternalServerErrorException isee) {
+                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+            }
+        }
+        return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+    }
+
+
+    //@GET
+    //@Produces(MediaType.APPLICATION_JSON)
     /**
      *
      */
-    public Response getAllTags(@Context HttpHeaders headers) {
+    /*public Response getAllTags(@Context HttpHeaders headers) {
         if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
             try {
                 List<Tag> tags = service.getAllTags();
@@ -76,7 +96,7 @@ public class TagResource {
                 return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
             }
         } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-    }
+    }*/
 
     @POST
     /**
