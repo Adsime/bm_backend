@@ -245,9 +245,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
-                        "",
-                        user.getEnterpriseID(),
-                        (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
+                        user.getEnterpriseID(), (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
                 );
 
                 try {

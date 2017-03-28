@@ -60,7 +60,7 @@ public class TestHibernateData {
 
     public static List<HbnUser> getHbnUserList(){
         List<HbnUser> hbnUserList = new ArrayList<>();
-        HbnUser hbnUser = new HbnUser("David Josué Jiménez", "Silva", "merlin@mcfc.co.uk","","silva.david.j.j","1");
+        HbnUser hbnUser = new HbnUser("David Josué Jiménez", "Silva", "merlin@mcfc.co.uk","silva.david.j.j","1");
         hbnUser.setId(1);
         hbnUser.setTags(getHbnTagSet());
         hbnUserList.add(hbnUser);

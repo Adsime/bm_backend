@@ -7,8 +7,11 @@ import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.User;
 import com.acc.providers.Links;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.EntityNotFoundException;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -27,7 +30,6 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                "",
                 user.getEnterpriseID(),
                 (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
         );
@@ -37,6 +39,8 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         }catch (EntityNotFoundException enf){
             throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
         }
+
+        //mappedUser.setSalt(BCrypt.gensalt());
 
         long id = super.addEntity(mappedUser);
 
@@ -50,15 +54,12 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getTags()
         );
     }
-
-    // TODO: 24.02.2017 generate salt 
     @Override
     public boolean update(User user) throws EntityNotFoundException {
         HbnUser mappedUser = new HbnUser(
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
-                "",
                 user.getEnterpriseID(),
                 user.getAccessLevel()
         );

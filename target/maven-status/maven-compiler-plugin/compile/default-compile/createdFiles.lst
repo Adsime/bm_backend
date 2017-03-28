@@ -1,3 +1,4 @@
+com\acc\database\repository\AccountRepositoryImpl.class
 com\acc\database\repository\Repository.class
 com\acc\database\entity\HbnEntity.class
 com\acc\service\UserService.class
@@ -31,6 +32,7 @@ com\acc\database\specification\GetProblemAllSpec.class
 com\acc\database\specification\GetTagByIdSpec.class
 com\acc\providers\Links.class
 com\acc\service\SupervisorService.class
+com\acc\database\repository\AccountRepository.class
 com\acc\database\specification\GetUserByIdSpec.class
 com\acc\database\entity\HbnBachelorGroup.class
 com\acc\database\DatabaseConenctionTest.class

@@ -142,7 +142,7 @@ public class ProblemRepository extends AbstractRepository implements Repository<
         try {
             return (HbnUser) queryToDb(new GetUserByIdSpec(authorId)).get(0);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i legg registrering av oppgave: \nForfatter med id: " + authorId + " finnes ikke");
+            throw new EntityNotFoundException("Feil i registrering/oppdatering av oppgave: \nForfatter med id: " + authorId + " finnes ikke");
         }
     }
 }

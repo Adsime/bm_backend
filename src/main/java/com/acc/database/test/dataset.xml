@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-    <USER first_name="Deju" last_name="Enguyen" email="hvalfanger@hvalfagnerbyn.no" salt="salt" problem_id="0"/>
-    <USER first_name="Håkone" last_name="Butterbucht" email="norwegenjunge123@gmail.com" salt="salt" problem_id="0"/>
-    <USER first_name="Gull-Drage" last_name="Vu" email="ås@ås.landet" salt="salt" problem_id="0"/>
-    <USER first_name="Addryan" last_name="Melsomsmakergodt" email="potet@kjeften.dk" salt="salt" problem_id="0"/>
-</dataset>

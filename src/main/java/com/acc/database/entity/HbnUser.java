@@ -25,11 +25,10 @@ public class HbnUser implements Serializable, HbnEntity {
 
     public HbnUser(){}
 
-    public HbnUser(String firstName, String lastName, String email, String salt, String enterpriseId, String accessLevel) {
+    public HbnUser(String firstName, String lastName, String email, String enterpriseId, String accessLevel) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.salt = salt;
         this.enterpriseId = enterpriseId;
         this.accessLevel = accessLevel;
     }
