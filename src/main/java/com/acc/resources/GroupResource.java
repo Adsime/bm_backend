@@ -1,6 +1,7 @@
 package com.acc.resources;
 
 import com.acc.models.Group;
+import com.acc.service.GeneralService;
 import com.acc.service.GroupService;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
@@ -51,7 +52,7 @@ public class GroupResource {
         }
         Group group = service.getGroup(id);
         if(group != null) {
-            return Response.ok(new Gson().toJson(group)).build();
+            return Response.ok(group.toString()).build();
         }
         return Response.status(HttpStatus.BAD_REQUEST_400).build();
     }

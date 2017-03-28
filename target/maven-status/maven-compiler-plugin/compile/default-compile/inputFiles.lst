@@ -17,6 +17,7 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\TagRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\UserRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\google\Folder.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\AccountResource.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\StaticResource.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\User.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\ProblemRepository.java
@@ -39,6 +40,7 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetUserByTagSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetProblemAllSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\UserResource.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\AccountService.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\Repository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Problem.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetGroupAllSpec.java

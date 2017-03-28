@@ -1,21 +1,13 @@
 package com.acc.resources;
 
-import com.acc.database.repository.ProblemRepository;
-import com.acc.database.repository.TagRepository;
-import com.acc.database.repository.UserRepository;
 import com.acc.models.Problem;
 import com.acc.service.ProblemService;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
-import org.omg.CORBA.RepositoryIdHelper;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
