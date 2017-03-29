@@ -1,16 +1,13 @@
 package com.acc.database.repository;
 
 import com.acc.database.entity.HbnPassword;
-import com.acc.database.entity.HbnProblem;
 import com.acc.database.entity.HbnUser;
 import com.acc.database.specification.GetPasswordByEIdSpec;
 import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.models.User;
-import org.hibernate.criterion.IlikeExpression;
 import org.mindrot.jbcrypt.BCrypt;
-
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.OptimisticLockException;
+import java.util.ArrayList;
 
 /**
  * Created by nguyen.duy.j.khac on 28.03.2017.
@@ -18,19 +15,32 @@ import javax.persistence.OptimisticLockException;
 public class AccountRepositoryImpl extends AbstractRepository implements AccountRepository {
 
     @Override
-    public boolean matchPassword(String username, String password) throws IllegalArgumentException {
+    public User matchPassword(String username, String password) throws IllegalArgumentException {
         HbnPassword hbnPassword;
-        try {
-            hbnPassword = (HbnPassword)super.queryToDb(new GetPasswordByEIdSpec(username)).get(0);
+        HbnUser hbnUser;
 
-        } catch (OptimisticLockException ole){
+        try {
+            hbnUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
+            String hashedEId = BCrypt.hashpw(username, hbnUser.getSalt());
+            hbnPassword = (HbnPassword)super.queryToDb(new GetPasswordByEIdSpec(hashedEId)).get(0);
+
+        } catch (EntityNotFoundException enf){
             throw new IllegalArgumentException("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
         }
 
-        if(BCrypt.checkpw(password, hbnPassword.getPassHash())){
-            return true;
+        boolean match = BCrypt.checkpw(password, hbnPassword.getPassHash());
+        if (match) return new User(
+                (int)hbnUser.getId(),
+                hbnUser.getFirstName(),
+                hbnUser.getLastName(),
+                hbnUser.getEmail(),
+                hbnUser.getEnterpriseId(),
+                hbnUser.getAccessLevel(),
+                hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
+        );
+        else {
+            throw new IllegalArgumentException("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
         }
-        else throw new IllegalArgumentException("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
     }
 
     @Override

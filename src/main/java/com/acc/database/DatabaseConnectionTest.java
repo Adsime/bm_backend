@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by nguyen.duy.j.khac on 07.02.2017.
  */
-public class DatabaseConenctionTest {
+public class DatabaseConnectionTest {
 
     public static void main(String[] args) {
         UserRepository UR = new UserRepository();
@@ -29,15 +29,16 @@ public class DatabaseConenctionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            String username = UR.getQuery(new GetUserByIdSpec(1)).get(0).getEnterpriseID();
-            String password = "password";
+            User merlin = UR.getQuery(new GetUserByIdSpec(7)).get(0);
+            String username = merlin.getEnterpriseID();
+            String password = "passsword";
             System.out.println("UN: " + username );
-            //AR.register(username,password, u1);
+            User user = AR.matchPassword(username, password);
+            System.out.println("you're logged in fucker");
+
         } catch (IllegalArgumentException iae){
-            iae.printStackTrace();
             System.out.println(iae.getMessage());
         } catch (EntityNotFoundException enf){
-            enf.printStackTrace();
             System.out.println(enf.getMessage());
         }
     }

@@ -22,12 +22,12 @@ USE `bm_database` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bm_database`.`USER` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(50) NULL,
-  `last_name` VARCHAR(50) NULL,
-  `email` VARCHAR(50) NULL,
-  `salt` VARCHAR(16) NULL,
-  `enterprise_id` VARCHAR(45) NULL,
-  `access_level` VARCHAR(2) NOT NULL,
+  `first_name` VARCHAR(1000) NULL,
+  `last_name` VARCHAR(1000) NULL,
+  `email` VARCHAR(1000) NULL,
+  `salt` VARCHAR(1000) NULL,
+  `enterprise_id` VARCHAR(1000) NULL,
+  `access_level` VARCHAR(1000) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -37,9 +37,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bm_database`.`TAG` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `tag_name` VARCHAR(40) NOT NULL,
-  `description` VARCHAR(200) NULL,
-  `type` VARCHAR(45) NULL,
+  `tag_name` VARCHAR(1000) NOT NULL,
+  `description` VARCHAR(10000) NULL,
+  `type` VARCHAR(1000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -49,9 +49,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bm_database`.`PROBLEM` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `path` VARCHAR(100) NULL,
+  `path` VARCHAR(10000) NULL,
   `user_id` INT NULL,
-  `title` VARCHAR(100) NULL,
+  `title` VARCHAR(10000) NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_PROBLEM_USER1_idx` (`user_id` ASC),
   CONSTRAINT `fk_PROBLEM_USER1`
@@ -65,7 +65,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bm_database`.`BACHELOR_GROUP` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(40) NULL,
+  `name` VARCHAR(1000) NULL,
   `problem_id` INT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_GROUP_PROBLEM1_idx` (`problem_id` ASC),
@@ -103,9 +103,9 @@ ENGINE = InnoDB;
 -- Table `bm_database`.`PASSWORD`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bm_database`.`PASSWORD` (
-  `id` INT NOT NULL,
-  `pass_hash` VARCHAR(64) NULL,
-  `eid_hash` VARCHAR(64) NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `pass_hash` VARCHAR(1000) NULL,
+  `eid_hash` VARCHAR(1000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
