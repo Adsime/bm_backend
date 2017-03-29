@@ -3,6 +3,7 @@ package com.acc.resources;
 import com.acc.models.Tag;
 import com.acc.service.TagService;
 import com.google.gson.Gson;
+import com.sun.org.apache.regexp.internal.RE;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -47,72 +48,49 @@ public class TagResource {
      *
      */
     public Response getTag(@PathParam("id") int id, @Context HttpHeaders headers) {
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-           try {
-               Tag tag = service.getTag(id);
-               if(tag == null) {
-                   return Response.status(HttpStatus.BAD_REQUEST_400).build();
-               }
-               return Response.ok(tag.toJson()).build();
-           } catch (InternalServerErrorException isee) {
-               return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        System.out.println("ACTION: GET - tag | id = " + id);
+        try {
+           Tag tag = service.getTag(id);
+           if(tag == null) {
+               return Response.status(HttpStatus.BAD_REQUEST_400).build();
            }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+           return Response.ok(tag.toJson()).build();
+       } catch (InternalServerErrorException isee) {
+           return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+       }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response queryTags(@Context HttpHeaders headers,
                               @QueryParam("name") List<String> names) {
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                List<Tag> tags = service.queryTags(names);
-                if(tags.isEmpty()) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(tags.toString()).build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        System.out.println("ACTION: GET - tah | query = " + names);
+        try {
+            List<Tag> tags = service.queryTags(names);
+            if(tags.isEmpty()) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
+            return Response.ok(tags.toString()).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
-        return Response.status(HttpStatus.UNAUTHORIZED_401).build();
     }
-
-
-    //@GET
-    //@Produces(MediaType.APPLICATION_JSON)
-    /**
-     *
-     */
-    /*public Response getAllTags(@Context HttpHeaders headers) {
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                List<Tag> tags = service.getAllTags();
-                if(tags == null || tags.isEmpty()) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(tags.toString()).build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
-            }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-    }*/
 
     @POST
     /**
      *
      */
     public Response newTag(JsonObject o, @Context HttpHeaders headers) {
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                Tag tag = service.newTag(new Gson().fromJson(o.toString(), Tag.class));
-                if(tag != null) {
-                    return Response.status(HttpStatus.CREATED_201).build();
-                }
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        System.out.println("ACTION: POST - tag | tag = " + o.toString());
+        try {
+            Tag tag = service.newTag(new Gson().fromJson(o.toString(), Tag.class));
+            if(tag != null) {
+                return Response.status(HttpStatus.CREATED_201).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @DELETE
@@ -121,16 +99,15 @@ public class TagResource {
      *
      */
     public Response deleteTag(@PathParam("id") int id, @Context HttpHeaders headers) {
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                if(!service.deleteTag(id)) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.status(HttpStatus.NO_CONTENT_204).build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        System.out.println("ACTION: DELETE - tag | id = " + id);
+        try {
+            if(!service.deleteTag(id)) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.status(HttpStatus.NO_CONTENT_204).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @PUT
@@ -139,15 +116,14 @@ public class TagResource {
      *
      */
     public Response updateTag(JsonObject o, @Context HttpHeaders headers) {
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                if(!service.updateTag(new Gson().fromJson(o.toString(), Tag.class))) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(o).build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        System.out.println("ACTION: UPDATE - tag | tag = " + o.toString());
+        try {
+            if(!service.updateTag(new Gson().fromJson(o.toString(), Tag.class))) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.ok(o).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 }

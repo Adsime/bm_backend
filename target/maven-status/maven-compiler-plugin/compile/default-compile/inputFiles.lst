@@ -14,6 +14,7 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\providers\CORSfilter.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\google\DriveApi.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\google\FileHandler.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\jsonWebToken\LoginHandler.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\TagRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\UserRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\google\Folder.java

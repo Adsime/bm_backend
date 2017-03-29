@@ -1,6 +1,8 @@
 package com.acc.providers;
 
 import com.acc.database.repository.UserRepository;
+import com.acc.jsonWebToken.LoginHandler;
+import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.User;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -23,6 +25,9 @@ public class RequestFilter implements ContainerRequestFilter {
     public static final String BASIC = "Basic ";
     public static final String BEARER = "Bearer ";
 
+    @Inject
+    private TokenHandler tokenHandler;
+
     @Override
     public void filter(ContainerRequestContext context) throws IOException {
         List<String> headers = context.getHeaders().get(HttpHeaders.AUTHORIZATION);
@@ -31,7 +36,11 @@ public class RequestFilter implements ContainerRequestFilter {
             System.out.println(headers);
             String authHeader = headers.get(0);
             if(authHeader.startsWith(BASIC)) {
-
+                return;
+            } else if(authHeader.startsWith(BEARER)) {
+                if(tokenHandler.verify(authHeader.split(" ")[1])) {
+                    return;
+                }
             }
         }
 
@@ -42,16 +51,5 @@ public class RequestFilter implements ContainerRequestFilter {
         context.abortWith(unauthorizedResponse);
     }
 
-    private User verify(String credentials) {
-        try {
-            credentials = credentials.substring("Basic ".length()).trim();
-            credentials = new String(Base64.getDecoder().decode(credentials));
-        } catch (Exception e) {
-            return null;
-        }
-        String pw = credentials.split(":")[1];
-        String un = credentials.split(":")[0];
-        User user = userRepository.
-        return true;
-    }
+
 }

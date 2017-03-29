@@ -41,85 +41,75 @@ public class ProblemResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProblem(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: GET - problem | id = " + id);
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                Problem problem = service.getProblem(id);
-                if(problem == null) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(problem.toString()).build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            Problem problem = service.getProblem(id);
+            if(problem == null) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.ok(problem.toString()).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllProblems(@Context HttpHeaders headers) {
         System.out.println("ACTION: GET - problem | ALL");
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                List<Problem> problems = service.getAllProblems();
-                if(problems == null || problems.isEmpty()) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(new Gson().toJson(problems)).build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            List<Problem> problems = service.getAllProblems();
+            if(problems == null || problems.isEmpty()) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.ok(new Gson().toJson(problems)).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newProblem(@Context HttpHeaders headers, JsonObject o) {
         System.out.println("ACTION: POST - problem | problem:\n" + o);
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                Problem problem = new Gson().fromJson(o.toString(), Problem.class);
-                problem = service.newProblem(problem);
-                if(problem != null) {
-                    return Response.status(HttpStatus.CREATED_201).build();
-                }
-                return Response.status(HttpStatus.BAD_REQUEST_400).build();
-
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            Problem problem = new Gson().fromJson(o.toString(), Problem.class);
+            problem = service.newProblem(problem);
+            if(problem != null) {
+                return Response.status(HttpStatus.CREATED_201).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).build();
+
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateProblem(@Context HttpHeaders headers, JsonObject o) {
         System.out.println("ACTION: UPDATE - problem | problem:\n" + o);
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                Problem problem = new Gson().fromJson(o.toString(), Problem.class);
-                if(!service.updateProblem(problem)) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok().build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            Problem problem = new Gson().fromJson(o.toString(), Problem.class);
+            if(!service.updateProblem(problem)) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.ok().build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @DELETE
     @Path("{id}")
     public Response deleteProblem(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: DELETE - problem | id = " + id);
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                if(!service.deleteProblem(id)) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.status(HttpStatus.NO_CONTENT_204).build();
-            } catch (InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            if(!service.deleteProblem(id)) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.status(HttpStatus.NO_CONTENT_204).build();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 }

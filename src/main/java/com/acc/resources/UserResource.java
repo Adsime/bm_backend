@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
+import sun.security.util.Resources_it;
 
 import javax.inject.Inject;
 import javax.json.Json;
@@ -46,39 +47,16 @@ public class UserResource {
      */
     public Response getUser(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: GET - user | ID = " + id);
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                User user = service.getUser(id);
-                if(user == null) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(user.toString()).build();
-            } catch(InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            User user = service.getUser(id);
+            if(user == null) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.ok(user.toString()).build();
+        } catch(InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
-
-    /*@GET
-    @Produces(MediaType.APPLICATION_JSON)
-    /**
-     *
-     */
-    /*public Response getAllUsers(@Context HttpHeaders headers) {
-        System.out.println("ACTION: GET - user | ALL");
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                List<User> users = service.getAllUsers();
-                if(users == null || users.isEmpty()) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(users.toString()).build();
-            } catch(Exception e) {
-                e.printStackTrace();
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
-            }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-    }*/
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -89,18 +67,16 @@ public class UserResource {
                                @QueryParam("tags") List<String> tags,
                                @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
         System.out.println("ACTION: GET - user | QUERY:\n" + tags);
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                List<User> users = tags.isEmpty() ? service.getAllUsers() : service.getUserByTags(tags, hasAll);
-                if(users == null || users.isEmpty()) {
-                    return Response.status(HttpStatus.BAD_REQUEST_400).build();
-                }
-                return Response.ok(new Gson().toJson(users)).build();
-            } catch (Exception e) {
-                e.printStackTrace();
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            List<User> users = tags.isEmpty() ? service.getAllUsers() : service.getUserByTags(tags, hasAll);
+            if(users == null || users.isEmpty()) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.ok(new Gson().toJson(users)).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @POST
@@ -110,16 +86,15 @@ public class UserResource {
      */
     public Response newUser(JsonObject o, @Context HttpHeaders headers) {
         System.out.println("ACTION: POST - user | ITEM =\n" + o.toString());
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                User user = new Gson().fromJson(o.toString(), User.class);
-                if((user = service.newUser(user)) != null) {
-                    return Response.status(HttpStatus.CREATED_201).entity(user.toString()).build();
-                }
-            } catch(Exception e) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            User user = new Gson().fromJson(o.toString(), User.class);
+            if((user = service.newUser(user)) != null) {
+                return Response.status(HttpStatus.CREATED_201).entity(user.toString()).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).build();
+        } catch(Exception e) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @DELETE
@@ -129,16 +104,14 @@ public class UserResource {
      */
     public Response deleteUser(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: DELETE - user | ID = " + id);
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                if(service.deleteUser(id)) {
-                    return Response.status(HttpStatus.NO_CONTENT_204).build();
-                }
-                return Response.status(HttpStatus.BAD_REQUEST_400).build();
-            } catch(InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            if(service.deleteUser(id)) {
+                return Response.status(HttpStatus.NO_CONTENT_204).build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        } catch(InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @PUT
@@ -147,15 +120,13 @@ public class UserResource {
      */
     public Response updateUser(JsonObject o, @Context HttpHeaders headers) {
         System.out.println("ACTION: PUT - user | ITEM = \n" + o.toString());
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            try {
-                if(service.updateUser(new Gson().fromJson(o.toString(), User.class))) {
-                    return Response.ok().build();
-                }
-                return Response.status(HttpStatus.BAD_REQUEST_400).build();
-            } catch(InternalServerErrorException isee) {
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        try {
+            if(service.updateUser(new Gson().fromJson(o.toString(), User.class))) {
+                return Response.ok().build();
             }
-        } return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        } catch(InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 }

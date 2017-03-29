@@ -35,7 +35,6 @@ public class GroupResource {
     @GET
     @Path("ping")
     public String groupPong(@Context HttpHeaders headers) {
-        service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0));
         return "group pong!";
     }
 
@@ -47,9 +46,6 @@ public class GroupResource {
      */
     public Response getGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: GET - group | ID = " + id);
-        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-        }
         Group group = service.getGroup(id);
         if(group != null) {
             return Response.ok(group.toString()).build();
@@ -64,9 +60,6 @@ public class GroupResource {
      */
     public Response getAllGroups(@Context HttpHeaders headers) {
         System.out.println("ACTION: GET - user | ALL");
-        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-        }
         try {
             List<Group> groups = service.getAllGroups();
             if(groups.size() < 1) {
@@ -84,16 +77,13 @@ public class GroupResource {
      */
     public Response newGroup(JsonObject o, @Context HttpHeaders headers) {
         System.out.println("ACTION: POST - GROUP | item = \n" + o.toString());
-        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-        }
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
             group = service.newGroup(group);
             if(group != null) {
                 return Response.status(HttpStatus.CREATED_201).build();
             }
-            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).build();
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -106,9 +96,6 @@ public class GroupResource {
      */
     public Response deleteGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: DELETE - user | ID = " + id);
-        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-        }
         try {
             if(service.deleteGroup(id)) {
                 return Response.status(HttpStatus.NO_CONTENT_204).build();
@@ -126,9 +113,6 @@ public class GroupResource {
      */
     public Response updateGroup(@Context HttpHeaders headers, JsonObject o) {
         System.out.println("ACTION: GET - user | item = \n" + o.toString());
-        if(!service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
-            return Response.status(HttpStatus.UNAUTHORIZED_401).build();
-        }
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
             if(service.updateGroup(group)) {

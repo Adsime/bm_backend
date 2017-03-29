@@ -14,6 +14,7 @@ com\acc\resources\StaticResource.class
 com\acc\database\repository\GroupRepository.class
 com\acc\database\repository\TagRepository.class
 com\acc\resources\AccountResource.class
+com\acc\jsonWebToken\LoginHandler.class
 com\acc\database\entity\HbnProblem.class
 com\acc\database\entity\HbnUser.class
 com\acc\database\specification\GetUserAllSpec.class
