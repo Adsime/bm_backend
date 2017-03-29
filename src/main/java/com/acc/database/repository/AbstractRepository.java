@@ -125,6 +125,7 @@ public abstract class AbstractRepository{
         try( Session session = sessionFactory.openSession()){
             tx = session.beginTransaction();
             for (HqlSpecification spec : specs){
+                System.out.println(spec.toHqlQuery());
                 result.add((HbnEntity) session
                         .createQuery(spec.toHqlQuery())
                         .list().get(0));
