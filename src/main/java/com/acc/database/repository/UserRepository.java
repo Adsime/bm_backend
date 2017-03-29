@@ -40,8 +40,6 @@ public class UserRepository extends AbstractRepository implements Repository<Use
             throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
         }
 
-        //mappedUser.setSalt(BCrypt.gensalt());
-
         long id = super.addEntity(mappedUser);
 
         return new User(
@@ -61,7 +59,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getLastName(),
                 user.getEmail(),
                 user.getEnterpriseID(),
-                user.getAccessLevel()
+                (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
         );
 
         try {

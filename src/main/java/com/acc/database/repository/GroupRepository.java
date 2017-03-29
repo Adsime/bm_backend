@@ -238,7 +238,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         Set<HbnUser> groupAssociates = new HashSet<>();
 
         for (User user : users){
-            //User exists
+            //User does not exist
             if (user.getId() == 0){
                 HbnUser hbnUser = new HbnUser(
                         user.getFirstName(),
@@ -255,7 +255,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 super.addEntity(hbnUser);
                 groupAssociates.add(hbnUser);
             }
-            //User does not exist
+            //User exists
             else {
                 HbnUser hbnUser;
                 try {

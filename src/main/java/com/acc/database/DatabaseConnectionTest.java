@@ -28,7 +28,11 @@ public class DatabaseConnectionTest {
         ProblemRepository PR = new ProblemRepository();
         AccountRepository AR = new AccountRepositoryImpl();
 
-        try {
+        //Group group = GR.getQuery(new GetGroupByIdSpec(1)).get(0);
+
+
+
+        /*try {
             User merlin = UR.getQuery(new GetUserByIdSpec(7)).get(0);
             String username = merlin.getEnterpriseID();
             String password = "passsword";
@@ -40,6 +44,6 @@ public class DatabaseConnectionTest {
             System.out.println(iae.getMessage());
         } catch (EntityNotFoundException enf){
             System.out.println(enf.getMessage());
-        }
+        }*/
     }
 }
