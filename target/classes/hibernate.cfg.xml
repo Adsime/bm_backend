@@ -10,7 +10,7 @@
         <!--<property name="hibernate.connection.url">jdbc:mysql://localhost:5050/bm_database</property>-->
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">admin</property>
-        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
 
         <mapping class="com.acc.database.entity.HbnBachelorGroup"/>
         <mapping class="com.acc.database.entity.HbnPassword"/>

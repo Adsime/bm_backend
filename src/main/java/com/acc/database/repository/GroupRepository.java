@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Handler;
 
 /**
  * Created by nguyen.duy.j.khac on 24.02.2017.
@@ -56,7 +57,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
     @Override
     public boolean update(Group group) throws EntityNotFoundException{
-        // TODO: 24.03.2017 update user at the same time?
         Set<HbnUser> groupAssociates = new HashSet<>();
         HbnBachelorGroup hbnBachelorGroup = new HbnBachelorGroup(group.getName());
         hbnBachelorGroup.setId(group.getId());
@@ -239,6 +239,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         Set<HbnUser> groupAssociates = new HashSet<>();
 
         for (User user : users){
+            //User exists
             if (user.getId() == 0){
                 HbnUser hbnUser = new HbnUser(
                         user.getFirstName(),
@@ -257,6 +258,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 super.addEntity(hbnUser);
                 groupAssociates.add(hbnUser);
             }
+            //User does not exist
             else {
                 HbnUser hbnUser;
                 try {
@@ -265,12 +267,20 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                     throw new EntityNotFoundException("Feil i registrering av gruppe (eksisterende bruker): \nBruker med id: " + user.getId() + " finnes ikke");
                 }
 
+                try {
+                    if (user.getTags() != null) hbnUser.setTags(super.getHbnTagSet(user.getTags()));
+                }catch (EntityNotFoundException enf){
+                    throw new EntityNotFoundException("Feil i registrering av gruppe (ny bruker): \nEn eller flere merknader finnes ikke");
+                }
+
                 hbnUser.setFirstName(user.getFirstName());
                 hbnUser.setLastName(user.getLastName());
                 hbnUser.setEmail(user.getEmail());
                 hbnUser.setEnterpriseId(user.getEnterpriseID());
                 hbnUser.setAccessLevel((user.getAccessLevel() == null) ? "0" : user.getAccessLevel());
                 groupAssociates.add(hbnUser);
+
+                super.updateEntity(hbnUser);
             }
         }
         return groupAssociates;

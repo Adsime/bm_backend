@@ -14,7 +14,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema bm_database
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `bm_database` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `bm_database` DEFAULT CHARACTER SET UTF8;
 USE `bm_database` ;
 
 -- -----------------------------------------------------
@@ -56,9 +56,7 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`PROBLEM` (
   INDEX `fk_PROBLEM_USER1_idx` (`user_id` ASC),
   CONSTRAINT `fk_PROBLEM_USER1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `bm_database`.`USER` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `bm_database`.`USER` (`id`))
 ENGINE = InnoDB;
 
 
@@ -73,9 +71,8 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`BACHELOR_GROUP` (
   INDEX `fk_GROUP_PROBLEM1_idx` (`problem_id` ASC),
   CONSTRAINT `fk_GROUP_PROBLEM1`
     FOREIGN KEY (`problem_id`)
-    REFERENCES `bm_database`.`PROBLEM` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `bm_database`.`PROBLEM` (`id`))
+
 ENGINE = InnoDB;
 
 
@@ -91,13 +88,14 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`GROUP_ASSOCIATE` (
   CONSTRAINT `fk_Gruppe_has_Bruker_Gruppe1`
     FOREIGN KEY (`bachelor_group_id`)
     REFERENCES `bm_database`.`BACHELOR_GROUP` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE ,
   CONSTRAINT `fk_Gruppe_has_Bruker_Bruker1`
     FOREIGN KEY (`user_id`)
     REFERENCES `bm_database`.`USER` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
 ENGINE = InnoDB;
 
 
@@ -124,13 +122,14 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`PROBLEM_TAG` (
   CONSTRAINT `fk_Tag_has_Oppgave_Tag1`
     FOREIGN KEY (`tag_id`)
     REFERENCES `bm_database`.`TAG` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Tag_has_Oppgave_Oppgave1`
     FOREIGN KEY (`problem_id`)
     REFERENCES `bm_database`.`PROBLEM` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
 ENGINE = InnoDB;
 
 
@@ -146,13 +145,14 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`USER_TAG` (
   CONSTRAINT `fk_USER_has_TAG1_USER1`
     FOREIGN KEY (`user_id`)
     REFERENCES `bm_database`.`USER` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_USER_has_TAG1_TAG1`
     FOREIGN KEY (`tag_id`)
     REFERENCES `bm_database`.`TAG` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
 ENGINE = InnoDB;
 
 
@@ -168,13 +168,14 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`GROUP_TAG` (
   CONSTRAINT `fk_BACHELOR_GROUP_has_TAG_BACHELOR_GROUP1`
     FOREIGN KEY (`bachelor_group_id`)
     REFERENCES `bm_database`.`BACHELOR_GROUP` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_BACHELOR_GROUP_has_TAG_TAG1`
     FOREIGN KEY (`tag_id`)
     REFERENCES `bm_database`.`TAG` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)DEFAULT CHARACTER SET UTF8
 ENGINE = InnoDB;
 
 
@@ -183,11 +184,28 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- PRIVILEGES --
-
 USE bm_database;
 GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'34.249.136.226' IDENTIFIED BY 'admin';
 GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'170.251.113.193' IDENTIFIED BY 'admin';
 
 -- DEFAULT DATA --
+INSERT INTO USER VALUES
+  (1, 'Hans', 'Flammenwerfer', 'hans@dieSS.de', 'salt1', 'flammenwerfer.h', '0'),
+  (2, 'David', 'Silva', 'merlin@mcfc.co.uk', 'salt2', 'silva.d', '0'),
+  (3, 'Kevin', 'De Bruyne', 'gingerprince@mcfc.co.uk', 'salt3', 'k.d.b', '0'),
+  (4, 'Benchod', 'Asskali', 'godem@hioa.no', 'salt4', 'asskali.b', '0'),
+  (5, 'Nusret', 'Gokce', 'saltbae@memes.com', 'salt', 'salt.bae', '0'),
+  (6, 'Hakon', 'Butterbucht', 'arianboy123@gmail.de', 'salt', 'butterbucht.h', '0');
 
-INSERT INTO  USER VALUES
+
+INSERT INTO BACHELOR_GROUP VALUES
+  (1,'City', null),
+  (2,'die SS', null);
+
+INSERT INTO TAG VALUES
+  (1,'Student', 'Tror h*n er noe', 'Role'),
+  (2,'Veileder', 'De som setter på plass drittungene', 'Role'),
+  (3,'2017', 'Fiscal Year', 'FY');
+
+INSERT INTO GROUP_ASSOCIATE VALUES (1,2),(2,1),(1,3),(2,6);
+INSERT INTO USER_TAG VALUES (2,2),(2,3),(3,1),(3,3),(1,1),(6,2);
