@@ -1,5 +1,6 @@
 package com.acc.database;
 
+import com.acc.database.entity.HbnUser;
 import com.acc.database.repository.GroupRepository;
 import com.acc.database.repository.ProblemRepository;
 import com.acc.database.repository.TagRepository;
@@ -28,10 +29,15 @@ public class DatabaseConnectionTest {
         ProblemRepository PR = new ProblemRepository();
         AccountRepository AR = new AccountRepositoryImpl();
 
-        //Group group = GR.getQuery(new GetGroupByIdSpec(1)).get(0);
-
-
-
+        /*Group group = GR.getQuery(new GetGroupByIdSpec(1)).get(0);
+        User kevin = group.getStudents().get(0);
+        kevin.setFirstName("GINGER PRINCE");
+        List<User> team = new ArrayList<>();
+        team.add(kevin);
+        group.setName("Man City");
+        group.setStudents(team);
+        GR.update(group);
+        System.out.println();
         /*try {
             User merlin = UR.getQuery(new GetUserByIdSpec(7)).get(0);
             String username = merlin.getEnterpriseID();
