@@ -27,7 +27,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
             throw new IllegalArgumentException("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
         }
 
-        if(BCrypt.checkpw(password,hbnPassword.getPassHash())){
+        if(BCrypt.checkpw(password, hbnPassword.getPassHash())){
             return true;
         }
         else throw new IllegalArgumentException("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
@@ -38,7 +38,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
 
         try {
             super.queryToDb(new GetUserByEIdSpec(username));
-        } catch (OptimisticLockException ole){
+        } catch (EntityNotFoundException enf){
             throw new IllegalArgumentException("Feil i registrering av Konto: \nEnterprise ID: " + username + " finnes fra før!");
         }
 

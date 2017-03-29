@@ -24,7 +24,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     @Override
     public Group add(Group group) throws EntityNotFoundException{
         Set<HbnUser> groupAssociates = new HashSet<>();
-        //addIfNotExist() throws EntityNotFoundException
         if (group.getSupervisors() != null) groupAssociates.addAll(addIfNotExist(group.getSupervisors()));
         if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
 

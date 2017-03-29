@@ -7,6 +7,7 @@ import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetGroupByIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.database.repository.*;
+import com.acc.database.specification.GetGroupByIdSpec;
 import com.acc.database.specification.GetUserByTagSpec;
 import com.acc.models.Group;
 import com.acc.models.User;
@@ -25,14 +26,19 @@ public class DatabaseConenctionTest {
         TagRepository TR = new TagRepository();
         GroupRepository GR = new GroupRepository();
         ProblemRepository PR = new ProblemRepository();
-
         AccountRepository AR = new AccountRepositoryImpl();
+
         try {
-           // AR.register(u1.getEnterpriseID(),"password", u1);
+            String username = UR.getQuery(new GetUserByIdSpec(1)).get(0).getEnterpriseID();
+            String password = "password";
+            System.out.println("UN: " + username );
+            //AR.register(username,password, u1);
         } catch (IllegalArgumentException iae){
-            System.out.println("SHIT JUST DIDN'T GO THROUGH");
+            iae.printStackTrace();
+            System.out.println(iae.getMessage());
         } catch (EntityNotFoundException enf){
-            System.out.println("TAGS AINT WORKING YO");
+            enf.printStackTrace();
+            System.out.println(enf.getMessage());
         }
     }
 }
