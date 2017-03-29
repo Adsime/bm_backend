@@ -269,6 +269,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
                 try {
                     if (user.getTags() != null) hbnUser.setTags(super.getHbnTagSet(user.getTags()));
+
                 }catch (EntityNotFoundException enf){
                     throw new EntityNotFoundException("Feil i registrering av gruppe (ny bruker): \nEn eller flere merknader finnes ikke");
                 }

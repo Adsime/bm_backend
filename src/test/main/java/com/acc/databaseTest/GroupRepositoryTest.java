@@ -53,6 +53,7 @@ public class GroupRepositoryTest {
         GR.setSessionFactory(mockSessionFactory);
     }
 
+    @Ignore
     @Test
     public void addGroupWithExistingUsersAndProblem() {
 
@@ -76,6 +77,7 @@ public class GroupRepositoryTest {
         Assert.assertTrue(actual.getId()==1);
     }
 
+    @Ignore
     @Test
     public void updateGroupSuccess(){
 
@@ -98,6 +100,7 @@ public class GroupRepositoryTest {
         Assert.assertTrue(actual);
     }
 
+    @Ignore
     @Test(expected = EntityNotFoundException.class)
     public void updateGroupWithWrongId(){
 
