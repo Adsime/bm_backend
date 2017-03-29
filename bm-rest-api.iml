@@ -112,7 +112,6 @@
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.poi:poi-ooxml:3.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.poi:poi:3.14" level="project" />
-    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Maven: org.apache.poi:poi-ooxml-schemas:3.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: stax:stax-api:1.0.1" level="project" />
@@ -134,17 +133,10 @@
     <orderEntry type="library" name="Maven: org.mortbay.jetty:jetty-util:6.1.26" level="project" />
     <orderEntry type="library" name="Maven: org.mortbay.jetty:servlet-api:2.5-20081211" level="project" />
     <orderEntry type="library" name="Maven: com.google.apis:google-api-services-drive:v3-rev61-1.22.0" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-rs-security-oauth2:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-frontend-jaxrs:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-core:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.4.1" level="project" />
-    <orderEntry type="library" name="Maven: org.codehaus.woodstox:stax2-api:3.1.4" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.ws.xmlschema:xmlschema-core:2.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-transports-http:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-rs-security-jose-jaxrs:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-security:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-rs-security-jose:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-rs-json-basic:3.1.5" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.cxf:cxf-rt-rs-client:3.1.5" level="project" />
+    <orderEntry type="library" name="Maven: com.auth0:java-jwt:3.1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.4" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
+    <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.55" level="project" />
   </component>
 </module>
