@@ -24,9 +24,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-<<<<<<< HEAD
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.1.3" level="project" />
-=======
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
@@ -38,7 +36,6 @@
     </orderEntry>
     <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
     <orderEntry type="library" name="Maven: org.mindrot:jbcrypt:0.3m" level="project" />
->>>>>>> created AccoutnRepository, AccountRepositoryImpl + fixed some minor details with error messages
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:7.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.mail:javax.mail:1.5.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1" level="project" />
