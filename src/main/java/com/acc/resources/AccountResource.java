@@ -1,9 +1,6 @@
 package com.acc.resources;
 
-import org.apache.cxf.rs.security.oauth2.common.AccessTokenRegistration;
-import org.apache.cxf.rs.security.oauth2.common.ServerAccessToken;
-import org.apache.cxf.rs.security.oauth2.tokens.bearer.BearerAccessToken;
-
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
@@ -14,9 +11,7 @@ import javax.ws.rs.Path;
 public class AccountResource {
 
     @GET
-    public String test() {
-        AccessTokenRegistration a = new AccessTokenRegistration();
-        ServerAccessToken token = new BearerAccessToken(a.getClient(), 600L);
-        return token.getRefreshToken();
+    public String test(SSLContext context) {
+        return "hei";
     }
 }

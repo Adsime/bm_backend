@@ -4,7 +4,9 @@ package com.acc.google;
  * Created by melsom.adrian on 08.03.2017.
  */
 
+import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.Problem;
+import com.acc.models.User;
 import com.acc.service.ProblemService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.drive.model.File;
@@ -50,7 +52,9 @@ public class DriveApi {
         get.setHeader("Authorization", "Bearer ya29.GlwYBBiYMg-2_uqtrgS7_U2ironLwK-4JGzs_QMR32MVz-Y5phPBWPYfl5R0jVUXhgRzGvtIsNXGpq6AXVERA_GNm6M6E0W56tdFkKG6vhzEpGBlImPeWzI3bf-Nyw");
         HttpResponse response = client.execute(get);
         */
-
-
+        User user = new User();
+        String token = new TokenHandler().generateToken(user);
+        System.out.println(token);
+        System.out.println(new TokenHandler().verify(token));
     }
 }

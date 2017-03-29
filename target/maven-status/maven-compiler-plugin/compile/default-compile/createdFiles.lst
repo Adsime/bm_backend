@@ -33,6 +33,7 @@ com\acc\database\specification\GetProblemByIdSpec.class
 com\acc\database\specification\GetProblemAllSpec.class
 com\acc\database\specification\GetTagByIdSpec.class
 com\acc\providers\Links.class
+com\acc\providers\RequestFilter.class
 com\acc\database\specification\GetUserByIdSpec.class
 com\acc\database\entity\HbnBachelorGroup.class
 com\acc\database\DatabaseConenctionTest.class
@@ -40,6 +41,7 @@ com\acc\database\specification\GetTagAllSpec.class
 com\acc\database\specification\GetUserByTagSpec.class
 com\acc\database\specification\Specification.class
 com\acc\models\Group.class
+com\acc\jsonWebToken\TokenHandler.class
 com\acc\models\Tag.class
 com\acc\google\Folder.class
 com\acc\models\Problem.class

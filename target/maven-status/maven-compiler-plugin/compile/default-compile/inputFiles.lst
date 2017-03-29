@@ -37,9 +37,11 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetGroupByIdSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\entity\HbnPassword.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\ProblemResource.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\jsonWebToken\TokenHandler.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetUserByTagSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetProblemAllSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\UserResource.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\providers\RequestFilter.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\AccountService.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\Repository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Problem.java

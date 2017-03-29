@@ -17,6 +17,7 @@ public class User extends HateOAS {
     private String enterpriseID;
     private String accessLevel;
     private List<Tag> tags;
+    private String secret = "Hemmelig";
 
     public User(){}
 
@@ -97,6 +98,14 @@ public class User extends HateOAS {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 
     public List<Integer> getTagIdList (){
