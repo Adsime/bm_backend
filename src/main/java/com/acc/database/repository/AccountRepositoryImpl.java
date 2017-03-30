@@ -45,11 +45,11 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
 
     @Override
     public User register(String username, String password, User user) throws EntityNotFoundException, IllegalArgumentException{
-
+        HbnUser newAccountUser;
         try {
-            super.queryToDb(new GetUserByEIdSpec(username));
+            newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
         } catch (EntityNotFoundException enf){
-            throw new IllegalArgumentException("Feil i registrering av Konto: \nEnterprise ID: " + username + " finnes fra før!");
+            newAccountUser = null;
         }
 
         String salt = BCrypt.gensalt();
@@ -57,34 +57,42 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
         String hashedPassword = BCrypt.hashpw(password, salt);
         HbnPassword mappedPassword = new HbnPassword(hashedPassword,hashedEId);
 
-        super.addEntity(mappedPassword);
+        if (newAccountUser == null){
 
-        HbnUser mappedUser = new HbnUser(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getEnterpriseID(),
-                (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
-        );
+            HbnUser mappedUser = new HbnUser(
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getEnterpriseID(),
+                    (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
+            );
 
-        try {
-            if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
-        }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
+            try {
+                if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
+            }catch (EntityNotFoundException enf){
+                throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
+            }
+
+            mappedUser.setSalt(salt);
+
+            long id = super.addEntity(mappedUser);
+            super.addEntity(mappedPassword);
+
+
+            return new User(
+                    (int) id,
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getEnterpriseID(),
+                    user.getAccessLevel(),
+                    user.getTags()
+            );
+        } else {
+            newAccountUser.setSalt(salt);
+            super.updateEntity(newAccountUser);
+            super.addEntity(mappedPassword);
         }
-
-        mappedUser.setSalt(salt);
-
-        long id = super.addEntity(mappedUser);
-
-        return new User(
-                (int) id,
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getEnterpriseID(),
-                user.getAccessLevel(),
-                user.getTags()
-        );
+        return user;
     }
 }

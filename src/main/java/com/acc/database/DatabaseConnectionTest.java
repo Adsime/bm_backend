@@ -29,32 +29,19 @@ public class DatabaseConnectionTest {
         ProblemRepository PR = new ProblemRepository();
         AccountRepository AR = new AccountRepositoryImpl();
 
-        Group group = GR.getQuery(new GetGroupByIdSpec(1)).get(0);
-        User kevin = group.getStudents().get(0);
-        User david = new User();
-        david.setId(2);
-        kevin.setFirstName("GINGER PRINCE");
-        List<User> team = new ArrayList<>();
-        team.add(kevin);
-        group.setName("Man City");
-        group.setStudents(team);
-        group.getSupervisors().remove(0);
-        group.getSupervisors().add(david);
-        GR.update(group);
-        System.out.println();
-/*
         try {
-            User merlin = UR.getQuery(new GetUserByIdSpec(7)).get(0);
+            User merlin = UR.getQuery(new GetUserByIdSpec(8)).get(0);
+            merlin.setEnterpriseID("YOLO");
             String username = merlin.getEnterpriseID();
             String password = "passsword";
             System.out.println("UN: " + username );
-            User user = AR.matchPassword(username, password);
+            User user = AR.register(username, password,merlin);
             System.out.println("you're logged in fucker");
 
         } catch (IllegalArgumentException iae){
             System.out.println(iae.getMessage());
         } catch (EntityNotFoundException enf){
             System.out.println(enf.getMessage());
-        }*/
+        }
     }
 }
