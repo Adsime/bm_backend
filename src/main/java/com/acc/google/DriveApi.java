@@ -5,33 +5,8 @@ package com.acc.google;
  */
 
 import com.acc.jsonWebToken.TokenHandler;
-import com.acc.models.Problem;
 import com.acc.models.User;
-import com.acc.service.ProblemService;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.services.drive.model.File;
-import com.sun.org.apache.xml.internal.security.algorithms.JCEMapper;
-import org.apache.http.HttpConnection;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.glassfish.jersey.servlet.ServletContainer;
-
-import javax.inject.Inject;
-import javax.servlet.Servlet;
-import java.awt.*;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
  
 public class DriveApi {
     public static void main(String[] args) throws IOException {

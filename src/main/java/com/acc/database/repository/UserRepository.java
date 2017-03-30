@@ -51,13 +51,13 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     }
     @Override
     public boolean update(User user) throws EntityNotFoundException {
-        HbnUser mappedUser = new HbnUser(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getEnterpriseID(),
-                (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
-        );
+
+        HbnUser mappedUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(user.getId())).get(0);
+        mappedUser.setFirstName(user.getFirstName());
+        mappedUser.setLastName(user.getLastName());
+        mappedUser.setEmail(user.getEmail());
+        mappedUser.setEnterpriseId(user.getEnterpriseID());
+        //mappedUser.setAccessLevel(user.getAccessLevel());
 
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));

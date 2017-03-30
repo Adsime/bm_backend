@@ -14,7 +14,6 @@ com\acc\resources\StaticResource.class
 com\acc\database\repository\GroupRepository.class
 com\acc\database\repository\TagRepository.class
 com\acc\resources\AccountResource.class
-com\acc\jsonWebToken\LoginHandler.class
 com\acc\database\entity\HbnProblem.class
 com\acc\database\entity\HbnUser.class
 com\acc\database\specification\GetUserByEIdSpec.class
@@ -23,6 +22,7 @@ com\acc\google\DriveApi.class
 com\acc\database\specification\GetPasswordByEIdSpec.class
 com\acc\models\HateOAS.class
 com\acc\resources\TagResource.class
+com\acc\models\Credentials.class
 com\acc\database\entity\HbnPassword.class
 com\acc\database\specification\GetGroupByIdSpec.class
 com\acc\database\DatabaseConnectionTest.class
