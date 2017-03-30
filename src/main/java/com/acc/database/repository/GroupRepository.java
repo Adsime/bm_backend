@@ -94,15 +94,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         List<HbnEntity> readData;
         try{
             readData = super.queryToDb((HqlSpecification) spec);
-        }catch (EntityNotFoundException enf){
+         }catch (EntityNotFoundException enf){
             throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
         }
-
         List<Group> result = new ArrayList<>();
 
         for (HbnEntity entity : readData ){
-            Problem groupProblem;
             HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
+            Problem groupProblem = null;
 
             if (hbnBachelorGroup.getProblem() != null){
                 groupProblem = new Problem(
@@ -116,7 +115,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 List<Integer> authorId = new ArrayList<>(groupProblem.getAuthor());
                 groupProblem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             }
-            else groupProblem = null;
 
             Group group = new Group(
                     (int) hbnBachelorGroup.getId(),
@@ -141,7 +139,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 else group.getSupervisors().add(user);
             }
 
-            List<Integer> userIdList = new ArrayList();
+            List<Integer> userIdList = new ArrayList<>();
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
             group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
 

@@ -53,7 +53,6 @@ public class GroupRepositoryTest {
         GR.setSessionFactory(mockSessionFactory);
     }
 
-    @Ignore
     @Test
     public void addGroupWithExistingUsersAndProblem() {
 
@@ -66,6 +65,7 @@ public class GroupRepositoryTest {
         when(mockQuery.list())
                 .thenReturn(TestHibernateData.getHbnUserList())
                 .thenReturn(TestHibernateData.getHbnUserList())
+                .thenReturn(TestHibernateData.getHbnTagList())
                 .thenReturn(TestHibernateData.getHbnProblemList())
         ;
         when(mockSession.save(any())).thenReturn(1L);
