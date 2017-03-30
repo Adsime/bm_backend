@@ -31,11 +31,15 @@ public class DatabaseConnectionTest {
 
         Group group = GR.getQuery(new GetGroupByIdSpec(1)).get(0);
         User kevin = group.getStudents().get(0);
+        User david = new User();
+        david.setId(2);
         kevin.setFirstName("GINGER PRINCE");
         List<User> team = new ArrayList<>();
         team.add(kevin);
         group.setName("Man City");
         group.setStudents(team);
+        group.getSupervisors().remove(0);
+        group.getSupervisors().add(david);
         GR.update(group);
         System.out.println();
 /*
