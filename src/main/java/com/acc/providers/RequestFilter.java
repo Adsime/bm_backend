@@ -1,9 +1,6 @@
 package com.acc.providers;
 
-import com.acc.database.repository.UserRepository;
-import com.acc.jsonWebToken.LoginHandler;
 import com.acc.jsonWebToken.TokenHandler;
-import com.acc.models.User;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -13,7 +10,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 /**
@@ -32,15 +28,13 @@ public class RequestFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext context) throws IOException {
         List<String> headers = context.getHeaders().get(HttpHeaders.AUTHORIZATION);
         if(headers != null && headers.size() > 0) {
-            System.out.println(context);
-            System.out.println(headers);
             String authHeader = headers.get(0);
-            if(authHeader.startsWith(BASIC)) {
+            String p = context.getUriInfo().getPath();
+            if(context.getUriInfo().getPath().contains("accounts") && authHeader.startsWith(BASIC)) {
                 return;
-            } else if(authHeader.startsWith(BEARER)) {
-                if(tokenHandler.verify(authHeader.split(" ")[1])) {
-                    return;
-                }
+            }
+            if(authHeader.startsWith(BEARER) && tokenHandler.verify(authHeader.split(" ")[1])) {
+                return;
             }
         }
 

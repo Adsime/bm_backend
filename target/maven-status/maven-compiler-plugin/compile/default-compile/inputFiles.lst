@@ -1,5 +1,4 @@
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\GroupRepository.java
-C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\test\DBTest.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetUserByIdSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Group.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\FileService.java
@@ -16,6 +15,8 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\google\FileHandler.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\jsonWebToken\LoginHandler.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\TagRepository.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\AccountRepository.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\DatabaseConnectionTest.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\UserRepository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\google\Folder.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\AccountResource.java
@@ -30,11 +31,11 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetUserAllSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetTagAllSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\Specification.java
-C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\DatabaseConenctionTest.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\HateOAS.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Link.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\TagService.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\entity\HbnBachelorGroup.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\AccountRepositoryImpl.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetGroupByIdSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\entity\HbnPassword.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\ProblemResource.java
@@ -44,8 +45,10 @@ C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\ac
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\resources\UserResource.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\providers\RequestFilter.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\service\AccountService.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetUserByEIdSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\repository\Repository.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\models\Problem.java
+C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetPasswordByEIdSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\specification\GetGroupAllSpec.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\app\ApiApp.java
 C:\Users\melsom.adrian\bachelor_project\Back-end\bm_backend\src\main\java\com\acc\database\entity\HbnTag.java

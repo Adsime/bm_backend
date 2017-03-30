@@ -8,8 +8,12 @@ import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.Problem;
 import com.acc.models.User;
 import com.acc.service.ProblemService;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.drive.model.File;
+import com.sun.org.apache.xml.internal.security.algorithms.JCEMapper;
 import org.apache.http.HttpConnection;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -52,9 +56,8 @@ public class DriveApi {
         get.setHeader("Authorization", "Bearer ya29.GlwYBBiYMg-2_uqtrgS7_U2ironLwK-4JGzs_QMR32MVz-Y5phPBWPYfl5R0jVUXhgRzGvtIsNXGpq6AXVERA_GNm6M6E0W56tdFkKG6vhzEpGBlImPeWzI3bf-Nyw");
         HttpResponse response = client.execute(get);
         */
-        User user = new User();
+        User user = new User("Adrian", "Melsom", "ad@ad.ad", "adrian.melsom", "0", null);
         String token = new TokenHandler().generateToken(user);
-        System.out.println(token);
-        System.out.println(new TokenHandler().verify(token));
+        new TokenHandler().verify(token);
     }
 }

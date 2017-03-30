@@ -7,11 +7,8 @@ import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.User;
 import com.acc.providers.Links;
-import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.EntityNotFoundException;
-import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.util.*;
 
 /**

@@ -44,19 +44,8 @@ public class ProblemResourceTest {
     public void getProblemSuccess() {
         problemResource.service = service;
         when(service.getProblem(0)).thenReturn(TestData.testProblems().get(0));
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.OK_200;
         actual = problemResource.getProblem(0, TestData.testCredentials()).getStatus();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void getProblemAuthFail() {
-        problemResource.service = service;
-        when(service.getProblem(0)).thenReturn(TestData.testProblems().get(0));
-        when(service.verify(TestData.badCredentials)).thenReturn(false);
-        expected = HttpStatus.UNAUTHORIZED_401;
-        actual = problemResource.getProblem(0, TestData.testBadCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -64,7 +53,6 @@ public class ProblemResourceTest {
     public void getProblemNoEntries() {
         problemResource.service = service;
         when(service.getProblem(0)).thenReturn(null);
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.BAD_REQUEST_400;
         actual = problemResource.getProblem(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -74,7 +62,6 @@ public class ProblemResourceTest {
     public void getProblemInternalError() {
         problemResource.service = service;
         when(service.getProblem(0)).thenThrow(new InternalServerErrorException());
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = problemResource.getProblem(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -87,19 +74,8 @@ public class ProblemResourceTest {
     public void getAllProblemsSuccess() {
         problemResource.service = service;
         when(service.getAllProblems()).thenReturn(TestData.testProblems());
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.OK_200;
         actual = problemResource.getAllProblems(TestData.testCredentials()).getStatus();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void getAllProblemsAuthFail() {
-        problemResource.service = service;
-        when(service.getAllProblems()).thenReturn(TestData.testProblems());
-        when(service.verify(TestData.badCredentials)).thenReturn(false);
-        expected = HttpStatus.UNAUTHORIZED_401;
-        actual = problemResource.getAllProblems(TestData.testBadCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -107,7 +83,6 @@ public class ProblemResourceTest {
     public void getAllProblemsNoEntries() {
         problemResource.service = service;
         when(service.getAllProblems()).thenReturn(new ArrayList<Problem>());
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.BAD_REQUEST_400;
         actual = problemResource.getAllProblems(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -117,7 +92,6 @@ public class ProblemResourceTest {
     public void getAllProblemsInternalError() {
         problemResource.service = service;
         when(service.getAllProblems()).thenThrow(new InternalServerErrorException());
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = problemResource.getAllProblems(TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -130,19 +104,8 @@ public class ProblemResourceTest {
     public void newProblemsSuccess() {
         problemResource.service = service;
         when(service.newProblem(any())).thenReturn(TestData.testProblems().get(0));
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.CREATED_201;
         actual = problemResource.newProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void newProblemsAuthFail() {
-        problemResource.service = service;
-        when(service.newProblem(any())).thenReturn(TestData.testProblems().get(0));
-        when(service.verify(TestData.badCredentials)).thenReturn(false);
-        expected = HttpStatus.UNAUTHORIZED_401;
-        actual = problemResource.newProblem(TestData.testBadCredentials(), TestData.jsonProblem()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -150,7 +113,6 @@ public class ProblemResourceTest {
     public void newProblemsInternalError() {
         problemResource.service = service;
         when(service.newProblem(any())).thenThrow(new InternalServerErrorException());
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = problemResource.newProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
         assertEquals(expected, actual);
@@ -163,19 +125,8 @@ public class ProblemResourceTest {
     public void updateProblemsSuccess() {
         problemResource.service = service;
         when(service.updateProblem(any())).thenReturn(true);
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.OK_200;
         actual = problemResource.updateProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void updateProblemsAuthFail() {
-        problemResource.service = service;
-        when(service.updateProblem(any())).thenReturn(true);
-        when(service.verify(TestData.badCredentials)).thenReturn(false);
-        expected = HttpStatus.UNAUTHORIZED_401;
-        actual = problemResource.updateProblem(TestData.testBadCredentials(), TestData.jsonProblem()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -183,7 +134,6 @@ public class ProblemResourceTest {
     public void updateProblemsNoEntries() {
         problemResource.service = service;
         when(service.updateProblem(any())).thenReturn(false);
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.BAD_REQUEST_400;
         actual = problemResource.updateProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
         assertEquals(expected, actual);
@@ -193,7 +143,6 @@ public class ProblemResourceTest {
     public void updateProblemsInternalError() {
         problemResource.service = service;
         when(service.updateProblem(any())).thenThrow(new InternalServerErrorException());
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = problemResource.updateProblem(TestData.testCredentials(), TestData.jsonProblem()).getStatus();
         assertEquals(expected, actual);
@@ -206,19 +155,8 @@ public class ProblemResourceTest {
     public void deleteProblemsSuccess() {
         problemResource.service = service;
         when(service.deleteProblem(0)).thenReturn(true);
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.NO_CONTENT_204;
         actual = problemResource.deleteProblem(0, TestData.testCredentials()).getStatus();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void deleteProblemsAuthFail() {
-        problemResource.service = service;
-        when(service.deleteProblem(0)).thenReturn(true);
-        when(service.verify(TestData.badCredentials)).thenReturn(false);
-        expected = HttpStatus.UNAUTHORIZED_401;
-        actual = problemResource.deleteProblem(0, TestData.testBadCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
@@ -226,7 +164,6 @@ public class ProblemResourceTest {
     public void deleteProblemsNoEntries() {
         problemResource.service = service;
         when(service.deleteProblem(0)).thenReturn(false);
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.BAD_REQUEST_400;
         actual = problemResource.deleteProblem(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
@@ -236,7 +173,6 @@ public class ProblemResourceTest {
     public void deleteProblemsInternalError() {
         problemResource.service = service;
         when(service.deleteProblem(0)).thenThrow(new InternalServerErrorException());
-        when(service.verify(TestData.credentials)).thenReturn(true);
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = problemResource.deleteProblem(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
