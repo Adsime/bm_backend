@@ -1,6 +1,8 @@
 package com.acc.resources;
 
+import com.acc.jsonWebToken.Coder;
 import com.acc.jsonWebToken.TokenHandler;
+import com.acc.models.Token;
 import com.acc.models.User;
 import com.acc.service.AccountService;
 import org.eclipse.jetty.http.HttpStatus;
@@ -34,8 +36,9 @@ public class AccountResource {
     public Response login() {
         User user = service.verifyUser(context.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0));
         if(user != null) {
-            String token = service.getToken(user);
-            return Response.ok(token).build();
+            Token token = service.getToken(user);
+            token.setToken(Coder.encode(token.getToken()));
+            return Response.ok(token.toString()).build();
         }
         return Response.status(HttpStatus.NOT_FOUND_404).build();
     }

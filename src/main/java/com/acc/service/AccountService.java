@@ -6,6 +6,7 @@ import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.Credentials;
+import com.acc.models.Token;
 import com.acc.models.User;
 
 import javax.inject.Inject;
@@ -38,7 +39,7 @@ public class AccountService {
         return null;
     }
 
-    public String getToken(User user) {
+    public Token getToken(User user) {
         return tokenHandler.generateToken(user);
     }
 

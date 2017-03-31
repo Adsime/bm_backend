@@ -5,6 +5,7 @@ package com.acc.google;
  */
 
 import com.acc.jsonWebToken.TokenHandler;
+import com.acc.models.Token;
 import com.acc.models.User;
 import java.io.IOException;
  
@@ -32,7 +33,7 @@ public class DriveApi {
         HttpResponse response = client.execute(get);
         */
         User user = new User("Adrian", "Melsom", "ad@ad.ad", "adrian.melsom", "0", null);
-        String token = new TokenHandler().generateToken(user);
-        new TokenHandler().verify(token);
+        Token token = new TokenHandler().generateToken(user);
+        new TokenHandler().verify(token.getToken());
     }
 }

@@ -13,9 +13,11 @@ com\acc\models\User.class
 com\acc\resources\StaticResource.class
 com\acc\database\repository\GroupRepository.class
 com\acc\database\repository\TagRepository.class
+com\acc\models\Token.class
 com\acc\resources\AccountResource.class
 com\acc\database\entity\HbnProblem.class
 com\acc\database\entity\HbnUser.class
+com\acc\jsonWebToken\Coder.class
 com\acc\database\specification\GetUserByEIdSpec.class
 com\acc\database\specification\GetUserAllSpec.class
 com\acc\google\DriveApi.class
