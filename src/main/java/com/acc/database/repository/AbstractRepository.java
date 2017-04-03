@@ -20,10 +20,8 @@ import java.util.*;
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
 
-// TODO: 15.03.2017 Properly implement exceptions
 // TODO: 16.03.2017 Every registration must have a full rollback! (GROUP)
-// TODO: 16.03.2017 Control the text input
-    
+
 // TODO: 07.03.2017 VERY BLOATED CLASS
 public abstract class AbstractRepository{
 
@@ -92,7 +90,6 @@ public abstract class AbstractRepository{
     }
 
     public List<HbnEntity> queryToDb (HqlSpecification spec) {
-        // TODO: 24.03.2017 List<HbnEntity> gives a warning
         List result = new ArrayList<>();
         Transaction tx = null;
         try( Session session = sessionFactory.openSession()){
