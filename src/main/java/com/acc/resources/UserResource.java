@@ -1,20 +1,13 @@
 package com.acc.resources;
 
-import com.acc.database.repository.Repository;
-import com.acc.models.Tag;
 import com.acc.models.User;
 import com.acc.service.UserService;
 import com.google.gson.Gson;
-import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
-import sun.security.util.Resources_it;
 
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
@@ -48,11 +41,7 @@ public class UserResource {
     public Response getUser(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: GET - user | ID = " + id);
         try {
-            User user = service.getUser(id);
-            if(user == null) {
-                return Response.status(HttpStatus.BAD_REQUEST_400).build();
-            }
-            return Response.ok(user.toString()).build();
+            return service.getUser(id);
         } catch(InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
