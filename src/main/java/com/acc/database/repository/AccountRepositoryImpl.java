@@ -46,6 +46,9 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
 
     @Override
     public User register(String username, String password, User user) throws EntityNotFoundException, IllegalArgumentException{
+        if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("") || user.getTelephone().equals("")){
+            throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!");
+        }
         HbnUser newAccountUser;
         try {
             newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
