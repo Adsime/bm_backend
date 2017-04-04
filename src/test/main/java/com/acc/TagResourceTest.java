@@ -38,7 +38,7 @@ public class TagResourceTest {
 
     // Start getTag Tests
 
-    @Test
+    /*@Test
     public void getTagSuccess() {
         tagResource.service = service;
         when(service.getTag(0)).thenReturn(TestData.testTags().get(0));
@@ -144,7 +144,7 @@ public class TagResourceTest {
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = tagResource.deleteTag(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }
+    }*/
 
     //End deleteTag Tests
 

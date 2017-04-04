@@ -11,6 +11,7 @@ com\acc\resources\ProblemResource.class
 com\acc\models\Supervisor.class
 com\acc\models\User.class
 com\acc\resources\StaticResource.class
+com\acc\models\Error.class
 com\acc\database\repository\GroupRepository.class
 com\acc\database\repository\TagRepository.class
 com\acc\models\Token.class
