@@ -28,9 +28,7 @@ public class GroupResource {
 
 
     @Before
-    public void setup() {
-
-    }
+    public void setup() {}
 
     @GET
     @Path("ping")
@@ -46,11 +44,11 @@ public class GroupResource {
      */
     public Response getGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: GET - group | ID = " + id);
-        Group group = service.getGroup(id);
-        if(group != null) {
-            return Response.ok(group.toString()).build();
+        try {
+            return service.getGroup(id);
+        }catch(InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
-        return Response.status(HttpStatus.BAD_REQUEST_400).build();
     }
 
     @GET
@@ -61,11 +59,7 @@ public class GroupResource {
     public Response getAllGroups(@Context HttpHeaders headers) {
         System.out.println("ACTION: GET - user | ALL");
         try {
-            List<Group> groups = service.getAllGroups();
-            if(groups.size() < 1) {
-                return Response.status(HttpStatus.BAD_REQUEST_400).build();
-            }
-            return Response.ok(new Gson().toJson(groups)).build();
+            return service.getAllGroups();
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -79,11 +73,7 @@ public class GroupResource {
         System.out.println("ACTION: POST - GROUP | item = \n" + o.toString());
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
-            group = service.newGroup(group);
-            if(group != null) {
-                return Response.status(HttpStatus.CREATED_201).build();
-            }
-            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).build();
+            return service.newGroup(group);
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -97,10 +87,7 @@ public class GroupResource {
     public Response deleteGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: DELETE - user | ID = " + id);
         try {
-            if(service.deleteGroup(id)) {
-                return Response.status(HttpStatus.NO_CONTENT_204).build();
-            }
-            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            return service.deleteGroup(id);
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -115,10 +102,7 @@ public class GroupResource {
         System.out.println("ACTION: GET - user | item = \n" + o.toString());
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
-            if(service.updateGroup(group)) {
-                return Response.ok().build();
-            }
-            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            return service.updateGroup(group);
         }catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }

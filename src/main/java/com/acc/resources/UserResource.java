@@ -23,8 +23,7 @@ public class UserResource {
     public UserService service;
 
     @Before
-    public void setup() {
-    }
+    public void setup() {}
 
     @GET
     @Path("ping")
@@ -77,7 +76,7 @@ public class UserResource {
         try {
             User user = new Gson().fromJson(o.toString(), User.class);
             return service.newUser(user);
-        } catch(Exception e) {
+        } catch(InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }

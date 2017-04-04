@@ -92,7 +92,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     }
 
     @Override
-    public List<Group> getQuery(Specification spec) {
+    public List<Group> getQuery(Specification spec) throws EntityNotFoundException{
         List<HbnEntity> readData;
         try{
             readData = super.queryToDb((HqlSpecification) spec);
@@ -163,7 +163,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     }
 
     @Override
-    public List<Group> getMinimalQuery(Specification spec) {
+    public List<Group> getMinimalQuery(Specification spec) throws EntityNotFoundException{
         List<HbnEntity> readData;
         try{
             readData = super.queryToDb((HqlSpecification) spec);

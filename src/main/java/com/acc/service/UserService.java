@@ -6,12 +6,11 @@ import com.acc.models.User;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 
-import javax.ejb.NoSuchEntityException;
+
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,7 +39,7 @@ public class UserService extends GeneralService {
 
     public Response getUserByTags(List<String> tags, boolean hasAll) {
         try {
-            List<User> users = userRepository.getQuery(new GetUserByTagSpec(tags, hasAll));
+            List<User> users = userRepository.getMinimalQuery(new GetUserByTagSpec(tags, hasAll));
             return Response.ok(new Gson().toJson(users)).build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
@@ -76,7 +75,8 @@ public class UserService extends GeneralService {
             userRepository.remove((long)id);
             return Response.status(HttpStatus.NO_CONTENT_204).build();
         }  catch (EntityNotFoundException enfe) {
-            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
         }
     }
 
