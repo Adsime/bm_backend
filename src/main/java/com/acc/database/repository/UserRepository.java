@@ -22,11 +22,16 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     }
 
     @Override
-    public User add(User user) throws EntityNotFoundException{
+    public User add(User user) throws EntityNotFoundException, IllegalArgumentException{
+        if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")){
+            throw new IllegalArgumentException("Feil i registrering av bruker: \nFyll ut alle nødvendige felter! \n(Fornavn, Etternavn og E-Mail)");
+        }
+
         HbnUser mappedUser = new HbnUser(
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getTelephone(),
                 user.getEnterpriseID(),
                 (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
         );
@@ -44,6 +49,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getTelephone(),
                 user.getEnterpriseID(),
                 user.getAccessLevel(),
                 user.getTags()
@@ -57,7 +63,6 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         mappedUser.setLastName(user.getLastName());
         mappedUser.setEmail(user.getEmail());
         mappedUser.setEnterpriseId(user.getEnterpriseID());
-        //mappedUser.setAccessLevel(user.getAccessLevel());
 
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
@@ -117,6 +122,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                     hbnUser.getFirstName(),
                     hbnUser.getLastName(),
                     hbnUser.getEmail(),
+                    hbnUser.getTelephone(),
                     hbnUser.getEnterpriseId(),
                     hbnUser.getAccessLevel(),
                     hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()

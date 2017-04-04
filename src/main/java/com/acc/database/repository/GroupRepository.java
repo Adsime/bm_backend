@@ -22,7 +22,9 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     }
 
     @Override
-    public Group add(Group group) throws EntityNotFoundException{
+    public Group add(Group group) throws EntityNotFoundException, IllegalArgumentException{
+        if(group.getName().equals("")) throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut nødvendige felter!");
+
         Set<HbnUser> groupAssociates = new HashSet<>();
         if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
         if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
@@ -130,6 +132,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         hbnUser.getFirstName(),
                         hbnUser.getLastName(),
                         hbnUser.getEmail(),
+                        hbnUser.getTelephone(),
                         hbnUser.getEnterpriseId(),
                         hbnUser.getAccessLevel(),
                         super.toTagList(hbnUser.getTags())
@@ -231,10 +234,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         for (User user : users){
             //User does not exist
             if (user.getId() == 0){
+                if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")) {
+                    throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!");
+                }
                 HbnUser hbnUser = new HbnUser(
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
+                        user.getTelephone(),
                         user.getEnterpriseID(), (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
                 );
 

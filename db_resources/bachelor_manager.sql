@@ -25,12 +25,12 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`USER` (
   `first_name` VARCHAR(1000) NULL,
   `last_name` VARCHAR(1000) NULL,
   `email` VARCHAR(1000) NULL,
+  `telephone` VARCHAR(1000) NULL,
   `salt` VARCHAR(1000) NULL,
   `enterprise_id` VARCHAR(1000) NULL,
   `access_level` VARCHAR(1000) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `bm_database`.`TAG`
@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`TAG` (
   `type` VARCHAR(1000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `bm_database`.`PROBLEM`

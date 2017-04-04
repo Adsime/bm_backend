@@ -34,6 +34,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
                 hbnUser.getFirstName(),
                 hbnUser.getLastName(),
                 hbnUser.getEmail(),
+                hbnUser.getTelephone(),
                 hbnUser.getEnterpriseId(),
                 hbnUser.getAccessLevel(),
                 hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
@@ -63,6 +64,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
+                    user.getTelephone(),
                     user.getEnterpriseID(),
                     (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
             );
@@ -84,6 +86,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
+                    user.getTelephone(),
                     user.getEnterpriseID(),
                     user.getAccessLevel(),
                     user.getTags()

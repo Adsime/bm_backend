@@ -25,7 +25,8 @@ public class ProblemRepository extends AbstractRepository implements Repository<
     }
 
     @Override
-    public Problem add(Problem problem) throws EntityNotFoundException {
+    public Problem add(Problem problem) throws EntityNotFoundException, IllegalArgumentException{
+        if (problem.getTitle().equals("") || problem.getContent().equals("")) throw new IllegalArgumentException("Feil i registrering av oppgave: \nFyll ut nødvendige felter!");
 
         //getAuthor() throws EntityNotFoundException
         HbnProblem mappedProblem = new HbnProblem(problem.getPath(), getAuthor(problem.getAuthor()), problem.getTitle());

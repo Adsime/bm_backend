@@ -8,6 +8,7 @@ import com.acc.models.Tag;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.IllegalFormatWidthException;
 import java.util.List;
 
 /**
@@ -21,7 +22,8 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     }
 
     @Override
-    public Tag add(Tag tag) {
+    public Tag add(Tag tag) throws IllegalArgumentException{
+        if(tag.getName().equals("") || tag.getType().equals(""))throw new IllegalArgumentException("Feil i registrering av merknad: \nFyll ut alle nødvendige felter!");
         HbnTag mappedTag = new HbnTag(
                 tag.getName(),
                 tag.getDescription(),
