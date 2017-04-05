@@ -7,7 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -104,6 +105,15 @@ public class FileResource {
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
         String fileLocation = fileDetail.getFileName();
+        String[] split = fileLocation.split("\\.");
+        String extension = "." + split[split.length -1];
+        String type = findType(fileLocation, false);
+        String originalType = findType(fileLocation, true);
+
+        if(type == null || originalType == null) {
+            return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
+                    .entity(extension + " is currently not a supported file format. Please contact an admin for support.").build();
+        }
         //saving file
         try {
             File file = File.createTempFile(fileLocation, fileLocation);
@@ -113,14 +123,27 @@ public class FileResource {
             while ((read = uploadedInputStream.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
-            service.saveFile(file, fileLocation, "application/vnd.google-apps.presentation", "application/pdf");
-            //service.saveFile(file, fileLocation, "application/x-vnd.oasis.opendocument.spreadsheet", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            //service.saveFile(file, fileLocation, "application/vnd.google-apps.document", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+
+            service.saveFile(file, fileLocation, type, originalType);
             out.flush();
             out.close();
             } catch (IOException e) {e.printStackTrace();}
         String output = "File successfully uploaded to : " + fileLocation;
         return Response.status(200).entity(output).build();
+    }
+
+    public String findType(String fileName, boolean googleType) {
+        if(fileName.endsWith(".docx")) {
+            return (googleType) ? "application/vnd.google-apps.document"
+                : "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        } else if(fileName.endsWith(".pptx")) {
+            return (googleType) ? "application/vnd.google-apps.presentation"
+                : "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+        } else if(fileName.endsWith(".xlsx")) {
+            return (googleType) ? "application/x-vnd.oasis.opendocument.spreadsheet"
+            : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        }
+        return null;
     }
 
 }

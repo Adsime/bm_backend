@@ -15,8 +15,7 @@ public class FileService extends GeneralService {
 
     public boolean saveFile(File file, String name, String type, String originalType) {
         String res = fileHandler.uploadAnyFile(file, name, type, originalType);
-        if(res != null) return true;
-        return false;
+        return res != null;
     }
 
 }
