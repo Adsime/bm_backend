@@ -199,7 +199,7 @@ INSERT INTO USER VALUES
   (6, 'Adrian', 'Melsom', 'adrianmelsom@hotmail.no','234792348','','melsom.adrian','0'),
   (7, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','23580522','','guldal.jostein','0'),
   (8, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','025839434','','kartveit.joakim','0'),
-  (9, 'admin', 'admin', '','94432647', '', 'admin', '0');
+  (9, 'admin', 'admin', 'admin@admin','94432647', '', 'admin', '0');
 
 INSERT INTO BACHELOR_GROUP VALUES
   (1,'City', null),
