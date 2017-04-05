@@ -37,7 +37,6 @@ public class AccountResource {
         User user = service.verifyUser(context.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0));
         if(user != null) {
             Token token = service.getToken(user);
-            token.setToken(Coder.encode(token.getToken()));
             return Response.ok(token.toString()).build();
         }
         return Response.status(HttpStatus.NOT_FOUND_404).build();

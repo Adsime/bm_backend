@@ -57,4 +57,3 @@ com\acc\service\GroupService.class
 com\acc\service\TagService.class
 com\acc\service\FileService.class
 com\acc\database\repository\ProblemRepository.class
-com\acc\app\ApiApp.class
