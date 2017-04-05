@@ -53,7 +53,6 @@ public class GroupRepositoryTest {
         GR.setSessionFactory(mockSessionFactory);
     }
 
-    @Ignore
     @Test
     public void addGroupWithExistingUsersAndProblem() {
 
@@ -66,6 +65,8 @@ public class GroupRepositoryTest {
         when(mockQuery.list())
                 .thenReturn(TestHibernateData.getHbnUserList())
                 .thenReturn(TestHibernateData.getHbnUserList())
+                .thenReturn(TestHibernateData.getHbnTagList())
+                .thenReturn(TestHibernateData.getHbnTagList())
                 .thenReturn(TestHibernateData.getHbnProblemList())
         ;
         when(mockSession.save(any())).thenReturn(1L);
@@ -77,7 +78,6 @@ public class GroupRepositoryTest {
         Assert.assertTrue(actual.getId()==1);
     }
 
-    @Ignore
     @Test
     public void updateGroupSuccess(){
 
@@ -90,8 +90,9 @@ public class GroupRepositoryTest {
         when(mockQuery.list())
                 .thenReturn(TestHibernateData.getHbnUserList())
                 .thenReturn(TestHibernateData.getHbnUserList())
+                .thenReturn(TestHibernateData.getHbnTagList())
+                .thenReturn(TestHibernateData.getHbnTagList())
                 .thenReturn(TestHibernateData.getHbnProblemList());
-
 
         //Action
         boolean actual = GR.update(group);
@@ -100,7 +101,6 @@ public class GroupRepositoryTest {
         Assert.assertTrue(actual);
     }
 
-    @Ignore
     @Test(expected = EntityNotFoundException.class)
     public void updateGroupWithWrongId(){
 
@@ -113,6 +113,8 @@ public class GroupRepositoryTest {
         when(mockQuery.list())
                 .thenReturn(TestHibernateData.getHbnUserList())
                 .thenReturn(TestHibernateData.getHbnUserList())
+                .thenReturn(TestHibernateData.getHbnTagList())
+                .thenReturn(TestHibernateData.getHbnTagList())
                 .thenReturn(TestHibernateData.getHbnProblemList());
         doThrow(new OptimisticLockException()).when(mockSession).update(any());
 

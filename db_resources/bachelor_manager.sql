@@ -25,12 +25,12 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`USER` (
   `first_name` VARCHAR(1000) NULL,
   `last_name` VARCHAR(1000) NULL,
   `email` VARCHAR(1000) NULL,
+  `telephone` VARCHAR(1000) NULL,
   `salt` VARCHAR(1000) NULL,
   `enterprise_id` VARCHAR(1000) NULL,
   `access_level` VARCHAR(1000) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `bm_database`.`TAG`
@@ -42,7 +42,6 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`TAG` (
   `type` VARCHAR(1000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `bm_database`.`PROBLEM`
@@ -187,25 +186,30 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE bm_database;
 GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'34.249.136.226' IDENTIFIED BY 'admin';
 GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'170.251.113.193' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'37.191.228.181' IDENTIFIED BY 'admin';
+
 
 -- DEFAULT DATA --
 INSERT INTO USER VALUES
-  (1, 'Hans', 'Flammenwerfer', 'hans@dieSS.de', 'salt1', 'flammenwerfer.h', '0'),
-  (2, 'David', 'Silva', 'merlin@mcfc.co.uk', 'salt2', 'silva.d', '0'),
-  (3, 'Kevin', 'De Bruyne', 'gingerprince@mcfc.co.uk', 'salt3', 'k.d.b', '0'),
-  (4, 'Benchod', 'Asskali', 'godem@hioa.no', 'salt4', 'asskali.b', '0'),
-  (5, 'Nusret', 'Gokce', 'saltbae@memes.com', 'salt', 'salt.bae', '0'),
-  (6, 'Hakon', 'Butterbucht', 'arianboy123@gmail.de', 'salt', 'butterbucht.h', '0');
+  (1, 'David', 'Silva', 'merlin@mcfc.co.uk', '', 'silva.david', '0'),
+  (2, 'Kevin', 'De Bruyne', 'gingerprince@mcfc.co.uk', '', 'de.bruyne.kevin', '0'),
+  (3, 'Hakon', 'Smorvik', 'hakonsmorvik@hotmail.no', '', 'smorvik.hakon', '0'),
+  (4, 'Duy', 'Nguyen', 'duynguyen@hotmail.no','','nguyen.duy','0'),
+  (5, 'Kim', 'Vu', 'kimvu@hotmail.no','','vu.kim','0'),
+  (6, 'Adrian', 'Melsom', 'adrianmelsom@hotmail.no','','melsom.adrian','0'),
+  (7, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','','guldal.jostein','0'),
+  (8, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','','kartveit.joakim','0'),
+  (9, 'admin', 'admin', '', '', 'admin', '0');
 
 
 INSERT INTO BACHELOR_GROUP VALUES
   (1,'City', null),
-  (2,'die SS', null);
+  (2,'Bachelor Manager', null);
 
 INSERT INTO TAG VALUES
-  (1,'Student', 'Tror h*n er noe', 'Role'),
-  (2,'Veileder', 'De som setter på plass drittungene', 'Role'),
+  (1,'Student', '', 'Rolle'),
+  (2,'Veileder', 'Skal bistå med faglig hjelp for bachelorgruppen', 'Rolle'),
   (3,'2017', 'Fiscal Year', 'FY');
 
-INSERT INTO GROUP_ASSOCIATE VALUES (1,2),(2,1),(1,3),(2,6);
-INSERT INTO USER_TAG VALUES (2,2),(2,3),(3,1),(3,3),(1,1),(6,2);
+INSERT INTO GROUP_ASSOCIATE VALUES (1,1),(1,2),(2,3),(2,4),(2,5),(2,6),(2,7),(2,8);
+INSERT INTO USER_TAG VALUES(1,2),(7,2),(8,2),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(8 ,3),(2,1),(3,1),(4,1),(5,1),(6,1);

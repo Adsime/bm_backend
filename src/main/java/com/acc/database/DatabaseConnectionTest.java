@@ -30,12 +30,11 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            User merlin = UR.getQuery(new GetUserByIdSpec(8)).get(0);
-            merlin.setEnterpriseID("YOLO");
+            User merlin = UR.getQuery(new GetUserByIdSpec(1)).get(0);
             String username = merlin.getEnterpriseID();
-            String password = "passsword";
+            String password = "admin";
             System.out.println("UN: " + username );
-            User user = AR.register(username, password,merlin);
+            AR.register(username, password,merlin);
             System.out.println("you're logged in fucker");
 
         } catch (IllegalArgumentException iae){

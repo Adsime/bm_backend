@@ -22,7 +22,9 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     }
 
     @Override
-    public Group add(Group group) throws EntityNotFoundException{
+    public Group add(Group group) throws EntityNotFoundException, IllegalArgumentException{
+        if(group.getName().equals("")) throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut nødvendige felter!");
+
         Set<HbnUser> groupAssociates = new HashSet<>();
         if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
         if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
@@ -94,15 +96,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         List<HbnEntity> readData;
         try{
             readData = super.queryToDb((HqlSpecification) spec);
-        }catch (EntityNotFoundException enf){
+         }catch (EntityNotFoundException enf){
             throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
         }
-
         List<Group> result = new ArrayList<>();
 
         for (HbnEntity entity : readData ){
-            Problem groupProblem;
             HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
+            Problem groupProblem = null;
 
             if (hbnBachelorGroup.getProblem() != null){
                 groupProblem = new Problem(
@@ -116,7 +117,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 List<Integer> authorId = new ArrayList<>(groupProblem.getAuthor());
                 groupProblem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             }
-            else groupProblem = null;
 
             Group group = new Group(
                     (int) hbnBachelorGroup.getId(),
@@ -132,6 +132,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         hbnUser.getFirstName(),
                         hbnUser.getLastName(),
                         hbnUser.getEmail(),
+                        hbnUser.getTelephone(),
                         hbnUser.getEnterpriseId(),
                         hbnUser.getAccessLevel(),
                         super.toTagList(hbnUser.getTags())
@@ -141,7 +142,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 else group.getSupervisors().add(user);
             }
 
-            List<Integer> userIdList = new ArrayList();
+            List<Integer> userIdList = new ArrayList<>();
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
             group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
 
@@ -233,10 +234,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         for (User user : users){
             //User does not exist
             if (user.getId() == 0){
+                if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("") || user.getTelephone().equals("")) {
+                    throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!");
+                }
                 HbnUser hbnUser = new HbnUser(
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
+                        user.getTelephone(),
                         user.getEnterpriseID(), (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
                 );
 

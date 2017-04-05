@@ -35,7 +35,11 @@ public class DriveApi {
         get.setHeader("Authorization", "Bearer ya29.GlwYBBiYMg-2_uqtrgS7_U2ironLwK-4JGzs_QMR32MVz-Y5phPBWPYfl5R0jVUXhgRzGvtIsNXGpq6AXVERA_GNm6M6E0W56tdFkKG6vhzEpGBlImPeWzI3bf-Nyw");
         HttpResponse response = client.execute(get);
         */
+<<<<<<< HEAD
         /*User user = new User("Adrian", "Melsom", "ad@ad.ad", "adrian.melsom", "0", null);
+=======
+        User user = new User("Adrian", "Melsom", "ad@ad.ad", "99999999", "adrian.melsom", "0", null);
+>>>>>>> d8d5309db6701641448ca39f73c040acae678670
         Token token = new TokenHandler().generateToken(user);
         new TokenHandler().verify(token.getToken());*/
 

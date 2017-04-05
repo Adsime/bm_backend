@@ -38,9 +38,9 @@ public class TestData {
 
     public static List<User> testUsers() {
         List<User> users = new ArrayList<>();
-        users.add(new User("David", "Silva", "davids@mcfc.co.uk", "melsom.adrian", "", null));
-        users.add(new User("Adrian", "Melsom", "asdasdasd@asdasdad.com", "melsom.adrian", "", null));
-        users.add(new User("Adrian", "Melsom", "asdasdasd@asdasdad.com", "melsom.adrian","" , null));
+        users.add(new User("David", "Silva", "davids@mcfc.co.uk", "99999999", "melsom.adrian", "", null));
+        users.add(new User("Adrian", "Melsom", "asdasdasd@asdasdad.com", "99999999","melsom.adrian",  "", null));
+        users.add(new User("Adrian", "Melsom", "asdasdasd@asdasdad.com", "99999999","melsom.adrian","" , null));
         return users;
     }
 

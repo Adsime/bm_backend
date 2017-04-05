@@ -34,6 +34,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
                 hbnUser.getFirstName(),
                 hbnUser.getLastName(),
                 hbnUser.getEmail(),
+                hbnUser.getTelephone(),
                 hbnUser.getEnterpriseId(),
                 hbnUser.getAccessLevel(),
                 hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
@@ -45,6 +46,9 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
 
     @Override
     public User register(String username, String password, User user) throws EntityNotFoundException, IllegalArgumentException{
+        if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("") || user.getTelephone().equals("")){
+            throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!");
+        }
         HbnUser newAccountUser;
         try {
             newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
@@ -63,6 +67,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
+                    user.getTelephone(),
                     user.getEnterpriseID(),
                     (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
             );
@@ -84,6 +89,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
+                    user.getTelephone(),
                     user.getEnterpriseID(),
                     user.getAccessLevel(),
                     user.getTags()

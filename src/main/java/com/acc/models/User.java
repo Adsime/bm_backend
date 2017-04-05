@@ -14,6 +14,7 @@ public class User extends HateOAS {
     private String firstName;
     private String lastName;
     private String email;
+    private String telephone;
     private String enterpriseID;
     private String accessLevel;
     private List<Tag> tags;
@@ -21,20 +22,22 @@ public class User extends HateOAS {
 
     public User(){}
 
-    public User(String firstName, String lastName, String email, String enterpriseID, String accessLevel, List<Tag> tags) {
+    public User(String firstName, String lastName, String email, String telephone, String enterpriseID, String accessLevel, List<Tag> tags) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.telephone = telephone;
         this.enterpriseID = enterpriseID;
         this.accessLevel =  accessLevel;
         this.tags = tags;
     }
 
-    public User(int id, String firstName, String lastName, String email, String enterpriseID, String accessLevel, List<Tag> tags) {
+    public User(int id, String firstName, String lastName, String email, String telephone, String enterpriseID, String accessLevel, List<Tag> tags) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.telephone = telephone;
         this.enterpriseID = enterpriseID;
         this.accessLevel =  accessLevel;
         this.tags = tags;
@@ -70,6 +73,14 @@ public class User extends HateOAS {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public String getEnterpriseID() {

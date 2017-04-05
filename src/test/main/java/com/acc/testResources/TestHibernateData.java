@@ -43,11 +43,11 @@ public class TestHibernateData {
     }
 
     public static User getUser(){
-        return new User(1,"David Josué Jiménez", "Silva", "merlin@mcfc.co.uk", "silva.david.j.j","1", getTagList());
+        return new User(1,"David Josué Jiménez", "Silva", "merlin@mcfc.co.uk", "99999999","silva.david.j.j","1", getTagList());
     }
 
     public static User getUserWrongId(){
-        return new User(0,"Yaya", "Toure", "nocake@mcfc.co.uk", "toure.yaya", "2" ,getTagList());
+        return new User(0,"Yaya", "Toure", "nocake@mcfc.co.uk", "99999999","toure.yaya", "2" ,getTagList());
     }
 
     public static List<HbnTag> getHbnTagList(){
@@ -60,7 +60,7 @@ public class TestHibernateData {
 
     public static List<HbnUser> getHbnUserList(){
         List<HbnUser> hbnUserList = new ArrayList<>();
-        HbnUser hbnUser = new HbnUser("David Josué Jiménez", "Silva", "merlin@mcfc.co.uk","silva.david.j.j","1");
+        HbnUser hbnUser = new HbnUser("David Josué Jiménez", "Silva", "merlin@mcfc.co.uk","99999999","silva.david.j.j","1");
         hbnUser.setId(1);
         hbnUser.setTags(getHbnTagSet());
         hbnUserList.add(hbnUser);

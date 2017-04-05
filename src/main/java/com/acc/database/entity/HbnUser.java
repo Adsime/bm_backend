@@ -16,6 +16,7 @@ public class HbnUser implements Serializable, HbnEntity {
     private String firstName;
     private String lastName;
     private String email;
+    private String telephone;
     private String salt;
     private String enterpriseId;
     private String accessLevel;
@@ -25,10 +26,11 @@ public class HbnUser implements Serializable, HbnEntity {
 
     public HbnUser(){}
 
-    public HbnUser(String firstName, String lastName, String email, String enterpriseId, String accessLevel) {
+    public HbnUser(String firstName, String lastName, String email, String telephone, String enterpriseId, String accessLevel) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.telephone = telephone;
         this.enterpriseId = enterpriseId;
         this.accessLevel = accessLevel;
     }
@@ -69,6 +71,15 @@ public class HbnUser implements Serializable, HbnEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Column(name = "telephone")
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     @Column(name = "salt")
