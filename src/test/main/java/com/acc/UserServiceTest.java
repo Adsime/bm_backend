@@ -47,6 +47,7 @@ public class UserServiceTest {
 
     //Start getUser()
 
+    /*
     @Test
     public void getUserSuccessTest() {
         when(userRepository.getQuery(any())).thenReturn(TestData.testUsers());
@@ -62,6 +63,7 @@ public class UserServiceTest {
         User actual = service.getUser(0);
         assertEquals(expected, actual);
     }
+    */
 
     @Test(expected = InternalServerErrorException.class)
     public void getUserInternalError() {

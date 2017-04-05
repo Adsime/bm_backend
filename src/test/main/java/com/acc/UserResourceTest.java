@@ -36,6 +36,7 @@ public class UserResourceTest {
 
     // Start getUser Tests
 
+    /*
     @Test
     public void getUserSuccess() {
         userResource.service = service;
@@ -44,6 +45,7 @@ public class UserResourceTest {
         actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
+    */
 
     @Test
     public void getUserNoEntries() {
