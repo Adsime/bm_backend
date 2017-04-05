@@ -1,7 +1,5 @@
 package com.acc.resources;
 
-import com.acc.jsonWebToken.Coder;
-import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.Token;
 import com.acc.models.User;
 import com.acc.service.AccountService;
@@ -37,6 +35,7 @@ public class AccountResource {
         User user = service.verifyUser(context.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0));
         if(user != null) {
             Token token = service.getToken(user);
+            token.setToken(token.getToken());
             return Response.ok(token.toString()).build();
         }
         return Response.status(HttpStatus.NOT_FOUND_404).build();
