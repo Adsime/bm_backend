@@ -191,16 +191,15 @@ GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'37.191.228.181' IDENTIFIED BY '
 
 -- DEFAULT DATA --
 INSERT INTO USER VALUES
-  (1, 'David', 'Silva', 'merlin@mcfc.co.uk', '', 'silva.david', '0'),
-  (2, 'Kevin', 'De Bruyne', 'gingerprince@mcfc.co.uk', '', 'de.bruyne.kevin', '0'),
-  (3, 'Hakon', 'Smorvik', 'hakonsmorvik@hotmail.no', '', 'smorvik.hakon', '0'),
-  (4, 'Duy', 'Nguyen', 'duynguyen@hotmail.no','','nguyen.duy','0'),
-  (5, 'Kim', 'Vu', 'kimvu@hotmail.no','','vu.kim','0'),
-  (6, 'Adrian', 'Melsom', 'adrianmelsom@hotmail.no','','melsom.adrian','0'),
-  (7, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','','guldal.jostein','0'),
-  (8, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','','kartveit.joakim','0'),
-  (9, 'admin', 'admin', '', '', 'admin', '0');
-
+  (1, 'David', 'Silva', 'merlin@mcfc.co.uk','40404040', '', 'silva.david', '0'),
+  (2, 'Kevin', 'De Bruyne', 'gingerprince@mcfc.co.uk', '30303030','', 'de.bruyne.kevin', '0'),
+  (3, 'Hakon', 'Smorvik', 'hakonsmorvik@hotmail.no', '98844823','', 'smorvik.hakon', '0'),
+  (4, 'Duy', 'Nguyen', 'duynguyen@hotmail.no','94432647','','nguyen.duy','0'),
+  (5, 'Kim', 'Vu', 'kimvu@hotmail.no','42149144','','vu.kim','0'),
+  (6, 'Adrian', 'Melsom', 'adrianmelsom@hotmail.no','234792348','','melsom.adrian','0'),
+  (7, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','23580522','','guldal.jostein','0'),
+  (8, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','025839434','','kartveit.joakim','0'),
+  (9, 'admin', 'admin', '','94432647', '', 'admin', '0');
 
 INSERT INTO BACHELOR_GROUP VALUES
   (1,'City', null),

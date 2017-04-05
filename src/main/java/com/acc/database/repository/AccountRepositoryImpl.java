@@ -52,7 +52,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
         HbnUser newAccountUser;
         try {
             newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
-        } catch (EntityNotFoundException enf){
+        } catch (EntityNotFoundException enfe){
             newAccountUser = null;
         }
 
