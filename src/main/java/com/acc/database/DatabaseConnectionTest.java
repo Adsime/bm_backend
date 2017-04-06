@@ -37,10 +37,9 @@ public class DatabaseConnectionTest {
             AR.register(username, password,merlin);
             System.out.println("you're logged in fucker");
 
-        } catch (IllegalArgumentException iae){
+        } catch (IllegalArgumentException | EntityNotFoundException iae){
+            //TODO exception message to log file
             System.out.println(iae.getMessage());
-        } catch (EntityNotFoundException enf){
-            System.out.println(enf.getMessage());
         }
     }
 }

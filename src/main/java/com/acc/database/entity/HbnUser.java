@@ -24,7 +24,6 @@ public class HbnUser implements Serializable, HbnEntity {
     private Set<HbnTag> tags;
     private Set<HbnProblem> problems;
 
-    public HbnUser(){}
 
     public HbnUser(String firstName, String lastName, String email, String telephone, String enterpriseId, String accessLevel) {
         this.firstName = firstName;

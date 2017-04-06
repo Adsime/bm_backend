@@ -6,6 +6,9 @@ import com.acc.database.specification.GetPasswordByEIdSpec;
 import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.models.User;
 import org.mindrot.jbcrypt.BCrypt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 
@@ -13,6 +16,8 @@ import java.util.ArrayList;
  * Created by nguyen.duy.j.khac on 28.03.2017.
  */
 public class AccountRepositoryImpl extends AbstractRepository implements AccountRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountRepositoryImpl.class);
 
     @Override
     public User matchPassword(String username, String password) throws IllegalArgumentException {
@@ -25,6 +30,8 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
             hbnPassword = (HbnPassword)super.queryToDb(new GetPasswordByEIdSpec(hashedEId)).get(0);
 
         } catch (EntityNotFoundException enf){
+            //TODO check if logg implementaion works, tho it should
+            logger.info("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
             throw new IllegalArgumentException("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
         }
 
@@ -53,6 +60,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
         try {
             newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
         } catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             newAccountUser = null;
         }
 
@@ -75,6 +83,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
             try {
                 if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
             }catch (EntityNotFoundException enf){
+                //TODO exception message to log file
                 throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
             }
 

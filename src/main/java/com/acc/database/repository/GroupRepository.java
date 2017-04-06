@@ -46,14 +46,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
         long id = super.addEntity(mappedGroup);
 
-               Group addedGroup = new Group(
+                return new Group(
                 (int)id,
                 group.getName(),
                 group.getStudents(),
                 group.getSupervisors(),
                 group.getProblem()
         );
-        return addedGroup;
+
     }
 
     @Override
@@ -87,6 +87,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         try {
             return super.removeEntity(hbnBachelorGroup);
         }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i sletting av gruppe: \nGruppe med id: " + id + " finnes ikke");
         }
     }
@@ -97,6 +98,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         try{
             readData = super.queryToDb((HqlSpecification) spec);
          }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
         }
         List<Group> result = new ArrayList<>();
@@ -168,6 +170,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         try{
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
         }
 
@@ -190,7 +193,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
 
 
-            List<Integer> userIdList = new ArrayList();
+            List<Integer> userIdList = new ArrayList<>();
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
             group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
 
