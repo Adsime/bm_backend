@@ -97,7 +97,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         try{
             readData = super.queryToDb((HqlSpecification) spec);
          }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
+            throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere grupper finnes ikke");
         }
         List<Group> result = new ArrayList<>();
 
@@ -168,7 +168,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         try{
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere gruppr med finnes ikke");
+            throw new EntityNotFoundException("Feil i henting av gruppe: \nEn eller flere grupper finnes ikke");
         }
 
         List<Group> result = new ArrayList<>();
