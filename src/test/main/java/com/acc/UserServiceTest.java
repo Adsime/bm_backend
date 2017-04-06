@@ -68,7 +68,6 @@ public class UserServiceTest {
         User actual = service.getUser(0);
         assertEquals(expected, actual);
     }*/
-    */
 
     //End getUser()
     //Start getAllUsers()

@@ -44,7 +44,7 @@ public class UserResourceTest {
         actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }*/
-    */
+
 
     /*@Test
     public void getUserNoEntries() {
