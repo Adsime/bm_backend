@@ -7,14 +7,11 @@ import com.acc.models.Error;
 import com.acc.models.Tag;
 import org.eclipse.jetty.http.HttpStatus;
 
-import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.o;
 
 /**
  * Created by melsom.adrian on 10.02.2017.
@@ -30,7 +27,7 @@ public class TagService extends GeneralService {
             return Response.ok(tag.toJson()).build();
         }  catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
 
@@ -42,7 +39,7 @@ public class TagService extends GeneralService {
             return Response.ok(tags.toString()).build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
     
@@ -52,7 +49,7 @@ public class TagService extends GeneralService {
             return Response.status(HttpStatus.CREATED_201).entity(registeredTag).build();
         }catch (IllegalArgumentException iae) {
             Error error = new Error(iae.getMessage());
-            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toString()).build();
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
         }
 
     }
@@ -63,7 +60,7 @@ public class TagService extends GeneralService {
             return Response.status(HttpStatus.NO_CONTENT_204).build();
         }  catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
 
@@ -73,7 +70,7 @@ public class TagService extends GeneralService {
             return Response.ok().build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
 
     }

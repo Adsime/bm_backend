@@ -73,8 +73,7 @@ public class Problem extends HateOAS {
         this.tags = tags;
     }
 
-    @Override
-    public String toString() {
+    public String toJson() {
         return new Gson().toJson(this);
     }
 
