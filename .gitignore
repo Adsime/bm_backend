@@ -3,13 +3,13 @@
 
 # Generated sources #
 #####################
-target/*
+/target
+/target/
+
 
 # Specific files #
 ##################
 META-INF/
-
-
 
 # Java #
 ########
@@ -24,6 +24,7 @@ META-INF/
 
 # Maven #
 #########
+*.lst
 MANIFEST.MF
 **/pom.xml.versionsBackup
 
@@ -44,6 +45,13 @@ local.properties
 .settings/
 .loadpath
 
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+*.orig
+
 # Intellij #
 ###########
 .idea
@@ -53,18 +61,6 @@ local.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# External tool builders
-.externalToolBuilders/
-
-# Locally stored "Eclipse launch configurations"
-*.launch
-*.orig
-
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
