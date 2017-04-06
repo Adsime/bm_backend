@@ -137,11 +137,9 @@ public abstract class AbstractRepository{
             }
             tx.commit();
 
-        } catch (OptimisticLockException | IndexOutOfBoundsException ole){
-            //TODO exception message to log file
+        } catch (OptimisticLockException|IndexOutOfBoundsException ex){
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
-
         } catch (HibernateException he) {
             //TODO exception message to log file
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();

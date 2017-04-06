@@ -61,8 +61,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
+                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -114,6 +114,23 @@ public class FileHandler {
         }
     }
 
+    public String uploadAnyFile(java.io.File file, String name, String type, String originalType) {
+        try {
+            Drive service = getDriveService();
+            File googleFile = new File();
+            googleFile.setName(name);
+            googleFile.setMimeType(type);
+            FileContent fileContent = new FileContent(originalType, file);
+            File retFile = service.files().create(googleFile, fileContent)
+                    .setFields("id")
+                    .execute();
+            return retFile.getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Finds the child items of a folder based on ID
      * @param id
@@ -155,7 +172,7 @@ public class FileHandler {
             /** Creating a file locally to update the file stored on Google Drive */
             File updatedFile = new File()
                     .setName(newName == null ? file.getName() : newName);
-            FileContent fileContent = createFileContent(file.getName(), outputStream.toString(), newName, newContent);
+            FileContent fileContent = createFileContent(file.getName(), outputStream.toString(), newName, newContent, "text/plain");
             path = fileContent.getFile().toPath();
 
             /** Uploading the new file to replace the content of the current file */
@@ -208,7 +225,7 @@ public class FileHandler {
             Drive service = getDriveService();
 
             /** Creates a file and sets appropriate values */
-            FileContent fileContent = createFileContent(name, content, null, null);
+            FileContent fileContent = createFileContent(name, content, null, null, "text/plain");
             path = fileContent.getFile().toPath();
             File file = new File();
             file.setName(name);
@@ -246,13 +263,13 @@ public class FileHandler {
         }
     }
 
-    private FileContent createFileContent(String oldName, String oldContent, String newName, String newContent) throws IOException {
+    private FileContent createFileContent(String oldName, String oldContent, String newName, String newContent, String type) throws IOException {
         String name = (newName == null || newName.isEmpty() ? oldName : newName);
         List<String> content = new ArrayList<>();
         content.add(newContent == null ? oldContent : newContent);
         java.io.File file = java.io.File.createTempFile(name, null); // new java.io.File(Config.getCacheDirectory(), name);
         Files.write(Paths.get(file.getPath()), content, Charset.forName("UTF-8"));
-        return new FileContent("text/plain", file);
+        return new FileContent(type, file);
     }
 
     public Problem insertFileContent(Problem problem) {

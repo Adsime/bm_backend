@@ -26,9 +26,7 @@ public class ProblemResource {
     public ProblemService service;
 
     @Before
-    public void setup() {
-
-    }
+    public void setup() {}
 
     @GET
     @Path("ping")

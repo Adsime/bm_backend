@@ -38,7 +38,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
-        }catch (EntityNotFoundException enf){
+        }catch (EntityNotFoundException ex){
             throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
         }
 
@@ -66,7 +66,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
-        }catch (EntityNotFoundException enf){
+        }catch (EntityNotFoundException ex){
             throw new EntityNotFoundException("Feil i oppdatering av bruker: \nEn eller flere merknader finnes ikke");
         }
 
@@ -75,7 +75,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
             return super.updateEntity(mappedUser);
 
-        }catch (EntityNotFoundException enf){
+        }catch (EntityNotFoundException ex){
             throw new EntityNotFoundException("Feil i oppdatering av bruker: \nBruker med id: " + user.getId() + " finnes ikke");
         }
     }
@@ -85,7 +85,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         HbnUser readUser;
         try {
             readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
-        }catch (EntityNotFoundException enf){
+        }catch (EntityNotFoundException ex){
             //TODO exception message to log file
             throw new EntityNotFoundException("Feil i sletting av bruker: \nBruker med id: " + id + " finnes ikke");
         }
@@ -96,7 +96,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
                 try {
                     super.updateEntity(problem);
-                }catch (EntityNotFoundException enf){
+                }catch (EntityNotFoundException ex){
                     //TODO exception message to log file
                     throw new EntityNotFoundException("Feil i sletting av bruker: \nOppgave: \"" +  problem.getTitle() + "\" , " + "til bruker finnes ikke");
                 }
@@ -110,7 +110,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         List<HbnEntity> readData;
         try {
            readData = super.queryToDb((HqlSpecification) spec);
-        }catch (EntityNotFoundException enf) {
+        }catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i henting av bruker: \nEn eller flere brukere finnes ikke!");
         }
 
@@ -142,7 +142,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         List<HbnEntity> readData;
         try {
             readData = super.queryToDb((HqlSpecification) spec);
-        }catch (EntityNotFoundException enf) {
+        }catch (EntityNotFoundException ex) {
             //TODO exception message to log file
             throw new EntityNotFoundException("Feil i henting av bruker: \nEn eller flere brukere finnes ikke!");
         }

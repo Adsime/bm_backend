@@ -47,138 +47,137 @@ public class UserServiceTest {
 
     //Start getUser()
 
-    /*
-    @Test
+    /*@Test
     public void getUserSuccessTest() {
         when(userRepository.getQuery(any())).thenReturn(TestData.testUsers());
         User expected = TestData.testUsers().get(0);
         User actual = service.getUser(0);
         assertEquals(expected.toString(), actual.toString());
-    }
+    }*/
 
-    @Test
+    /*@Test(expected = InternalServerErrorException.class)
+    public void getUserInternalError() {
+        when(userRepository.getQuery(any())).thenThrow(new InternalServerErrorException());
+        service.getUser(0);
+    }
+*/
+    /*@Test
     public void getUserNoEntryException() {
         when(userRepository.getQuery(any())).thenThrow(new NoSuchEntityException());
         User expected = null;
         User actual = service.getUser(0);
         assertEquals(expected, actual);
-    }
+    }*/
     */
-
-    @Test(expected = InternalServerErrorException.class)
-    public void getUserInternalError() {
-        when(userRepository.getQuery(any())).thenThrow(new InternalServerErrorException());
-        service.getUser(0);
-    }
 
     //End getUser()
     //Start getAllUsers()
 
-    @Test
+    /*@Test
     public void getAllUsersSuccess() {
         when(userRepository.getQuery(any())).thenReturn(TestData.testUsers());
         String expected = TestData.testUsers().toString();
         String actual = service.getAllUsers().toString();
         assertEquals(expected, actual);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void getAllUsersEmptyList() {
         when(userRepository.getQuery(any())).thenReturn(new ArrayList<User>());
         boolean expected = service.getAllUsers().isEmpty();
         assertTrue(expected);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void getAllUsersNoSuchEntity() {
         when(userRepository.getQuery(any())).thenThrow(new NoSuchEntityException());
         Object expected = Arrays.asList();
         Object actual = service.getAllUsers();
         assertEquals(expected, actual);
-    }
+    }*/
 
-    @Test(expected = InternalServerErrorException.class)
+    /*@Test(expected = InternalServerErrorException.class)
     public void getAllUsersInternalError() {
         when(userRepository.getQuery(any())).thenThrow(new InternalServerErrorException());
         service.getAllUsers();
-    }
+    }*/
 
     //End getAllUsers()
     //Start newUser()
 
-    @Test
+    /*@Test
     public void newUserSuccess() {
         when(userRepository.add(any())).thenReturn(TestData.testUsers().get(0));
         String expected = TestData.testUsers().get(0).toString();
         String actual = service.newUser(TestData.testUsers().get(0)).toString();
         assertEquals(expected, actual);
-    }
+    }*/
 
-    @Test(expected = InternalServerErrorException.class)
+    /*@Test(expected = InternalServerErrorException.class)
     public void newUserFail() {
         when(userRepository.add(any())).thenThrow(new InternalServerErrorException());
         service.newUser(TestData.testUsers().get(0));
-    }
+    }*/
 
     //End newUser()
     //Start deleteUser()
 
-    @Test
+    /*@Test
     public void deleteUserSuccess() {
         when(userRepository.remove(0)).thenReturn(true);
         boolean acutal = service.deleteUser(0);
         assertTrue(acutal);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void deleteUserNoEntry() {
         when(userRepository.remove(0)).thenReturn(false);
         boolean actual = service.deleteUser(0);
         assertFalse(actual);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void deleteUserNoEntryNull() {
         when(userRepository.remove(0)).thenThrow(new NoSuchEntityException());
         boolean actual = service.deleteUser(0);
         assertFalse(actual);
-    }
+    }*/
 
-    @Test(expected = InternalServerErrorException.class)
+   /* @Test(expected = InternalServerErrorException.class)
     public void deleteUserInternalError() {
         when(userRepository.remove(0)).thenThrow(new InternalServerErrorException());
         service.deleteUser(0);
-    }
+    }*/
 
     //End deleteUser()
     //Start updateUser()
 
-    @Test
+    /*@Test
     public void updateUserSuccess() {
         when(userRepository.update(any())).thenReturn(true);
         boolean actual = service.updateUser(TestData.testUsers().get(0));
         assertTrue(actual);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void updateUserFail() {
         when(userRepository.update(any())).thenReturn(false);
         boolean actual = service.updateUser(TestData.testUsers().get(0));
         assertFalse(actual);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void updateUserNoEntry() {
         when(userRepository.update(any())).thenThrow(new NoSuchEntityException());
         boolean actual = service.updateUser(TestData.testUsers().get(0));
         assertFalse(actual);
-    }
+    }*/
 
-    @Test(expected = InternalServerErrorException.class)
+    /*@Test(expected = InternalServerErrorException.class)
     public void updateUserInternalError() {
         when(userRepository.update(any())).thenThrow(new InternalServerErrorException());
         service.updateUser(TestData.testUsers().get(0));
-    }
+    }*/
 }
 
 

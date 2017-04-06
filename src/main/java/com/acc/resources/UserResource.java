@@ -23,8 +23,7 @@ public class UserResource {
     public UserService service;
 
     @Before
-    public void setup() {
-    }
+    public void setup() {}
 
     @GET
     @Path("ping")
@@ -57,12 +56,11 @@ public class UserResource {
                                @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
         System.out.println("ACTION: GET - user | QUERY:\n" + tags);
         try {
-            List<User> users = tags.isEmpty() ? service.getAllUsers() : service.getUserByTags(tags, hasAll);
-            if(users == null || users.isEmpty()) {
-                return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            if(tags.isEmpty()){
+              return service.getAllUsers();
             }
-            return Response.ok(new Gson().toJson(users)).build();
-        } catch (Exception e) {
+            return service.getUserByTags(tags, hasAll);
+        } catch (InternalServerErrorException e) {
             e.printStackTrace();
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -77,11 +75,8 @@ public class UserResource {
         System.out.println("ACTION: POST - user | ITEM =\n" + o.toString());
         try {
             User user = new Gson().fromJson(o.toString(), User.class);
-            if((user = service.newUser(user)) != null) {
-                return Response.status(HttpStatus.CREATED_201).entity(user.toString()).build();
-            }
-            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).build();
-        } catch(Exception e) {
+            return service.newUser(user);
+        } catch(InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -94,10 +89,7 @@ public class UserResource {
     public Response deleteUser(@PathParam("id") int id, @Context HttpHeaders headers) {
         System.out.println("ACTION: DELETE - user | ID = " + id);
         try {
-            if(service.deleteUser(id)) {
-                return Response.status(HttpStatus.NO_CONTENT_204).build();
-            }
-            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            return service.deleteUser(id);
         } catch(InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -110,10 +102,8 @@ public class UserResource {
     public Response updateUser(JsonObject o, @Context HttpHeaders headers) {
         System.out.println("ACTION: PUT - user | ITEM = \n" + o.toString());
         try {
-            if(service.updateUser(new Gson().fromJson(o.toString(), User.class))) {
-                return Response.ok().build();
-            }
-            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+            User user = new Gson().fromJson(o.toString(), User.class);
+            return service.updateUser(user);
         } catch(InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }

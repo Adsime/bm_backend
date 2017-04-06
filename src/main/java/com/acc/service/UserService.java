@@ -3,14 +3,14 @@ import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.*;
 import com.acc.models.Error;
 import com.acc.models.User;
+import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 
-import javax.ejb.NoSuchEntityException;
+
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,52 +37,56 @@ public class UserService extends GeneralService {
 
     }
 
-    public List<User> getUserByTags(List<String> tags, boolean hasAll) {
+    public Response getUserByTags(List<String> tags, boolean hasAll) {
         try {
-            List<User> users = userRepository.getQuery(new GetUserByTagSpec(tags, hasAll));
-            return users.isEmpty() ? null : users;
+            List<User> users = userRepository.getMinimalQuery(new GetUserByTagSpec(tags, hasAll));
+            return Response.ok(new Gson().toJson(users)).build();
         }catch (EntityNotFoundException enfe) {
-
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
         }
-        return null;
     }
 
-    public List<User> getAllUsers() throws InternalServerErrorException {
+    public Response getAllUsers() throws InternalServerErrorException {
         try {
-            return userRepository.getQuery(new GetUserAllSpec());
-        } catch (NoSuchEntityException nsee) {
+            List<User> users = userRepository.getQuery(new GetUserAllSpec());
+            return Response.ok(new Gson().toJson(users)).build();
+        } catch (EntityNotFoundException enfe) {
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+        }
+    }
 
+    public Response newUser(User user) throws InternalServerErrorException {
+        try{
+            User registeredUser = userRepository.add(user);
+            return Response.status(HttpStatus.CREATED_201).entity(registeredUser.toString()).build();
+        } catch (EntityNotFoundException enfe){
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+        } catch (IllegalArgumentException iae){
+            Error error = new Error(iae.getMessage());
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toString()).build();
+        }
+    }
+
+    public Response deleteUser(int id) {
+        try {
+            userRepository.remove((long)id);
+            return Response.status(HttpStatus.NO_CONTENT_204).build();
         }  catch (EntityNotFoundException enfe) {
-
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
         }
-        return Arrays.asList();
     }
 
-    public User newUser(User user) throws InternalServerErrorException {
-        return userRepository.add(user);
-    }
-
-    public boolean deleteUser(int id) {
+    public Response updateUser(User user) {
         try {
-            return userRepository.remove((long)id);
-        } catch (NoSuchEntityException nsee) {
-
-        } catch (EntityNotFoundException enfe) {
-
+            userRepository.update(user);
+            return Response.ok().build();
+        }  catch (EntityNotFoundException enfe) {
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
         }
-        return false;
-
-    }
-
-    public boolean updateUser(User user) {
-        try {
-            return userRepository.update(user);
-        } catch (NoSuchEntityException nsee) {
-
-        } catch (EntityNotFoundException enfe) {
-
-        }
-        return false;
-
     }
 }
