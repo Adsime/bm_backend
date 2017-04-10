@@ -182,12 +182,14 @@ public class FileHandler {
             Files.delete(path);
             return true;
         } catch (IOException ioe) {
+            //TODO write to log file instead
             ioe.printStackTrace();
             if(path != null) {
                 try {
                     Files.delete(path);
                 } catch (IOException ioEx) {
-
+                    //TODO write to log file
+                    ioEx.printStackTrace();
                 }
             }
             return false;

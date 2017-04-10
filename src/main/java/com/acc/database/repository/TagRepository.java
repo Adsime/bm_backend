@@ -51,6 +51,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         try {
             return super.updateEntity(mappedTag);
         }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i oppdatering av merknad: \nMerknad med id: " + tag.getId() + " finnes ikke");
         }
     }
@@ -62,6 +63,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         try{
             return super.removeEntity(mappedTag);
         }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i oppdatering av merknad: \nMerknad med id: " + id + " finnes ikke");
         }
     }

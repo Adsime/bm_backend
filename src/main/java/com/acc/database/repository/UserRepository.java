@@ -86,6 +86,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
             readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
         }catch (EntityNotFoundException ex){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i sletting av bruker: \nBruker med id: " + id + " finnes ikke");
         }
 
@@ -96,6 +97,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 try {
                     super.updateEntity(problem);
                 }catch (EntityNotFoundException ex){
+                    //TODO exception message to log file
                     throw new EntityNotFoundException("Feil i sletting av bruker: \nOppgave: \"" +  problem.getTitle() + "\" , " + "til bruker finnes ikke");
                 }
             }
@@ -141,6 +143,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException ex) {
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i henting av bruker: \nEn eller flere brukere finnes ikke!");
         }
         List<User> result =  new ArrayList<>();

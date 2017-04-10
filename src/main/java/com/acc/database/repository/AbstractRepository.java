@@ -11,6 +11,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.hibernate.service.spi.ServiceException;
+
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
 import java.util.*;
@@ -41,6 +43,7 @@ public abstract class AbstractRepository{
             tx.commit();
         }
         catch (HibernateException he) {
+            //TODO exception message to log file
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
             return 0;
@@ -59,9 +62,11 @@ public abstract class AbstractRepository{
             tx.commit();
         }
         catch (OptimisticLockException ole){
+            //TODO exception message to log file
             throw new EntityNotFoundException();
 
         } catch (HibernateException he) {
+            //TODO exception message to log file
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
             return false;
@@ -80,9 +85,11 @@ public abstract class AbstractRepository{
             tx.commit();
         }
         catch(OptimisticLockException ole){
+            //TODO exception message to log file
             throw new EntityNotFoundException();
         }
         catch (HibernateException he){
+            //TODO exception message to log file
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
         }
@@ -103,10 +110,12 @@ public abstract class AbstractRepository{
             if (result.isEmpty()) throw new EntityNotFoundException();
         }
         catch (OptimisticLockException ole){
+            //TODO exception message to log file
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
         }
         catch (HibernateException he) {
+            //TODO exception message to log file
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
         }
@@ -132,6 +141,7 @@ public abstract class AbstractRepository{
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
         } catch (HibernateException he) {
+            //TODO exception message to log file
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
         }
@@ -181,12 +191,8 @@ public abstract class AbstractRepository{
                     .buildMetadata()
                     .buildSessionFactory();
         }
-        catch (org.hibernate.service.spi.ServiceException se) {
-            se.printStackTrace();
-            StandardServiceRegistryBuilder.destroy( registry );
-            throw new ExceptionInInitializerError(se);
-        }
         catch (Exception e) {
+            //TODO exception message to log file
             e.printStackTrace();
             StandardServiceRegistryBuilder.destroy( registry );
             throw new ExceptionInInitializerError(e);

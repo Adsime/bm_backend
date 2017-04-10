@@ -45,6 +45,7 @@ public class UserResourceTest {
         assertEquals(expected, actual);
     }*/
 
+
     /*@Test
     public void getUserNoEntries() {
         userResource.service = service;

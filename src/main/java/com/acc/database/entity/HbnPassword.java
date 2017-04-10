@@ -14,8 +14,6 @@ public class HbnPassword implements Serializable, HbnEntity {
     private String passHash;
     private String eIdHash;
 
-    public HbnPassword(){}
-
     public HbnPassword(String passHash, String eIdHash) {
         this.passHash = passHash;
         this.eIdHash = eIdHash;
@@ -28,23 +26,25 @@ public class HbnPassword implements Serializable, HbnEntity {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     @Column(name = "pass_hash")
     public String getPassHash() {
         return passHash;
     }
 
-    public void setPassHash(String passHash) {
-        this.passHash = passHash;
-    }
-
     @Column(name = "eid_hash")
     public String getEIdHash() {
         return eIdHash;
     }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setPassHash(String passHash) {
+        this.passHash = passHash;
+    }
+
 
     public void setEIdHash(String eIdHash) {
         this.eIdHash = eIdHash;

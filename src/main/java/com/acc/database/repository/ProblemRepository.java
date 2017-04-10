@@ -34,6 +34,7 @@ public class ProblemRepository extends AbstractRepository implements Repository<
         try {
              if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
         }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i registrering av oppgave: \nEn eller flere merknader finnes ikke");
         }
         long id = super.addEntity(mappedProblem);
@@ -57,12 +58,14 @@ public class ProblemRepository extends AbstractRepository implements Repository<
         try {
             if (problem.getTags() != null) mappedProblem.setTags(super.getHbnTagSet(problem.getTags()));
         }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
            throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nEn eller flere merknader finnes ikke");
         }
 
         try{
             return super.updateEntity(mappedProblem);
         }catch (EntityNotFoundException enf){
+            //TODO exception message to log file
             throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nOppgave med id: " + problem.getId() + " finnes ikke");
         }
 
