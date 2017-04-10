@@ -27,10 +27,10 @@ public class GroupService extends GeneralService{
     public Response getGroup(int id) {
         try {
             Group group = groupRepository.getQuery(new GetGroupByIdSpec((long)id)).get(0);
-            return Response.ok(group.toString()).build();
+            return Response.ok(group.toJson()).build();
         } catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
 
@@ -40,7 +40,7 @@ public class GroupService extends GeneralService{
             return Response.ok(new Gson().toJson(groups)).build();
         } catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
 
@@ -50,10 +50,10 @@ public class GroupService extends GeneralService{
             return Response.status(HttpStatus.CREATED_201).entity(registeredGroup).build();
         } catch (EntityNotFoundException enfe){
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         } catch (IllegalArgumentException iae){
             Error error = new Error(iae.getMessage());
-            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toString()).build();
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
         }
 
     }
@@ -64,7 +64,7 @@ public class GroupService extends GeneralService{
             return Response.status(HttpStatus.NO_CONTENT_204).build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
 
@@ -74,7 +74,7 @@ public class GroupService extends GeneralService{
             return Response.ok().build();
         } catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
 }

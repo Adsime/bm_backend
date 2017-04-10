@@ -13,8 +13,7 @@ public class Error {
         this.message = message;
     }
 
-    @Override
-    public String toString() {
+    public String toJson() {
         return new Gson().toJson(this);
     }
 }

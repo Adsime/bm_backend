@@ -95,7 +95,7 @@ public class User extends HateOAS {
         return tags;
     }
 
-    public String toString() {
+    public String toJson() {
         return new Gson().toJson(this);
     }
 
