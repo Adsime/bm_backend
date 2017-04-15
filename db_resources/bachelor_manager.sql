@@ -44,16 +44,16 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`TAG` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `bm_database`.`PROBLEM`
+-- Table `bm_database`.`DOCUMENT`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bm_database`.`PROBLEM` (
+CREATE TABLE IF NOT EXISTS `bm_database`.`DOCUMENT` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `path` VARCHAR(10000) NULL,
   `user_id` INT NULL,
   `title` VARCHAR(10000) NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_PROBLEM_USER1_idx` (`user_id` ASC),
-  CONSTRAINT `fk_PROBLEM_USER1`
+  INDEX `fk_DOCUMENT_USER1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_DOCUMENT_USER1`
     FOREIGN KEY (`user_id`)
     REFERENCES `bm_database`.`USER` (`id`))
 ENGINE = InnoDB;
@@ -65,12 +65,12 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `bm_database`.`BACHELOR_GROUP` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(1000) NULL,
-  `problem_id` INT NULL,
+  `document_id` INT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_GROUP_PROBLEM1_idx` (`problem_id` ASC),
-  CONSTRAINT `fk_GROUP_PROBLEM1`
-    FOREIGN KEY (`problem_id`)
-    REFERENCES `bm_database`.`PROBLEM` (`id`))
+  INDEX `fk_GROUP_DOCUMENT1_idx` (`document_id` ASC),
+  CONSTRAINT `fk_GROUP_DOCUMENT1`
+    FOREIGN KEY (`document_id`)
+    REFERENCES `bm_database`.`DOCUMENT` (`id`))
 
 ENGINE = InnoDB;
 
@@ -97,7 +97,6 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`GROUP_ASSOCIATE` (
 )
 ENGINE = InnoDB;
 
-
 -- -----------------------------------------------------
 -- Table `bm_database`.`PASSWORD`
 -- -----------------------------------------------------
@@ -110,13 +109,13 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `bm_database`.`PROBLEM_TAG`
+-- Table `bm_database`.`DOCUMENT_TAG`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bm_database`.`PROBLEM_TAG` (
+CREATE TABLE IF NOT EXISTS `bm_database`.`DOCUMENT_TAG` (
   `tag_id` INT NOT NULL,
-  `problem_id` INT NOT NULL,
-  PRIMARY KEY (`tag_id`, `problem_id`),
-  INDEX `fk_Tag_has_Oppgave_Oppgave1_idx` (`problem_id` ASC),
+  `document_id` INT NOT NULL,
+  PRIMARY KEY (`tag_id`, `document_id`),
+  INDEX `fk_Tag_has_Oppgave_Oppgave1_idx` (`document_id` ASC),
   INDEX `fk_Tag_has_Oppgave_Tag1_idx` (`tag_id` ASC),
   CONSTRAINT `fk_Tag_has_Oppgave_Tag1`
     FOREIGN KEY (`tag_id`)
@@ -124,8 +123,8 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`PROBLEM_TAG` (
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_Tag_has_Oppgave_Oppgave1`
-    FOREIGN KEY (`problem_id`)
-    REFERENCES `bm_database`.`PROBLEM` (`id`)
+    FOREIGN KEY (`document_id`)
+    REFERENCES `bm_database`.`DOCUMENT` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 )
