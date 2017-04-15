@@ -16,6 +16,7 @@ public class HbnDocument implements Serializable, HbnEntity {
     private Set<HbnTag> tags;
     private HbnUser user;
     private String title;
+    private Set<HbnBachelorGroup> groups;
 
     public HbnDocument(){}
 
@@ -75,5 +76,14 @@ public class HbnDocument implements Serializable, HbnEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @ManyToMany(mappedBy = "groupDocuments", fetch = FetchType.EAGER)
+    public Set<HbnBachelorGroup> getGroups(){
+        return groups;
+    }
+
+    public void setGroups(Set<HbnBachelorGroup> groups) {
+        this.groups = groups;
     }
 }

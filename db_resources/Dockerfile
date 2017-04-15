@@ -11,7 +11,7 @@ COPY /bachelor_manager.sql /docker-entrypoint-initdb.d/test.sql
 # ###########################################################
 
 #Start a MySQL Server Instance
-# docker run --name my-container-name -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 5050:3306 -d mysql/mysql-server:tag
+# docker run --name my-container-name -e MYSQL_ROOT_PASSWORD=my-secret-pw -p 5050:3306 -d dbv12_img
 
 #Connect to MySQL from an Application in another container.
 # docker run --name app-container-name --link my-container-name:mysql -d app-that-uses-mysql

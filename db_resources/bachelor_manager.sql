@@ -98,6 +98,28 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`GROUP_ASSOCIATE` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
+-- Table `bm_database`.`GROUP_DOCUMENT`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `bm_database`.`GROUP_DOCUMENT` (
+  `bachelor_group_id` INT NOT NULL,
+  `document_id` INT NOT NULL,
+  PRIMARY KEY (`bachelor_group_id`, `document_id`),
+  INDEX `fk_group_document_document_idx` (`document_id` ASC),
+  INDEX `fk_group_document_bachelor_group_idx` (`bachelor_group_id` ASC),
+  CONSTRAINT `fk_Gruppe_has_Bruker_Gruppe1`
+  FOREIGN KEY (`bachelor_group_id`)
+  REFERENCES `bm_database`.`BACHELOR_GROUP` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE ,
+  CONSTRAINT `fk_Gruppe_has_Bruker_Bruker1`
+  FOREIGN KEY (`document_id`)
+  REFERENCES `bm_database`.`DOCUMENT` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `bm_database`.`PASSWORD`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bm_database`.`PASSWORD` (
@@ -106,7 +128,6 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`PASSWORD` (
   `eid_hash` VARCHAR(1000) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `bm_database`.`DOCUMENT_TAG`
