@@ -151,7 +151,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
             User user = new User();
             user.setId((int)hbnUser.getId());
             user.setFirstName(hbnUser.getFirstName());
-            user.setFirstName(hbnUser.getLastName());
+            user.setLastName(hbnUser.getLastName());
             user.setTags(super.toTagList(hbnUser.getTags()));
 
             if (!user.getTags().isEmpty()) user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
