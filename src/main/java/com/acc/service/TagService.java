@@ -5,6 +5,7 @@ import com.acc.database.specification.GetTagAllSpec;
 import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.models.Error;
 import com.acc.models.Tag;
+import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -38,7 +39,7 @@ public class TagService extends GeneralService {
                 names.forEach(name -> name = name.toLowerCase());
                 tags.removeIf(tag -> !names.contains(tag.getName().toLowerCase()));
             }
-            return Response.ok(tags.toString()).build();
+            return Response.ok(new Gson().toJson(tags)).build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
