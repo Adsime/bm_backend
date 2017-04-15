@@ -1,7 +1,7 @@
 package com.acc.google;
 
 import com.acc.models.Folder;
-import com.acc.models.Problem;
+import com.acc.models.Document;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -324,11 +324,11 @@ public class FileHandler {
         return new FileContent(type, file);
     }
 
-    public Problem insertFileContent(Problem problem) {
+    public Document insertFileContent(Document document) {
         try {
             Drive service = getDriveService();
-            problem.setContent(getFileContent(problem.getPath(), service).toString());
-            return problem;
+            document.setContent(getFileContent(document.getPath(), service).toString());
+            return document;
         } catch (IOException ioe) {
             return null;
         }

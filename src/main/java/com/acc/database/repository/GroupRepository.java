@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Handler;
 
 /**
  * Created by nguyen.duy.j.khac on 24.02.2017.
@@ -38,9 +37,9 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         }
 
         try {
-            if (group.getProblem() != null) mappedGroup.setProblem(getHbnProblem(group.getProblem()));
+            if (group.getDocument() != null) mappedGroup.setDocument(getHbnDocument(group.getDocument()));
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i registrering av gruppe: \nOppgave med id: " + group.getProblem().getId() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i registrering av gruppe: \nOppgave med id: " + group.getDocument().getId() + " finnes ikke");
         }
         mappedGroup.setUsers(groupAssociates);
 
@@ -51,7 +50,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 group.getName(),
                 group.getStudents(),
                 group.getSupervisors(),
-                group.getProblem()
+                group.getDocument()
         );
         return addedGroup;
     }
@@ -72,9 +71,9 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         }
 
         try {
-            if (group.getProblem() != null) hbnBachelorGroup.setProblem(getHbnProblem(group.getProblem()));
+            if (group.getDocument() != null) hbnBachelorGroup.setDocument(getHbnDocument(group.getDocument()));
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nOppgave med id: " + group.getProblem().getId() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nOppgave med id: " + group.getDocument().getId() + " finnes ikke");
         }
 
         return super.updateEntity(hbnBachelorGroup);
@@ -103,19 +102,19 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
         for (HbnEntity entity : readData ){
             HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
-            Problem groupProblem = null;
+            Document groupDocument = null;
 
-            if (hbnBachelorGroup.getProblem() != null){
-                groupProblem = new Problem(
-                        (int) hbnBachelorGroup.getProblem().getId(),
-                        (int) hbnBachelorGroup.getProblem().getUser().getId(),
+            if (hbnBachelorGroup.getDocument() != null){
+                groupDocument = new Document(
+                        (int) hbnBachelorGroup.getDocument().getId(),
+                        (int) hbnBachelorGroup.getDocument().getUser().getId(),
                         "",
                         "",
-                        hbnBachelorGroup.getProblem().getPath(),
-                        super.toTagList(hbnBachelorGroup.getProblem().getTags()
+                        hbnBachelorGroup.getDocument().getPath(),
+                        super.toTagList(hbnBachelorGroup.getDocument().getTags()
                 ));
-                List<Integer> authorId = new ArrayList<>(groupProblem.getAuthor());
-                groupProblem.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+                List<Integer> authorId = new ArrayList<>(groupDocument.getAuthor());
+                groupDocument.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             }
 
             Group group = new Group(
@@ -123,7 +122,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                     hbnBachelorGroup.getName(),
                     new ArrayList<>(),
                     new ArrayList<>(),
-                    groupProblem
+                    groupDocument
             );
 
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()){
@@ -151,10 +150,10 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             group.addLinks(Links.STUDENT, Links.generateLinks(Links.STUDENTS, studentIdList));
             group.addLinks(Links.SUPERVISOR, Links.generateLinks(Links.SUPERVISORS, supervisorIdList));
 
-            if (group.getProblem() != null ) {
-                List<Integer> problemId = new ArrayList<>();
-                problemId.add(group.getProblem().getId());
-                group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
+            if (group.getDocument() != null ) {
+                List<Integer> documentId = new ArrayList<>();
+                documentId.add(group.getDocument().getId());
+                group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, documentId));
             }
 
             if (hbnBachelorGroup.getTags() != null) {
@@ -179,14 +178,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         List<Group> result = new ArrayList<>();
 
         for (HbnEntity entity : readData ){
-            Problem groupProblem;
+            Document groupDocument;
             HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
-            HbnProblem hbnProblem = hbnBachelorGroup.getProblem();
+            HbnDocument hbnDocument = hbnBachelorGroup.getDocument();
 
-            if (hbnProblem != null){
-                groupProblem = new Problem();
-                groupProblem.setId((int)hbnProblem.getId());
-                groupProblem.setTitle(hbnProblem.getTitle());
+            if (hbnDocument != null){
+                groupDocument = new Document();
+                groupDocument.setId((int) hbnDocument.getId());
+                groupDocument.setTitle(hbnDocument.getTitle());
             }
 
             Group group = new Group();
@@ -199,10 +198,10 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
             group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
 
-            if (hbnProblem != null ) {
-                List<Integer> problemId = new ArrayList<>();
-                problemId.add(group.getProblem().getId());
-                group.addLinks(Links.PROBLEMS, Links.generateLinks(Links.PROBLEM, problemId));
+            if (hbnDocument != null ) {
+                List<Integer> documentId = new ArrayList<>();
+                documentId.add(group.getDocument().getId());
+                group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, documentId));
             }
 
             if (hbnBachelorGroup.getTags() != null) {
@@ -214,8 +213,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return result;
     }
 
-    private HbnProblem getHbnProblem(Problem problem){
-        return (HbnProblem) super.queryToDb(new GetProblemByIdSpec(problem.getId())).get(0);
+    private HbnDocument getHbnDocument(Document document){
+        return (HbnDocument) super.queryToDb(new GetDocumentByIdSpec(document.getId())).get(0);
     }
 
     private boolean hasStudentTag(Set<HbnTag> tags){
@@ -293,10 +292,10 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         group.getUsers().add(groupAssociate);
         return super.updateEntity(group);
     }
-    public boolean assignProblemToGroup(long problemId, long groupId){
-        HbnProblem problem = (HbnProblem) super.queryToDb(new GetProblemByIdSpec(problemId));
+    public boolean assignDocumentToGroup(long documentId, long groupId){
+        HbnDocument document = (HbnDocument) super.queryToDb(new GetDocumentByIdSpec(documentId));
         HbnBachelorGroup group = (HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(groupId));
-        group.setProblem(problem);
+        group.setDocument(document);
         return super.updateEntity(group);
     }
 }

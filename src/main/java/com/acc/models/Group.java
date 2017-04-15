@@ -2,7 +2,6 @@ package com.acc.models;
 
 import com.google.gson.Gson;
 
-import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,23 +12,23 @@ public class Group extends HateOAS {
     private int id;
     private String name;
     private List<User> students, supervisors;
-    private Problem problem;
+    private Document document;
     private List<Tag> tags;
 
     public Group() {}
 
-    public Group(int id, String name, List<User> students, List<User> supervisors, Problem problem) {
+    public Group(int id, String name, List<User> students, List<User> supervisors, Document document) {
         this.id = id;
         this.name = name;
         this.students = students;
         this.supervisors = supervisors;
-        this.problem = problem;
+        this.document = document;
     }
 
-    public Group(int id, String name, Problem problem) {
+    public Group(int id, String name, Document document) {
         this.id = id;
         this.name = name;
-        this.problem = problem;
+        this.document = document;
     }
 
     public int getId() {
@@ -64,12 +63,12 @@ public class Group extends HateOAS {
         this.supervisors = supervisors;
     }
 
-    public Problem getProblem() {
-        return problem;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setProblem(Problem problem) {
-        this.problem = problem;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 
     public List<Tag> getTags() {

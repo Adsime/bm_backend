@@ -1,11 +1,11 @@
 package main.java.com.acc.testResources;
 
 import com.acc.database.entity.HbnBachelorGroup;
-import com.acc.database.entity.HbnProblem;
+import com.acc.database.entity.HbnDocument;
 import com.acc.database.entity.HbnTag;
 import com.acc.database.entity.HbnUser;
 import com.acc.models.Group;
-import com.acc.models.Problem;
+import com.acc.models.Document;
 import com.acc.models.Tag;
 import com.acc.models.User;
 
@@ -81,34 +81,34 @@ public class TestHibernateData {
     }
 
 
-    public static Problem getProblem() {
-        return new Problem(1, 1, "From Zlatan, Love Zlatan","Zlatan", "zlatan's path", getTagList());
+    public static Document getDocument() {
+        return new Document(1, 1, "From Zlatan, Love Zlatan","Zlatan", "zlatan's path", getTagList());
     }
 
-    public static List<Problem> getProblemList() {
-        List<Problem> problemList = new ArrayList<>();
-        Problem problem = new Problem(1, 1, "From Zlatan, Love Zlatan","Zlatan", "zlatan's path", getTagList());
-        problemList.add(problem);
-        return problemList;
+    public static List<Document> getDocumentList() {
+        List<Document> documentList = new ArrayList<>();
+        Document document = new Document(1, 1, "From Zlatan, Love Zlatan","Zlatan", "zlatan's path", getTagList());
+        documentList.add(document);
+        return documentList;
     }
 
-    public static List<HbnProblem> getHbnProblemList() {
-        List<HbnProblem> hbnProblemList = new ArrayList<>();
-        HbnProblem hbnProblem = new HbnProblem("path",getHbnUserList().get(0),"title");
-        hbnProblem.setId(1);
-        hbnProblemList.add(hbnProblem);
-        return hbnProblemList;
+    public static List<HbnDocument> getHbnDocumentList() {
+        List<HbnDocument> hbnDocumentList = new ArrayList<>();
+        HbnDocument hbnDocument = new HbnDocument("path",getHbnUserList().get(0),"title");
+        hbnDocument.setId(1);
+        hbnDocumentList.add(hbnDocument);
+        return hbnDocumentList;
     }
 
-    public static Problem getProblemWrongId() {
-        return new Problem(0, 1, "From Zlatan, Love Zlatan","Zlatan", "zlatan's path", getTagList());
+    public static Document getDocumentWrongId() {
+        return new Document(0, 1, "From Zlatan, Love Zlatan","Zlatan", "zlatan's path", getTagList());
     }
 
-    public static Problem getProblemNoAuthor() {
-        return new Problem(1, 0, "From Zlatan, Love Zlatan", "Zlatan", "zlatan's path", getTagList());
+    public static Document getDocumentNoAuthor() {
+        return new Document(1, 0, "From Zlatan, Love Zlatan", "Zlatan", "zlatan's path", getTagList());
     }
 
-    public static List<HbnProblem> getEmptyHbnProblemList() {
+    public static List<HbnDocument> getEmptyHbnDocumentList() {
         return new ArrayList<>();
     }
 
@@ -125,11 +125,11 @@ public class TestHibernateData {
     }
 
     public static Group getGroup() {
-        return new Group(1, "Group", getUserList(), getUserList(), getProblem());
+        return new Group(1, "Group", getUserList(), getUserList(), getDocument());
     }
 
     public static Group getGroupWrongId() {
-        return new Group(0, "Group", getUserList(), getUserList(), getProblem());
+        return new Group(0, "Group", getUserList(), getUserList(), getDocument());
     }
 
     public static List<HbnBachelorGroup> getHbnGroupList() {

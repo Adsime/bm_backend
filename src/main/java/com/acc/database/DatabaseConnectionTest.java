@@ -2,7 +2,7 @@ package com.acc.database;
 
 import com.acc.database.entity.HbnUser;
 import com.acc.database.repository.GroupRepository;
-import com.acc.database.repository.ProblemRepository;
+import com.acc.database.repository.DocumentRepository;
 import com.acc.database.repository.TagRepository;
 import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetGroupByIdSpec;
@@ -26,7 +26,7 @@ public class DatabaseConnectionTest {
         UserRepository UR = new UserRepository();
         TagRepository TR = new TagRepository();
         GroupRepository GR = new GroupRepository();
-        ProblemRepository PR = new ProblemRepository();
+        DocumentRepository PR = new DocumentRepository();
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {

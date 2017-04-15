@@ -8,8 +8,8 @@ import java.util.Set;
  * Created by nguyen.duy.j.khac on 07.02.2017.
  */
 @Entity
-@Table(name = "PROBLEM")
-public class HbnProblem implements Serializable, HbnEntity {
+@Table(name = "DOCUMENT")
+public class HbnDocument implements Serializable, HbnEntity {
 
     private long id;
     private String path;
@@ -17,9 +17,9 @@ public class HbnProblem implements Serializable, HbnEntity {
     private HbnUser user;
     private String title;
 
-    public HbnProblem(){}
+    public HbnDocument(){}
 
-    public HbnProblem(String path, HbnUser hbnUser, String title) {
+    public HbnDocument(String path, HbnUser hbnUser, String title) {
         this.path = path;
         this.user = hbnUser;
         this.title = title;
@@ -46,8 +46,8 @@ public class HbnProblem implements Serializable, HbnEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "PROBLEM_TAG",
-            joinColumns =  @JoinColumn(name = "problem_id"),
+            name = "DOCUMENT_TAG",
+            joinColumns =  @JoinColumn(name = "document_id"),
             inverseJoinColumns =  @JoinColumn(name = "tag_id")
     )
     public Set<HbnTag> getTags() {

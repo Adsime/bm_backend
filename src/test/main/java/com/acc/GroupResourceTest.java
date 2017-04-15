@@ -1,21 +1,11 @@
 package main.java.com.acc;
 
-import com.acc.models.Group;
-import com.acc.models.Problem;
-import com.acc.service.GeneralService;
 import com.acc.service.GroupService;
 import com.acc.resources.GroupResource;
-import main.java.com.acc.testResources.TestData;
-import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
 
-import javax.ws.rs.InternalServerErrorException;
-
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
-import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.MockitoAnnotations.initMocks;

@@ -1,21 +1,17 @@
 package main.java.com.acc.testResources;
 
 import com.acc.models.*;
-import org.junit.Before;
 import org.mockito.Mock;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.HttpHeaders;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  * Created by melsom.adrian on 10.02.2017.
@@ -60,13 +56,13 @@ public class TestData {
         return headers;
     }
 
-    public static List<Problem> testProblems() {
-        List<Problem> problems = new ArrayList<>();
-        problems.add(new Problem(1, 1,"asdad", "asdasddsa", "path", null));
-        problems.add(new Problem(2, 1,"asdad", "asdasddsa", "path", null));
-        problems.add(new Problem(3, 1,"asdad", "asdasddsa", "path", null));
-        problems.add(new Problem(4, 1,"asdad", "asdasddsa", "path", null));
-        return problems;
+    public static List<Document> testDocuments() {
+        List<Document> documents = new ArrayList<>();
+        documents.add(new Document(1, 1,"asdad", "asdasddsa", "path", null));
+        documents.add(new Document(2, 1,"asdad", "asdasddsa", "path", null));
+        documents.add(new Document(3, 1,"asdad", "asdasddsa", "path", null));
+        documents.add(new Document(4, 1,"asdad", "asdasddsa", "path", null));
+        return documents;
     }
 
     public static List<Tag> testTags() {
@@ -87,11 +83,11 @@ public class TestData {
                 .build();
     }
 
-    public static JsonObject jsonProblem() {
+    public static JsonObject jsonDocument() {
         JsonArrayBuilder jab = Json.createArrayBuilder();
         return Json.createObjectBuilder()
                 .add("id", 1)
-                .add("title", "problem 1")
+                .add("title", "document 1")
                 .add("content", "asdasdasd")
                 .add("links", jab)
                 .build();

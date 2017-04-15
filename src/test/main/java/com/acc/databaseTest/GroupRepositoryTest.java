@@ -54,7 +54,7 @@ public class GroupRepositoryTest {
     }
 
     @Test
-    public void addGroupWithExistingUsersAndProblem() {
+    public void addGroupWithExistingUsersAndDocument() {
 
         //Set Up
         Group group = TestHibernateData.getGroup();
@@ -67,7 +67,7 @@ public class GroupRepositoryTest {
                 .thenReturn(TestHibernateData.getHbnUserList())
                 .thenReturn(TestHibernateData.getHbnTagList())
                 .thenReturn(TestHibernateData.getHbnTagList())
-                .thenReturn(TestHibernateData.getHbnProblemList())
+                .thenReturn(TestHibernateData.getHbnDocumentList())
         ;
         when(mockSession.save(any())).thenReturn(1L);
 
@@ -92,7 +92,7 @@ public class GroupRepositoryTest {
                 .thenReturn(TestHibernateData.getHbnUserList())
                 .thenReturn(TestHibernateData.getHbnTagList())
                 .thenReturn(TestHibernateData.getHbnTagList())
-                .thenReturn(TestHibernateData.getHbnProblemList());
+                .thenReturn(TestHibernateData.getHbnDocumentList());
 
         //Action
         boolean actual = GR.update(group);
@@ -115,7 +115,7 @@ public class GroupRepositoryTest {
                 .thenReturn(TestHibernateData.getHbnUserList())
                 .thenReturn(TestHibernateData.getHbnTagList())
                 .thenReturn(TestHibernateData.getHbnTagList())
-                .thenReturn(TestHibernateData.getHbnProblemList());
+                .thenReturn(TestHibernateData.getHbnDocumentList());
         doThrow(new OptimisticLockException()).when(mockSession).update(any());
 
         //Action

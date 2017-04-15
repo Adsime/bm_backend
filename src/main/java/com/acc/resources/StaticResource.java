@@ -32,19 +32,19 @@ public class StaticResource {
         String body = "[\n" +
                 "{\n" +
                 "  \"id\": \"1\",\n" +
-                "  \"problem\": \"Dat boi\",\n" +
+                "  \"document\": \"Dat boi\",\n" +
                 "  \"title\": \"Yes, dat boi\",\n" +
                 "  \"author\": \"1\"\n" +
                 "},\n" +
                 "{\n" +
                 "  \"id\": \"2\",\n" +
-                "  \"problem\": \"Dette er også en oppgave\",\n" +
+                "  \"document\": \"Dette er også en oppgave\",\n" +
                 "  \"title\": \"Det var en gang\",\n" +
                 "  \"author\": \"1\"\n" +
                 "},\n" +
                  "{\n" +
                 "  \"id\": \"3\",\n" +
-                "  \"problem\": \"Bon bo hue pho bo bahn mi dap mei du ma pho ga\",\n" +
+                "  \"document\": \"Bon bo hue pho bo bahn mi dap mei du ma pho ga\",\n" +
                 "  \"title\": \"Vietnamesisk\",\n" +
                 "  \"author\": \"1\"\n" +
                 "}\n" +
@@ -61,14 +61,14 @@ public class StaticResource {
         for(int i = 0; i < 10000; i++) {
             sb.append("{\n" +
                     "  \"id\": \"" + i +"\" ,\n" +
-                    "  \"problem\": \"Dat boi\",\n" +
+                    "  \"document\": \"Dat boi\",\n" +
                     "  \"title\": \"Yes, dat boi\",\n" +
                     "  \"author\": \"1\"\n" +
                     "},\n");
         }
         sb.append("{\n" +
                 "  \"id\": \"1000\",\n" +
-                "  \"problem\": \"Bon bo hue pho bo bahn mi dap mei du ma pho ga\",\n" +
+                "  \"document\": \"Bon bo hue pho bo bahn mi dap mei du ma pho ga\",\n" +
                 "  \"title\": \"Vietnamesisk\",\n" +
                 "  \"author\": \"1\"\n" +
                 "}\n]"

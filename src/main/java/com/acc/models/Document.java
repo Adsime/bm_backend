@@ -8,15 +8,15 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 14.02.2017.
  */
-public class Problem extends HateOAS {
+public class Document extends HateOAS {
 
     private int id, author;
     private String title, content, path;
     private List<Tag> tags;
 
-    public Problem() {}
+    public Document() {}
 
-    public Problem(int id, int author, String title, String content, String path, List<Tag> tags) {
+    public Document(int id, int author, String title, String content, String path, List<Tag> tags) {
         this.id = id;
         this.author = author;
         this.title = title;

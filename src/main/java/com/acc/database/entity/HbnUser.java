@@ -22,7 +22,7 @@ public class HbnUser implements Serializable, HbnEntity {
     private String accessLevel;
     private Set<HbnBachelorGroup> groups;
     private Set<HbnTag> tags;
-    private Set<HbnProblem> problems;
+    private Set<HbnDocument> documents;
 
     public HbnUser(){}
 
@@ -133,11 +133,11 @@ public class HbnUser implements Serializable, HbnEntity {
     }
 
     @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
-    public Set<HbnProblem> getProblems() {
-        return problems;
+    public Set<HbnDocument> getDocuments() {
+        return documents;
     }
 
-    public void setProblems(Set<HbnProblem> problems) {
-        this.problems = problems;
+    public void setDocuments(Set<HbnDocument> documents) {
+        this.documents = documents;
     }
 }

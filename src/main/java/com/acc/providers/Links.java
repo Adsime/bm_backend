@@ -13,21 +13,21 @@ public class Links {
     public static final String USER_LINK = "/users";
     public static final String GROUP_LINK = "/groups";
     public static final String TAG_LINK = "/tags";
-    public static final String PROBLEM_LINK = "/problems";
+    public static final String DOCUMENT_LINK = "/documents";
 
     public static final String USER = "user";
     public static final String STUDENT = "student";
     public static final String SUPERVISOR = "supervisor";
     public static final String GROUP = "group";
     public static final String TAG = "tag";
-    public static final String PROBLEM = "problem";
+    public static final String DOCUMENT = "document";
 
     public static final String USERS = "users";
     public static final String STUDENTS = "students";
     public static final String SUPERVISORS = "supervisors";
     public static final String GROUPS = "groups";
     public static final String TAGS = "tags";
-    public static final String PROBLEMS = "problems";
+    public static final String DOCUMENTS = "documents";
 
     private static final String COMBINE = "/";
 
@@ -49,9 +49,9 @@ public class Links {
                     retVal.add(new Link(type, TAG_LINK + COMBINE + id));
                 }
                 break;
-            } case PROBLEM: {
+            } case DOCUMENT: {
                 for(int id : ids) {
-                    retVal.add(new Link(type, PROBLEM_LINK + COMBINE + id));
+                    retVal.add(new Link(type, DOCUMENT_LINK + COMBINE + id));
                 }
                 break;
             } case STUDENT: {

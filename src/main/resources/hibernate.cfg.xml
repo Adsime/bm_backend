@@ -15,7 +15,7 @@
         <mapping class="com.acc.database.entity.HbnBachelorGroup"/>
         <mapping class="com.acc.database.entity.HbnPassword"/>
         <mapping class="com.acc.database.entity.HbnTag"/>
-        <mapping class="com.acc.database.entity.HbnProblem"/>
+        <mapping class="com.acc.database.entity.HbnDocument"/>
         <mapping class="com.acc.database.entity.HbnUser"/>
     </session-factory>
 </hibernate-configuration>

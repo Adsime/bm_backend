@@ -89,14 +89,14 @@ public class UserRepository extends AbstractRepository implements Repository<Use
             throw new EntityNotFoundException("Feil i sletting av bruker: \nBruker med id: " + id + " finnes ikke");
         }
 
-        if (readUser.getProblems() != null){
-            for (HbnProblem problem : readUser.getProblems()){
-                problem.setUser(null);
+        if (readUser.getDocuments() != null){
+            for (HbnDocument document : readUser.getDocuments()){
+                document.setUser(null);
 
                 try {
-                    super.updateEntity(problem);
+                    super.updateEntity(document);
                 }catch (EntityNotFoundException ex){
-                    throw new EntityNotFoundException("Feil i sletting av bruker: \nOppgave: \"" +  problem.getTitle() + "\" , " + "til bruker finnes ikke");
+                    throw new EntityNotFoundException("Feil i sletting av bruker: \nOppgave: \"" +  document.getTitle() + "\" , " + "til bruker finnes ikke");
                 }
             }
         }

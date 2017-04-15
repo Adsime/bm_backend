@@ -14,7 +14,7 @@ public class HbnBachelorGroup implements Serializable, HbnEntity {
     private long id;
     private String name;
     private Set<HbnUser> users;
-    private HbnProblem problem;
+    private HbnDocument document;
     private Set<HbnTag> tags;
 
     public HbnBachelorGroup(){}
@@ -57,13 +57,13 @@ public class HbnBachelorGroup implements Serializable, HbnEntity {
     }
 
     @OneToOne
-    @JoinColumn(name = "problem_id")
-    public HbnProblem getProblem() {
-        return problem;
+    @JoinColumn(name = "document_id")
+    public HbnDocument getDocument() {
+        return document;
     }
 
-    public void setProblem(HbnProblem problem) {
-        this.problem = problem;
+    public void setDocument(HbnDocument document) {
+        this.document = document;
     }
 
     @ManyToMany(fetch = FetchType.EAGER)

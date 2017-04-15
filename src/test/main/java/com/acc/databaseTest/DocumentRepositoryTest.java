@@ -1,8 +1,8 @@
 package main.java.com.acc.databaseTest;
 
-import com.acc.database.repository.ProblemRepository;
-import com.acc.database.specification.GetProblemByIdSpec;
-import com.acc.models.Problem;
+import com.acc.database.repository.DocumentRepository;
+import com.acc.database.specification.GetDocumentByIdSpec;
+import com.acc.models.Document;
 import main.java.com.acc.testResources.TestHibernateData;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,7 +26,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 /**
  * Created by nguyen.duy.j.khac on 15.03.2017.
  */
-public class ProblemRepositoryTest {
+public class DocumentRepositoryTest {
     @Mock
     private Session mockSession;
     @Mock
@@ -36,20 +36,20 @@ public class ProblemRepositoryTest {
     @Mock
     private Query mockQuery;
 
-    private ProblemRepository PR;
+    private DocumentRepository DR;
 
     @Before
     public void before(){
         initMocks(this);
-        PR = Mockito.spy(new ProblemRepository());
-        PR.setSessionFactory(mockSessionFactory);
+        DR = Mockito.spy(new DocumentRepository());
+        DR.setSessionFactory(mockSessionFactory);
     }
 
     @Test
-    public void addProblemSuccess() {
+    public void addDocumentSuccess() {
 
         //Set Up
-        Problem problem = TestHibernateData.getProblem();
+        Document document = TestHibernateData.getDocument();
 
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);
@@ -58,17 +58,17 @@ public class ProblemRepositoryTest {
         when(mockSession.save(any())).thenReturn(1L);
 
         //Action
-        Problem actual = PR.add(problem);
+        Document actual = DR.add(document);
 
         //Assert
         Assert.assertTrue(actual.getId()==1);
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void addProblemWithNonExistingUser() {
+    public void addDocumentWithNonExistingUser() {
 
         //Set Up
-        Problem problem = TestHibernateData.getProblemNoAuthor();
+        Document document = TestHibernateData.getDocumentNoAuthor();
 
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);
@@ -76,14 +76,14 @@ public class ProblemRepositoryTest {
         doThrow(new OptimisticLockException()).when(mockQuery).list();
 
         //Action
-        PR.add(problem);
+        DR.add(document);
     }
 
     @Test
-    public void updateProblemSuccess(){
+    public void updateDocumentSuccess(){
 
         //Set Up
-        Problem problem = TestHibernateData.getProblem();
+        Document document = TestHibernateData.getDocument();
 
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);
@@ -91,17 +91,17 @@ public class ProblemRepositoryTest {
         when(mockQuery.list()).thenReturn(TestHibernateData.getHbnUserList()).thenReturn(TestHibernateData.getHbnTagList());
 
         //Action
-        boolean actual = PR.update(problem);
+        boolean actual = DR.update(document);
 
         //Assert
         Assert.assertTrue(actual);
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void updateProblemWithWrongId(){
+    public void updateDocumentWithWrongId(){
 
         //Set Up
-        Problem problem = TestHibernateData.getProblemWrongId();
+        Document document = TestHibernateData.getDocumentWrongId();
 
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);
@@ -110,25 +110,25 @@ public class ProblemRepositoryTest {
         doThrow(new OptimisticLockException()).when(mockSession).update(any());
 
         //Action
-        PR.update(problem);
+        DR.update(document);
     }
 
     @Test
-    public void removeProblemSuccess(){
+    public void removeDocumentSuccess(){
 
         //Set Up
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);
 
         //Action
-        boolean actual = PR.remove(1);
+        boolean actual = DR.remove(1);
 
         //Assert
         Assert.assertTrue(actual);
     }
 
     @Test (expected = EntityNotFoundException.class)
-    public void removeProblemWithWrongId(){
+    public void removeDocumentWithWrongId(){
 
         //Set Up
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
@@ -136,20 +136,20 @@ public class ProblemRepositoryTest {
         doThrow(new OptimisticLockException()).when(mockSession).delete(any());
 
         //Action
-        PR.remove(0);
+        DR.remove(0);
     }
 
     @Test
-    public void getProblemSuccess() {
+    public void getDocumentSuccess() {
 
         //Set Up
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);
         when(mockSession.createQuery(anyString())).thenReturn(mockQuery);
-        when(mockQuery.list()).thenReturn(TestHibernateData.getHbnProblemList());
+        when(mockQuery.list()).thenReturn(TestHibernateData.getHbnDocumentList());
 
         //Action
-        long actual = PR.getQuery(new GetProblemByIdSpec(1)).get(0).getId();
+        long actual = DR.getQuery(new GetDocumentByIdSpec(1)).get(0).getId();
         long expected = 1;
 
         //Assert
@@ -157,15 +157,15 @@ public class ProblemRepositoryTest {
     }
 
     @Test (expected = EntityNotFoundException.class)
-    public void getProblemWithWrongId(){
+    public void getDocumentWithWrongId(){
 
         //Set Up
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);
         when(mockSession.createQuery(anyString())).thenReturn(mockQuery);
-        when(mockQuery.list()).thenReturn(TestHibernateData.getEmptyHbnProblemList());
+        when(mockQuery.list()).thenReturn(TestHibernateData.getEmptyHbnDocumentList());
 
         //Action
-        PR.getQuery(new GetProblemByIdSpec(0));
+        DR.getQuery(new GetDocumentByIdSpec(0));
     }
 }
