@@ -16,6 +16,8 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
+import com.google.common.collect.Lists;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -139,11 +141,19 @@ public class FileHandler {
     public List<File> getFolder(String id) {
         try {
             Drive service = getDriveService();
+            if(id == null) {
+                id = service.files().get("root").setFields("id").execute().getId();
+            }
             FileList res = service.files().list()
                     .setQ("'" + id + "'" + " in parents" + " and trashed = false")
-                    .setFields("nextPageToken, files(id, name, mimeType, iconLink, webViewLink)")
+                    .setFields("nextPageToken, files(id, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
                     .execute();
-            return res.getFiles();
+            File parent = service.files().get(id)
+                    .setFields("id, name")
+                    .execute();
+            List<File> files = res.getFiles();
+            files.add(parent);
+            return Lists.reverse(files);
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return Arrays.asList();

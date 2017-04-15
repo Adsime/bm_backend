@@ -34,8 +34,10 @@ public class TagService extends GeneralService {
     public Response queryTags(List<String> names) {
         try {
             List<Tag> tags = tagRepository.getQuery(new GetTagAllSpec());
-            names.forEach(name -> name = name.toLowerCase());
-            tags.removeIf(tag -> !names.contains(tag.getName().toLowerCase()));
+            if(!names.isEmpty()) {
+                names.forEach(name -> name = name.toLowerCase());
+                tags.removeIf(tag -> !names.contains(tag.getName().toLowerCase()));
+            }
             return Response.ok(tags.toString()).build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());

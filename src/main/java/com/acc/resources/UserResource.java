@@ -61,7 +61,6 @@ public class UserResource {
             }
             return service.getUserByTags(tags, hasAll);
         } catch (InternalServerErrorException e) {
-            e.printStackTrace();
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }

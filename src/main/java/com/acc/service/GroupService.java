@@ -3,8 +3,11 @@ package com.acc.service;
 import com.acc.database.repository.GroupRepository;
 import com.acc.database.specification.GetGroupAllSpec;
 import com.acc.database.specification.GetGroupByIdSpec;
+import com.acc.database.specification.GetGroupByTagSpec;
+import com.acc.database.specification.GetUserByTagSpec;
 import com.acc.models.Error;
 import com.acc.models.Group;
+import com.acc.models.User;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -47,7 +50,7 @@ public class GroupService extends GeneralService{
     public Response newGroup(Group group) {
         try{
             Group registeredGroup = groupRepository.add(group);
-            return Response.status(HttpStatus.CREATED_201).entity(registeredGroup).build();
+            return Response.status(HttpStatus.CREATED_201).entity(registeredGroup.toString()).build();
         } catch (EntityNotFoundException enfe){
             Error error = new Error(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
@@ -55,7 +58,16 @@ public class GroupService extends GeneralService{
             Error error = new Error(iae.getMessage());
             return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
         }
+    }
 
+    public Response getGroupByTags(List<String> tags, boolean hasAll) {
+        try {
+            List<Group> users = groupRepository.getMinimalQuery(new GetGroupByTagSpec(tags, hasAll));
+            return Response.ok(new Gson().toJson(users)).build();
+        }catch (EntityNotFoundException enfe) {
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
+        }
     }
 
     public Response deleteGroup(int id) {

@@ -9,6 +9,7 @@ import org.junit.Before;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -56,16 +57,23 @@ public class GroupResource {
     /**
      *
      */
-    public Response getAllGroups(@Context HttpHeaders headers) {
-        System.out.println("ACTION: GET - user | ALL");
+    public Response queryGroups(@Context HttpHeaders headers,
+                                @QueryParam("tags") List<String> tags,
+                                @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
+        System.out.println("ACTION: GET - group | QUERY. tags = " + tags + " hasAll = " + hasAll);
         try {
-            return service.getAllGroups();
+            if(tags.isEmpty()) {
+                return service.getAllGroups();
+            }
+            return service.getGroupByTags(tags, hasAll);
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     /**
      *
      */
@@ -75,6 +83,7 @@ public class GroupResource {
             Group group = new Gson().fromJson(o.toString(), Group.class);
             return service.newGroup(group);
         } catch (InternalServerErrorException isee) {
+            System.out.println(isee.toString());
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }

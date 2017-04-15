@@ -46,13 +46,17 @@ public class FileResource {
     }
 
     @GET
-    @Path("{id}")
+    @Path("/folder/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFolderContent(@PathParam("id") String id, @Context HttpHeaders headers) {
-        if(service.verify(headers.getRequestHeader(HttpHeaders.AUTHORIZATION).get(0))) {
+        return service.getFolderContent(id);
+    }
 
-        }
-        return Response.status(HttpStatus.UNAUTHORIZED_401).build();
+    @GET
+    @Path("/folder")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFolderContent(@Context HttpHeaders headers) {
+        return service.getFolderContent(null);
     }
 
     @GET
@@ -74,29 +78,7 @@ public class FileResource {
         return null;
     }
 
-    /*@POST
-    @Path("/upload")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response postFile(
-            @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) {
-        try {
-            String ddoooood = "duy";
-            /*byte[] bytes = new byte[1024];
-            int read = 0;
-            OutputStream os = new FileOutputStream(File.createTempFile("temp", "asd"));
-            while((read = inputStream.read(bytes)) != -1) {
-                os.write(bytes, 0, read);
-            }
-            System.out.println("Hei");
-            return Response.status(HttpStatus.OK_200).build();
-        } catch (Exception e) {
 
-        }
-        System.out.println("Hei");
-        return Response.status(HttpStatus.BAD_REQUEST_400).build();
-    }*/
 
     @POST
     @Path("/upload")
