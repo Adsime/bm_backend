@@ -4,7 +4,7 @@ COPY /bachelor_manager.sql /docker-entrypoint-initdb.d/test.sql
 ########################### DEPLOY ##########################
 # - Docker build -t <name of image> .                       #
 # Name of image MUST be lower case.                         #
-# Make sure to build from folder containing Dockerfile      #
+# Make sure to build from googleFolder containing Dockerfile      #
 # - Docker run -p host_port:8080 <name of image>            #
 # Host port should be any open port on the host system,     #
 # which will be your way to access the container.           #

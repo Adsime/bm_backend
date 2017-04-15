@@ -1,8 +1,10 @@
 package com.acc.service;
 
 import com.acc.google.FileHandler;
+import com.acc.models.Folder;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.http.protocol.HTTP;
 import org.eclipse.jetty.http.HttpStatus;
 
@@ -30,5 +32,14 @@ public class FileService extends GeneralService {
         } catch (Exception e) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity("Invalid folder ID provided.").build();
         }
+    }
+
+    public Response createFolder(Folder folder) {
+        boolean created = fileHandler.createFolder(folder);
+        Response response = Response
+                                .status(created ? HttpStatus.OK_200 : HttpStatus.BAD_REQUEST_400)
+                                .entity(created ? folder.getName() + " er opprettet!" : "Var ikke i stand til å opprette " + folder.getName())
+                                .build();
+        return response;
     }
 }

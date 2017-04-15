@@ -8,20 +8,20 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 08.03.2017.
  */
-public class Folder {
+public class googleFolder {
     private File folder;
-    private List<Folder> children;
+    private List<googleFolder> children;
 
-    public Folder() {
+    public googleFolder() {
     }
 
-    public Folder(File folder) {
+    public googleFolder(File folder) {
         this.folder = folder;
     }
 
-    public Folder(File folder, List<Folder> folders) {
+    public googleFolder(File folder, List<googleFolder> googleFolders) {
         this.folder = folder;
-        this.children = folders;
+        this.children = googleFolders;
     }
 
     public File getFolder() {
@@ -32,11 +32,11 @@ public class Folder {
         this.folder = folder;
     }
 
-    public List<Folder> getChildren() {
+    public List<googleFolder> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Folder> children) {
+    public void setChildren(List<googleFolder> children) {
         this.children = children;
     }
 

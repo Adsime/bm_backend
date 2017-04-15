@@ -1,15 +1,15 @@
 package com.acc.resources;
 
 import com.acc.google.FileHandler;
+import com.acc.models.Folder;
 import com.acc.service.FileService;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -20,6 +20,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import com.google.gson.Gson;
 import org.apache.http.HttpResponse;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -57,6 +58,21 @@ public class FileResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFolderContent(@Context HttpHeaders headers) {
         return service.getFolderContent(null);
+    }
+
+    @POST
+    @Path("/folder")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createFolder(JsonObject o) {
+        Folder folder = new Gson().fromJson(o.toString(), Folder.class);
+        if(folder.getName() == null || folder.getParent() == null) {
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity("Ufullstendig informasjon.\n" +
+                    "Format: \n{\n" +
+                    " name: <FolderName>,\n" +
+                    " parent: <Parent ID>\n" +
+                    "}").build();
+        }
+        return service.createFolder(folder);
     }
 
     @GET

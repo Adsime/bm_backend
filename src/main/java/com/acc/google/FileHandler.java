@@ -1,5 +1,6 @@
 package com.acc.google;
 
+import com.acc.models.Folder;
 import com.acc.models.Problem;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -63,8 +64,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
+                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -101,7 +102,7 @@ public class FileHandler {
      * by comparing the parents of the items in the list.
      * @return List of Folders
      */
-    public List<Folder> getTreeStructure() {
+    public List<googleFolder> getTreeStructure() {
         try {
             Drive service = getDriveService();
             FileList result = service.files().list()
@@ -131,6 +132,40 @@ public class FileHandler {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean createFolder(Folder folder) {
+        try {
+            Drive service = getDriveService();
+            if(exists(folder.getName(), folder.getParent())) {
+                return false;
+            }
+            File fileMetadata = new File();
+            fileMetadata.setName(folder.getName());
+            fileMetadata.setParents(Lists.newArrayList(folder.getParent()));
+            fileMetadata.setMimeType("application/vnd.google-apps.folder");
+
+            File file = service.files().create(fileMetadata)
+                    .setFields("id")
+                    .execute();
+            return true;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean exists(String name, String parent) {
+        try {
+            Drive service = getDriveService();
+            FileList files = service.files().list()
+                    .setQ("'" + parent + "' in parents" + "and trashed = false and name = '" + name + "'")
+                    .execute();
+            return files.size() > 0;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return true;
     }
 
     /**
@@ -290,22 +325,22 @@ public class FileHandler {
         }
      }
 
-    private List<Folder> build(List<File> list, String root) {
-        ArrayList<Folder> folders = new ArrayList<>();
-        if(list.isEmpty()) return folders;
+    private List<googleFolder> build(List<File> list, String root) {
+        ArrayList<googleFolder> googleFolders = new ArrayList<>();
+        if(list.isEmpty()) return googleFolders;
         File file;
         Iterator<File> it = list.iterator();
         while(it.hasNext() && (file = it.next()) != null) {
             if(file.getParents().get(0).equals(root)) {
-                folders.add(new Folder(file));
+                googleFolders.add(new googleFolder(file));
                 list.remove(file);
                 it = list.iterator();
             }
 
         }
-        for(Folder f : folders) {
+        for(googleFolder f : googleFolders) {
             f.setChildren(build(list, f.getFolder().getId()));
         }
-        return folders;
+        return googleFolders;
     }
 }
