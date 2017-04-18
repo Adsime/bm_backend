@@ -77,6 +77,10 @@ public class Problem extends HateOAS {
         return new Gson().toJson(this);
     }
 
+    public String toString() {
+        return this.toJson();
+    }
+
     public List<Integer> getTagIdList (){
         List<Integer> idList = new ArrayList<>();
         for (Tag tag : tags) idList.add(tag.getId());
