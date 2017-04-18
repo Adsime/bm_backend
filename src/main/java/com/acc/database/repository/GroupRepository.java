@@ -142,9 +142,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 else group.getSupervisors().add(user);
             }
 
-            List<Integer> userIdList = new ArrayList<>();
-            for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
-            group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
+            List<Integer> studentIdList = new ArrayList<>();
+            List<Integer> supervisorIdList = new ArrayList<>();
+            for (HbnUser hbnUser: hbnBachelorGroup.getUsers()){
+                if(hasStudentTag(hbnUser.getTags()))studentIdList.add((int)hbnUser.getId());
+                else supervisorIdList.add((int)hbnUser.getId());
+            }
+            group.addLinks(Links.STUDENT, Links.generateLinks(Links.STUDENTS, studentIdList));
+            group.addLinks(Links.SUPERVISOR, Links.generateLinks(Links.SUPERVISORS, supervisorIdList));
 
             if (group.getProblem() != null ) {
                 List<Integer> problemId = new ArrayList<>();
