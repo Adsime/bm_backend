@@ -106,12 +106,12 @@ CREATE TABLE IF NOT EXISTS `bm_database`.`GROUP_DOCUMENT` (
   PRIMARY KEY (`bachelor_group_id`, `document_id`),
   INDEX `fk_group_document_document_idx` (`document_id` ASC),
   INDEX `fk_group_document_bachelor_group_idx` (`bachelor_group_id` ASC),
-  CONSTRAINT `fk_Gruppe_has_Bruker_Gruppe1`
+  CONSTRAINT `fk_group_has_document_group`
   FOREIGN KEY (`bachelor_group_id`)
   REFERENCES `bm_database`.`BACHELOR_GROUP` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE ,
-  CONSTRAINT `fk_Gruppe_has_Bruker_Bruker1`
+  CONSTRAINT `fk_group_has_document_document`
   FOREIGN KEY (`document_id`)
   REFERENCES `bm_database`.`DOCUMENT` (`id`)
     ON DELETE CASCADE

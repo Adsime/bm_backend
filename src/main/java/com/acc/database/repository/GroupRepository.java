@@ -6,6 +6,7 @@ import com.acc.models.*;
 import com.acc.providers.Links;
 
 import javax.persistence.EntityNotFoundException;
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,10 +25,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     public Group add(Group group) throws EntityNotFoundException, IllegalArgumentException{
         if(group.getName().equals("")) throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut nødvendige felter!");
 
-        Set<HbnUser> groupAssociates = new HashSet<>();
-        if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
-        if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
-
         HbnBachelorGroup mappedGroup = new HbnBachelorGroup(group.getName());
 
         try {
@@ -37,10 +34,15 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         }
 
         try {
-            if (group.getDocument() != null) mappedGroup.setDocument(getHbnDocument(group.getDocument()));
+            if (group.getDocuments() != null) mappedGroup.setDocuments(getHbnDocuments(group.getDocuments()));
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i registrering av gruppe: \nOppgave med id: " + group.getDocument().getId() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i registrering av gruppe: \nOppgave med id: " + group.getDocuments().get(0).getId() + " finnes ikke");
         }
+        
+        Set<HbnUser> groupAssociates = new HashSet<>();
+        // TODO: 18.04.2017 try catch for supervisor
+        if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
+        if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
         mappedGroup.setUsers(groupAssociates);
 
         long id = super.addEntity(mappedGroup);
@@ -49,8 +51,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 (int)id,
                 group.getName(),
                 group.getStudents(),
-                group.getSupervisors(),
-                group.getDocument()
+                group.getSupervisors()
         );
         return addedGroup;
     }
@@ -60,9 +61,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         Set<HbnUser> groupAssociates = new HashSet<>();
         HbnBachelorGroup hbnBachelorGroup = new HbnBachelorGroup(group.getName());
         hbnBachelorGroup.setId(group.getId());
-        if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
-        if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
-        hbnBachelorGroup.setUsers(groupAssociates);
 
         try {
             if (group.getTags() != null) hbnBachelorGroup.setTags(super.getHbnTagSet(group.getTags()));
@@ -71,10 +69,15 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         }
 
         try {
-            if (group.getDocument() != null) hbnBachelorGroup.setDocument(getHbnDocument(group.getDocument()));
+            if (group.getDocuments() != null) hbnBachelorGroup.setDocuments(getHbnDocuments(group.getDocuments()));
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nOppgave med id: " + group.getDocument().getId() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nEn eller flere oppgaver finnes ikke");
         }
+
+        // TODO: 18.04.2017 try catch for supervisor
+        if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
+        if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
+        hbnBachelorGroup.setUsers(groupAssociates);
 
         return super.updateEntity(hbnBachelorGroup);
     }
@@ -102,19 +105,24 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
         for (HbnEntity entity : readData ){
             HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
-            Document groupDocument = null;
 
-            if (hbnBachelorGroup.getDocument() != null){
-                groupDocument = new Document(
-                        (int) hbnBachelorGroup.getDocument().getId(),
-                        (int) hbnBachelorGroup.getDocument().getUser().getId(),
+            List<Document> groupDocuments = new ArrayList<>();
+            Set<HbnDocument> groupHbnDocuments = hbnBachelorGroup.getDocuments();
+            if (!groupHbnDocuments.isEmpty()){
+
+                Document document;
+                for (HbnDocument hbnDocument : groupHbnDocuments)
+                document = new Document(
+                        (int) hbnDocument.getId(),
+                        (int) hbnDocument.getUser().getId(),
                         "",
                         "",
-                        hbnBachelorGroup.getDocument().getPath(),
-                        super.toTagList(hbnBachelorGroup.getDocument().getTags()
+                        hbnDocument.getPath(),
+                        super.toTagList(hbnDocument.getTags()
                 ));
-                List<Integer> authorId = new ArrayList<>(groupDocument.getAuthor());
-                groupDocument.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+                List<Integer> authorId = new ArrayList<>(document.getAuthor());
+                document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+                groupDocuments.add(document);
             }
 
             Group group = new Group(
@@ -213,8 +221,12 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return result;
     }
 
-    private HbnDocument getHbnDocument(Document document){
-        return (HbnDocument) super.queryToDb(new GetDocumentByIdSpec(document.getId())).get(0);
+    private Set<HbnDocument> getHbnDocuments(List<Document> documents){
+        Set<HbnDocument> hbnDocuments = new HashSet<>();
+        for (Document document : documents) {
+            hbnDocuments.add((HbnDocument) super.queryToDb(new GetDocumentByIdSpec(document.getId())));
+        }
+        return hbnDocuments;
     }
 
     private boolean hasStudentTag(Set<HbnTag> tags){
@@ -286,7 +298,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return groupAssociates;
     }
 
-    public boolean assignUserToGroup(long userId, long groupId){
+    /*public boolean assignUserToGroup(long userId, long groupId){
         HbnUser groupAssociate = (HbnUser) super.queryToDb(new GetUserByIdSpec(userId));
         HbnBachelorGroup group = (HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(groupId));
         group.getUsers().add(groupAssociate);
@@ -297,5 +309,5 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         HbnBachelorGroup group = (HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(groupId));
         group.setDocument(document);
         return super.updateEntity(group);
-    }
+    }*/
 }

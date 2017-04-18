@@ -5,11 +5,10 @@ import com.acc.database.repository.GroupRepository;
 import com.acc.database.repository.DocumentRepository;
 import com.acc.database.repository.TagRepository;
 import com.acc.database.repository.UserRepository;
-import com.acc.database.specification.GetGroupByIdSpec;
-import com.acc.database.specification.GetUserByIdSpec;
+import com.acc.database.specification.*;
 import com.acc.database.repository.*;
 import com.acc.database.specification.GetGroupByIdSpec;
-import com.acc.database.specification.GetUserByTagSpec;
+import com.acc.models.Document;
 import com.acc.models.Group;
 import com.acc.models.User;
 
@@ -30,13 +29,25 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
+            Document doc = new Document(1,1,"Cray cray doc","this shit is legit lit", "//some:path",null);
+            Group group = GR.getQuery(new GetGroupByIdSpec(0)).get(0);
+            List<Group> groups = new ArrayList<>();
+            groups.add(group);
+            //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
+            System.out.println("NORMAl QUERY: "+ PR.getQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
+            System.out.println("MIN QUERY: "+ PR.getMinimalQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
+            doc.setGroups(groups);
+            PR.update(doc);
+            System.out.println("NORMAl QUERY: "+ PR.getQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
+            System.out.println("MIN QUERY: "+ PR.getMinimalQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
+
+            /*
             User merlin = UR.getQuery(new GetUserByIdSpec(1)).get(0);
             String username = merlin.getEnterpriseID();
             String password = "admin";
             System.out.println("UN: " + username );
             AR.register(username, password,merlin);
-            System.out.println("you're logged in fucker");
-
+            System.out.println("you're logged in fucker");*/
         } catch (IllegalArgumentException iae){
             System.out.println(iae.getMessage());
         } catch (EntityNotFoundException enf){

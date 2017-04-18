@@ -12,23 +12,21 @@ public class Group extends HateOAS {
     private int id;
     private String name;
     private List<User> students, supervisors;
-    private Document document;
+    private List<Document> documents;
     private List<Tag> tags;
 
     public Group() {}
 
-    public Group(int id, String name, List<User> students, List<User> supervisors, Document document) {
+    public Group(int id, String name, List<User> students, List<User> supervisors) {
         this.id = id;
         this.name = name;
         this.students = students;
         this.supervisors = supervisors;
-        this.document = document;
     }
 
-    public Group(int id, String name, Document document) {
+    public Group(int id, String name) {
         this.id = id;
         this.name = name;
-        this.document = document;
     }
 
     public int getId() {
@@ -63,12 +61,12 @@ public class Group extends HateOAS {
         this.supervisors = supervisors;
     }
 
-    public Document getDocument() {
-        return document;
+    public List<Document> getDocuments() {
+        return documents;
     }
 
-    public void setDocument(Document document) {
-        this.document = document;
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 
     public List<Tag> getTags() {

@@ -21,8 +21,6 @@ import java.util.*;
  */
 
 // TODO: 16.03.2017 Every registration must have a full rollback! (GROUP)
-
-// TODO: 07.03.2017 VERY BLOATED CLASS
 public abstract class AbstractRepository{
 
     private static SessionFactory sessionFactory;

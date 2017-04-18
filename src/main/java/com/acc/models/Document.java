@@ -12,6 +12,7 @@ public class Document extends HateOAS {
 
     private int id, author;
     private String title, content, path;
+    private List<Group> groups;
     private List<Tag> tags;
 
     public Document() {}
@@ -73,6 +74,14 @@ public class Document extends HateOAS {
         this.tags = tags;
     }
 
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
+
     public String toJson() {
         return new Gson().toJson(this);
     }
@@ -84,6 +93,12 @@ public class Document extends HateOAS {
     public List<Integer> getTagIdList (){
         List<Integer> idList = new ArrayList<>();
         for (Tag tag : tags) idList.add(tag.getId());
+        return idList;
+    }
+
+    public List<Integer> getGroupsIdList (){
+        List<Integer> idList = new ArrayList<>();
+        for (Group group : groups) idList.add(group.getId());
         return idList;
     }
 }
