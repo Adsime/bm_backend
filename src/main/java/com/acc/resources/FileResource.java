@@ -65,6 +65,8 @@ public class FileResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createFolder(JsonObject o) {
         Folder folder = new Gson().fromJson(o.toString(), Folder.class);
+        System.out.println(o);
+        System.out.println(folder);
         if(folder.getName() == null || folder.getParent() == null) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity("Ufullstendig informasjon.\n" +
                     "Format: \n{\n" +

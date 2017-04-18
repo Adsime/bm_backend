@@ -18,6 +18,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
+import sun.security.x509.AVA;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -30,6 +31,14 @@ import java.util.*;
  * Created by melsom.adrian on 09.03.2017.
  */
 public class FileHandler {
+
+    /**
+     * Folder and file status codes
+     */
+    public static final int EXISTS = 400;
+    public static final int AVAILABLE = 200;
+    public static final int CREATED = 201;
+    public static final int ERROR = 500;
 
     /** App name */
     private static final String APPLICATION_NAME = "Bachelor Manager";
@@ -64,8 +73,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
+                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -134,11 +143,11 @@ public class FileHandler {
         return null;
     }
 
-    public boolean createFolder(Folder folder) {
+    public int createFolder(Folder folder) {
         try {
             Drive service = getDriveService();
-            if(exists(folder.getName(), folder.getParent())) {
-                return false;
+            if(exists(folder.getName(), folder.getParent()) == EXISTS && !folder.isForced()) {
+                return EXISTS;
             }
             File fileMetadata = new File();
             fileMetadata.setName(folder.getName());
@@ -148,24 +157,24 @@ public class FileHandler {
             File file = service.files().create(fileMetadata)
                     .setFields("id")
                     .execute();
-            return true;
+            return CREATED;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return false;
+        return ERROR;
     }
 
-    public boolean exists(String name, String parent) {
+    public int exists(String name, String parent) {
         try {
             Drive service = getDriveService();
             FileList files = service.files().list()
-                    .setQ("'" + parent + "' in parents" + "and trashed = false and name = '" + name + "'")
+                    .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'" + " and mimeType = 'application/vnd.google-apps.folder'")
                     .execute();
-            return files.size() > 0;
+            return (files.getFiles().size() > 0) ? EXISTS : AVAILABLE;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return true;
+        return ERROR;
     }
 
     /**

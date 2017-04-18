@@ -16,11 +16,15 @@ public class Links {
     public static final String PROBLEM_LINK = "/problems";
 
     public static final String USER = "user";
+    public static final String STUDENT = "student";
+    public static final String SUPERVISOR = "supervisor";
     public static final String GROUP = "group";
     public static final String TAG = "tag";
     public static final String PROBLEM = "problem";
 
     public static final String USERS = "users";
+    public static final String STUDENTS = "students";
+    public static final String SUPERVISORS = "supervisors";
     public static final String GROUPS = "groups";
     public static final String TAGS = "tags";
     public static final String PROBLEMS = "problems";
@@ -48,6 +52,16 @@ public class Links {
             } case PROBLEM: {
                 for(int id : ids) {
                     retVal.add(new Link(type, PROBLEM_LINK + COMBINE + id));
+                }
+                break;
+            } case STUDENT: {
+                for(int id : ids) {
+                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
+                }
+                break;
+            }case SUPERVISOR: {
+                for(int id : ids) {
+                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
                 }
                 break;
             }

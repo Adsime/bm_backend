@@ -39,7 +39,7 @@ public class GroupService extends GeneralService{
 
     public Response getAllGroups() {
         try {
-            List<Group> groups = groupRepository.getQuery(new GetGroupAllSpec());
+            List<Group> groups = groupRepository.getMinimalQuery(new GetGroupAllSpec());
             return Response.ok(new Gson().toJson(groups)).build();
         } catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());

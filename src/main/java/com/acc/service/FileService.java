@@ -35,10 +35,16 @@ public class FileService extends GeneralService {
     }
 
     public Response createFolder(Folder folder) {
-        boolean created = fileHandler.createFolder(folder);
+        int created = fileHandler.createFolder(folder);
+        int status = (created == FileHandler.CREATED) ? HttpStatus.OK_200
+                : (created == FileHandler.EXISTS) ? HttpStatus.MULTIPLE_CHOICES_300
+                : HttpStatus.BAD_REQUEST_400;
+        String entity = (created == FileHandler.CREATED) ? folder.getName() + " er opprettet!"
+                : (created == FileHandler.EXISTS) ? folder.getName() + " eksisterer allerede. \nØnkser du å opprette en mappe med samme navn?"
+                : "Var ikke i stand til å opprette " + folder.getName();
         Response response = Response
-                                .status(created ? HttpStatus.OK_200 : HttpStatus.BAD_REQUEST_400)
-                                .entity(created ? folder.getName() + " er opprettet!" : "Var ikke i stand til å opprette " + folder.getName())
+                                .status(status)
+                                .entity(entity)
                                 .build();
         return response;
     }

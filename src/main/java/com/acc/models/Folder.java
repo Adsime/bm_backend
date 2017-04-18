@@ -5,10 +5,12 @@ package com.acc.models;
  */
 public class Folder {
     private String name, parent;
+    private boolean forced;
 
-    public Folder(String name, String parent) {
+    public Folder(String name, String parent, boolean forced) {
         this.name = name;
         this.parent = parent;
+        this.forced = forced;
     }
 
     public String getParent() {
@@ -27,11 +29,20 @@ public class Folder {
         this.name = name;
     }
 
+    public boolean isForced() {
+        return forced;
+    }
+
+    public void setForced(boolean forced) {
+        this.forced = forced;
+    }
+
     @Override
     public String toString() {
         return "Folder{" +
                 "name: '" + name + '\'' +
-                ", parent:'" + parent + '\'' +
+                ", parent: '" + parent + '\'' +
+                ", forced: " + forced +
                 '}';
     }
 }
