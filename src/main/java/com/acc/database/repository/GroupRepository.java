@@ -156,8 +156,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 if(hasStudentTag(hbnUser.getTags()))studentIdList.add((int)hbnUser.getId());
                 else supervisorIdList.add((int)hbnUser.getId());
             }
-            group.addLinks(Links.STUDENT, Links.generateLinks(Links.STUDENTS, studentIdList));
-            group.addLinks(Links.SUPERVISOR, Links.generateLinks(Links.SUPERVISORS, supervisorIdList));
+            group.addLinks(Links.STUDENTS, Links.generateLinks(Links.STUDENT, studentIdList));
+            group.addLinks(Links.SUPERVISORS, Links.generateLinks(Links.SUPERVISOR, supervisorIdList));
             group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
 
             if (hbnBachelorGroup.getTags() != null) {
@@ -195,8 +195,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 if(hasStudentTag(hbnUser.getTags()))studentIdList.add((int)hbnUser.getId());
                 else supervisorIdList.add((int)hbnUser.getId());
             }
-            group.addLinks(Links.STUDENT, Links.generateLinks(Links.STUDENTS, studentIdList));
-            group.addLinks(Links.SUPERVISOR, Links.generateLinks(Links.SUPERVISORS, supervisorIdList));            group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
+            group.addLinks(Links.STUDENTS, Links.generateLinks(Links.STUDENT, studentIdList));
+            group.addLinks(Links.SUPERVISORS, Links.generateLinks(Links.SUPERVISOR, supervisorIdList));            group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
 
             if (hbnBachelorGroup.getTags() != null) {
                 group.setTags(super.toTagList(hbnBachelorGroup.getTags()));

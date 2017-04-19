@@ -29,20 +29,9 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            Document doc2 = PR.getQuery(new GetDocumentByIdSpec(1)).get(0);
-            Document doc = new Document(1,2,"Cray cray doc","this shit is legit lit", "//some:path",null);
-            List<Document> docList = new ArrayList<>();
-            docList.add(doc2);
+            List<Group> groups = GR.getMinimalQuery(new GetGroupAllSpec());
+            System.out.println(groups);
 
-            Group group = GR.getQuery(new GetGroupByIdSpec(1)).get(0);
-            List<Group> groups = new ArrayList<>();
-            groups.add(group);
-
-            doc.setGroups(groups);
-            doc2 = PR.getQuery(new GetDocumentByIdSpec(1)).get(0);
-            System.out.println(doc2);
-            group.setDocuments(docList);
-            GR.update(group);
             //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*
             User merlin = UR.getQuery(new GetUserByIdSpec(1)).get(0);
