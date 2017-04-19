@@ -26,9 +26,9 @@ public class TestData {
 
     public static List<Group> testGroups() {
         List<Group> groups = new ArrayList<>();
-        groups.add(new Group(1, "asdasd",null, null, null));
-        groups.add(new Group(2, "asdasd",null, null, null));
-        groups.add(new Group(3, "asdasd",null, null, null));
+        groups.add(new Group(1, "asdasd",null, null));
+        groups.add(new Group(2, "asdasd",null, null));
+        groups.add(new Group(3, "asdasd",null, null));
         return groups;
     }
 

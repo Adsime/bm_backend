@@ -6,7 +6,6 @@ import com.acc.models.*;
 import com.acc.providers.Links;
 
 import javax.persistence.EntityNotFoundException;
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -107,11 +106,11 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
 
             List<Document> groupDocuments = new ArrayList<>();
-            Set<HbnDocument> groupHbnDocuments = hbnBachelorGroup.getDocuments();
-            if (!groupHbnDocuments.isEmpty()){
+            Set<HbnDocument> hbnDocuments = hbnBachelorGroup.getDocuments();
+            if (!hbnDocuments.isEmpty()){
 
-                Document document;
-                for (HbnDocument hbnDocument : groupHbnDocuments)
+                Document document = null;
+                for (HbnDocument hbnDocument : hbnDocuments)
                 document = new Document(
                         (int) hbnDocument.getId(),
                         (int) hbnDocument.getUser().getId(),
@@ -120,8 +119,10 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                         hbnDocument.getPath(),
                         super.toTagList(hbnDocument.getTags()
                 ));
-                List<Integer> authorId = new ArrayList<>(document.getAuthor());
-                document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+                if (document != null) {
+                    List<Integer> authorId = new ArrayList<>(document.getAuthor());
+                    document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+                }
                 groupDocuments.add(document);
             }
 
@@ -129,9 +130,9 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                     (int) hbnBachelorGroup.getId(),
                     hbnBachelorGroup.getName(),
                     new ArrayList<>(),
-                    new ArrayList<>(),
-                    groupDocument
+                    new ArrayList<>()
             );
+            group.setDocuments(groupDocuments);
 
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()){
                 User user = new User(
@@ -157,12 +158,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             }
             group.addLinks(Links.STUDENT, Links.generateLinks(Links.STUDENTS, studentIdList));
             group.addLinks(Links.SUPERVISOR, Links.generateLinks(Links.SUPERVISORS, supervisorIdList));
-
-            if (group.getDocument() != null ) {
-                List<Integer> documentId = new ArrayList<>();
-                documentId.add(group.getDocument().getId());
-                group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, documentId));
-            }
+            group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
 
             if (hbnBachelorGroup.getTags() != null) {
                 group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
@@ -174,6 +170,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return result;
     }
 
+    // TODO: 18.04.2017 ASSIGN VALUE TO ASSIGNMET FOR GROUP MODEL
     @Override
     public List<Group> getMinimalQuery(Specification spec) throws EntityNotFoundException{
         List<HbnEntity> readData;
@@ -186,31 +183,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         List<Group> result = new ArrayList<>();
 
         for (HbnEntity entity : readData ){
-            Document groupDocument;
             HbnBachelorGroup hbnBachelorGroup = (HbnBachelorGroup) entity;
-            HbnDocument hbnDocument = hbnBachelorGroup.getDocument();
-
-            if (hbnDocument != null){
-                groupDocument = new Document();
-                groupDocument.setId((int) hbnDocument.getId());
-                groupDocument.setTitle(hbnDocument.getTitle());
-            }
 
             Group group = new Group();
             group.setId((int)hbnBachelorGroup.getId());
             group.setName(hbnBachelorGroup.getName());
-            group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
 
-
-            List<Integer> userIdList = new ArrayList();
-            for (HbnUser hbnUser : hbnBachelorGroup.getUsers()) userIdList.add((int)hbnUser.getId());
-            group.addLinks(Links.USERS, Links.generateLinks(Links.USER, userIdList));
-
-            if (hbnDocument != null ) {
-                List<Integer> documentId = new ArrayList<>();
-                documentId.add(group.getDocument().getId());
-                group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, documentId));
-            }
+            group.addLinks(Links.USERS, Links.generateLinks(Links.USER, group.getUserIdList()));
+            group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
 
             if (hbnBachelorGroup.getTags() != null) {
                 group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
@@ -224,7 +204,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     private Set<HbnDocument> getHbnDocuments(List<Document> documents){
         Set<HbnDocument> hbnDocuments = new HashSet<>();
         for (Document document : documents) {
-            hbnDocuments.add((HbnDocument) super.queryToDb(new GetDocumentByIdSpec(document.getId())));
+            hbnDocuments.add((HbnDocument) super.queryToDb(new GetDocumentByIdSpec(document.getId())).get(0));
         }
         return hbnDocuments;
     }

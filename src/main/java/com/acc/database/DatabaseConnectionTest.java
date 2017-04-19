@@ -29,18 +29,21 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            Document doc = new Document(1,1,"Cray cray doc","this shit is legit lit", "//some:path",null);
-            Group group = GR.getQuery(new GetGroupByIdSpec(0)).get(0);
+            Document doc2 = PR.getQuery(new GetDocumentByIdSpec(1)).get(0);
+            Document doc = new Document(1,2,"Cray cray doc","this shit is legit lit", "//some:path",null);
+            List<Document> docList = new ArrayList<>();
+            docList.add(doc2);
+
+            Group group = GR.getQuery(new GetGroupByIdSpec(1)).get(0);
             List<Group> groups = new ArrayList<>();
             groups.add(group);
-            //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
-            System.out.println("NORMAl QUERY: "+ PR.getQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
-            System.out.println("MIN QUERY: "+ PR.getMinimalQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
-            doc.setGroups(groups);
-            PR.update(doc);
-            System.out.println("NORMAl QUERY: "+ PR.getQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
-            System.out.println("MIN QUERY: "+ PR.getMinimalQuery(new GetDocumentByIdSpec(1)).get(0).getTitle());
 
+            doc.setGroups(groups);
+            doc2 = PR.getQuery(new GetDocumentByIdSpec(1)).get(0);
+            System.out.println(doc2);
+            group.setDocuments(docList);
+            GR.update(group);
+            //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*
             User merlin = UR.getQuery(new GetUserByIdSpec(1)).get(0);
             String username = merlin.getEnterpriseID();

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Group extends HateOAS {
     private int id;
-    private String name;
+    private String name, assignment;
     private List<User> students, supervisors;
     private List<Document> documents;
     private List<Tag> tags;
@@ -86,4 +86,18 @@ public class Group extends HateOAS {
         if (tags != null) for (Tag tag : tags) idList.add(tag.getId());
         return idList;
     }
+
+    public List<Integer> getDocumentIdList (){
+        List<Integer> idList = new ArrayList<>();
+        if (documents != null) for (Document document : documents) idList.add(document.getId());
+        return idList;
+    }
+
+    public List<Integer> getUserIdList() {
+        List<Integer> idList = new ArrayList<>();
+        if (students != null) for (User student : students) idList.add(student.getId());
+        if (supervisors != null) for (User supervisor : supervisors) idList.add(supervisor.getId());
+        return idList;
+    }
+
 }

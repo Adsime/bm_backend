@@ -125,11 +125,11 @@ public class TestHibernateData {
     }
 
     public static Group getGroup() {
-        return new Group(1, "Group", getUserList(), getUserList(), getDocument());
+        return new Group(1, "Group", getUserList(), getUserList());
     }
 
     public static Group getGroupWrongId() {
-        return new Group(0, "Group", getUserList(), getUserList(), getDocument());
+        return new Group(0, "Group", getUserList(), getUserList());
     }
 
     public static List<HbnBachelorGroup> getHbnGroupList() {

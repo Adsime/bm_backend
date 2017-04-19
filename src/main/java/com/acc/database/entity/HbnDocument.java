@@ -78,7 +78,7 @@ public class HbnDocument implements Serializable, HbnEntity {
         this.title = title;
     }
 
-    @ManyToMany(mappedBy = "groupDocuments", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "documents", fetch = FetchType.EAGER)
     public Set<HbnBachelorGroup> getGroups(){
         return groups;
     }

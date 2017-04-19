@@ -62,6 +62,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
                 document.getTags()
         );
     }
+ 
 
     @Override
     public boolean update(Document document) throws EntityNotFoundException{
@@ -73,7 +74,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
         }
 
         try {
-            if (document.getGroups() != null || !document.getContent().isEmpty()) mappedDocument.setGroups(getHbnBachelorGroupSet(document.getGroups()));
+            if (document.getGroups() != null) mappedDocument.setGroups(getHbnBachelorGroupSet(document.getGroups()));
         }catch (EntityNotFoundException enfe){
             throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nEn eller flere grupper finnes ikke");
         }
@@ -129,8 +130,8 @@ public class DocumentRepository extends AbstractRepository implements Repository
 
             List<Integer> authorId = new ArrayList<>(document.getAuthor());
             document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
-            if (!document.getTags().isEmpty()) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
-            if (!document.getGroups().isEmpty()) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
+            if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
+            if (document.getGroups() != null) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
             result.add(document);
         }
         return result;
@@ -157,8 +158,8 @@ public class DocumentRepository extends AbstractRepository implements Repository
 
             List<Integer> authorId = new ArrayList<>(document.getAuthor());
             document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
-            if (!document.getTags().isEmpty()) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
-            if (!document.getGroups().isEmpty()) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
+            if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
+            if (document.getGroups() != null) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
             result.add(document);
         }
         return result;
@@ -171,7 +172,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
     private Set<HbnBachelorGroup> getHbnBachelorGroupSet(List<Group> groups){
         Set<HbnBachelorGroup> hbnBachelorGroups = new HashSet<>();
         for (Group group : groups) {
-            hbnBachelorGroups.add((HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(group.getId())));
+            hbnBachelorGroups.add((HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(group.getId())).get(0));
         }
         return hbnBachelorGroups;
     }
