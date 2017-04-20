@@ -195,6 +195,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 if(hasStudentTag(hbnUser.getTags()))studentIdList.add((int)hbnUser.getId());
                 else supervisorIdList.add((int)hbnUser.getId());
             }
+
             group.addLinks(Links.STUDENTS, Links.generateLinks(Links.STUDENT, studentIdList));
             group.addLinks(Links.SUPERVISORS, Links.generateLinks(Links.SUPERVISOR, supervisorIdList));            group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
 
@@ -202,6 +203,10 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
                 group.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, group.getTagIdList()));
             }
+
+            Set<HbnDocument> groupDocuments = hbnBachelorGroup.getDocuments();
+            group.setAssignment(getAssignment(groupDocuments));
+
             result.add(group);
         }
         return result;
@@ -282,6 +287,22 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             }
         }
         return groupAssociates;
+    }
+
+    public String getAssignment(Set<HbnDocument> documents){
+        if (documents != null) {
+            for (HbnDocument hbnDocument : documents) {
+                if (hasAssignment(hbnDocument.getTags())) {
+                    return hbnDocument.getTitle();
+                }
+            }
+        }
+        return "Ingen Oppgave";
+    }
+
+    public boolean hasAssignment(Set<HbnTag> tags){
+        for(HbnTag hbnTag : tags) if(hbnTag.getType().equals("Oppgave")) return true;
+        return false;
     }
 
     /*public boolean assignUserToGroup(long userId, long groupId){

@@ -45,6 +45,14 @@ public class Group extends HateOAS {
         this.name = name;
     }
 
+    public String getAssignment() {
+        return assignment;
+    }
+
+    public void setAssignment(String assignment) {
+        this.assignment = assignment;
+    }
+
     public List<User> getStudents() {
         return students;
     }
