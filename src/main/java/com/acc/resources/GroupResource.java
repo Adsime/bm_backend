@@ -61,7 +61,6 @@ public class GroupResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed("admin")
     /**
      *
      */
