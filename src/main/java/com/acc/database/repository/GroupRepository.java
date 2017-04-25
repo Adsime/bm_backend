@@ -197,7 +197,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             }
 
             group.addLinks(Links.STUDENTS, Links.generateLinks(Links.STUDENT, studentIdList));
-            group.addLinks(Links.SUPERVISORS, Links.generateLinks(Links.SUPERVISOR, supervisorIdList));            group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
+            group.addLinks(Links.SUPERVISORS, Links.generateLinks(Links.SUPERVISOR, supervisorIdList));
+            group.addLinks(Links.DOCUMENTS, Links.generateLinks(Links.DOCUMENT, group.getDocumentIdList()));
 
             if (hbnBachelorGroup.getTags() != null) {
                 group.setTags(super.toTagList(hbnBachelorGroup.getTags()));
