@@ -50,5 +50,7 @@ public class FileService extends GeneralService {
     public Response deleteItem(String id, boolean forced) {
         int status = fileHandler.deleteItem(id, forced);
         return Response.status(status).build();
-}
+    }
+
+
 }
