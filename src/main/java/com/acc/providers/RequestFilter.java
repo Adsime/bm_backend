@@ -1,13 +1,17 @@
 package com.acc.providers;
 
 import com.acc.jsonWebToken.TokenHandler;
+import com.acc.requestContext.BMSecurityContext;
+import com.acc.requestContext.ContextUser;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.List;
@@ -24,8 +28,11 @@ public class RequestFilter implements ContainerRequestFilter {
     @Inject
     private TokenHandler tokenHandler;
 
+    @Inject
+    private ContextUser contextUser;
+
     @Override
-    public void filter(ContainerRequestContext context) throws IOException {
+    public void filter(final ContainerRequestContext context) throws IOException {
 
         List<String> a = context.getHeaders().get("access-control-request-headers");
         if(a != null) {
@@ -37,7 +44,9 @@ public class RequestFilter implements ContainerRequestFilter {
             if(context.getUriInfo().getPath().contains("accounts") && authHeader.startsWith(BASIC)) {
                 return;
             }
-            if(authHeader.startsWith(BEARER) && tokenHandler.verify(authHeader.split(" ")[1])) {
+            String token = authHeader.split(" ")[1];
+            if(authHeader.startsWith(BEARER) && tokenHandler.verify(token)) {
+                context.setSecurityContext(new BMSecurityContext(tokenHandler.getUserAllowance(token)));
                 return;
             }
         }
