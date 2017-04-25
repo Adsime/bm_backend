@@ -217,9 +217,9 @@ INSERT INTO USER VALUES
   (4, 'Duy', 'Nguyen', 'duynguyen@hotmail.no','94432647','','nguyen.duy','0'),
   (5, 'Kim', 'Vu', 'kimvu@hotmail.no','42149144','','vu.kim','0'),
   (6, 'Adrian', 'Melsom', 'adrianmelsom@hotmail.no','234792348','','melsom.adrian','0'),
-  (7, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','23580522','','guldal.jostein','0'),
-  (8, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','025839434','','kartveit.joakim','0'),
-  (9, 'admin', 'admin', 'admin@admin','94432647', '', 'admin', '0');
+  (7, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','23580522','','guldal.jostein','2'),
+  (8, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','025839434','','kartveit.joakim','2'),
+  (9, 'admin', 'admin', 'admin@admin','94432647', '', 'admin', '9');
 
 INSERT INTO BACHELOR_GROUP VALUES
   (1,'City', null),
@@ -228,7 +228,9 @@ INSERT INTO BACHELOR_GROUP VALUES
 INSERT INTO TAG VALUES
   (1,'Student', '', 'Rolle'),
   (2,'Veileder', 'Skal bistå med faglig hjelp for bachelorgruppen', 'Rolle'),
-  (3,'2017', 'Fiscal Year', 'FY');
+  (3,'2017', 'Fiscal Year', 'FY'),
+  (4,'2012', 'Fiscal Year', 'FY');
 
 INSERT INTO GROUP_ASSOCIATE VALUES (1,1),(1,2),(2,3),(2,4),(2,5),(2,6),(2,7),(2,8);
 INSERT INTO USER_TAG VALUES(1,2),(7,2),(8,2),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(8 ,3),(2,1),(3,1),(4,1),(5,1),(6,1);
+INSERT INTO GROUP_TAG VALUE (2,4);
