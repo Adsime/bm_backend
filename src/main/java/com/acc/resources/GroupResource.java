@@ -67,7 +67,7 @@ public class GroupResource {
     public Response queryGroups(@Context HttpHeaders headers,
                                 @QueryParam("tags") List<String> tags,
                                 @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
-        System.out.println("ACTION: GET - group | QUERY. tags = " + tags + " hasAll = " + hasAll);  
+        System.out.println("ACTION: GET - group | QUERY. tags = " + tags + " hasAll = " + hasAll);
         try {
             if(tags.isEmpty()) {
                 return service.getAllGroups();

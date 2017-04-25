@@ -18,7 +18,6 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
-import sun.security.x509.AVA;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -35,10 +34,13 @@ public class FileHandler {
     /**
      * Folder and file status codes
      */
-    public static final int EXISTS = 400;
-    public static final int AVAILABLE = 200;
-    public static final int CREATED = 201;
-    public static final int ERROR = 500;
+    public static final int EXISTS_400 = 400;
+    public static final int AVAILABLE_200 = 200;
+    public static final int CREATED_201 = 201;
+    public static final int ERROR_500 = 500;
+    public static final int DELETED_204 = 204;
+    public static final int MULTIPLE_CHOICES_300 = 300;
+    public static final int NOT_FOUND_404 = 404;
 
     /** App name */
     private static final String APPLICATION_NAME = "Bachelor Manager";
@@ -73,8 +75,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
+                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -146,8 +148,8 @@ public class FileHandler {
     public int createFolder(Folder folder) {
         try {
             Drive service = getDriveService();
-            if(exists(folder.getName(), folder.getParent()) == EXISTS && !folder.isForced()) {
-                return EXISTS;
+            if(exists(folder.getName(), folder.getParent()) == EXISTS_400 && !folder.isForced()) {
+                return EXISTS_400;
             }
             File fileMetadata = new File();
             fileMetadata.setName(folder.getName());
@@ -157,11 +159,11 @@ public class FileHandler {
             File file = service.files().create(fileMetadata)
                     .setFields("id")
                     .execute();
-            return CREATED;
+            return CREATED_201;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ERROR;
+        return ERROR_500;
     }
 
     public int exists(String name, String parent) {
@@ -170,11 +172,11 @@ public class FileHandler {
             FileList files = service.files().list()
                     .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'" + " and mimeType = 'application/vnd.google-apps.folder'")
                     .execute();
-            return (files.getFiles().size() > 0) ? EXISTS : AVAILABLE;
+            return (files.getFiles().size() > 0) ? EXISTS_400 : AVAILABLE_200;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ERROR;
+        return ERROR_500;
     }
 
     /**
@@ -245,15 +247,6 @@ public class FileHandler {
                 }
             }
             return false;
-        }
-    }
-
-    public OutputStream asdasd(String id) {
-        try {
-            Drive service = getDriveService();
-            return getFileContent(id, service);
-        }catch (IOException ioe) {
-            return null;
         }
     }
 
@@ -332,6 +325,24 @@ public class FileHandler {
         } catch (IOException ioe) {
             return null;
         }
+     }
+
+     public int deleteItem(String id, boolean forced) {
+        try {
+            Drive service = getDriveService();
+            FileList files = service.files().list()
+                    .setQ("'" + id + "' in parents" + " and trashed = false")
+                    .execute();
+            if(files.getFiles().size() < 1 || forced) {
+                service.files().delete(id).execute();
+                return DELETED_204;
+            } else if(files.size() > 0) {
+                return MULTIPLE_CHOICES_300;
+            }
+        } catch (IOException ioe) {
+            return ERROR_500;
+        }
+        return NOT_FOUND_404;
      }
 
     private List<googleFolder> build(List<File> list, String root) {

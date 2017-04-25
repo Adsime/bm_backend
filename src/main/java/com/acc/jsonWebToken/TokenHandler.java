@@ -13,6 +13,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.sun.org.apache.xml.internal.security.utils.UnsyncBufferedOutputStream;
 
+import javax.inject.Inject;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +28,9 @@ public class TokenHandler {
 
     public static final String USER_ACCESS_LEVEL = "UAL";
     public static final String USER = "USER";
+
+    @Inject
+    private ContextUser user;
 
     public TokenHandler() {
 
@@ -62,8 +66,7 @@ public class TokenHandler {
         DecodedJWT jwt = decode(token);
         Claim ual = jwt.getClaim(USER_ACCESS_LEVEL);
         Claim un = jwt.getClaim(USER);
-        int accessLevel = ual.asInt();
-        ContextUser user = new ContextUser();
+        int accessLevel = Integer.parseInt(ual.asString());
         user.setName(un.asString());
         switch (accessLevel) {
             case BMSecurityContext.ADMIN: {
