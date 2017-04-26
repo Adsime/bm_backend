@@ -4,8 +4,6 @@ import com.acc.google.FileHandler;
 import com.acc.models.Folder;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
-import com.sun.org.apache.regexp.internal.RE;
-import org.apache.http.protocol.HTTP;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -36,11 +34,11 @@ public class FileService extends GeneralService {
 
     public Response createFolder(Folder folder) {
         int created = fileHandler.createFolder(folder);
-        int status = (created == FileHandler.CREATED) ? HttpStatus.OK_200
-                : (created == FileHandler.EXISTS) ? HttpStatus.MULTIPLE_CHOICES_300
+        int status = (created == FileHandler.CREATED_201) ? HttpStatus.OK_200
+                : (created == FileHandler.EXISTS_400) ? HttpStatus.MULTIPLE_CHOICES_300
                 : HttpStatus.BAD_REQUEST_400;
-        String entity = (created == FileHandler.CREATED) ? folder.getName() + " er opprettet!"
-                : (created == FileHandler.EXISTS) ? folder.getName() + " eksisterer allerede. \nØnkser du å opprette en mappe med samme navn?"
+        String entity = (created == FileHandler.CREATED_201) ? folder.getName() + " er opprettet!"
+                : (created == FileHandler.EXISTS_400) ? folder.getName() + " eksisterer allerede. \nØnkser du å opprette en mappe med samme navn?"
                 : "Var ikke i stand til å opprette " + folder.getName();
         Response response = Response
                                 .status(status)
@@ -48,4 +46,11 @@ public class FileService extends GeneralService {
                                 .build();
         return response;
     }
+
+    public Response deleteItem(String id, boolean forced) {
+        int status = fileHandler.deleteItem(id, forced);
+        return Response.status(status).build();
+    }
+
+
 }

@@ -1,16 +1,19 @@
 package com.acc.resources;
 
 import com.acc.models.Group;
+import com.acc.requestContext.ContextUser;
 import com.acc.service.GeneralService;
 import com.acc.service.GroupService;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -27,9 +30,13 @@ public class GroupResource {
     @Inject
     public GroupService service;
 
+    @Context
+    private ContainerRequestContext context;
 
     @Before
-    public void setup() {}
+    public void setup() {
+
+    }
 
     @GET
     @Path("ping")

@@ -35,19 +35,22 @@ public class Links {
         List<Link> retVal = new ArrayList<>();
         switch (type) {
             case USER: {
-                for(int id : ids) {
+                ids.forEach(id -> retVal.add(new Link(type, USER_LINK + COMBINE + id)));
+                /*for(int id : ids) {
                     retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }
+                }*/
                 break;
             } case GROUP: {
-                for(int id : ids) {
+                ids.forEach(id -> retVal.add(new Link(type, GROUP_LINK + COMBINE + id)));
+                /*for(int id : ids) {
                     retVal.add(new Link(type, GROUP_LINK + COMBINE + id));
-                }
+                }*/
                 break;
             } case TAG: {
-                for(int id : ids) {
+                ids.forEach(id -> retVal.add(new Link(type, TAG_LINK + COMBINE + id)));
+                /*for(int id : ids) {
                     retVal.add(new Link(type, TAG_LINK + COMBINE + id));
-                }
+                }*/
                 break;
             } case DOCUMENT: {
                 for(int id : ids) {
@@ -55,14 +58,16 @@ public class Links {
                 }
                 break;
             } case STUDENT: {
-                for(int id : ids) {
+                ids.forEach(id -> retVal.add(new Link(type, GROUP_LINK + COMBINE + id)));
+                /*for(int id : ids) {
                     retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }
+                }*/
                 break;
             }case SUPERVISOR: {
-                for(int id : ids) {
+                ids.forEach(id -> retVal.add(new Link(type, GROUP_LINK + COMBINE + id)));
+                /*for(int id : ids) {
                     retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }
+                }*/
                 break;
             }
         }

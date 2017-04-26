@@ -4,10 +4,7 @@ import com.acc.google.FileHandler;
 import com.acc.models.Folder;
 import com.acc.service.FileService;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
@@ -21,7 +18,18 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.http.HttpResponse;
+import org.docx4j.Docx4J;
+import org.docx4j.Docx4jProperties;
+import org.docx4j.XmlUtils;
+import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
+import org.docx4j.convert.out.HTMLSettings;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.exceptions.InvalidFormatException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.AltChunkType;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -65,8 +73,6 @@ public class FileResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createFolder(JsonObject o) {
         Folder folder = new Gson().fromJson(o.toString(), Folder.class);
-        System.out.println(o);
-        System.out.println(folder);
         if(folder.getName() == null || folder.getParent() == null) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity("Ufullstendig informasjon.\n" +
                     "Format: \n{\n" +
@@ -96,7 +102,46 @@ public class FileResource {
         return null;
     }
 
+    @DELETE
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteItem(@PathParam("id") String id,
+                               @DefaultValue("false") @QueryParam("forced") boolean forced) {
+        Response response = service.deleteItem(id, forced);
+        return response;
+    }
 
+    @POST
+    @Path("/test/{name}")
+    @Consumes(MediaType.TEXT_HTML)
+    public Response upload(String html, @PathParam("name") String name) {
+        try {
+            try {
+                WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
+                MainDocumentPart mdp = wordMLPackage.getMainDocumentPart();
+
+                mdp.addAltChunk(AltChunkType.Xhtml, html.getBytes());
+                mdp.addParagraphOfText("Hello world");
+
+                String filename = System.getProperty("user.dir") + "/" + name + ".docx";
+                File file = new File(filename);
+
+                WordprocessingMLPackage fin = mdp.convertAltChunks();
+
+                // Saving the file locally, then uploads to the server.
+                Docx4J.save(fin, file, Docx4J.FLAG_SAVE_ZIP_FILE);
+                service.saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false));
+
+                // Ensures the file is deleted from the server storage after it's been uploaded.
+                file.delete();
+            } catch (Docx4JException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+
+        }
+        return Response.ok().build();
+    }
 
     @POST
     @Path("/upload")
@@ -107,8 +152,8 @@ public class FileResource {
         String fileLocation = fileDetail.getFileName();
         String[] split = fileLocation.split("\\.");
         String extension = "." + split[split.length -1];
-        String type = findType(fileLocation, false);
-        String originalType = findType(fileLocation, true);
+        String type = findType(fileLocation, true);
+        String originalType = findType(fileLocation, false);
 
         if(type == null || originalType == null) {
             return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
