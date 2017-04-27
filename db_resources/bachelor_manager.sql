@@ -209,8 +209,6 @@ GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'170.251.113.193' IDENTIFIED BY 
 GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'37.191.228.181' IDENTIFIED BY 'admin';
 GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'52.214.224.105' IDENTIFIED BY 'admin';
 
-
-
 -- DEFAULT DATA --
 INSERT INTO USER VALUES
   (1, 'David', 'Silva', 'merlin@mcfc.co.uk','40404040', '', 'silva.david', '0'),
