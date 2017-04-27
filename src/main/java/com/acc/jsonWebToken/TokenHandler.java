@@ -11,7 +11,6 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.sun.org.apache.xml.internal.security.utils.UnsyncBufferedOutputStream;
 
 import javax.inject.Inject;
 import java.io.UnsupportedEncodingException;

@@ -34,6 +34,7 @@ public class RequestFilter implements ContainerRequestFilter {
     @Override
     public void filter(final ContainerRequestContext context) throws IOException {
 
+        System.out.println(context.getHeaders());
         List<String> a = context.getHeaders().get("access-control-request-headers");
         if(a != null) {
             return;
@@ -57,6 +58,7 @@ public class RequestFilter implements ContainerRequestFilter {
                 .build();
         context.abortWith(unauthorizedResponse);
     }
+
 
 
 }

@@ -124,4 +124,9 @@ public class User extends HateOAS {
         if (tags != null) for (Tag tag : tags) idList.add(tag.getId());
         return idList;
     }
+
+    @Override
+    public String toString() {
+        return toJson();
+    }
 }

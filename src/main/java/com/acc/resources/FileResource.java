@@ -7,6 +7,7 @@ import com.acc.service.FileService;
 import java.io.*;
 import javax.inject.Inject;
 import javax.json.JsonObject;
+import javax.persistence.PostRemove;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -68,12 +69,19 @@ public class FileResource {
         return service.getFolderContent(null);
     }
 
+    @GET
+    @Path("/open/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public Response getFileAsHtml(@PathParam("id") String id) {
+        return Response.ok(service.getFileAsHtml(id)).build();
+    }
+
     @POST
     @Path("/folder")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createFolder(JsonObject o) {
         Folder folder = new Gson().fromJson(o.toString(), Folder.class);
-        if(folder.getName() == null || folder.getParent() == null) {
+        if (folder.getName() == null || folder.getParent() == null) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity("Ufullstendig informasjon.\n" +
                     "Format: \n{\n" +
                     " name: <FolderName>,\n" +
@@ -81,25 +89,6 @@ public class FileResource {
                     "}").build();
         }
         return service.createFolder(folder);
-    }
-
-    @GET
-    @Path("/docs")
-    @Produces(MediaType.TEXT_HTML)
-    public String get() {
-        try {
-            URI target = new URI();
-            FileHandler fileHandler = new FileHandler();
-            String token = fileHandler.authorize().getAccessToken();
-            org.apache.http.client.HttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet("https://docs.google.com/spreadsheets/d/17_tGxvUKmWK_VTgXPQg-QDEa918GTj2Rje-bDV1SX7o/edit?usp=drivesdk");
-            get.setHeader("Authorization", "Bearer ya29.GlwYBBiYMg-2_uqtrgS7_U2ironLwK-4JGzs_QMR32MVz-Y5phPBWPYfl5R0jVUXhgRzGvtIsNXGpq6AXVERA_GNm6M6E0W56tdFkKG6vhzEpGBlImPeWzI3bf-Nyw");
-            HttpResponse response = client.execute(get);
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @DELETE
@@ -112,83 +101,12 @@ public class FileResource {
     }
 
     @POST
-    @Path("/test/{name}")
-    @Consumes(MediaType.TEXT_HTML)
-    public Response upload(String html, @PathParam("name") String name) {
-        try {
-            try {
-                WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
-                MainDocumentPart mdp = wordMLPackage.getMainDocumentPart();
-
-                mdp.addAltChunk(AltChunkType.Xhtml, html.getBytes());
-                mdp.addParagraphOfText("Hello world");
-
-                String filename = System.getProperty("user.dir") + "/" + name + ".docx";
-                File file = new File(filename);
-
-                WordprocessingMLPackage fin = mdp.convertAltChunks();
-
-                // Saving the file locally, then uploads to the server.
-                Docx4J.save(fin, file, Docx4J.FLAG_SAVE_ZIP_FILE);
-                service.saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false));
-
-                // Ensures the file is deleted from the server storage after it's been uploaded.
-                file.delete();
-            } catch (Docx4JException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-
-        }
-        return Response.ok().build();
-    }
-
-    @POST
     @Path("/upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
-        String fileLocation = fileDetail.getFileName();
-        String[] split = fileLocation.split("\\.");
-        String extension = "." + split[split.length -1];
-        String type = findType(fileLocation, true);
-        String originalType = findType(fileLocation, false);
-
-        if(type == null || originalType == null) {
-            return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
-                    .entity(extension + " is currently not a supported file format. Please contact an admin for support.").build();
-        }
-        //saving file
-        try {
-            File file = File.createTempFile(fileLocation, fileLocation);
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            FileOutputStream out = new FileOutputStream(file);
-            while ((read = uploadedInputStream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-
-            service.saveFile(file, fileLocation, type, originalType);
-            out.flush();
-            out.close();
-            } catch (IOException e) {e.printStackTrace();}
-        String output = "File successfully uploaded to : " + fileLocation;
-        return Response.status(200).entity(output).build();
-    }
-
-    public String findType(String fileName, boolean googleType) {
-        if(fileName.endsWith(".docx")) {
-            return (googleType) ? "application/vnd.google-apps.document"
-                : "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        } else if(fileName.endsWith(".pptx")) {
-            return (googleType) ? "application/vnd.google-apps.presentation"
-                : "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-        } else if(fileName.endsWith(".xlsx")) {
-            return (googleType) ? "application/x-vnd.oasis.opendocument.spreadsheet"
-            : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        }
-        return null;
+        return service.upLoadAnyFile(uploadedInputStream, fileDetail);
     }
 
 }

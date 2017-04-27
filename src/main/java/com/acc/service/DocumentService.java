@@ -27,7 +27,7 @@ public class DocumentService extends GeneralService {
         try {
             Document document = documentRepository.getQuery(new GetDocumentByIdSpec((long)id)).get(0);
             if(document == null) return null;
-            return fileHandler.insertFileContent(document);
+            return fileHandler.insertFileContent(document, "");
         } catch (NoSuchEntityException nsee) {
 
         } catch (EntityNotFoundException enfe) {
@@ -88,7 +88,7 @@ public class DocumentService extends GeneralService {
             }
             boolean updated = documentRepository.update(document);
             if(updated) {
-                fileHandler.updateFile(old.getPath(), document.getTitle(), document.getContent());
+                fileHandler.updateFile(old.getPath(), document.getTitle(), document.getContent(), "");
             }
             return updated;
         } catch (NoSuchEntityException nsee) {

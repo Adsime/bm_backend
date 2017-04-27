@@ -75,8 +75,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
+                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -213,13 +213,13 @@ public class FileHandler {
      * @param newContent
      * @return boolean indicating if the action was successfull.
      */
-    public boolean updateFile(String id, String newName, String newContent) {
+    public boolean updateFile(String id, String newName, String newContent, String type) {
         Path path = null;
         try {
             Drive service = getDriveService();
 
             /** Downloading a specific file from Google Drive */
-            OutputStream outputStream = getFileContent(id, service);
+            OutputStream outputStream = getFileContent(id, service, type);
             File file = service
                     .files()
                     .get(id)
@@ -250,10 +250,31 @@ public class FileHandler {
         }
     }
 
-    private OutputStream getFileContent(String id, Drive service) throws IOException {
+    public OutputStream getFileContent(String id, String type) {
+        OutputStream os = null;
+        try {
+            Drive service = getDriveService();
+            os = getFileContent(id, service, type);
+        } catch (IOException ioe) {
+
+        }
+        return os;
+    }
+
+    private OutputStream getFileContent(String id, Drive service, String type) throws IOException {
         OutputStream outputStream = new ByteArrayOutputStream();
-        service.files().export(id, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").executeMediaAndDownloadTo(outputStream);
+        service.files().export(id, type).executeMediaAndDownloadTo(outputStream);
         return outputStream;
+    }
+
+    public Document insertFileContent(Document document, String type) {
+        try {
+            Drive service = getDriveService();
+            document.setContent(getFileContent(document.getPath(), service, type).toString());
+            return document;
+        } catch (IOException ioe) {
+            return null;
+        }
     }
 
     /**
@@ -317,16 +338,6 @@ public class FileHandler {
         return new FileContent(type, file);
     }
 
-    public Document insertFileContent(Document document) {
-        try {
-            Drive service = getDriveService();
-            document.setContent(getFileContent(document.getPath(), service).toString());
-            return document;
-        } catch (IOException ioe) {
-            return null;
-        }
-     }
-
      public int deleteItem(String id, boolean forced) {
         try {
             Drive service = getDriveService();
@@ -362,5 +373,16 @@ public class FileHandler {
             f.setChildren(build(list, f.getFolder().getId()));
         }
         return googleFolders;
+    }
+
+    public void createFile(String id, java.io.File file) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            Drive service = getDriveService();
+            service.files().export(id, "application/vnd.openxmlformats-officedocument.wordprocessingml.document").executeMediaAndDownloadTo(fos);
+            fos.close();
+        } catch (IOException ioe) {
+
+        }
     }
 }
