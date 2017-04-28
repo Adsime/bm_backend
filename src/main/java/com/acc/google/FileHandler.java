@@ -75,8 +75,8 @@ public class FileHandler {
     public Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
+                DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
+                //DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
