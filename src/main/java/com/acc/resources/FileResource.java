@@ -8,6 +8,7 @@ import java.io.*;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.persistence.PostRemove;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -74,6 +75,13 @@ public class FileResource {
     @Produces(MediaType.TEXT_HTML)
     public Response getFileAsHtml(@PathParam("id") String id) {
         return Response.ok(service.getFileAsHtml(id)).build();
+    }
+
+    @GET
+    @Path("/download/{id}")
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    public Response download(@PathParam("id") String id) {
+        return service.download(id);
     }
 
     @POST

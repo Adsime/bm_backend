@@ -6,6 +6,7 @@ import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.regexp.RE;
 import org.docx4j.Docx4J;
 import org.docx4j.Docx4jProperties;
 import org.docx4j.convert.out.HTMLSettings;
@@ -15,8 +16,12 @@ import org.docx4j.openpackaging.parts.WordprocessingML.AltChunkType;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.inject.Inject;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.List;
@@ -65,6 +70,20 @@ public class FileService extends GeneralService {
     public Response deleteItem(String id, boolean forced) {
         int status = fileHandler.deleteItem(id, forced);
         return Response.status(status).build();
+    }
+
+    public Response download(String id) {
+        OutputStream os = fileHandler.downloadAnyFile(id);
+        MimeBodyPart osPart = new MimeBodyPart();
+        try {
+            osPart.setContent(os, "multipart/form-data");
+        } catch (MessagingException me) {
+
+        }
+        Response response = Response.status(os == null ? HttpStatus.BAD_REQUEST_400 : HttpStatus.OK_200)
+                .entity(os == null ? "Var ikke i stand til å hente filen" : osPart).build();
+
+        return response;
     }
 
     public String getFileAsHtml(String id) {

@@ -33,7 +33,7 @@ public class DriveApi {
         FileService service = new FileService();
         service.setFileHandler(fileHandler);
         //service.getFileAsHtml("1DxwpUClmVaB_c4ieHS-NcELNNQ3gSU-iW1HbduZM7Dk");
-        service.getFile("1lTJHklu-hBklLkUUGxoq8eaENqT6FFMRbRNh7WjYhAM");
+        //service.getFile("1lTJHklu-hBklLkUUGxoq8eaENqT6FFMRbRNh7WjYhAM");
         //fileHandler.createFolder(new Folder("asdasd", "0ByI1HjM5emiFVlQ5RWdhTGJXVGc"));
         //System.out.println(fileHandler.getFolder(null));
         /*HttpClient client = new DefaultHttpClient();
