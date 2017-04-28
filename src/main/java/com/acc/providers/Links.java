@@ -11,6 +11,8 @@ import java.util.List;
 public class Links {
 
     public static final String USER_LINK = "/users";
+    public static final String SUPERVISOR_LINK = "/supervisors";
+    public static final String STUDENT_LINK = "/students";
     public static final String GROUP_LINK = "/groups";
     public static final String TAG_LINK = "/tags";
     public static final String DOCUMENT_LINK = "/documents";
@@ -58,13 +60,13 @@ public class Links {
                 }
                 break;
             } case STUDENT: {
-                ids.forEach(id -> retVal.add(new Link(type, GROUP_LINK + COMBINE + id)));
+                ids.forEach(id -> retVal.add(new Link(type, STUDENT_LINK + COMBINE + id)));
                 /*for(int id : ids) {
                     retVal.add(new Link(type, USER_LINK + COMBINE + id));
                 }*/
                 break;
             }case SUPERVISOR: {
-                ids.forEach(id -> retVal.add(new Link(type, GROUP_LINK + COMBINE + id)));
+                ids.forEach(id -> retVal.add(new Link(type, SUPERVISOR_LINK + COMBINE + id)));
                 /*for(int id : ids) {
                     retVal.add(new Link(type, USER_LINK + COMBINE + id));
                 }*/
