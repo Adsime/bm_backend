@@ -2,13 +2,10 @@ package com.acc.service;
 
 import com.acc.google.FileHandler;
 import com.acc.models.Folder;
-import com.fasterxml.jackson.core.io.InputDecorator;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
-import jdk.internal.util.xml.impl.Input;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.regexp.RE;
 import org.docx4j.Docx4J;
 import org.docx4j.Docx4jProperties;
 import org.docx4j.convert.out.HTMLSettings;
@@ -18,12 +15,10 @@ import org.docx4j.openpackaging.parts.WordprocessingML.AltChunkType;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.MultiPart;
 
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
 import java.util.List;
