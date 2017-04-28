@@ -2,8 +2,10 @@ package com.acc.service;
 
 import com.acc.google.FileHandler;
 import com.acc.models.Folder;
+import com.fasterxml.jackson.core.io.InputDecorator;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
+import jdk.internal.util.xml.impl.Input;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.regexp.RE;
@@ -38,8 +40,8 @@ public class FileService extends GeneralService {
         this.fileHandler = fileHandler;
     }
 
-    public boolean saveFile(java.io.File file, String name, String type, String originalType) {
-        String res = fileHandler.uploadAnyFile(file, name, type, originalType);
+    public boolean saveFile(java.io.File file, String name, String type, String originalType, String parent) {
+        String res = fileHandler.uploadAnyFile(file, name, type, originalType, parent);
         return res != null;
     }
 
@@ -136,7 +138,70 @@ public class FileService extends GeneralService {
         return null;
     }
 
-    public Response upLoadAnyFile(InputStream uploadedInputStream, FormDataContentDisposition fileDetail) {
+    public Response updateFile(InputStream content, FormDataContentDisposition fileDetail, String id) {
+        String fileLocation = fileDetail.getFileName();
+        String[] split = fileLocation.split("\\.");
+        String extension = "." + split[split.length - 1];
+        java.io.File file;
+        if(extension.equals(".html")) {
+            file = createFileFromHtml(content, fileDetail.getName(), extension);
+        } else {
+            file = createTempFile(fileDetail.getName(), content);
+        }
+        fileHandler.updateAnyFile(file, id, findType(extension, false));
+        file.delete();
+
+        return null;
+    }
+
+    public java.io.File createFileFromHtml(InputStream content, String name, String extension) {
+        try {
+            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
+            // Main part of the document. Where the user info is put
+            MainDocumentPart mdp = wordMLPackage.getMainDocumentPart();
+
+            // Adds the incoming xhtml to the MainDocumentPart
+            mdp.addAltChunk(AltChunkType.Xhtml, content);
+
+            // Creates a new file
+            java.io.File file = java.io.File.createTempFile(name, extension);
+            /*String filename = System.getProperty("user.dir") + "/" + name + ".docx";
+            java.io.File file = new java.io.File(filename);*/
+
+            // Package with the inserted data
+            WordprocessingMLPackage fin = mdp.convertAltChunks();
+            Docx4J.save(fin, file, Docx4J.FLAG_SAVE_ZIP_FILE);
+
+            return file;
+        } catch (Docx4JException de) {
+            Logger.getRootLogger().setLevel(Level.INFO);
+            de.printStackTrace();
+            Logger.getRootLogger().setLevel(Level.ERROR);
+        } catch (IOException ioe) {
+
+        }
+        return null;
+    }
+
+    private java.io.File createTempFile(String name, InputStream inputStream) {
+        try {
+            java.io.File file = java.io.File.createTempFile(name, name);
+            int read = 0;
+            byte[] bytes = new byte[1024];
+            FileOutputStream out = new FileOutputStream(file);
+            while ((read = inputStream.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+            out.flush();
+            out.close();
+            return file;
+        } catch (IOException ioe) {
+
+        }
+        return null;
+    }
+
+    public Response upLoadAnyFile(InputStream uploadedInputStream, FormDataContentDisposition fileDetail, String parent, boolean forced) {
         String fileLocation = fileDetail.getFileName();
         String[] split = fileLocation.split("\\.");
         String extension = "." + split[split.length - 1];
@@ -148,61 +213,36 @@ public class FileService extends GeneralService {
                     .entity(extension + " is currently not a supported file format. Please contact an admin for support.").build();
         }
 
+        int exists = fileHandler.exists(fileLocation, parent);
+        if(exists != 200 && !forced) {
+            Response response = Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("Fil med samme navn eksisterer allerede i denne mappen!").build();
+            return response;
+        }
+
         if(extension.toLowerCase().equals(".html")) {
-            uploadAsHtml(uploadedInputStream, fileLocation.replace(".html", ""));
+            uploadAsHtml(uploadedInputStream, fileLocation.replace(".html", ""), parent);
             String output = "File successfully uploaded to : " + fileLocation;
             return Response.ok(output).build();
         }
 
         //saving file
-        try {
-            java.io.File file = java.io.File.createTempFile(fileLocation, fileLocation);
-            int read = 0;
-            byte[] bytes = new byte[1024];
-            FileOutputStream out = new FileOutputStream(file);
-            while ((read = uploadedInputStream.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
+        java.io.File file = createTempFile(fileLocation, uploadedInputStream);
+        saveFile(file, fileLocation, type, originalType, parent);
+        file.delete();
 
-            saveFile(file, fileLocation, type, originalType);
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         String output = "File successfully uploaded to : " + fileLocation;
         return Response.ok(output).build();
     }
 
-    public Response uploadAsHtml(InputStream content, String name) {
-        try {
-            System.out.println("uploadAsHtml");
-            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
-            // Main part of the document. Where the user info is put
-            MainDocumentPart mdp = wordMLPackage.getMainDocumentPart();
+    public Response uploadAsHtml(InputStream content, String name, String parent) {
 
-            // Adds the incoming xhtml to the MainDocumentPart
-            mdp.addAltChunk(AltChunkType.Xhtml, content);
-
-            // Creates a new file
-            //java.io.File file = java.io.File.createTempFile(name, ".docx");
-            String filename = System.getProperty("user.dir") + "/" + name + ".docx";
-            java.io.File file = new java.io.File(filename);
-
-            // Package with the inserted data
-            WordprocessingMLPackage fin = mdp.convertAltChunks();
-
-            // Saving the file locally, then uploads to the server.
-            Docx4J.save(fin, file, Docx4J.FLAG_SAVE_ZIP_FILE);
-            saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false));
+        java.io.File file = createFileFromHtml(content, name, ".docx");
+        if(file != null) {
+            saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false), parent);
 
             file.delete();
 
             return Response.ok(name + " successfully uploaded!").build();
-        } catch (Docx4JException e) {
-            Logger.getRootLogger().setLevel(Level.INFO);
-            e.printStackTrace();
-            Logger.getRootLogger().setLevel(Level.ERROR);
         }
         return Response.status(HttpStatus.BAD_REQUEST_400).entity("Could not upload " + name).build();
     }

@@ -18,6 +18,7 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -128,12 +129,13 @@ public class FileHandler {
         }
     }
 
-    public String uploadAnyFile(java.io.File file, String name, String type, String originalType) {
+    public String uploadAnyFile(java.io.File file, String name, String type, String originalType, String parent) {
         try {
             Drive service = getDriveService();
             File googleFile = new File();
             googleFile.setName(name);
             googleFile.setMimeType(type);
+            googleFile.setParents(Arrays.asList(parent));
             FileContent fileContent = new FileContent(originalType, file);
             File retFile = service.files().create(googleFile, fileContent)
                     .setFields("id")
@@ -184,7 +186,7 @@ public class FileHandler {
         try {
             Drive service = getDriveService();
             FileList files = service.files().list()
-                    .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'" + " and mimeType = 'application/vnd.google-apps.folder'")
+                    .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'")
                     .execute();
             return (files.getFiles().size() > 0) ? EXISTS_400 : AVAILABLE_200;
         } catch (IOException ioe) {
@@ -262,6 +264,20 @@ public class FileHandler {
             }
             return false;
         }
+    }
+
+    public int updateAnyFile(java.io.File file, String id, String type) {
+        try {
+            Drive service = getDriveService();
+            File googleFile = service.files().get(id).execute();
+            FileContent fileContent = new FileContent(type, file);
+            File updatedFile = new File();
+            updatedFile.setName(googleFile.getName());
+            service.files().update(id, updatedFile, fileContent).execute();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        return -1;
     }
 
     public OutputStream getFileContent(String id, String type) {

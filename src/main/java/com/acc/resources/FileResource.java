@@ -10,10 +10,7 @@ import javax.json.JsonObject;
 import javax.persistence.PostRemove;
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -39,6 +36,7 @@ import com.sun.org.apache.xml.internal.utils.URI;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.jetty.http.HttpStatus;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.junit.Before;
 
 
@@ -108,13 +106,25 @@ public class FileResource {
         return response;
     }
 
+    @PUT
+    @Path("/update/{id}")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response updateFile(@FormDataParam("file") InputStream uploadedInputStream,
+                               @FormDataParam("file") FormDataContentDisposition fileDetail,
+                               @DefaultValue("null") @PathParam("id") String id) {
+        Response response = service.updateFile(uploadedInputStream, fileDetail, id);
+        return response;
+    }
+
     @POST
-    @Path("/upload")
+    @Path("/upload/{id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadFile(
             @FormDataParam("file") InputStream uploadedInputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail) {
-        return service.upLoadAnyFile(uploadedInputStream, fileDetail);
+            @FormDataParam("file") FormDataContentDisposition fileDetail,
+            @DefaultValue("null") @PathParam("id") String id,
+            @DefaultValue("false") @QueryParam("forced") boolean forced) {
+        return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced);
     }
 
 }
