@@ -82,6 +82,13 @@ public class FileResource {
         return service.download(id);
     }
 
+    @GET
+    @Path("/structure")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getStructure() {
+        return service.getFolderStructure();
+    }
+
     @POST
     @Path("/folder")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -126,5 +133,4 @@ public class FileResource {
             @DefaultValue("false") @QueryParam("forced") boolean forced) {
         return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced);
     }
-
 }

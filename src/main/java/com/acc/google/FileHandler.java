@@ -18,7 +18,6 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -114,7 +113,7 @@ public class FileHandler {
      * by comparing the parents of the items in the list.
      * @return List of Folders
      */
-    public List<googleFolder> getTreeStructure() {
+    public List<GoogleFolder> getTreeStructure() {
         try {
             Drive service = getDriveService();
             FileList result = service.files().list()
@@ -386,20 +385,20 @@ public class FileHandler {
         return NOT_FOUND_404;
      }
 
-    private List<googleFolder> build(List<File> list, String root) {
-        ArrayList<googleFolder> googleFolders = new ArrayList<>();
+    private List<GoogleFolder> build(List<File> list, String root) {
+        ArrayList<GoogleFolder> googleFolders = new ArrayList<>();
         if(list.isEmpty()) return googleFolders;
         File file;
         Iterator<File> it = list.iterator();
         while(it.hasNext() && (file = it.next()) != null) {
             if(file.getParents().get(0).equals(root)) {
-                googleFolders.add(new googleFolder(file));
+                googleFolders.add(new GoogleFolder(file));
                 list.remove(file);
                 it = list.iterator();
             }
 
         }
-        for(googleFolder f : googleFolders) {
+        for(GoogleFolder f : googleFolders) {
             f.setChildren(build(list, f.getFolder().getId()));
         }
         return googleFolders;

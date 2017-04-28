@@ -67,6 +67,7 @@ public class TagResource {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     /**
      *
      */

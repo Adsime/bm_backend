@@ -1,6 +1,7 @@
 package com.acc.service;
 
 import com.acc.google.FileHandler;
+import com.acc.google.GoogleFolder;
 import com.acc.models.Folder;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
@@ -241,4 +242,10 @@ public class FileService extends GeneralService {
         }
         return Response.status(HttpStatus.BAD_REQUEST_400).entity("Could not upload " + name).build();
     }
+
+    public Response getFolderStructure() {
+        List<GoogleFolder> folders = fileHandler.getTreeStructure();
+        return Response.ok(new Gson().toJson(folders)).build();
+    }
+
 }
