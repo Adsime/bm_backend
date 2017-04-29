@@ -23,7 +23,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
     @Override
     public User add(User user) throws EntityNotFoundException, IllegalArgumentException{
-        if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("") || user.getTelephone().equals("")){
+        if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")){
             throw new IllegalArgumentException("Feil i registrering av bruker: \nFyll ut alle nødvendige felter! \n(Fornavn, Etternavn og E-Mail)");
         }
 
