@@ -242,8 +242,8 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         for (User user : users){
             //User does not exist
             if (user.getId() == 0){
-                if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("") || user.getTelephone().equals("")) {
-                    throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!");
+                if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")) {
+                    throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!\n(Fornavn, Etternavn og E-Mail)");
                 }
                 HbnUser hbnUser = new HbnUser(
                         user.getFirstName(),
