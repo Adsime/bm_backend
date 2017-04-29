@@ -54,4 +54,6 @@ public class Tag extends HateOAS {
     public String toJson() {
         return new Gson().toJson(this);
     }
+
+    public String toString() { return this.toJson(); }
 }

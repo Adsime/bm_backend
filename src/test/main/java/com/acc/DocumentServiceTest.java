@@ -53,7 +53,7 @@ public class DocumentServiceTest {
     @Test
     public void getDocumentSuccessTest() {
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
         Document expected = TestData.testDocuments().get(0);
         Document actual = service.getDocument(0);
         assertEquals(expected.toString(), actual.toString());
@@ -135,7 +135,7 @@ public class DocumentServiceTest {
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
         when(documentRepository.remove(anyLong())).thenReturn(true);
         when(fileHandler.deleteFile(anyString())).thenReturn(true);
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
         boolean acutal = service.deleteDocument(0);
         assertTrue(acutal);
     }
@@ -145,7 +145,7 @@ public class DocumentServiceTest {
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
         when(documentRepository.remove(anyLong())).thenReturn(false);
         when(fileHandler.deleteFile(anyString())).thenReturn(true);
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
         boolean actual = service.deleteDocument(0);
         assertFalse(actual);
     }
@@ -155,7 +155,7 @@ public class DocumentServiceTest {
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
         when(documentRepository.remove(anyLong())).thenThrow(new NoSuchEntityException());
         when(fileHandler.deleteFile(anyString())).thenReturn(true);
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
         boolean actual = service.deleteDocument(0);
         assertFalse(actual);
     }
@@ -165,7 +165,7 @@ public class DocumentServiceTest {
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
         when(documentRepository.remove(anyLong())).thenThrow(new InternalServerErrorException());
         when(fileHandler.deleteFile(anyString())).thenReturn(true);
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
         service.deleteDocument(0);
     }
 
@@ -176,8 +176,8 @@ public class DocumentServiceTest {
     public void updateDocumentSuccess() {
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
         when(documentRepository.update(any())).thenReturn(true);
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
-        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString(), anyString())).thenReturn(true);
         boolean actual = service.updateDocument(TestData.testDocuments().get(0));
         assertTrue(actual);
     }
@@ -186,8 +186,8 @@ public class DocumentServiceTest {
     public void updateDocumentFail() {
         when(documentRepository.update(any())).thenReturn(false);
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
-        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString(), anyString())).thenReturn(true);
         boolean actual = service.updateDocument(TestData.testDocuments().get(0));
         assertFalse(actual);
     }
@@ -196,8 +196,8 @@ public class DocumentServiceTest {
     public void updateDocumentNoEntry() {
         when(documentRepository.update(any())).thenThrow(new NoSuchEntityException());
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
-        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString(), anyString())).thenReturn(true);
         boolean actual = service.updateDocument(TestData.testDocuments().get(0));
         assertFalse(actual);
     }
@@ -206,8 +206,8 @@ public class DocumentServiceTest {
     public void updateDocumentInternalError() {
         when(documentRepository.update(any())).thenThrow(new InternalServerErrorException());
         when(documentRepository.getQuery(any())).thenReturn(TestData.testDocuments());
-        when(fileHandler.insertFileContent(any())).thenReturn(TestData.testDocuments().get(0));
-        when(fileHandler.updateFile(anyString(), anyString(), anyString())).thenReturn(true);
+        when(fileHandler.insertFileContent(any(), anyString())).thenReturn(TestData.testDocuments().get(0));
+        when(fileHandler.updateFile(anyString(), anyString(), anyString(), anyString())).thenReturn(true);
         service.updateDocument(TestData.testDocuments().get(0));
     }
 }

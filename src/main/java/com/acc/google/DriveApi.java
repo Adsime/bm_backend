@@ -8,6 +8,7 @@ import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.Folder;
 import com.acc.models.Token;
 import com.acc.models.User;
+import com.acc.service.FileService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.services.drive.Drive;
 
@@ -29,6 +30,10 @@ public class DriveApi {
         //System.out.println(fileHandler.asdasd("17_tGxvUKmWK_VTgXPQg-QDEa918GTj2Rje-bDV1SX7o").toString())
 
         FileHandler fileHandler = new FileHandler();
+        FileService service = new FileService();
+        service.setFileHandler(fileHandler);
+        //service.getFileAsHtml("1DxwpUClmVaB_c4ieHS-NcELNNQ3gSU-iW1HbduZM7Dk");
+        //service.getFile("1lTJHklu-hBklLkUUGxoq8eaENqT6FFMRbRNh7WjYhAM");
         //fileHandler.createFolder(new Folder("asdasd", "0ByI1HjM5emiFVlQ5RWdhTGJXVGc"));
         //System.out.println(fileHandler.getFolder(null));
         /*HttpClient client = new DefaultHttpClient();
