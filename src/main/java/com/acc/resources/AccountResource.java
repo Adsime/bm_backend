@@ -7,10 +7,7 @@ import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -43,12 +40,10 @@ public class AccountResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("newUser")
-    public Response createLogin(JsonObject o) {
-        int id = o.getInt("id");
-        String pw = o.getString("password");
-        User user = service.deleteThis(id, pw);
-        return Response.ok(user.toString()).build();
+    @Path("newUser/{id}")
+    public Response createLogin(@PathParam("id") long id) {
+        service.resetPassword(id);
+        return Response.ok("Mail sendt!").build();
     }
 
 }

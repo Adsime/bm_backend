@@ -42,11 +42,30 @@ public class TokenHandler {
         return headers;
     }
 
-    public Token generateToken(User user) {
+    public Token generateAccessToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
             Date date = new Date();
             date.setTime(System.currentTimeMillis() + (90L * DAY));
+            String token = JWT.create()
+                    .withExpiresAt(date)
+                    .withClaim(USER_ACCESS_LEVEL, user.getAccessLevel())
+                    .withClaim(USER, user.getEnterpriseID())
+                    .withHeader(createHeaders(user))
+                    .sign(algorithm);
+            return new Token(token);
+        } catch (UnsupportedEncodingException exception) {
+            return null;
+        } catch (JWTCreationException exception) {
+            return null;
+        }
+    }
+
+    public Token generateResetToken(User user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("secret");
+            Date date = new Date();
+            date.setTime(System.currentTimeMillis() + ((1/24) * DAY));
             String token = JWT.create()
                     .withExpiresAt(date)
                     .withClaim(USER_ACCESS_LEVEL, user.getAccessLevel())

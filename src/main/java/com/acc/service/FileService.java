@@ -209,9 +209,11 @@ public class FileService extends GeneralService {
                     .entity(extension + " is currently not a supported file format. Please contact an admin for support.").build();
         }
 
-        int exists = fileHandler.exists(fileLocation, parent);
-        if(exists != 200 && !forced) {
-            Response response = Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("Fil med samme navn eksisterer allerede i denne mappen!").build();
+        String id = fileHandler.exists(fileLocation, parent, false);
+        if(id != null && !forced) {
+            Response response = Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("{" +
+                    "\"message\": \"Fil med samme navn eksisterer allerede i denne mappen!\"," +
+                    "\"id\": \"" + id + "\"}").build();
             return response;
         }
 

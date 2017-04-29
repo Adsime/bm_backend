@@ -4,14 +4,6 @@ package com.acc.google;
  * Created by melsom.adrian on 08.03.2017.
  */
 
-import com.acc.jsonWebToken.TokenHandler;
-import com.acc.models.Folder;
-import com.acc.models.Token;
-import com.acc.models.User;
-import com.acc.service.FileService;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.services.drive.Drive;
-
 import java.io.IOException;
  
 public class DriveApi {
@@ -30,8 +22,18 @@ public class DriveApi {
         //System.out.println(fileHandler.asdasd("17_tGxvUKmWK_VTgXPQg-QDEa918GTj2Rje-bDV1SX7o").toString())
 
         FileHandler fileHandler = new FileHandler();
-        FileService service = new FileService();
-        service.setFileHandler(fileHandler);
+        MailHandler mailHandler = new MailHandler();
+
+        //FileService service = new FileService();
+        //service.setFileHandler(fileHandler);
+
+        try {
+            mailHandler.sendMessage("potasian17@gmail.com", mailHandler.createEmail("melsom.adrian@accenture.com", "potasian17@gmail.com", "test", "test"));
+        } catch (Exception me) {
+            me.printStackTrace();
+        }
+        System.out.println(fileHandler.getTreeStructure());
+
         //service.getFileAsHtml("1DxwpUClmVaB_c4ieHS-NcELNNQ3gSU-iW1HbduZM7Dk");
         //service.getFile("1lTJHklu-hBklLkUUGxoq8eaENqT6FFMRbRNh7WjYhAM");
         //fileHandler.createFolder(new Folder("asdasd", "0ByI1HjM5emiFVlQ5RWdhTGJXVGc"));
@@ -43,7 +45,7 @@ public class DriveApi {
         */
         //User user = new User("Adrian", "Melsom", "ad@ad.ad", "99999999", "adrian.melsom", "0", null);
         /*User user = new User("Adrian", "Melsom", "ad@ad.ad", "adrian.melsom", "0", null);
-        Token token = new TokenHandler().generateToken(user);
+        Token token = new TokenHandler().generateAccessToken(user);
         new TokenHandler().verify(token.getToken());*/
 
     }

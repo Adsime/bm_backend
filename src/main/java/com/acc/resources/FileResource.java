@@ -114,7 +114,7 @@ public class FileResource {
     }
 
     @PUT
-    @Path("/update/{id}")
+    @Path("/{id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateFile(@FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetail,
@@ -126,6 +126,7 @@ public class FileResource {
     @POST
     @Path("/upload/{id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadFile(
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail,

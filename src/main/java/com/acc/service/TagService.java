@@ -49,7 +49,7 @@ public class TagService extends GeneralService {
     public Response newTag(Tag tag) {
         try{
             Tag registeredTag = tagRepository.add(tag);
-            return Response.status(HttpStatus.CREATED_201).entity(registeredTag).build();
+            return Response.status(HttpStatus.CREATED_201).entity(registeredTag.toJson()).build();
         }catch (IllegalArgumentException iae) {
             Error error = new Error(iae.getMessage());
             return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();

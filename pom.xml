@@ -72,7 +72,12 @@
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-drive</artifactId>
-            <version>v3-rev61-1.22.0</version>
+            <version>v3-rev70-1.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-gmail</artifactId>
+            <version>v1-rev64-1.22.0</version>
         </dependency>
 
         <!-- JWT -->
@@ -165,6 +170,14 @@
             <artifactId>docx4j-ImportXHTML</artifactId>
             <version>3.3.1</version>
         </dependency>
+
+        <!-- mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+
 
     </dependencies>
 

@@ -26,6 +26,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.acc.google.GoogleService.getDriveService;
+
+
 /**
  * Created by melsom.adrian on 09.03.2017.
  */
@@ -41,69 +44,6 @@ public class FileHandler {
     public static final int DELETED_204 = 204;
     public static final int MULTIPLE_CHOICES_300 = 300;
     public static final int NOT_FOUND_404 = 404;
-
-    /** App name */
-    private static final String APPLICATION_NAME = "Bachelor Manager";
-
-    /** Directory to store user credentials for this application. */
-    private static final java.io.File DATA_STORE_DIR = new java.io.File(
-            System.getProperty("user.home"), ".credentials/bachelor-manager");
-
-    /** Global instance of the {@link FileDataStoreFactory}. */
-    private static FileDataStoreFactory DATA_STORE_FACTORY;
-
-    /** Global instance of the JSON factory. */
-    private static final JsonFactory JSON_FACTORY =
-            JacksonFactory.getDefaultInstance();
-
-    /** Global instance of the HTTP transport. */
-    private static HttpTransport HTTP_TRANSPORT;
-
-    private static final List<String> SCOPES =
-            Arrays.asList(DriveScopes.DRIVE);
-
-    static {
-        try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE_DIR);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    public Credential authorize() throws IOException {
-        // Load client secrets.
-        InputStream in =
-                //DriveApi.class.getResourceAsStream("/client_secret.json"); //API key
-                DriveApi.class.getResourceAsStream("/local_key.json"); //Local key
-        GoogleClientSecrets clientSecrets =
-                GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
-
-        // Build flow and trigger user authorization request.
-        GoogleAuthorizationCodeFlow flow =
-                new GoogleAuthorizationCodeFlow.Builder(
-                        HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                        .setDataStoreFactory(DATA_STORE_FACTORY)
-                        .setAccessType("offline")
-                        .build();
-        Credential credential = new AuthorizationCodeInstalledApp(
-                flow, new LocalServerReceiver()).authorize("user");
-        return credential;
-    }
-
-    /**
-     * Build and return an authorized Drive client service.
-     * @return an authorized Drive client service
-     * @throws IOException
-     */
-    public Drive getDriveService() throws IOException {
-        Credential credential = authorize();
-        return new Drive.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
-    }
 
     /** End google required methods
         Start of custom methods for API calls to google drive API */
@@ -163,7 +103,7 @@ public class FileHandler {
     public int createFolder(Folder folder) {
         try {
             Drive service = getDriveService();
-            if(exists(folder.getName(), folder.getParent()) == EXISTS_400 && !folder.isForced()) {
+            if(exists(folder.getName(), folder.getParent(), true) != null && !folder.isForced()) {
                 return EXISTS_400;
             }
             File fileMetadata = new File();
@@ -181,17 +121,18 @@ public class FileHandler {
         return ERROR_500;
     }
 
-    public int exists(String name, String parent) {
+    public String exists(String name, String parent, boolean folder) {
         try {
             Drive service = getDriveService();
             FileList files = service.files().list()
-                    .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'")
+                    .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'" +
+                            (folder ? "application/vnd.google-apps.folder" : ""))
                     .execute();
-            return (files.getFiles().size() > 0) ? EXISTS_400 : AVAILABLE_200;
+            return (files.getFiles().size() > 0) ? files.getFiles().get(0).getId() : null;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return ERROR_500;
+        return null;
     }
 
     /**
