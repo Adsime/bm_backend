@@ -39,7 +39,7 @@ public class UserService extends GeneralService {
 
     public Response getUserByTags(List<String> tags, boolean hasAll) {
         try {
-            List<User> users = userRepository.getMinimalQuery(new GetUserByTagSpec(tags, hasAll));
+            List<User> users = userRepository.getQuery(new GetUserByTagSpec(tags, hasAll));
             return Response.ok(new Gson().toJson(users)).build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
