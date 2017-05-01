@@ -1,10 +1,16 @@
 package com.acc.service;
 
+import com.acc.database.repository.DocumentRepository;
 import com.acc.google.FileHandler;
 import com.acc.google.GoogleFolder;
+import com.acc.models.Document;
+import com.acc.models.Error;
 import com.acc.models.Folder;
+import com.acc.models.Tag;
+import com.acc.requestContext.BMSecurityContext;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.docx4j.Docx4J;
@@ -20,8 +26,12 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
+import javax.persistence.EntityNotFoundException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,6 +41,14 @@ public class FileService extends GeneralService {
 
     @Inject
     private FileHandler fileHandler;
+
+    @Inject
+    private DocumentRepository documentRepository;
+
+/*
+    @Inject
+    private BMSecurityContext securityContext;
+*/
 
     public void setFileHandler(FileHandler fileHandler) {
         this.fileHandler = fileHandler;
@@ -66,6 +84,7 @@ public class FileService extends GeneralService {
     }
 
     public Response deleteItem(String id, boolean forced) {
+        // TODO: 01.05.2017  documentRepository.remove()
         int status = fileHandler.deleteItem(id, forced);
         return Response.status(status).build();
     }
@@ -134,23 +153,43 @@ public class FileService extends GeneralService {
         return null;
     }
 
-    public Response updateFile(InputStream content, FormDataContentDisposition fileDetail, String id) {
-        String fileLocation = fileDetail.getFileName();
-        String[] split = fileLocation.split("\\.");
+    public Response updateFile(InputStream content, FormDataContentDisposition fileDetail, String id, JsonArray o) {
+        String fileName = fileDetail.getFileName();
+        String[] split = fileName.split("\\.");
         String extension = "." + split[split.length - 1];
         java.io.File file;
+
+        /*String authorEId = securityContext.getUser().getName();
+        int authorId;
+        try {
+            authorId = documentRepository.findAuthorId(authorEId);
+        }catch (EntityNotFoundException enfe){
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.UNAUTHORIZED_401).entity(error.toJson()).build();
+        }*/
+
         if(extension.equals(".html")) {
             file = createFileFromHtml(content, fileDetail.getName(), extension);
         } else {
             file = createTempFile(fileDetail.getName(), content);
         }
+
+        // TODO: 01.05.2017  Document document = new Document(,authorId,fileName,"content", id, toTagList(o));
+
+        /*try{
+            documentRepository.update(document);
+        }catch (EntityNotFoundException enfe) {
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+        }*/
+
         fileHandler.updateAnyFile(file, id, findType(extension, false));
         file.delete();
 
         return null;
     }
 
-    public java.io.File createFileFromHtml(InputStream content, String name, String extension) {
+    private java.io.File createFileFromHtml(InputStream content, String name, String extension) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
             // Main part of the document. Where the user info is put
@@ -197,38 +236,61 @@ public class FileService extends GeneralService {
         return null;
     }
 
-    public Response upLoadAnyFile(InputStream uploadedInputStream, FormDataContentDisposition fileDetail, String parent, boolean forced) {
-        String fileLocation = fileDetail.getFileName();
-        String[] split = fileLocation.split("\\.");
+    public Response upLoadAnyFile(InputStream uploadedInputStream,
+                                  FormDataContentDisposition fileDetail,
+                                  String parent, boolean forced, JsonArray o) {
+        String fileName = fileDetail.getFileName();
+        String[] split = fileName.split("\\.");
         String extension = "." + split[split.length - 1];
-        String type = findType(fileLocation, true);
-        String originalType = findType(fileLocation, false);
+        String type = findType(fileName, true);
+        String originalType = findType(fileName, false);
+
+        //String authorEId = securityContext.getUser().getName();
+        String authorEId = "silva.david";
+        int authorId;
+        try {
+            authorId = documentRepository.findAuthorId(authorEId);
+        }catch (EntityNotFoundException enfe){
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.UNAUTHORIZED_401).entity(error.toJson()).build();
+        }
 
         if ((type == null || originalType == null) && !extension.equals(".html")) {
             return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
                     .entity(extension + " is currently not a supported file format. Please contact an admin for support.").build();
         }
 
-        String id = fileHandler.exists(fileLocation, parent, false);
-        if(id != null && !forced) {
+        String apiId = fileHandler.exists(fileName, parent, false);
+        if(apiId != null && !forced) {
             Response response = Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("{" +
                     "\"message\": \"Fil med samme navn eksisterer allerede i denne mappen!\"," +
-                    "\"id\": \"" + id + "\"}").build();
+                    "\"id\": \"" + apiId + "\"}").build();
             return response;
         }
 
         if(extension.toLowerCase().equals(".html")) {
-            uploadAsHtml(uploadedInputStream, fileLocation.replace(".html", ""), parent);
-            String output = "File successfully uploaded to : " + fileLocation;
+            uploadAsHtml(uploadedInputStream, fileName.replace(".html", ""), parent);
+            String output = "File successfully uploaded to : " + fileName;
             return Response.ok(output).build();
         }
 
+        Document document = new Document(0,authorId,fileName,"content", apiId, toTagList(o));
+        try{
+            documentRepository.add(document);
+        }catch (IllegalArgumentException iae) {
+            Error error = new Error(iae.getMessage());
+            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
+        }catch (EntityNotFoundException enfe) {
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+        }
+
         //saving file
-        java.io.File file = createTempFile(fileLocation, uploadedInputStream);
-        saveFile(file, fileLocation, type, originalType, parent);
+        java.io.File file = createTempFile(fileName, uploadedInputStream);
+        saveFile(file, fileName, type, originalType, parent);
         file.delete();
 
-        String output = "File successfully uploaded to : " + fileLocation;
+        String output = "File successfully uploaded to : " + fileName;
         return Response.ok(output).build();
     }
 
@@ -250,4 +312,11 @@ public class FileService extends GeneralService {
         return Response.ok(new Gson().toJson(folders)).build();
     }
 
+
+    private List<Tag> toTagList(JsonArray o){
+        Gson gson = new Gson();
+        List<Tag> tags = Arrays.asList();
+        o.forEach(item -> tags.add(gson.fromJson(item.toString(), Tag.class)));
+        return tags;
+    }
 }

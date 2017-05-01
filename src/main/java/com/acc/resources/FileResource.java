@@ -2,9 +2,13 @@ package com.acc.resources;
 
 import com.acc.google.FileHandler;
 import com.acc.models.Folder;
+import com.acc.models.Tag;
 import com.acc.service.FileService;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.persistence.PostRemove;
@@ -17,6 +21,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.sun.org.apache.regexp.internal.RE;
 import org.apache.http.HttpResponse;
 import org.docx4j.Docx4J;
@@ -51,7 +56,6 @@ public class FileResource {
 
     @Before
     public void setup() {
-
     }
 
     @GET
@@ -118,8 +122,10 @@ public class FileResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response updateFile(@FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetail,
-                               @DefaultValue("null") @PathParam("id") String id) {
-        Response response = service.updateFile(uploadedInputStream, fileDetail, id);
+                               @DefaultValue("null") @PathParam("id") String id,
+                               @DefaultValue("[]") @FormDataParam("tags") JsonArray o) {
+
+        Response response = service.updateFile(uploadedInputStream, fileDetail, id, o);
         return response;
     }
 
@@ -131,7 +137,9 @@ public class FileResource {
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail,
             @DefaultValue("null") @PathParam("id") String id,
-            @DefaultValue("false") @QueryParam("forced") boolean forced) {
-        return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced);
+            @DefaultValue("false") @QueryParam("forced") boolean forced,
+            @DefaultValue("[]") @FormDataParam("tags") JsonArray o) {
+
+        return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced, o);
     }
 }

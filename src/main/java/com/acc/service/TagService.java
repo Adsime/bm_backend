@@ -61,7 +61,7 @@ public class TagService extends GeneralService {
         try {
             tagRepository.remove((long)id);
             return Response.status(HttpStatus.NO_CONTENT_204).build();
-        }  catch (EntityNotFoundException enfe) {
+        }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }

@@ -4,10 +4,7 @@ import com.acc.database.entity.HbnBachelorGroup;
 import com.acc.database.entity.HbnDocument;
 import com.acc.database.entity.HbnEntity;
 import com.acc.database.entity.HbnUser;
-import com.acc.database.specification.GetGroupByIdSpec;
-import com.acc.database.specification.GetUserByIdSpec;
-import com.acc.database.specification.HqlSpecification;
-import com.acc.database.specification.Specification;
+import com.acc.database.specification.*;
 import com.acc.models.Document;
 import com.acc.models.Group;
 import com.acc.providers.Links;
@@ -30,26 +27,30 @@ public class DocumentRepository extends AbstractRepository implements Repository
 
     @Override
     public Document add(Document document) throws EntityNotFoundException, IllegalArgumentException{
-        if (document.getTitle().equals("") || document.getContent().equals("")) throw new IllegalArgumentException("Feil i registrering av oppgave: \nFyll ut nødvendige felter!");
+        if (document.getTitle().equals("") || document.getContent().equals("")) {
+            throw new IllegalArgumentException("Feil i registrering av fil: \nFyll ut nødvendige felter!");
+        }
 
         HbnDocument mappedDocument = null;
 
         try {
             mappedDocument = new HbnDocument(document.getPath(), getAuthor(document.getAuthor()), document.getTitle());
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i registrering av oppgave: \nForfatter med id: " + document.getAuthor() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i registrering av fil: \nForfatter med id: " + document.getAuthor() + " finnes ikke");
         }
 
         try {
-            if (document.getGroups() != null || !document.getContent().isEmpty()) mappedDocument.setGroups(getHbnBachelorGroupSet(document.getGroups()));
+            if (document.getGroups() != null || !document.getContent().isEmpty()){
+                mappedDocument.setGroups(getHbnBachelorGroupSet(document.getGroups()));
+            }
         }catch (EntityNotFoundException enfe){
-            throw new EntityNotFoundException("Feil i registering av oppgave: \nEn eller flere grupper finnes ikke");
+            throw new EntityNotFoundException("Feil i registering av fil: \nEn eller flere grupper finnes ikke");
         }
 
         try {
             if (document.getTags() != null) mappedDocument.setTags(super.getHbnTagSet(document.getTags()));
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i registrering av oppgave: \nEn eller flere merknader finnes ikke");
+            throw new EntityNotFoundException("Feil i registrering av fil: \nEn eller flere merknader finnes ikke");
         }
         long id = super.addEntity(mappedDocument);
 
@@ -66,23 +67,23 @@ public class DocumentRepository extends AbstractRepository implements Repository
 
     @Override
     public boolean update(Document document) throws EntityNotFoundException{
-        HbnDocument mappedDocument = null;
+        HbnDocument mappedDocument;
         try {
             mappedDocument = new HbnDocument(document.getPath(), getAuthor(document.getAuthor()), document.getTitle());
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nForfatter med id: " + document.getAuthor() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av fil: \nForfatter med id: " + document.getAuthor() + " finnes ikke");
         }
 
         try {
             if (document.getGroups() != null) mappedDocument.setGroups(getHbnBachelorGroupSet(document.getGroups()));
         }catch (EntityNotFoundException enfe){
-            throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nEn eller flere grupper finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av fil: \nEn eller flere grupper finnes ikke");
         }
 
         try {
             if (document.getTags() != null) mappedDocument.setTags(super.getHbnTagSet(document.getTags()));
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nEn eller flere merknader finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av fil: \nEn eller flere merknader finnes ikke");
         }
 
         mappedDocument.setId(document.getId());
@@ -90,7 +91,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
         try{
             return super.updateEntity(mappedDocument);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i oppdatering av oppgave: \nOppgave med id: " + document.getId() + " finnes ikke");
+            throw new EntityNotFoundException("Feil i oppdatering av fil: \nOppgave med id: " + document.getId() + " finnes ikke");
         }
     }
 
@@ -102,7 +103,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
         try{
             return super.removeEntity(mappedDocument);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i sletting av oppgave: \nOppgave med id: " + id + " finnes ikke");
+            throw new EntityNotFoundException("Feil i sletting av fil: \nOppgave med id: " + id + " finnes ikke");
         }
     }
 
@@ -112,7 +113,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
         try{
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i henting av oppgave: \nEn eller flere oppgaver finnes ikke");
+            throw new EntityNotFoundException("Feil i henting av fil: \nEn eller flere filer finnes ikke");
         }
 
         List<Document> result = new ArrayList<>();
@@ -143,7 +144,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
         try{
             readData = super.queryToDb((HqlSpecification) spec);
         }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i henting av oppgave: \nEn eller flere oppgaver finnes ikke");
+            throw new EntityNotFoundException("Feil i henting av fil: \nEn eller flere filer finnes ikke");
         }
         List<Document> result = new ArrayList<>();
 
@@ -175,6 +176,15 @@ public class DocumentRepository extends AbstractRepository implements Repository
             hbnBachelorGroups.add((HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(group.getId())).get(0));
         }
         return hbnBachelorGroups;
+    }
+
+    public int findAuthorId(String enterpriseId){
+        try{
+            HbnUser foundUser = (HbnUser) queryToDb(new GetUserByEIdSpec(enterpriseId)).get(0);
+            return (int)foundUser.getId();
+        }catch (EntityNotFoundException enf){
+            throw new EntityNotFoundException("Feil i opplasting av fil: \nBruker finnes ikke: " + enterpriseId);
+        }
     }
 }
 
