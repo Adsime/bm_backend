@@ -75,8 +75,8 @@ public class GoogleService {
 
         // Load client secrets.
         InputStream in =
-                //FileHandler.class.getResourceAsStream("/client_secret.json"); //API key
-                FileHandler.class.getResourceAsStream("/local_key.json"); //Local key
+                FileHandler.class.getResourceAsStream("/client_secret.json"); //API key
+                //FileHandler.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
