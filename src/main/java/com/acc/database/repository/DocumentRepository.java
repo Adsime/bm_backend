@@ -7,7 +7,10 @@ import com.acc.database.entity.HbnUser;
 import com.acc.database.specification.*;
 import com.acc.models.Document;
 import com.acc.models.Group;
+import com.acc.models.Tag;
 import com.acc.providers.Links;
+
+import javax.ejb.Singleton;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,7 +34,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
             throw new IllegalArgumentException("Feil i registrering av fil: \nFyll ut nødvendige felter!");
         }
 
-        HbnDocument mappedDocument = null;
+        HbnDocument mappedDocument;
 
         try {
             mappedDocument = new HbnDocument(document.getPath(), getAuthor(document.getAuthor()), document.getTitle());
@@ -40,16 +43,17 @@ public class DocumentRepository extends AbstractRepository implements Repository
         }
 
         try {
-            if (document.getGroups() != null || !document.getContent().isEmpty()){
+            if (document.getGroups() != null){
                 mappedDocument.setGroups(getHbnBachelorGroupSet(document.getGroups()));
             }
         }catch (EntityNotFoundException enfe){
             throw new EntityNotFoundException("Feil i registering av fil: \nEn eller flere grupper finnes ikke");
         }
 
+        // TODO: 02.05.2017 if before try?
         try {
             if (document.getTags() != null) mappedDocument.setTags(super.getHbnTagSet(document.getTags()));
-        }catch (EntityNotFoundException enf){
+        }catch (EntityNotFoundException enfe){
             throw new EntityNotFoundException("Feil i registrering av fil: \nEn eller flere merknader finnes ikke");
         }
         long id = super.addEntity(mappedDocument);

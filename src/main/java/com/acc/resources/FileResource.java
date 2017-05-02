@@ -138,8 +138,8 @@ public class FileResource {
             @FormDataParam("file") FormDataContentDisposition fileDetail,
             @DefaultValue("null") @PathParam("id") String id,
             @DefaultValue("false") @QueryParam("forced") boolean forced,
-            @DefaultValue("[]") @FormDataParam("tags") JsonArray o) {
+            @QueryParam("tags") List<Integer> tagIdList) {
 
-        return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced, o);
+        return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced, tagIdList);
     }
 }

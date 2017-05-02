@@ -127,6 +127,9 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                     hbnUser.getAccessLevel(),
                     hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
             );
+            List<String> pathList = new ArrayList<>();
+            hbnUser.getDocuments().forEach(doc->pathList.add(doc.getPath()));
+            user.setFiles(pathList);
 
             List<String> filePaths = new ArrayList<>();
             hbnUser.getDocuments().forEach(doc->filePaths.add(doc.getPath()));

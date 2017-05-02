@@ -27,10 +27,11 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.persistence.EntityNotFoundException;
-import javax.ws.rs.core.Context;
+
 import javax.ws.rs.core.Response;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,18 +46,17 @@ public class FileService extends GeneralService {
     @Inject
     private DocumentRepository documentRepository;
 
-/*
-    @Inject
+    /*@Context
     private BMSecurityContext securityContext;
-*/
+    */
 
     public void setFileHandler(FileHandler fileHandler) {
         this.fileHandler = fileHandler;
     }
 
-    public boolean saveFile(java.io.File file, String name, String type, String originalType, String parent) {
+    public String saveFile(java.io.File file, String name, String type, String originalType, String parent) {
         String res = fileHandler.uploadAnyFile(file, name, type, originalType, parent);
-        return res != null;
+        return res;
     }
 
     public Response getFolderContent(String id) {
@@ -139,7 +139,7 @@ public class FileService extends GeneralService {
         return fileHandler.getFileContent(id, type);
     }
 
-    public String findType(String fileName, boolean googleType) {
+    private String findType(String fileName, boolean googleType) {
         if (fileName.endsWith(".docx")) {
             return (googleType) ? "application/vnd.google-apps.document"
                     : "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -238,7 +238,7 @@ public class FileService extends GeneralService {
 
     public Response upLoadAnyFile(InputStream uploadedInputStream,
                                   FormDataContentDisposition fileDetail,
-                                  String parent, boolean forced, JsonArray o) {
+                                  String parent, boolean forced, List<Integer> tagIdList) {
         String fileName = fileDetail.getFileName();
         String[] split = fileName.split("\\.");
         String extension = "." + split[split.length - 1];
@@ -269,14 +269,20 @@ public class FileService extends GeneralService {
         }
 
         if(extension.toLowerCase().equals(".html")) {
-            uploadAsHtml(uploadedInputStream, fileName.replace(".html", ""), parent);
-            String output = "File successfully uploaded to : " + fileName;
-            return Response.ok(output).build();
+            Response response = uploadAsHtml(uploadedInputStream, fileName.replace(".html", ""), parent, authorId, tagIdList);
+            return response;
         }
 
-        Document document = new Document(0,authorId,fileName,"content", apiId, toTagList(o));
+        //saving file
+        java.io.File file = createTempFile(fileName, uploadedInputStream);
+        saveFile(file, fileName, type, originalType, parent);
+        file.delete();
+        String output = "File successfully uploaded to : " + fileName;
+
+        //saving to database
+        Document document = new Document(0,authorId,fileName,"content", apiId, toTagList(tagIdList));
         try{
-            documentRepository.add(document);
+            document = documentRepository.add(document);
         }catch (IllegalArgumentException iae) {
             Error error = new Error(iae.getMessage());
             return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
@@ -285,24 +291,28 @@ public class FileService extends GeneralService {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
 
-        //saving file
-        java.io.File file = createTempFile(fileName, uploadedInputStream);
-        saveFile(file, fileName, type, originalType, parent);
-        file.delete();
-
-        String output = "File successfully uploaded to : " + fileName;
-        return Response.ok(output).build();
+        return Response.status(HttpStatus.CREATED_201).entity(document.toJson()).build();
     }
 
-    public Response uploadAsHtml(InputStream content, String name, String parent) {
+    public Response uploadAsHtml(InputStream content, String name, String parent, int authorId, List<Integer> tagIdList) {
 
         java.io.File file = createFileFromHtml(content, name, ".docx");
+
         if(file != null) {
-            saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false), parent);
+            String path = saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false), parent);
+            Document document = new Document(0, authorId, name,"content", path, toTagList(tagIdList));
+            try{
+                documentRepository.add(document);
+            }catch (IllegalArgumentException iae) {
+                Error error = new Error(iae.getMessage());
+                return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
+            }catch (EntityNotFoundException enfe) {
+                Error error = new Error(enfe.getMessage());
+                return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+            }
 
             file.delete();
-
-            return Response.ok(name + " successfully uploaded!").build();
+            return Response.status(HttpStatus.CREATED_201).entity(document.toJson()).build();
         }
         return Response.status(HttpStatus.BAD_REQUEST_400).entity("Could not upload " + name).build();
     }
@@ -312,11 +322,10 @@ public class FileService extends GeneralService {
         return Response.ok(new Gson().toJson(folders)).build();
     }
 
-
-    private List<Tag> toTagList(JsonArray o){
-        Gson gson = new Gson();
-        List<Tag> tags = Arrays.asList();
-        o.forEach(item -> tags.add(gson.fromJson(item.toString(), Tag.class)));
-        return tags;
+    private List<Tag> toTagList(List<Integer> idList){
+        List<Tag> tagList = new ArrayList<>();
+        idList.forEach(id->tagList.add(new Tag(id,"","","")));
+        System.out.println(Arrays.toString(tagList.toArray()));
+        return tagList;
     }
 }
