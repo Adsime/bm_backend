@@ -33,6 +33,14 @@ public class AccountService {
     @Inject
     private MailHandler mailHandler;
 
+    public void setMailHandler(MailHandler mailHandler) {
+        this.mailHandler = mailHandler;
+    }
+
+    public void setUserRepo(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
+
     public User verifyUser(String encodedCreds) {
         try {
             Credentials credentials = new Credentials(encodedCreds);
@@ -55,7 +63,7 @@ public class AccountService {
         Token token = tokenHandler.generateResetToken(user);
         try {
             MimeMessage message = mailHandler.createEmail("melsom.adrian@accenture.com",
-                    "potasian17@accenture.com",
+                    "potasian17@gmail.com",
                     "Password reset",
                     "<h1>Password reset - Bachelor manager</h1>" +
                             "</br></br>" +

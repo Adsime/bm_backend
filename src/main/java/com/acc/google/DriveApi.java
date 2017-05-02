@@ -28,7 +28,8 @@ public class DriveApi {
         //service.setFileHandler(fileHandler);
 
         try {
-            mailHandler.sendMessage("potasian17@gmail.com", mailHandler.createEmail("melsom.adrian@accenture.com", "potasian17@gmail.com", "test", "test"));
+            mailHandler.sendMessage("potasian17@gmail.com",
+                    mailHandler.createEmail("melsom.adrian@accenture.com", "potasian17@gmail.com", "test", "test"));
         } catch (Exception me) {
             me.printStackTrace();
         }

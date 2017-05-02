@@ -11,13 +11,11 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,11 +31,13 @@ public class GoogleService {
             "Bachelor Manager";
 
     /** Directory to store user credentials for this application. */
-    public static final java.io.File DATA_STORE_DIR_MAIL = new java.io.File(
-            System.getProperty("user.home"), ".credentials/bachelor-manager-mail");
+    public static final java.io.File DATA_STORE =
+            new java.io.File(System.getProperty("user.home"), ".credentials/bm");
+            //new java.io.File("./src/main/java/com/acc/google/credentials/mail");
 
-    public static final java.io.File DATA_STORE_DIR_FILES = new java.io.File(
-            System.getProperty("user.home"), ".credentials/bachelor-manager");
+    //public static final java.io.File DATA_STORE_DIR_FILES =
+            //new java.io.File(System.getProperty("user.home"), ".credentials/bachelor-manager");
+            //new java.io.File("./src/main/java/com/acc/google/credentials/files");
 
     /** Global instance of the {@link FileDataStoreFactory}. */
     private static FileDataStoreFactory DATA_STORE_FACTORY;
@@ -55,28 +55,30 @@ public class GoogleService {
      * at ~/.credentials/gmail-java-quickstart
      */
     private static final List<String> SCOPES =
-            Arrays.asList(GmailScopes.GMAIL_COMPOSE, GmailScopes.GMAIL_INSERT, GmailScopes.GMAIL_LABELS, GmailScopes.GMAIL_METADATA,
-                    GmailScopes.GMAIL_MODIFY, GmailScopes.GMAIL_SEND, GmailScopes.GMAIL_SETTINGS_BASIC);
+            Arrays.asList(DriveScopes.DRIVE, GmailScopes.MAIL_GOOGLE_COM);
+
+    static {
+        try {
+            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+            DATA_STORE_FACTORY = new FileDataStoreFactory(DATA_STORE);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            System.exit(1);
+        }
+    }
 
     /**
      * Creates an authorized Credential object.
      * @return an authorized Credential object.
      * @throws IOException
      */
-    public static Credential authorize(File dataStorage) throws IOException {
-
-        try {
-            HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-            DATA_STORE_FACTORY = new FileDataStoreFactory(dataStorage);
-        } catch (Throwable t) {
-            t.printStackTrace();
-            System.exit(1);
-        }
+    public static Credential authorize() throws IOException {
 
         // Load client secrets.
         InputStream in =
-                //FileHandler.class.getResourceAsStream("/client_secret.json"); //API key
-                FileHandler.class.getResourceAsStream("/local_key.json"); //Local key
+                GoogleService.class.getResourceAsStream("/client_secret.json");
+                //GoogleService.class.getResourceAsStream("/client_secret.json"); //API key
+                //GoogleService.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -87,6 +89,29 @@ public class GoogleService {
                         .setDataStoreFactory(DATA_STORE_FACTORY)
                         .setAccessType("offline")
                         .build();
+
+        /*GoogleCredential credential = GoogleCredential.fromStream(GoogleService.class.getResourceAsStream("/bm-manager-client.json"))
+                .createScoped(SCOPES);*/
+
+        /*HTTP_TRANSPORT = new NetHttpTransport();
+        GoogleCredential credential = null;
+
+        try {
+            credential = new GoogleCredential.Builder()
+                    .setTransport(HTTP_TRANSPORT)
+                    .setJsonFactory(JSON_FACTORY)
+                    .setServiceAccountId("bachelor-manager@bm-manager.iam.gserviceaccount.com")
+                    .setServiceAccountScopes(SCOPES)
+                    .setServiceAccountPrivateKeyFromP12File(new File(System.getProperty("user.home"), ".credentials/bm-manager-client.p12"))
+                    .build();
+        }catch (GeneralSecurityException gse) {
+            gse.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+
+
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
         return credential;
@@ -98,17 +123,12 @@ public class GoogleService {
      * @throws IOException
      */
     public static Gmail getGmailService() throws IOException {
-        Credential credential = authorize(DATA_STORE_DIR_MAIL);
-        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
+        Credential credential = authorize();
+        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
     }
 
     public static Drive getDriveService() throws IOException {
-        Credential credential = authorize(DATA_STORE_DIR_FILES);
-        return new Drive.Builder(
-                HTTP_TRANSPORT, JSON_FACTORY, credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
+        Credential credential = authorize();
+        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
     }
 }
