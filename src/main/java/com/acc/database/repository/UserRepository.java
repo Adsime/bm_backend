@@ -128,9 +128,13 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                     hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
             );
 
+            List<String> filePaths = new ArrayList<>();
+            hbnUser.getDocuments().forEach(doc->filePaths.add(doc.getPath()));
+            user.setFiles(filePaths);
+
            if (!user.getTags().isEmpty()) user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
            if (hbnUser.getGroups() != null) user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
-            result.add(user);
+           result.add(user);
         }
         return result;
     }
