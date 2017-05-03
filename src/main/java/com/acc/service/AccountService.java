@@ -51,7 +51,7 @@ public class AccountService {
     }
 
     public void resetPassword(long id) {
-        User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
+        /*User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
         Token token = tokenHandler.generateResetToken(user);
         try {
             MimeMessage message = mailHandler.createEmail("melsom.adrian@accenture.com",
@@ -67,6 +67,9 @@ public class AccountService {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        System.out.println("done");
+        System.out.println("done");*/
+
+        User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
+        repo.register(user.getEnterpriseID(),"admin",user);
     }
 }

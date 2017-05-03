@@ -1,6 +1,8 @@
 package com.acc.service;
 
 import com.acc.database.repository.DocumentRepository;
+import com.acc.database.specification.GetDocumentAllSpec;
+import com.acc.database.specification.GetDocumentWithPathSpec;
 import com.acc.google.FileHandler;
 import com.acc.google.GoogleFolder;
 import com.acc.models.Document;
@@ -28,6 +30,9 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.persistence.EntityNotFoundException;
 
+import javax.print.Doc;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import java.io.*;
@@ -46,9 +51,8 @@ public class FileService extends GeneralService {
     @Inject
     private DocumentRepository documentRepository;
 
-    /*@Context
-    private BMSecurityContext securityContext;
-    */
+    @Context
+    private ContainerRequestContext context;
 
     public void setFileHandler(FileHandler fileHandler) {
         this.fileHandler = fileHandler;
@@ -84,8 +88,18 @@ public class FileService extends GeneralService {
     }
 
     public Response deleteItem(String id, boolean forced) {
-        // TODO: 01.05.2017  documentRepository.remove()
+        // @Database
+        try {
+            Document readDocument = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
+            documentRepository.remove(readDocument.getId());
+
+        }catch (EntityNotFoundException enfe){
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+        }
+        // @API
         int status = fileHandler.deleteItem(id, forced);
+
         return Response.status(status).build();
     }
 
@@ -153,20 +167,23 @@ public class FileService extends GeneralService {
         return null;
     }
 
-    public Response updateFile(InputStream content, FormDataContentDisposition fileDetail, String id, JsonArray o) {
+    public Response updateFile(InputStream content, FormDataContentDisposition fileDetail, String id, List<Integer> tagIdList) {
         String fileName = fileDetail.getFileName();
         String[] split = fileName.split("\\.");
         String extension = "." + split[split.length - 1];
         java.io.File file;
 
-        /*String authorEId = securityContext.getUser().getName();
+        String authorEId = ((BMSecurityContext)context.getSecurityContext()).getUser().getName();
         int authorId;
+        Document readDocument;
         try {
             authorId = documentRepository.findAuthorId(authorEId);
+            readDocument = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
+
         }catch (EntityNotFoundException enfe){
             Error error = new Error(enfe.getMessage());
             return Response.status(HttpStatus.UNAUTHORIZED_401).entity(error.toJson()).build();
-        }*/
+        }
 
         if(extension.equals(".html")) {
             file = createFileFromHtml(content, fileDetail.getName(), extension);
@@ -174,19 +191,18 @@ public class FileService extends GeneralService {
             file = createTempFile(fileDetail.getName(), content);
         }
 
-        // TODO: 01.05.2017  Document document = new Document(,authorId,fileName,"content", id, toTagList(o));
-
-        /*try{
-            documentRepository.update(document);
+        //updating the database
+        Document newDocument = new Document(readDocument.getId() ,authorId,fileName,"", id, toTagList(tagIdList));
+        try{
+            documentRepository.update(newDocument);
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
-        }*/
+        }
 
         fileHandler.updateAnyFile(file, id, findType(extension, false));
         file.delete();
-
-        return null;
+        return Response.ok().build();
     }
 
     private java.io.File createFileFromHtml(InputStream content, String name, String extension) {
@@ -245,8 +261,7 @@ public class FileService extends GeneralService {
         String type = findType(fileName, true);
         String originalType = findType(fileName, false);
 
-        //String authorEId = securityContext.getUser().getName();
-        String authorEId = "silva.david";
+        String authorEId = ((BMSecurityContext)context.getSecurityContext()).getUser().getName();
         int authorId;
         try {
             authorId = documentRepository.findAuthorId(authorEId);
@@ -325,7 +340,16 @@ public class FileService extends GeneralService {
     private List<Tag> toTagList(List<Integer> idList){
         List<Tag> tagList = new ArrayList<>();
         idList.forEach(id->tagList.add(new Tag(id,"","","")));
-        System.out.println(Arrays.toString(tagList.toArray()));
         return tagList;
+    }
+
+    public Response queryAssigntments() {
+        try {
+            List<Document> docs = documentRepository.getAssignments();
+            return Response.ok(new Gson().toJson(docs)).build();
+        }catch (EntityNotFoundException enfe) {
+            Error error = new Error(enfe.getMessage());
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+        }
     }
 }

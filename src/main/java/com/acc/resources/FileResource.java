@@ -93,6 +93,18 @@ public class FileResource {
         return service.getFolderStructure();
     }
 
+    @GET
+    @Path("/assignments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response queryFiles(){
+        System.out.println("ACTION: GET - assignemtns");
+        try {
+            return service.queryAssigntments();
+        } catch (InternalServerErrorException isee) {
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
+    }
+
     @POST
     @Path("/folder")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -113,8 +125,8 @@ public class FileResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteItem(@PathParam("id") String id,
                                @DefaultValue("false") @QueryParam("forced") boolean forced) {
-        Response response = service.deleteItem(id, forced);
-        return response;
+        System.out.println("\n__________________________________\n performing a delete :\n\n ");
+        return service.deleteItem(id, forced);
     }
 
     @PUT
@@ -123,10 +135,9 @@ public class FileResource {
     public Response updateFile(@FormDataParam("file") InputStream uploadedInputStream,
                                @FormDataParam("file") FormDataContentDisposition fileDetail,
                                @DefaultValue("null") @PathParam("id") String id,
-                               @DefaultValue("[]") @FormDataParam("tags") JsonArray o) {
+                               @QueryParam("tags") List<Integer> tagIdList) {
 
-        Response response = service.updateFile(uploadedInputStream, fileDetail, id, o);
-        return response;
+        return service.updateFile(uploadedInputStream, fileDetail, id, tagIdList);
     }
 
     @POST
