@@ -16,6 +16,10 @@ public class BMSecurityContext implements SecurityContext {
         this.user = user;
     }
 
+    public ContextUser getUser() {
+        return user;
+    }
+
     @Override
     public Principal getUserPrincipal() {
         return null;

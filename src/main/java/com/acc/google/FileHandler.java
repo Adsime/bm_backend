@@ -2,12 +2,21 @@ package com.acc.google;
 
 import com.acc.models.Folder;
 import com.acc.models.Document;
+import com.acc.models.GoogleItem;
+import com.acc.models.User;
+import com.acc.requestContext.BMSecurityContext;
+import com.acc.requestContext.ContextUser;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
+import org.apache.http.protocol.RequestContent;
+import org.glassfish.jersey.hk2.RequestContext;
 
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -34,8 +43,8 @@ public class FileHandler {
     public static final int MULTIPLE_CHOICES_300 = 300;
     public static final int NOT_FOUND_404 = 404;
 
-    /** End google required methods
-        Start of custom methods for API calls to google drive API */
+    @Context
+    private ContainerRequestContext context;
 
     /**
      * Grabs all folders from the application Google Drive. It then creates a tree structure
@@ -129,7 +138,7 @@ public class FileHandler {
      * @param id
      * @return List of google files, which includes folders
      */
-    public List<File> getFolder(String id) {
+    public List<File> getFolder(String id, User user) {
         try {
             Drive service = getDriveService();
             if(id == null) {
@@ -144,6 +153,8 @@ public class FileHandler {
                     .execute();
             List<File> files = res.getFiles();
             files.add(parent);
+            List<GoogleItem> items = Arrays.asList();
+            files.forEach(item -> items.add(new GoogleItem(item, user.)));
             return Lists.reverse(files);
         } catch (IOException ioe) {
             ioe.printStackTrace();

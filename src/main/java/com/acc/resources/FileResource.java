@@ -5,6 +5,7 @@ import com.acc.models.Folder;
 import com.acc.service.FileService;
 
 import java.io.*;
+import java.util.List;
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.persistence.PostRemove;
@@ -131,7 +132,8 @@ public class FileResource {
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail,
             @DefaultValue("null") @PathParam("id") String id,
-            @DefaultValue("false") @QueryParam("forced") boolean forced) {
+            @DefaultValue("false") @QueryParam("forced") boolean forced,
+            @QueryParam("tags") List<Integer> tags) {
         return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced);
     }
 }
