@@ -14,6 +14,7 @@ import javax.ejb.NoSuchEntityException;
 import javax.ws.rs.InternalServerErrorException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -96,7 +97,7 @@ public class DocumentServiceTest {
     @Test
     public void getAllDocumentsNoSuchEntity() {
         when(documentRepository.getQuery(any())).thenThrow(new NoSuchEntityException());
-        Object expected = Arrays.asList();
+        Object expected = Collections.emptyList();
         Object actual = service.getAllDocuments();
         assertEquals(expected, actual);
     }

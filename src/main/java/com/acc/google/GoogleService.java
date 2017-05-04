@@ -87,9 +87,9 @@ public class GoogleService {
                         .setDataStoreFactory(DATA_STORE_FACTORY)
                         .setAccessType("offline")
                         .build();
-        Credential credential = new AuthorizationCodeInstalledApp(
+        return new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        return credential;
+
     }
 
     /**

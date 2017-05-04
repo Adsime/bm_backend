@@ -66,7 +66,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
 
     @Override
     public boolean update(Document document) throws EntityNotFoundException{
-        HbnDocument mappedDocument = null;
+        HbnDocument mappedDocument;
         try {
             mappedDocument = new HbnDocument(document.getPath(), getAuthor(document.getAuthor()), document.getTitle());
         }catch (EntityNotFoundException enf){

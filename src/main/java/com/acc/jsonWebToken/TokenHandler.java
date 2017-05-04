@@ -54,9 +54,7 @@ public class TokenHandler {
                     .withHeader(createHeaders(user))
                     .sign(algorithm);
             return new Token(token);
-        } catch (UnsupportedEncodingException exception) {
-            return null;
-        } catch (JWTCreationException exception) {
+        } catch (UnsupportedEncodingException | JWTCreationException exception) {
             return null;
         }
     }
@@ -65,7 +63,7 @@ public class TokenHandler {
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
             Date date = new Date();
-            date.setTime(System.currentTimeMillis() + ((1/24) * DAY));
+            date.setTime(System.currentTimeMillis());
             String token = JWT.create()
                     .withExpiresAt(date)
                     .withClaim(USER_ACCESS_LEVEL, user.getAccessLevel())
@@ -73,9 +71,7 @@ public class TokenHandler {
                     .withHeader(createHeaders(user))
                     .sign(algorithm);
             return new Token(token);
-        } catch (UnsupportedEncodingException exception) {
-            return null;
-        } catch (JWTCreationException exception) {
+        } catch (UnsupportedEncodingException | JWTCreationException exception) {
             return null;
         }
     }
@@ -110,21 +106,16 @@ public class TokenHandler {
     public boolean verify(String token) {
         DecodedJWT jwt = decode(token);
         Date expiresAt = jwt.getExpiresAt();
-        if (expiresAt.after(new Date())) {
-            return true;
-        }
-        return false;
+        return expiresAt.after(new Date());
     }
 
     private DecodedJWT decode(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
             JWTVerifier verifier = JWT.require(algorithm).build();
-            DecodedJWT jwt = verifier.verify(token);
-            return jwt;
-        } catch (UnsupportedEncodingException exception) {
+            return verifier.verify(token);
 
-        } catch (JWTVerificationException jve) {
+        } catch (UnsupportedEncodingException | JWTVerificationException exception) {
 
         }
         return null;

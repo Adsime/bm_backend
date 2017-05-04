@@ -46,13 +46,12 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
 
         long id = super.addEntity(mappedGroup);
 
-               Group addedGroup = new Group(
+        return new Group(
                 (int)id,
                 group.getName(),
                 group.getStudents(),
                 group.getSupervisors()
         );
-        return addedGroup;
     }
 
     @Override

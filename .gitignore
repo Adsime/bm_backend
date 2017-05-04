@@ -14,5 +14,7 @@ hs_err_pid*
 .idea
 target
 
+*.iml
+
 src/main/resources/hibernate.cfg.xml
 src/main/java/com/acc/database/DatabaseConenctionTest.java

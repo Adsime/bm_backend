@@ -36,12 +36,9 @@ public class AccountService {
     public User verifyUser(String encodedCreds) {
         try {
             Credentials credentials = new Credentials(encodedCreds);
-            User user = repo.matchPassword(credentials.getUsername(), credentials.getPassword());
-            return user;
-        } catch (IllegalArgumentException iae) {
-            iae.printStackTrace();
-        } catch (EntityNotFoundException enfe) {
-            enfe.printStackTrace();
+            return repo.matchPassword(credentials.getUsername(), credentials.getPassword());
+        } catch (IllegalArgumentException |EntityNotFoundException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -62,10 +59,8 @@ public class AccountService {
                             "<p>Trykk på følgende link for å sette ditt nye passord:</p>" +
                             "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +  "\">Linken</a> er aktiv i 30 minutter</p>");
             mailHandler.sendMessage("potasian17@gmail.com", message);
-        } catch (MessagingException me) {
-            me.printStackTrace();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+        } catch (MessagingException | IOException e) {
+            e.printStackTrace();
         }
         System.out.println("done");
     }
