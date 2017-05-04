@@ -89,7 +89,7 @@ public class AccountService {
 
     public Response resetPassword(long id) {
         User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
-        Token token = tokenHandler.generateResetToken(user);
+        Token token = tokenHandler.generateRefreshToken(user);
         try {
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
                     "potasian17@gmail.com",
