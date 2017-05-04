@@ -87,11 +87,10 @@ public class FileService extends GeneralService {
         String entity = (created == FileHandler.CREATED_201) ? folder.getName() + " er opprettet!"
                 : (created == FileHandler.EXISTS_400) ? folder.getName() + " eksisterer allerede. \nØnkser du å opprette en mappe med samme navn?"
                 : "Var ikke i stand til å opprette " + folder.getName();
-        Response response = Response
-                                .status(status)
-                                .entity(entity)
-                                .build();
-        return response;
+        return Response
+                .status(status)
+                .entity(entity)
+                .build();
     }
 
     public Response deleteItem(String id, boolean forced) {
@@ -118,10 +117,8 @@ public class FileService extends GeneralService {
         } catch (MessagingException me) {
 
         }
-        Response response = Response.status(os == null ? HttpStatus.BAD_REQUEST_400 : HttpStatus.OK_200)
+       return Response.status(os == null ? HttpStatus.BAD_REQUEST_400 : HttpStatus.OK_200)
                 .entity(os == null ? "Var ikke i stand til å hente filen" : osPart).build();
-
-        return response;
     }
 
     public String getFileAsHtml(String id) {
@@ -284,10 +281,9 @@ public class FileService extends GeneralService {
 
         String apiId = fileHandler.exists(fileName, parent, false);
         if(apiId != null && !forced) {
-            Response response = Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("{" +
+            return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("{" +
                     "\"message\": \"Fil med samme navn eksisterer allerede i denne mappen!\"," +
                     "\"id\": \"" + apiId + "\"}").build();
-            return response;
         }
 
         if(extension.toLowerCase().equals(".html")) {

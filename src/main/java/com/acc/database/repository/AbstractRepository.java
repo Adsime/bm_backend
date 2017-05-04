@@ -179,11 +179,6 @@ public abstract class AbstractRepository{
                     .buildMetadata()
                     .buildSessionFactory();
         }
-        catch (org.hibernate.service.spi.ServiceException se) {
-            se.printStackTrace();
-            StandardServiceRegistryBuilder.destroy( registry );
-            throw new ExceptionInInitializerError(se);
-        }
         catch (Exception e) {
             e.printStackTrace();
             StandardServiceRegistryBuilder.destroy( registry );
