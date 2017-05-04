@@ -223,7 +223,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
 
     public boolean hasAssignmentTag(Set<HbnTag> tags){
         HbnTag result = tags.stream()
-                .filter(tag->tag.getTagName().equals("Oppgave"))
+                .filter(tag->tag.getTagName().toLowerCase().equals("oppgave"))
                 .findFirst()
                 .orElse(null);
         return result != null;
