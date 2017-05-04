@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
  * Created by melsom.adrian on 28.03.2017.
  */
 @Path("accounts")
-public class AccountResource {
+public class  AccountResource {
 
     @Context
     private ContainerRequestContext context;
