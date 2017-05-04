@@ -167,36 +167,36 @@ public class DocumentRepository extends AbstractRepository implements Repository
         return result;
     }
 
-    public List<Document> getAssignments() {
+    public List<Document> getAssignments(List<String> tags) {
         List<HbnEntity> readData;
         Set<HbnDocument> readDocs = new HashSet<>();
         try{
-            readData = super.queryToDb(new GetDocumentAllSpec());
-            readData.forEach(entity->readDocs.add((HbnDocument) entity));
+            readData = super.queryToDb(new GetDocumentAllSpec(tags));
+            readData.forEach(item -> readDocs.add((HbnDocument) item));
         }catch (EntityNotFoundException enf){
             throw new EntityNotFoundException("Feil i henting av fil(oppgaver): \nIngen filer");
         }
 
         List<Document> result = new ArrayList<>();
 
-        for (HbnDocument hbnDocument : readDocs){
-            if (hasAssignmentTag(hbnDocument.getTags())){
-                Document document = new Document(
-                        (int) hbnDocument.getId(),
-                        (int) hbnDocument.getUser().getId(),
-                        hbnDocument.getTitle(),
-                        "",
-                        hbnDocument.getPath(),
-                        hbnDocument.getTags() != null ? super.toTagList(hbnDocument.getTags()) : new ArrayList<>()
-                );
+        readDocs.forEach(item -> {
+            Document document = new Document(
+                    (int) item.getId(),
+                    (int) item.getUser().getId(),
+                    item.getTitle(),
+                    "",
+                    item.getPath(),
+                    item.getTags() != null ? super.toTagList(item.getTags()) : new ArrayList<>());
 
-                List<Integer> authorId = new ArrayList<>(document.getAuthor());
-                document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
-                if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
-                if (document.getGroups() != null) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
-                result.add(document);
-            }
-        }
+            List<Integer> authorId = new ArrayList<>(document.getAuthor());
+            document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
+            if (document.getTags() != null)
+                document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
+            if (document.getGroups() != null)
+                document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
+            result.add(document);
+        });
+
         return result;
     }
 
@@ -219,14 +219,6 @@ public class DocumentRepository extends AbstractRepository implements Repository
         }catch (EntityNotFoundException enf){
             throw new EntityNotFoundException("Feil i opplasting av fil: \nBruker finnes ikke: " + enterpriseId);
         }
-    }
-
-    public boolean hasAssignmentTag(Set<HbnTag> tags){
-        HbnTag result = tags.stream()
-                .filter(tag->tag.getTagName().toLowerCase().equals("oppgave"))
-                .findFirst()
-                .orElse(null);
-        return result != null;
     }
 }
 

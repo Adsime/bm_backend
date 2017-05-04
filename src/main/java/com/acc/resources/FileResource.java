@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
+import org.apache.http.protocol.HTTP;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -71,12 +72,14 @@ public class FileResource {
     }
 
     @GET
-    @Path("/assignments")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response queryFiles(){
+    public Response queryFiles(@QueryParam("tags") List<String> tags){
         System.out.println("ACTION: GET - assignemtns");
         try {
-            return service.queryAssigntments();
+            if(tags.isEmpty()) {
+                return Response.status(HttpStatus.BAD_REQUEST_400).entity("Ingen tags å søke på.").build();
+            }
+            return service.queryAssigntments(tags);
         } catch (InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -102,7 +105,6 @@ public class FileResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteItem(@PathParam("id") String id,
                                @DefaultValue("false") @QueryParam("forced") boolean forced) {
-        System.out.println("\n__________________________________\n performing a delete :\n\n ");
         return service.deleteItem(id, forced);
     }
 

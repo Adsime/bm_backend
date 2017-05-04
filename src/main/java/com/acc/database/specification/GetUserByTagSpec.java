@@ -23,9 +23,9 @@ public class GetUserByTagSpec implements HqlSpecification {
 
     public String toHqlQuery() {
         String query = "select u from HbnUser u join u.tags t WHERE ";
-        StringJoiner sj = new StringJoiner(" in t.tagName) OR " +
-                "(", "(", " in t.tagName) " +
-                "GROUP BY u.id HAVING COUNT(u.id) " + operator);
+        StringJoiner sj = new StringJoiner(" in t.tagName) OR (",
+                "(",
+                " in t.tagName) GROUP BY u.id HAVING COUNT(u.id) " + operator);
         for(String s : tags) {
             sj.add("'"+s+"'");
         }

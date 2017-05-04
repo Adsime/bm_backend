@@ -38,7 +38,7 @@ public class DocumentService extends GeneralService {
 
     public List<Document> getAllDocuments() {
         try {
-            return documentRepository.getQuery(new GetDocumentAllSpec());
+            return documentRepository.getQuery(new GetDocumentAllSpec(Collections.emptyList()));
         } catch (NoSuchEntityException nsee) {
 
         } catch (EntityNotFoundException enfe) {

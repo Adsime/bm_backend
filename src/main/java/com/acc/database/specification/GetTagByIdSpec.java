@@ -1,7 +1,5 @@
 package com.acc.database.specification;
 
-import com.acc.models.Tag;
-
 /**
  * Created by nguyen.duy.j.khac on 23.02.2017.
  */

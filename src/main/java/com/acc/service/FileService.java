@@ -33,6 +33,7 @@ import javax.persistence.EntityNotFoundException;
 
 import javax.print.Doc;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -46,6 +47,8 @@ import java.util.List;
  * Created by melsom.adrian on 23.03.2017.
  */
 public class FileService extends GeneralService {
+
+    public static final String DELETED = "deleted";
 
     @Inject
     private FileHandler fileHandler;
@@ -94,19 +97,21 @@ public class FileService extends GeneralService {
     }
 
     public Response deleteItem(String id, boolean forced) {
-        // @Database
+        int status = fileHandler.deleteItem(id, forced);
+        if(status == HttpStatus.NO_CONTENT_204) {
+            deleteFromDatabase(id);
+        }
+        return Response.status(status).build();
+    }
+
+    private String deleteFromDatabase(String id) {
         try {
             Document readDocument = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
             documentRepository.remove(readDocument.getId());
-
-        }catch (EntityNotFoundException enfe){
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+            return DELETED
+;        }catch (EntityNotFoundException enfe){
+            return enfe.getMessage();
         }
-        // @API
-        int status = fileHandler.deleteItem(id, forced);
-
-        return Response.status(status).build();
     }
 
     public Response download(String id) {
@@ -279,11 +284,11 @@ public class FileService extends GeneralService {
                     .entity(extension + " is currently not a supported file format. Please contact an admin for support.").build();
         }
 
-        String apiId = fileHandler.exists(fileName, parent, false);
-        if(apiId != null && !forced) {
+        String existingId = fileHandler.exists(fileName, parent, false);
+        if(existingId != null && !forced) {
             return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("{" +
                     "\"message\": \"Fil med samme navn eksisterer allerede i denne mappen!\"," +
-                    "\"id\": \"" + apiId + "\"}").build();
+                    "\"id\": \"" + existingId + "\"}").build();
         }
 
         if(extension.toLowerCase().equals(".html")) {
@@ -293,7 +298,7 @@ public class FileService extends GeneralService {
 
         //saving file
         java.io.File file = createTempFile(fileName, uploadedInputStream);
-        saveFile(file, fileName, type, originalType, parent);
+        String apiId = saveFile(file, fileName, type, originalType, parent);
         file.delete();
         String output = "File successfully uploaded to : " + fileName;
 
@@ -346,9 +351,9 @@ public class FileService extends GeneralService {
         return tagList;
     }
 
-    public Response queryAssigntments() {
+    public Response queryAssigntments(List<String> tags) {
         try {
-            List<Document> docs = documentRepository.getAssignments();
+            List<Document> docs = documentRepository.getAssignments(tags);
             return Response.ok(new Gson().toJson(docs)).build();
         }catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
