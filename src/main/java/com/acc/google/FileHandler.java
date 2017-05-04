@@ -148,7 +148,7 @@ public class FileHandler {
             }
             FileList res = service.files().list()
                     .setQ("'" + id + "'" + " in parents" + " and trashed = false")
-                    .setFields("nextPageToken, files(id, contentHints, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
+                    .setFields("nextPageToken, files(id, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
                     .execute();
             File parent = service.files().get(id)
                     .setFields("id, name")
