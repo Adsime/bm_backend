@@ -1,18 +1,12 @@
 package com.acc.resources;
 
-import com.acc.google.FileHandler;
 import com.acc.models.Folder;
-import com.acc.models.Tag;
 import com.acc.service.FileService;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.inject.Inject;
 import javax.json.JsonObject;
-import javax.persistence.PostRemove;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -21,27 +15,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.sun.org.apache.regexp.internal.RE;
-import org.apache.http.HttpResponse;
-import org.docx4j.Docx4J;
-import org.docx4j.Docx4jProperties;
-import org.docx4j.XmlUtils;
-import org.docx4j.convert.in.xhtml.XHTMLImporterImpl;
-import org.docx4j.convert.out.HTMLSettings;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.exceptions.InvalidFormatException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.AltChunkType;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import com.sun.org.apache.xml.internal.utils.URI;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.jetty.http.HttpStatus;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.junit.Before;
 
 

@@ -40,10 +40,29 @@ public class  AccountResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Path("password")
+    public Response updatePassword(JsonObject o) {
+        String password = o.getString("password");
+        Response response = service.setNewPassword(password);
+        return response;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("newUser/{id}")
     public Response createLogin(@PathParam("id") long id) {
         service.resetPassword(id);
         return Response.ok("Mail sendt!").build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("noUse")
+    public Response temp(JsonObject o) {
+        long id = (long)o.getInt("id");
+        String password = o.getString("password");
+        service.temp(id, password);
+        return Response.ok().build();
     }
 
 }

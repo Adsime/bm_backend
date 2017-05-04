@@ -50,7 +50,10 @@ public class MailHandler {
             throws MessagingException, IOException {
         Gmail service = getGmailService();
         Message message = createMessageWithEmail(email);
-        message = service.users().messages().send(userId, message).execute();
+        message = service.users()
+                .messages()
+                .send(userId, message)
+                .execute();
 
         System.out.println("Message id: " + message.getId());
         System.out.println(message.toPrettyString());

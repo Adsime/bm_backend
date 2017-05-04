@@ -50,7 +50,7 @@ public class GroupResource {
     /**
      *
      */
-    public Response getGroup(@PathParam("id") int id, @Context HttpHeaders headers) {
+    public Response getGroup(@PathParam("id") int id) {
         System.out.println("ACTION: GET - group | ID = " + id);
         try {
             return service.getGroup(id);
@@ -64,8 +64,7 @@ public class GroupResource {
     /**
      *
      */
-    public Response queryGroups(@Context HttpHeaders headers,
-                                @QueryParam("tags") List<String> tags,
+    public Response queryGroups(@QueryParam("tags") List<String> tags,
                                 @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
         System.out.println("ACTION: GET - group | QUERY. tags = " + tags + " hasAll = " + hasAll);
         try {
@@ -84,7 +83,7 @@ public class GroupResource {
     /**
      *
      */
-    public Response newGroup(JsonObject o, @Context HttpHeaders headers) {
+    public Response newGroup(JsonObject o) {
         System.out.println("ACTION: POST - GROUP | item = \n" + o.toString());
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
