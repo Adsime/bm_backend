@@ -2,12 +2,22 @@ package com.acc.google;
 
 import com.acc.models.Folder;
 import com.acc.models.Document;
+import com.acc.models.GoogleItem;
+import com.acc.models.User;
+import com.acc.requestContext.BMSecurityContext;
+import com.acc.requestContext.ContextUser;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
+import org.apache.http.protocol.RequestContent;
+import org.glassfish.jersey.hk2.RequestContext;
 
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -15,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.acc.google.GoogleService.authorize;
 import static com.acc.google.GoogleService.getDriveService;
 
 
@@ -34,8 +45,8 @@ public class FileHandler {
     public static final int MULTIPLE_CHOICES_300 = 300;
     public static final int NOT_FOUND_404 = 404;
 
-    /** End google required methods
-        Start of custom methods for API calls to google drive API */
+    @Context
+    private ContainerRequestContext context;
 
     /**
      * Grabs all folders from the application Google Drive. It then creates a tree structure
@@ -129,7 +140,7 @@ public class FileHandler {
      * @param id
      * @return List of google files, which includes folders
      */
-    public List<File> getFolder(String id) {
+    public List<GoogleItem> getFolder(String id, User user, boolean isAdmin) {
         try {
             Drive service = getDriveService();
             if(id == null) {
@@ -137,14 +148,19 @@ public class FileHandler {
             }
             FileList res = service.files().list()
                     .setQ("'" + id + "'" + " in parents" + " and trashed = false")
-                    .setFields("nextPageToken, files(id, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
+                    .setFields("nextPageToken, files(id, contentHints, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
                     .execute();
             File parent = service.files().get(id)
                     .setFields("id, name")
                     .execute();
             List<File> files = res.getFiles();
             files.add(parent);
-            return Lists.reverse(files);
+            ArrayList<GoogleItem> items = new ArrayList<>();
+            files.forEach(file -> {
+                boolean canDelete = isAdmin || user.getFiles().contains(file.getId());
+                items.add(new GoogleItem(file, canDelete));
+            });
+            return Lists.reverse(items);
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return Arrays.asList();

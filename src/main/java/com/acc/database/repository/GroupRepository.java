@@ -301,7 +301,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     }
 
     public boolean hasAssignment(Set<HbnTag> tags){
-        for(HbnTag hbnTag : tags) if(hbnTag.getType().equals("Oppgave")) return true;
+        for(HbnTag hbnTag : tags) if(hbnTag.getType().toLowerCase().equals("oppgave")) return true;
         return false;
     }
 

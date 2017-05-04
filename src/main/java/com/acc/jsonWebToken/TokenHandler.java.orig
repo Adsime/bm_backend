@@ -104,6 +104,11 @@ public class TokenHandler {
     }
 
     public boolean verify(String token) {
+<<<<<<< HEAD
+        DecodedJWT jwt = decode(token);
+        Date expiresAt = jwt.getExpiresAt();
+        return expiresAt.after(new Date());
+=======
         try {
             DecodedJWT jwt = decode(token);
             Date expiresAt = jwt.getExpiresAt();
@@ -112,6 +117,9 @@ public class TokenHandler {
             }
         } catch (Exception e) {
 
+        }
+        return false;
+>>>>>>> master
     }
 
     private DecodedJWT decode(String token) {

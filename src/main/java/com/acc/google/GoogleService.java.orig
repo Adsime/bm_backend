@@ -89,6 +89,9 @@ public class GoogleService {
                         .setDataStoreFactory(DATA_STORE_FACTORY)
                         .setAccessType("offline")
                         .build();
+<<<<<<< HEAD
+        return new AuthorizationCodeInstalledApp(
+=======
 
         /*GoogleCredential credential = GoogleCredential.fromStream(GoogleService.class.getResourceAsStream("/bm-manager-client.json"))
                 .createScoped(SCOPES);*/
@@ -112,6 +115,8 @@ public class GoogleService {
 
 
 
+        Credential credential = new AuthorizationCodeInstalledApp(
+>>>>>>> master
                 flow, new LocalServerReceiver()).authorize("user");
 
     }

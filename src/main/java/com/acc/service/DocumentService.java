@@ -27,7 +27,6 @@ public class DocumentService extends GeneralService {
     public Document getDocument(int id) {
         try {
             Document document = documentRepository.getQuery(new GetDocumentByIdSpec((long)id)).get(0);
-            if(document == null) return null;
             return fileHandler.insertFileContent(document, "");
         } catch (NoSuchEntityException nsee) {
 
