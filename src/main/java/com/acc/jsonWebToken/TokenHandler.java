@@ -112,6 +112,8 @@ public class TokenHandler {
             }
         } catch (Exception e) {
 
+        }
+        return false;
     }
 
     private DecodedJWT decode(String token) {

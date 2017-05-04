@@ -15,6 +15,9 @@ hs_err_pid*
 target
 
 *.iml
+*.orig
+.orig
+bm-rest-api.iml
 
 src/main/resources/hibernate.cfg.xml
 src/main/java/com/acc/database/DatabaseConenctionTest.java

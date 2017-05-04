@@ -100,6 +100,7 @@ public class AccountService {
                             "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +  "\">Linken</a> er aktiv i 30 minutter</p>");
             mailHandler.sendMessage("potasian17@gmail.com", message);
             return Response.ok("Mail sendt!").build();
+        }catch (MessagingException | IOException e) {
             e.printStackTrace();
         }
         return Response.status(HttpStatus.SERVICE_UNAVAILABLE_503).entity("Var ikke i stand til å sende mail.").build();

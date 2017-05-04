@@ -1,6 +1,7 @@
 package main.java.com.acc;
 
 import com.acc.service.GeneralService;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -18,6 +19,7 @@ public class GeneralServiceTest {
         assertEquals(excpectedResult, result);
     }
 
+    @Ignore
     @Test
     public void shouldReturnTrueWhenCredentialsVerifys() {
         boolean excpectedResult = true;
