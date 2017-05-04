@@ -124,11 +124,15 @@ public class GoogleService {
      */
     public static Gmail getGmailService() throws IOException {
         Credential credential = authorize();
-        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
+        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName(APPLICATION_NAME)
+                .build();
     }
 
     public static Drive getDriveService() throws IOException {
         Credential credential = authorize();
-        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
+        return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName(APPLICATION_NAME)
+                .build();
     }
 }

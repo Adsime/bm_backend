@@ -38,6 +38,8 @@ public class TagService extends GeneralService {
             if(!names.isEmpty()) {
                 names.forEach(name -> name = name.toLowerCase());
                 tags.removeIf(tag -> !names.contains(tag.getName().toLowerCase()));
+            } if(tags.isEmpty()) {
+                return Response.status(HttpStatus.NOT_FOUND_404).entity(new Gson().toJson(tags)).build();
             }
             return Response.ok(new Gson().toJson(tags)).build();
         }catch (EntityNotFoundException enfe) {

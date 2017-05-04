@@ -6,6 +6,7 @@ import com.acc.models.GoogleItem;
 import com.acc.models.User;
 import com.acc.requestContext.BMSecurityContext;
 import com.acc.requestContext.ContextUser;
+import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static com.acc.google.GoogleService.authorize;
 import static com.acc.google.GoogleService.getDriveService;
 
 
@@ -146,15 +148,18 @@ public class FileHandler {
             }
             FileList res = service.files().list()
                     .setQ("'" + id + "'" + " in parents" + " and trashed = false")
-                    .setFields("nextPageToken, files(id, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
+                    .setFields("nextPageToken, files(id, contentHints, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
                     .execute();
             File parent = service.files().get(id)
                     .setFields("id, name")
                     .execute();
             List<File> files = res.getFiles();
             files.add(parent);
-            List<GoogleItem> items = Arrays.asList();
-            files.forEach(item -> items.add(new GoogleItem(item, (isAdmin || user.getFiles().contains(item.getId())))));
+            ArrayList<GoogleItem> items = new ArrayList<>();
+            files.forEach(file -> {
+                boolean canDelete = isAdmin || user.getFiles().contains(file.getId());
+                items.add(new GoogleItem(file, canDelete));
+            });
             return Lists.reverse(items);
         } catch (IOException ioe) {
             ioe.printStackTrace();
