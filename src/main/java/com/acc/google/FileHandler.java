@@ -284,9 +284,8 @@ public class FileHandler {
             ioe.printStackTrace();
             try {
                 Files.delete(path);
-                if(id != null) {
-                    deleteFile(id);
-                }
+                deleteFile(id);
+
             } catch (IOException ioEx) {
 
             }

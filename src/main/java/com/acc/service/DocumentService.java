@@ -10,6 +10,7 @@ import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class DocumentService extends GeneralService {
         } catch (EntityNotFoundException enfe) {
 
         }
-        return Arrays.asList();
+        return Collections.emptyList();
     }
 
     public Document newDocument(Document document) {
