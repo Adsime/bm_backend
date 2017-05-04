@@ -1,17 +1,18 @@
 package com.acc.models;
 
 import com.google.api.services.drive.model.File;
+import com.google.gson.Gson;
 
 /**
  * Created by melsom.adrian on 02.05.2017.
  */
 public class GoogleItem {
-    public File file;
-    public boolean caDelete;
+    private File file;
+    private boolean canDelete;
 
     public GoogleItem(File file, boolean caDelete) {
         this.file = file;
-        this.caDelete = caDelete;
+        this.canDelete = caDelete;
     }
 
     public File getFile() {
@@ -22,11 +23,20 @@ public class GoogleItem {
         this.file = file;
     }
 
-    public boolean isCaDelete() {
-        return caDelete;
+    public boolean canDelete() {
+        return canDelete;
     }
 
-    public void setCaDelete(boolean caDelete) {
-        this.caDelete = caDelete;
+    public void setCanDelete(boolean canDelete) {
+        this.canDelete = canDelete;
+    }
+
+    public String toJson() {
+        return new Gson().toJson(this);
+    }
+
+    @Override
+    public String toString() {
+        return this.toJson();
     }
 }

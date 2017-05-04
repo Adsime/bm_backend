@@ -1,15 +1,16 @@
 package com.acc.service;
 
 import com.acc.database.repository.DocumentRepository;
+import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetDocumentAllSpec;
 import com.acc.database.specification.GetDocumentWithPathSpec;
+import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.google.FileHandler;
 import com.acc.google.GoogleFolder;
-import com.acc.models.Document;
+import com.acc.models.*;
 import com.acc.models.Error;
-import com.acc.models.Folder;
-import com.acc.models.Tag;
 import com.acc.requestContext.BMSecurityContext;
+import com.acc.requestContext.ContextUser;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -31,6 +32,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.persistence.EntityNotFoundException;
 
 import javax.print.Doc;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -49,6 +51,9 @@ public class FileService extends GeneralService {
     private FileHandler fileHandler;
 
     @Inject
+    private UserRepository userRepo;
+
+    @Inject
     private DocumentRepository documentRepository;
 
     @Context
@@ -65,7 +70,9 @@ public class FileService extends GeneralService {
 
     public Response getFolderContent(String id) {
         try {
-            List<File> files = fileHandler.getFolder(id);
+            ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+            User user  = userRepo.getQuery(new GetUserByEIdSpec(contextUser.getName())).get(0);
+            List<GoogleItem> files = fileHandler.getFolder(id, user, contextUser.hasRole("admin"));
             return Response.status(HttpStatus.OK_200).entity(new Gson().toJson(files)).build();
         } catch (Exception e) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity("Invalid folder ID provided.").build();

@@ -138,7 +138,7 @@ public class FileHandler {
      * @param id
      * @return List of google files, which includes folders
      */
-    public List<File> getFolder(String id, User user) {
+    public List<GoogleItem> getFolder(String id, User user, boolean isAdmin) {
         try {
             Drive service = getDriveService();
             if(id == null) {
@@ -154,8 +154,8 @@ public class FileHandler {
             List<File> files = res.getFiles();
             files.add(parent);
             List<GoogleItem> items = Arrays.asList();
-            files.forEach(item -> items.add(new GoogleItem(item, user.)));
-            return Lists.reverse(files);
+            files.forEach(item -> items.add(new GoogleItem(item, (isAdmin || user.getFiles().contains(item.getId())))));
+            return Lists.reverse(items);
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return Arrays.asList();
