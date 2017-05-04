@@ -24,6 +24,8 @@ import java.util.Map;
 public class TokenHandler {
 
     public static final long DAY = 1000L * 60L * 60L * 24L;
+    public static final long HOUR = DAY/24;
+    public static final long HALF_HOUR = HOUR / 2;
 
     public static final String USER_ACCESS_LEVEL = "UAL";
     public static final String USER = "USER";
@@ -59,11 +61,11 @@ public class TokenHandler {
         }
     }
 
-    public Token generateResetToken(User user) {
+    public Token generateRefreshToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
             Date date = new Date();
-            date.setTime(System.currentTimeMillis());
+            date.setTime(System.currentTimeMillis() + HALF_HOUR);
             String token = JWT.create()
                     .withExpiresAt(date)
                     .withClaim(USER_ACCESS_LEVEL, user.getAccessLevel())
