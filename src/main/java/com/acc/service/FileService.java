@@ -2,7 +2,6 @@ package com.acc.service;
 
 import com.acc.database.repository.DocumentRepository;
 import com.acc.database.repository.UserRepository;
-import com.acc.database.specification.GetDocumentAllSpec;
 import com.acc.database.specification.GetDocumentWithPathSpec;
 import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.google.FileHandler;
@@ -11,10 +10,7 @@ import com.acc.models.*;
 import com.acc.models.Error;
 import com.acc.requestContext.BMSecurityContext;
 import com.acc.requestContext.ContextUser;
-import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import jdk.internal.util.xml.impl.Input;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.docx4j.Docx4J;
@@ -30,19 +26,14 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
-import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.EntityNotFoundException;
 
-import javax.print.Doc;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

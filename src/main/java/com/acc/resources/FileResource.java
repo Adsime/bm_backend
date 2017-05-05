@@ -17,6 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.protocol.HTTP;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -138,7 +139,20 @@ public class FileResource {
     @GET
     @Path("test")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response test() {
-        return Response.ok(service.deleteThis()).build();
+    public StreamingOutput test() {
+        StreamingOutput output = new StreamingOutput() {
+            @Override
+            public void write(OutputStream outputStream) throws IOException, WebApplicationException {
+                try {
+                    //ByteArrayInputStream reader = (ByteArrayInputStream) Thread.currentThread().getContextClassLoader().getResourceAsStream();
+                    //byte[] input = new byte[2048];
+                    ByteArrayOutputStream baos = service.deleteThis();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return output;
     }
 }
