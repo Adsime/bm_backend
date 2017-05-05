@@ -5,8 +5,10 @@ import com.acc.service.FileService;
 
 import java.io.*;
 import java.util.List;
+import javax.ejb.PrePassivate;
 import javax.inject.Inject;
 import javax.json.JsonObject;
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -131,5 +133,12 @@ public class FileResource {
             @QueryParam("tags") List<Integer> tagIdList) {
 
         return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced, tagIdList);
+    }
+
+    @GET
+    @Path("test")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response test() {
+        return Response.ok(service.deleteThis()).build();
     }
 }

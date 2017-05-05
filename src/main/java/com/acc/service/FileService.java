@@ -14,6 +14,7 @@ import com.acc.requestContext.ContextUser;
 import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import jdk.internal.util.xml.impl.Input;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.docx4j.Docx4J;
@@ -29,6 +30,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
+import javax.net.ssl.HttpsURLConnection;
 import javax.persistence.EntityNotFoundException;
 
 import javax.print.Doc;
@@ -101,7 +103,9 @@ public class FileService extends GeneralService {
         if(status == HttpStatus.NO_CONTENT_204) {
             deleteFromDatabase(id);
         }
-        return Response.status(status).build();
+        return Response.status(status).entity(status == HttpStatus.NO_CONTENT_204 ? "Slettet"
+                : status == HttpStatus.MULTIPLE_CHOICES_300 ? "Denne mappen har innhold. Ønsker du å slette uansett?"
+                : "Ikke i stand til å behandle forespørselen").build();
     }
 
     private String deleteFromDatabase(String id) {
@@ -359,5 +363,9 @@ public class FileService extends GeneralService {
             Error error = new Error(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
+    }
+
+    public ByteArrayOutputStream deleteThis() {
+        return fileHandler.downloadTest();
     }
 }

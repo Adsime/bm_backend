@@ -13,6 +13,7 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
 import org.apache.http.protocol.RequestContent;
+import org.glassfish.grizzly.streams.StreamOutput;
 import org.glassfish.jersey.hk2.RequestContext;
 
 import javax.ws.rs.container.ContainerRequestContext;
@@ -126,13 +127,13 @@ public class FileHandler {
             Drive service = getDriveService();
             FileList files = service.files().list()
                     .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'" +
-                            (folder ? "application/vnd.google-apps.folder" : ""))
+                            (folder ? " and mimeType = 'application/vnd.google-apps.folder'" : ""))
                     .execute();
-            return (files.getFiles().size() > 0) ? files.getFiles().get(0).getId() : null;
+            return (files.getFiles().size() > 0) ? "exists" : null;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        return null;
+        return "error";
     }
 
     /**
@@ -358,5 +359,20 @@ public class FileHandler {
         } catch (IOException ioe) {
 
         }
+    }
+
+    public ByteArrayOutputStream downloadTest(){
+        try {
+            Drive service = getDriveService();
+            String fileId = "1T8-RViclMSVXEoj4BE6-rp3lcPCPMS722S2ibQjxZCE";
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            service.files().export(fileId, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                    .executeMediaAndDownloadTo(outputStream);
+            return outputStream;
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        return null;
     }
 }
