@@ -2,11 +2,13 @@
 package com.acc.database.repository;
 
 import com.acc.database.entity.*;
+import com.acc.database.specification.GetPasswordByEIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.User;
 import com.acc.providers.Links;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.*;
@@ -57,8 +59,9 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     }
     @Override
     public boolean update(User user) throws EntityNotFoundException {
-
         HbnUser mappedUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(user.getId())).get(0);
+        String oldEId = mappedUser.getEnterpriseId();
+        String salt = mappedUser.getSalt();
         mappedUser.setFirstName(user.getFirstName());
         mappedUser.setLastName(user.getLastName());
         mappedUser.setEmail(user.getEmail());
@@ -71,6 +74,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         }
 
         mappedUser.setId(user.getId());
+        if(salt != null) updateUsername(oldEId, user.getEnterpriseID(), salt);
 
         try {
             return super.updateEntity(mappedUser);
@@ -99,6 +103,11 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                     throw new EntityNotFoundException("Feil i sletting av bruker: \nOppgave: \"" +  document.getTitle() + "\" , " + "til bruker finnes ikke");
                 }
             }
+        }
+        if (readUser.getSalt() != null) {
+            String hashedEId = BCrypt.hashpw(readUser.getEnterpriseId(), readUser.getSalt());
+            HbnPassword hbnPassword = (HbnPassword) super.queryToDb(new GetPasswordByEIdSpec(hashedEId)).get(0);
+            super.removeEntity(hbnPassword);
         }
         return super.removeEntity(readUser);
     }
@@ -168,5 +177,18 @@ public class UserRepository extends AbstractRepository implements Repository<Use
             result.add(user);
         }
         return result;
+    }
+
+    public void updateUsername(String oldEID, String newEId, String salt){
+        String oldHashedEId = BCrypt.hashpw(oldEID, salt);
+        String newHashedEId = BCrypt.hashpw(newEId, salt);
+
+        try{
+            HbnPassword newHbnPassword = (HbnPassword) super.queryToDb(new GetPasswordByEIdSpec(oldHashedEId)).get(0);
+            newHbnPassword.setEIdHash(newHashedEId);
+            super.updateEntity(newHbnPassword);
+        } catch (EntityNotFoundException enfe){
+            throw new EntityNotFoundException("Feil i oppdatering av bruker: \nBruker med " + oldHashedEId + " finnes ikke!");
+        }
     }
 }

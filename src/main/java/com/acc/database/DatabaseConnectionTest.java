@@ -29,8 +29,9 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            List<Group> groups = GR.getMinimalQuery(new GetGroupAllSpec());
-            System.out.println(groups);
+            UR.remove(2);
+
+
 
             //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*
