@@ -358,7 +358,7 @@ public class FileService extends GeneralService {
         }
     }
 
-    public ByteArrayOutputStream deleteThis() {
+    public File deleteThis() {
         return fileHandler.downloadTest();
     }
 

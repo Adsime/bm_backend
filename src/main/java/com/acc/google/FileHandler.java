@@ -12,6 +12,7 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.protocol.RequestContent;
 import org.glassfish.grizzly.streams.StreamOutput;
 import org.glassfish.jersey.hk2.RequestContext;
@@ -361,18 +362,42 @@ public class FileHandler {
         }
     }
 
-    public ByteArrayOutputStream downloadTest(){
+    public File getMetadata(String id) {
+        try {
+            Drive service = getDriveService();
+            File file = service.files()
+                    .get(id)
+                    .setFields("name, mimeType").execute();
+            return file;
+        } catch (IOException ioe) {
+
+        }
+        return null;
+    }
+
+    public java.io.File downloadTest(){
         try {
             Drive service = getDriveService();
             String fileId = "1T8-RViclMSVXEoj4BE6-rp3lcPCPMS722S2ibQjxZCE";
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             service.files().export(fileId, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                     .executeMediaAndDownloadTo(outputStream);
-            return outputStream;
+            return createFile(getMetadata(fileId), outputStream);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
 
+        return null;
+    }
+
+    public java.io.File createFile(File file, ByteArrayOutputStream outputStream) {
+        try {
+            java.io.File temp = java.io.File.createTempFile(file.getName(), file.getName());
+            FileUtils.writeByteArrayToFile(temp, outputStream.toByteArray());
+            return temp;
+        } catch (IOException e) {
+
+        }
         return null;
     }
 }

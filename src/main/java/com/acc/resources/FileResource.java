@@ -139,20 +139,10 @@ public class FileResource {
     @GET
     @Path("test")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public StreamingOutput test() {
-        StreamingOutput output = new StreamingOutput() {
-            @Override
-            public void write(OutputStream outputStream) throws IOException, WebApplicationException {
-                try {
-                    //ByteArrayInputStream reader = (ByteArrayInputStream) Thread.currentThread().getContextClassLoader().getResourceAsStream();
-                    //byte[] input = new byte[2048];
-                    ByteArrayOutputStream baos = service.deleteThis();
-                } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        };
-        return output;
+    public Response test() {
+        File file = service.deleteThis();
+        return Response.ok(file, MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
+                .build();
     }
 }
