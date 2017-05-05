@@ -1,7 +1,6 @@
 package com.acc.service;
 import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.*;
-import com.acc.models.Error;
 import com.acc.models.User;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
@@ -31,8 +30,7 @@ public class UserService extends GeneralService {
             List<User> users = userRepository.getQuery(new GetUserByIdSpec(id));
             return Response.ok(users.get(0).toJson()).build();
         }  catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
         }
 
     }
@@ -42,8 +40,7 @@ public class UserService extends GeneralService {
             List<User> users = userRepository.getQuery(new GetUserByTagSpec(tags, hasAll));
             return Response.ok(new Gson().toJson(users)).build();
         }catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
         }
     }
 
@@ -52,8 +49,7 @@ public class UserService extends GeneralService {
             List<User> users = userRepository.getQuery(new GetUserAllSpec());
             return Response.ok(new Gson().toJson(users)).build();
         } catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
         }
     }
 
@@ -61,12 +57,11 @@ public class UserService extends GeneralService {
         try{
             User registeredUser = userRepository.add(user);
             return Response.status(HttpStatus.CREATED_201).entity(registeredUser.toJson()).build();
-        } catch (EntityNotFoundException enfe){
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
-        } catch (IllegalArgumentException iae){
-            Error error = new Error(iae.getMessage());
-            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            return Response.status(e instanceof EntityNotFoundException
+                    ? HttpStatus.BAD_REQUEST_400
+                    : HttpStatus.NOT_ACCEPTABLE_406)
+                    .entity(e.getMessage()).build();
         }
     }
 
@@ -75,8 +70,7 @@ public class UserService extends GeneralService {
             userRepository.remove((long)id);
             return Response.status(HttpStatus.NO_CONTENT_204).build();
         }  catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
         }
     }
 
@@ -86,7 +80,7 @@ public class UserService extends GeneralService {
             return Response.ok().build();
         }  catch (EntityNotFoundException enfe) {
             Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
         }
     }
 }

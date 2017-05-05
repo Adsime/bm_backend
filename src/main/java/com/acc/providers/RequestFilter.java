@@ -34,11 +34,12 @@ public class RequestFilter implements ContainerRequestFilter {
     @Override
     public void filter(final ContainerRequestContext context) throws IOException {
 
-        System.out.println(context.getHeaders());
-        List<String> a = context.getHeaders().get("access-control-request-headers");
-        if(a != null) {
+        //Currently allowing all headers, so pre-flights are approved immediately.
+        List<String> preFlightHeaders = context.getHeaders().get("access-control-request-headers");
+        if(preFlightHeaders != null) {
             return;
         }
+
         List<String> headers = context.getHeaders().get(HttpHeaders.AUTHORIZATION);
         if(headers != null && headers.size() > 0) {
             String authHeader = headers.get(0);

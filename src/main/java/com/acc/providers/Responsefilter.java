@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 
 @Provider
-public class CORSfilter implements ContainerResponseFilter {
+public class Responsefilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
         responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");

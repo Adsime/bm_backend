@@ -90,27 +90,6 @@ public class GoogleService {
                         .setAccessType("offline")
                         .build();
 
-        /*GoogleCredential credential = GoogleCredential.fromStream(GoogleService.class.getResourceAsStream("/bm-manager-client.json"))
-                .createScoped(SCOPES);*/
-
-        /*HTTP_TRANSPORT = new NetHttpTransport();
-        GoogleCredential credential = null;
-
-        try {
-            credential = new GoogleCredential.Builder()
-                    .setTransport(HTTP_TRANSPORT)
-                    .setJsonFactory(JSON_FACTORY)
-                    .setServiceAccountId("bachelor-manager@bm-manager.iam.gserviceaccount.com")
-                    .setServiceAccountScopes(SCOPES)
-                    .setServiceAccountPrivateKeyFromP12File(new File(System.getProperty("user.home"), ".credentials/bm-manager-client.p12"))
-                    .build();
-        }catch (GeneralSecurityException gse) {
-            gse.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
-
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
         return credential;

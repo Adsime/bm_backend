@@ -1,13 +1,15 @@
 package com.acc.service;
 
 import com.acc.database.repository.DocumentRepository;
+import com.acc.database.repository.TagRepository;
 import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetDocumentWithPathSpec;
+import com.acc.database.specification.GetTagsWithDocumentIdsSpec;
 import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.google.FileHandler;
 import com.acc.google.GoogleFolder;
 import com.acc.models.*;
-import com.acc.models.Error;
+import com.acc.models.Feedback;
 import com.acc.requestContext.BMSecurityContext;
 import com.acc.requestContext.ContextUser;
 import com.google.gson.Gson;
@@ -52,6 +54,9 @@ public class FileService extends GeneralService {
     @Inject
     private DocumentRepository documentRepository;
 
+    @Inject
+    private TagRepository tagRepo;
+
     @Context
     private ContainerRequestContext context;
 
@@ -69,7 +74,17 @@ public class FileService extends GeneralService {
             ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
             User user  = userRepo.getQuery(new GetUserByEIdSpec(contextUser.getName())).get(0);
             List<GoogleItem> files = fileHandler.getFolder(id, user, contextUser.hasRole("admin"));
-            return Response.status(HttpStatus.OK_200).entity(new Gson().toJson(files)).build();
+            List<String> ids = new ArrayList<>();
+            files.forEach(item -> ids.add(item.getFile().getId()));
+            files.forEach(item -> {
+                try {
+                    item.setTags(tagRepo.getQuery(new GetTagsWithDocumentIdsSpec(item.getFile().getId())));
+                } catch (EntityNotFoundException enfe) {
+
+                }
+            });
+            Response response = Response.status(HttpStatus.OK_200).entity(new Gson().toJson(files)).build();
+            return response;
         } catch (Exception e) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity("Invalid folder ID provided.").build();
         }
@@ -177,16 +192,21 @@ public class FileService extends GeneralService {
         String extension = "." + split[split.length - 1];
         java.io.File file;
 
-        String authorEId = ((BMSecurityContext)context.getSecurityContext()).getUser().getName();
+        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+        String authorEId = contextUser.getName();
         int authorId;
         Document readDocument;
         try {
             authorId = documentRepository.findAuthorId(authorEId);
+        } catch (EntityNotFoundException enfe) {
+            return Response.status(HttpStatus.UNAUTHORIZED_401).entity("Denne brukeren eksisterer ikke lenger").build();
+        }
+        try {
             readDocument = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
-
         }catch (EntityNotFoundException enfe){
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.UNAUTHORIZED_401).entity(error.toJson()).build();
+            readDocument = createDocument(authorId, fileName, id, tagIdList);
+            saveToDB(readDocument);
+            readDocument = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
         }
 
         if(extension.equals(".html")) {
@@ -200,7 +220,7 @@ public class FileService extends GeneralService {
         try{
             documentRepository.update(newDocument);
         }catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
 
@@ -265,12 +285,13 @@ public class FileService extends GeneralService {
         String type = findType(fileName, true);
         String originalType = findType(fileName, false);
 
-        String authorEId = ((BMSecurityContext)context.getSecurityContext()).getUser().getName();
+        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+        String authorEId = contextUser.getName();
         int authorId;
         try {
             authorId = documentRepository.findAuthorId(authorEId);
         }catch (EntityNotFoundException enfe){
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.UNAUTHORIZED_401).entity(error.toJson()).build();
         }
 
@@ -281,9 +302,7 @@ public class FileService extends GeneralService {
 
         String existingId = fileHandler.exists(fileName, parent, false);
         if(existingId != null && !forced) {
-            return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("{" +
-                    "\"message\": \"Fil med samme navn eksisterer allerede i denne mappen!\"," +
-                    "\"id\": \"" + existingId + "\"}").build();
+            return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("Fil med samme navn eksisterer allerede i denne mappen!").build();
         }
 
         if(extension.toLowerCase().equals(".html")) {
@@ -296,20 +315,12 @@ public class FileService extends GeneralService {
         String apiId = saveFile(file, fileName, type, originalType, parent);
         file.delete();
         String output = "File successfully uploaded to : " + fileName;
+        Document document;
 
-        //saving to database
-        Document document = new Document(0,authorId,fileName,"content", apiId, toTagList(tagIdList));
-        try{
-            document = documentRepository.add(document);
-        }catch (IllegalArgumentException iae) {
-            Error error = new Error(iae.getMessage());
-            return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
-        }catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
-            return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
-        }
+        document = createDocument(authorId, fileName, apiId, tagIdList);
+        Feedback feedback = saveToDB(document);
 
-        return Response.status(HttpStatus.CREATED_201).entity(document.toJson()).build();
+        return Response.status(feedback.getStatus()).entity(feedback.getMessage()).build();
     }
 
     public Response uploadAsHtml(InputStream content, String name, String parent, int authorId, List<Integer> tagIdList) {
@@ -318,19 +329,10 @@ public class FileService extends GeneralService {
 
         if(file != null) {
             String path = saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false), parent);
-            Document document = new Document(0, authorId, name,"content", path, toTagList(tagIdList));
-            try{
-                documentRepository.add(document);
-            }catch (IllegalArgumentException iae) {
-                Error error = new Error(iae.getMessage());
-                return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
-            }catch (EntityNotFoundException enfe) {
-                Error error = new Error(enfe.getMessage());
-                return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
-            }
-
+            Document document = createDocument(authorId, name, path, tagIdList);
+            Feedback feedback = saveToDB(document);
             file.delete();
-            return Response.status(HttpStatus.CREATED_201).entity(document.toJson()).build();
+            return Response.status(feedback.getStatus()).entity(feedback.getMessage()).build();
         }
         return Response.status(HttpStatus.BAD_REQUEST_400).entity("Could not upload " + name).build();
     }
@@ -351,12 +353,25 @@ public class FileService extends GeneralService {
             List<Document> docs = documentRepository.getAssignments(tags);
             return Response.ok(new Gson().toJson(docs)).build();
         }catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
 
     public ByteArrayOutputStream deleteThis() {
         return fileHandler.downloadTest();
+    }
+
+    private Document createDocument(int authorId, String fileName, String apiId, List<Integer> tagIdList) {
+        return new Document(0, authorId, fileName, "content", apiId, toTagList(tagIdList));
+    }
+
+    private Feedback saveToDB(Document document) {
+        try {
+            documentRepository.add(document);
+            return new Feedback(document.toJson(), HttpStatus.CREATED_201);
+        } catch (IllegalArgumentException | EntityNotFoundException iae) {
+            return new Feedback(iae.getMessage(), iae instanceof EntityNotFoundException ? HttpStatus.BAD_REQUEST_400 : HttpStatus.NOT_ACCEPTABLE_406);
+        }
     }
 }

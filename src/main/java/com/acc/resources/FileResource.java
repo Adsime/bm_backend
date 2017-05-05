@@ -129,11 +129,11 @@ public class FileResource {
     public Response uploadFile(
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail,
-            @DefaultValue("null") @PathParam("id") String id,
+            @DefaultValue("null") @PathParam("id") String parent,
             @DefaultValue("false") @QueryParam("forced") boolean forced,
             @QueryParam("tags") List<Integer> tagIdList) {
 
-        return service.upLoadAnyFile(uploadedInputStream, fileDetail, id, forced, tagIdList);
+        return service.upLoadAnyFile(uploadedInputStream, fileDetail, parent, forced, tagIdList);
     }
 
     @GET
@@ -152,7 +152,7 @@ public class FileResource {
                     e.printStackTrace();
                 }
             }
-        }
+        };
         return output;
     }
 }

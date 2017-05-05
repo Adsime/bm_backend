@@ -4,7 +4,6 @@ import com.acc.database.entity.*;
 import com.acc.database.specification.*;
 import com.acc.models.Document;
 import com.acc.models.Group;
-import com.acc.models.Tag;
 import com.acc.providers.Links;
 
 import javax.ejb.Singleton;
@@ -27,7 +26,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
 
     @Override
     public Document add(Document document) throws EntityNotFoundException, IllegalArgumentException{
-        if (document.getTitle().equals("") || document.getContent().equals("")) {
+        if (document.getTitle().equals("") || document.getContent().equals("") || document.getAuthor() == -1) {
             throw new IllegalArgumentException("Feil i registrering av fil: \nFyll ut nødvendige felter!");
         }
 

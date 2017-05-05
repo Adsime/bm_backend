@@ -4,18 +4,14 @@ import com.acc.database.repository.GroupRepository;
 import com.acc.database.specification.GetGroupAllSpec;
 import com.acc.database.specification.GetGroupByIdSpec;
 import com.acc.database.specification.GetGroupByTagSpec;
-import com.acc.database.specification.GetUserByTagSpec;
-import com.acc.models.Error;
+import com.acc.models.Feedback;
 import com.acc.models.Group;
-import com.acc.models.User;
 import com.google.gson.Gson;
 import org.eclipse.jetty.http.HttpStatus;
 
-import javax.ejb.NoSuchEntityException;
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,7 +28,7 @@ public class GroupService extends GeneralService{
             Group group = groupRepository.getQuery(new GetGroupByIdSpec((long)id)).get(0);
             return Response.ok(group.toJson()).build();
         } catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
@@ -42,7 +38,7 @@ public class GroupService extends GeneralService{
             List<Group> groups = groupRepository.getMinimalQuery(new GetGroupAllSpec());
             return Response.ok(new Gson().toJson(groups)).build();
         } catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
@@ -52,10 +48,10 @@ public class GroupService extends GeneralService{
             Group registeredGroup = groupRepository.add(group);
             return Response.status(HttpStatus.CREATED_201).entity(registeredGroup.toString()).build();
         } catch (EntityNotFoundException enfe){
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         } catch (IllegalArgumentException iae){
-            Error error = new Error(iae.getMessage());
+            Feedback error = new Feedback(iae.getMessage());
             return Response.status(HttpStatus.NOT_ACCEPTABLE_406).entity(error.toJson()).build();
         }
     }
@@ -65,7 +61,7 @@ public class GroupService extends GeneralService{
             List<Group> users = groupRepository.getMinimalQuery(new GetGroupByTagSpec(tags, hasAll));
             return Response.ok(new Gson().toJson(users)).build();
         }catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toString()).build();
         }
     }
@@ -75,7 +71,7 @@ public class GroupService extends GeneralService{
             groupRepository.remove((long) id);
             return Response.status(HttpStatus.NO_CONTENT_204).build();
         }catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
@@ -85,7 +81,7 @@ public class GroupService extends GeneralService{
             groupRepository.update(group);
             return Response.ok().build();
         } catch (EntityNotFoundException enfe) {
-            Error error = new Error(enfe.getMessage());
+            Feedback error = new Feedback(enfe.getMessage());
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(error.toJson()).build();
         }
     }
