@@ -8,6 +8,7 @@ import com.acc.models.Feedback;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -145,8 +146,9 @@ public class HbnUser implements Serializable, HbnEntity {
         this.documents = documents;
     }
 
+    @Transient
     public boolean isStudent() {
-        List<Boolean> res = Collections.emptyList();
+        ArrayList<Boolean> res = new ArrayList<>();
         this.tags.forEach(tag -> {
             if(tag.getTagName().toLowerCase().equals("student")) {
                 res.add(true);
