@@ -76,7 +76,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         }
 
         mappedUser.setId(user.getId());
-        if(salt != null || salt.equals("")) updateUsername(oldEId, user.getEnterpriseID(), salt);
+        if(salt != null) updateUsername(oldEId, user.getEnterpriseID(), salt);
 
         try {
             return super.updateEntity(mappedUser);
@@ -91,14 +91,20 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         try {
             readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
             if(!forced) {
-                readUser.getGroups().forEach(item -> {
-                    if (item.getUsers().size() < 2) {
+                readUser.getGroups().forEach(group -> {
+                    List<HbnUser> students = Collections.emptyList();
+                    group.getUsers().forEach(user -> {
+                        if(user.isStudent()) {
+                            students.add(user);
+                        }
+                    });
+                    if (students.size() < 2) {
                         StringBuilder builder = new StringBuilder()
                                 .append(readUser.getFirstName())
                                 .append(" ")
                                 .append(readUser.getLastName())
                                 .append(" er siste medlem i gruppen \"")
-                                .append(item.getName())
+                                .append(group.getName())
                                 .append("\". Ved å slette brukeren slettes også brukeren.<br/>Ønsker du å gjennomføre slettingen?");
                         throw new IllegalArgumentException(builder.toString());
                     }
@@ -132,7 +138,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 }
             }
         }
-        if (readUser.getSalt() != null || readUser.getSalt().equals("")) {
+        if (readUser.getSalt() != null) {
             String hashedEId = BCrypt.hashpw(readUser.getEnterpriseId(), readUser.getSalt());
             HbnPassword hbnPassword = (HbnPassword) super.queryToDb(new GetPasswordByEIdSpec(hashedEId)).get(0);
             super.removeEntity(hbnPassword);

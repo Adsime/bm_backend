@@ -4,8 +4,12 @@ package com.acc.database.entity;
  * Created by nguyen.duy.j.khac on 08.02.2017.
  */
 
+import com.acc.models.Feedback;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -139,5 +143,16 @@ public class HbnUser implements Serializable, HbnEntity {
 
     public void setDocuments(Set<HbnDocument> documents) {
         this.documents = documents;
+    }
+
+    public boolean isStudent() {
+        List<Boolean> res = Collections.emptyList();
+        this.tags.forEach(tag -> {
+            if(tag.getTagName().toLowerCase().equals("student")) {
+                res.add(true);
+                return;
+            }
+        });
+        return res.size() > 0;
     }
 }
