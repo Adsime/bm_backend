@@ -1,6 +1,7 @@
 
 package com.acc.database.repository;
 
+import com.acc.Exceptions.MultipleChoiceException;
 import com.acc.database.entity.*;
 import com.acc.database.specification.GetPasswordByEIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
@@ -11,6 +12,7 @@ import com.acc.providers.Links;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.OptionalDataException;
 import java.util.*;
 
 /**
@@ -81,6 +83,32 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         }catch (EntityNotFoundException ex){
             throw new EntityNotFoundException("Feil i oppdatering av bruker: \nBruker med id: " + user.getId() + " finnes ikke");
+        }
+    }
+
+    public boolean remove(long id, boolean forced) throws MultipleChoiceException {
+        HbnUser readUser;
+        try {
+            readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
+            if(!forced) {
+                readUser.getGroups().forEach(item -> {
+                    if (item.getUsers().size() < 2) {
+                        StringBuilder builder = new StringBuilder()
+                                .append(readUser.getFirstName())
+                                .append(" ")
+                                .append(readUser.getLastName())
+                                .append(" er siste medlem i gruppen \"")
+                                .append(item.getName())
+                                .append("\". Ved å slette brukeren slettes også brukeren.<br/>Ønsker du å gjennomføre slettingen?");
+                        throw new IllegalArgumentException(builder.toString());
+                    }
+                });
+            }
+            return remove(id);
+        }catch (EntityNotFoundException ex){
+            throw new EntityNotFoundException("Feil i sletting av bruker: \nBruker med id: " + id + " finnes ikke");
+        }catch (IllegalArgumentException iae) {
+            throw new MultipleChoiceException(iae.getMessage());
         }
     }
 

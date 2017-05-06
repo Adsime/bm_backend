@@ -52,7 +52,7 @@ public class UserResourceTest {
         expected = HttpStatus.BAD_REQUEST_400;
         actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }*/
+    }
 
     @Test
     public void getUserInternalError() {
@@ -61,7 +61,7 @@ public class UserResourceTest {
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }
+    }*/
 
     // End getUser Tests
     // Start newUser Tests
@@ -78,7 +78,7 @@ public class UserResourceTest {
         expected = HttpStatus.CREATED_201;
         actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }*/
+    }
 
     @Test
     public void newUsersInternalError() {
@@ -92,7 +92,7 @@ public class UserResourceTest {
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.newUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }
+    }*/
 
     // End newUser Tests
     // Start updateUser Tests
@@ -113,7 +113,7 @@ public class UserResourceTest {
         expected = HttpStatus.BAD_REQUEST_400;
         actual = userResource.updateUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }*/
+    }
 
     @Test
     public void updateUsersInternalError() {
@@ -122,7 +122,7 @@ public class UserResourceTest {
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.updateUser(TestData.jsonUser(), TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }
+    }*/
 
     // End updateUser Tests
     // Start deleteUser Tests
@@ -143,7 +143,7 @@ public class UserResourceTest {
         expected = HttpStatus.BAD_REQUEST_400;
         actual = userResource.deleteUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }*/
+    }
 
     @Test
     public void deleteUsersInternalError() {
@@ -152,7 +152,7 @@ public class UserResourceTest {
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
         actual = userResource.deleteUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
-    }
+    }*/
 
     //End deleteUser Tests
 }

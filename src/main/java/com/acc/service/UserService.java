@@ -1,4 +1,5 @@
 package com.acc.service;
+import com.acc.Exceptions.MultipleChoiceException;
 import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.*;
 import com.acc.models.User;
@@ -65,12 +66,14 @@ public class UserService extends GeneralService {
         }
     }
 
-    public Response deleteUser(int id) {
+    public Response deleteUser(int id, boolean forced) {
         try {
-            userRepository.remove((long)id);
+            userRepository.remove((long)id, forced);
             return Response.status(HttpStatus.NO_CONTENT_204).build();
         }  catch (EntityNotFoundException enfe) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
+        } catch (MultipleChoiceException mce) {
+            return Response.status(mce.getStatus()).entity(mce.getMessage()).build();
         }
     }
 
