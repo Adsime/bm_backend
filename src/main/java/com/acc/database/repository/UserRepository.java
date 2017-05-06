@@ -92,7 +92,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
             readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
             if(!forced) {
                 readUser.getGroups().forEach(group -> {
-                    List<HbnUser> students = Collections.emptyList();
+                    ArrayList<HbnUser> students = new ArrayList<>();
                     group.getUsers().forEach(user -> {
                         if(user.isStudent()) {
                             students.add(user);
@@ -105,7 +105,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                                 .append(readUser.getLastName())
                                 .append(" er siste medlem i gruppen \"")
                                 .append(group.getName())
-                                .append("\". Ved å slette brukeren slettes også brukeren.<br/>Ønsker du å gjennomføre slettingen?");
+                                .append("\".\nVed å slette brukeren slettes også brukeren.\n\nØnsker du å gjennomføre slettingen?");
                         throw new IllegalArgumentException(builder.toString());
                     }
                 });
