@@ -37,7 +37,7 @@ public class UserResource {
     /**
      *
      */
-    public Response getUser(@PathParam("id") int id, @Context HttpHeaders headers) {
+    public Response getUser(@PathParam("id") int id) {
         System.out.println("ACTION: GET - user | ID = " + id);
         try {
             return service.getUser(id);
@@ -51,8 +51,7 @@ public class UserResource {
     /**
      *
      */
-    public Response queryUsers(@Context HttpHeaders headers,
-                               @QueryParam("tags") List<String> tags,
+    public Response queryUsers(@QueryParam("tags") List<String> tags,
                                @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
         System.out.println("ACTION: GET - user | QUERY:\n" + tags);
         try {
@@ -70,7 +69,7 @@ public class UserResource {
     /**
      *
      */
-    public Response newUser(JsonObject o, @Context HttpHeaders headers) {
+    public Response newUser(JsonObject o) {
         System.out.println("ACTION: POST - user | ITEM =\n" + o.toString());
         try {
             User user = new Gson().fromJson(o.toString(), User.class);
@@ -85,10 +84,11 @@ public class UserResource {
     /**
      *
      */
-    public Response deleteUser(@PathParam("id") int id, @Context HttpHeaders headers) {
+    public Response deleteUser(@PathParam("id") int id,
+                               @DefaultValue("false") @QueryParam("forced") boolean forced) {
         System.out.println("ACTION: DELETE - user | ID = " + id);
         try {
-            return service.deleteUser(id);
+            return service.deleteUser(id, forced);
         } catch(InternalServerErrorException isee) {
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -98,7 +98,7 @@ public class UserResource {
     /**
      *
      */
-    public Response updateUser(JsonObject o, @Context HttpHeaders headers) {
+    public Response updateUser(JsonObject o) {
         System.out.println("ACTION: PUT - user | ITEM = \n" + o.toString());
         try {
             User user = new Gson().fromJson(o.toString(), User.class);
