@@ -132,6 +132,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                     new ArrayList<>()
             );
             group.setDocuments(groupDocuments);
+            group.setAssignment(getAssignment(hbnDocuments));
 
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()){
                 User user = new User(
@@ -301,7 +302,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     }
 
     public boolean hasAssignment(Set<HbnTag> tags){
-        for(HbnTag hbnTag : tags) if(hbnTag.getType().toLowerCase().equals("oppgave")) return true;
+        for(HbnTag hbnTag : tags) if(hbnTag.getTagName().toLowerCase().equals("oppgave")) return true;
         return false;
     }
 
