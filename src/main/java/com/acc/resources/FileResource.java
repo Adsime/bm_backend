@@ -140,9 +140,7 @@ public class FileResource {
     @Path("test")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response test() {
-        File file = service.deleteThis();
-        return Response.ok(file, MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-                .build();
+        //File file = service.deleteThis();
+        return Response.ok(service.deleteThis()).build();
     }
 }

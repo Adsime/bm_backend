@@ -375,14 +375,14 @@ public class FileHandler {
         return null;
     }
 
-    public java.io.File downloadTest(){
+    public byte[] downloadTest(){
         try {
             Drive service = getDriveService();
             String fileId = "1T8-RViclMSVXEoj4BE6-rp3lcPCPMS722S2ibQjxZCE";
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             service.files().export(fileId, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                     .executeMediaAndDownloadTo(outputStream);
-            return createFile(getMetadata(fileId), outputStream);
+            return outputStream.toByteArray();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
