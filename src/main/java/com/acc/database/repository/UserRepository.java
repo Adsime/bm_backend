@@ -74,7 +74,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         }
 
         mappedUser.setId(user.getId());
-        if(salt != null) updateUsername(oldEId, user.getEnterpriseID(), salt);
+        if(salt != null || salt.equals("")) updateUsername(oldEId, user.getEnterpriseID(), salt);
 
         try {
             return super.updateEntity(mappedUser);
@@ -104,7 +104,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 }
             }
         }
-        if (readUser.getSalt() != null) {
+        if (readUser.getSalt() != null || readUser.getSalt().equals("")) {
             String hashedEId = BCrypt.hashpw(readUser.getEnterpriseId(), readUser.getSalt());
             HbnPassword hbnPassword = (HbnPassword) super.queryToDb(new GetPasswordByEIdSpec(hashedEId)).get(0);
             super.removeEntity(hbnPassword);
