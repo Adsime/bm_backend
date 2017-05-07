@@ -52,28 +52,35 @@ public class TokenHandler {
         return headers;
     }
 
+    /**
+     * Returns a token lasting an extended period of time
+     * @param user User
+     * @return Token
+     */
     public Token generateAccessToken(User user) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256("secret");
-            Date date = new Date();
-            date.setTime(System.currentTimeMillis() + (90L * DAY));
-            String token = JWT.create()
-                    .withExpiresAt(date)
-                    .withClaim(USER_ACCESS_LEVEL, user.getAccessLevel())
-                    .withClaim(USER, user.getEnterpriseID())
-                    .withHeader(createHeaders(user))
-                    .sign(algorithm);
-            return new Token(token);
-        } catch (UnsupportedEncodingException | JWTCreationException exception) {
-            return null;
-        }
+        return generateToken(user, DAY * 90);
     }
 
+    /**
+     * Returns a token lasting a short period of time
+     * @param user User
+     * @return Token
+     */
     public Token generateRefreshToken(User user) {
+        return generateToken(user, HALF_HOUR);
+    }
+
+    /**
+     * Responsible for generating tokens
+     * @param user User
+     * @param timeExtention long
+     * @return Token
+     */
+    private Token generateToken(User user, long timeExtention) {
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
             Date date = new Date();
-            date.setTime(System.currentTimeMillis() + HALF_HOUR);
+            date.setTime(System.currentTimeMillis() + timeExtention);
             String token = JWT.create()
                     .withExpiresAt(date)
                     .withClaim(USER_ACCESS_LEVEL, user.getAccessLevel())
@@ -86,6 +93,53 @@ public class TokenHandler {
         }
     }
 
+    /**
+     * Determines the validity of a given token. Will set the security context user
+     * if the token is
+     * @param token Token
+     * @param context ContainerRequestContent
+     * @return boolean
+     */
+    @SuppressWarnings("all")
+    public boolean verify(String token, ContainerRequestContext context) {
+        try {
+            DecodedJWT jwt = decode(token);
+            Date expiresAt = jwt.getExpiresAt();
+            User user = repo.getQuery(new GetUserByEIdSpec(jwt.getClaim(USER).toString())).get(0);
+            if (expiresAt.after(new Date())) {
+                getUserAllowance(user, context);
+                return true;
+            }
+        } catch (Exception e) {
+
+        }
+        return false;
+    }
+
+    /**
+     * Decodes a given token and returns an object containing its components.
+     * @param token Token
+     * @return DecodedJWT
+     */
+    @SuppressWarnings("all")
+    private DecodedJWT decode(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("secret");
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            return verifier.verify(token);
+
+        } catch (UnsupportedEncodingException | JWTVerificationException exception) {
+
+        }
+        return null;
+    }
+
+    /**
+     * Determines the client's role within the API.
+     * @param user User
+     * @param context ContainerRequestContext
+     * @throws Exception To ensure any errors results in the client not getting access.
+     */
     private void getUserAllowance(User user, ContainerRequestContext context) throws Exception {
         contextUser.setName(user.getEnterpriseID());
         switch (Integer.parseInt(user.getAccessLevel())) {
@@ -107,33 +161,5 @@ public class TokenHandler {
             }
         }
         context.setSecurityContext(new BMSecurityContext(contextUser));
-    }
-
-    public boolean verify(String token, ContainerRequestContext context) {
-        try {
-            DecodedJWT jwt = decode(token);
-            Date expiresAt = jwt.getExpiresAt();
-            User user = repo.getQuery(new GetUserByEIdSpec(jwt.getClaim(USER).toString())).get(0);
-            if (expiresAt.after(new Date())) {
-                getUserAllowance(user, context);
-                return true;
-            }
-        } catch (Exception e) {
-
-        }
-        return false;
-    }
-
-    private DecodedJWT decode(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256("secret");
-            JWTVerifier verifier = JWT.require(algorithm).build();
-            return verifier.verify(token);
-
-        } catch (UnsupportedEncodingException | JWTVerificationException exception) {
-
-        }
-        return null;
-
     }
 }
