@@ -6,6 +6,7 @@ import com.acc.requestContext.ContextUser;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
+import javax.security.auth.login.LoginException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
@@ -39,29 +40,38 @@ public class RequestFilter implements ContainerRequestFilter {
     @Override
     public void filter(final ContainerRequestContext context) throws IOException {
 
+        Response abort = null;
+
         //Currently allowing all headers, so pre-flights are approved immediately.
         List<String> preFlightHeaders = context.getHeaders().get("access-control-request-headers");
         if(preFlightHeaders != null) {
             return;
         }
-
-        List<String> headers = context.getHeaders().get(HttpHeaders.AUTHORIZATION);
-        if(headers != null && headers.size() > 0) {
-            String authHeader = headers.get(0);
-            if(context.getUriInfo().getPath().contains("accounts/login") && authHeader.startsWith(BASIC)) {
-                return;
+        try {
+            List<String> headers = context.getHeaders().get(HttpHeaders.AUTHORIZATION);
+            if (headers != null && headers.size() > 0) {
+                String authHeader = headers.get(0);
+                if (context.getUriInfo().getPath().contains("accounts/login") && authHeader.startsWith(BASIC)) {
+                    return;
+                }
+                String token = authHeader.split(" ")[1];
+                if (authHeader.startsWith(BEARER) && tokenHandler.verify(token, context)) {
+                    return;
+                }
             }
-            String token = authHeader.split(" ")[1];
-            if(authHeader.startsWith(BEARER) && tokenHandler.verify(token, context)) {
-                return;
-            }
+        } catch (LoginException le) {
+            abort = Response
+                    .status(HttpStatus.FOUND_302)
+                    .entity(le.getMessage())
+                    .build();
         }
-
-        Response unauthorizedResponse = Response
-                .status(HttpStatus.UNAUTHORIZED_401)
-                .entity("Unauthorized access attempt.")
-                .build();
-        context.abortWith(unauthorizedResponse);
+        if(abort == null) {
+            abort = Response
+                    .status(HttpStatus.UNAUTHORIZED_401)
+                    .entity("Unauthorized access attempt.")
+                    .build();
+        }
+        context.abortWith(abort);
     }
 
 

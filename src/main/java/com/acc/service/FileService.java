@@ -71,7 +71,7 @@ public class FileService extends GeneralService {
 
     public Response getFolderContent(String id) {
         try {
-            ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+            ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getContextUser();
             User user  = userRepo.getQuery(new GetUserByEIdSpec(contextUser.getName())).get(0);
             List<GoogleItem> files = fileHandler.getFolder(id, user, contextUser.hasRole("admin"));
             List<String> ids = new ArrayList<>();
@@ -192,7 +192,7 @@ public class FileService extends GeneralService {
         String extension = "." + split[split.length - 1];
         java.io.File file;
 
-        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getContextUser();
         String authorEId = contextUser.getName();
         int authorId;
         Document readDocument;
@@ -285,7 +285,7 @@ public class FileService extends GeneralService {
         String type = findType(fileName, true);
         String originalType = findType(fileName, false);
 
-        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getContextUser();
         String authorEId = contextUser.getName();
         int authorId;
         try {

@@ -14,7 +14,6 @@ import com.acc.models.User;
 import com.acc.requestContext.BMSecurityContext;
 import com.acc.requestContext.ContextUser;
 import org.eclipse.jetty.http.HttpStatus;
-import sun.security.util.Resources_it;
 
 import javax.inject.Inject;
 import javax.mail.*;
@@ -22,9 +21,7 @@ import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.*;
 import java.io.IOException;
 
 /**
@@ -72,8 +69,7 @@ public class AccountService {
         String content;
         int status;
         try {
-            ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
-            User user = userRepo.getQuery(new GetUserByEIdSpec(contextUser.getName())).get(0);
+            User user = ((BMSecurityContext)context.getSecurityContext()).getAccountUser();
             repo.register(user.getEnterpriseID(), password, user);
             content = "Passord endret.";
             status = HttpStatus.OK_200;
