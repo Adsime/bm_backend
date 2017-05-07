@@ -43,7 +43,7 @@ public class RequestFilter implements ContainerRequestFilter {
         List<String> headers = context.getHeaders().get(HttpHeaders.AUTHORIZATION);
         if(headers != null && headers.size() > 0) {
             String authHeader = headers.get(0);
-            if(context.getUriInfo().getPath().contains("accounts") && authHeader.startsWith(BASIC)) {
+            if(context.getUriInfo().getPath().contains("accounts/login") && authHeader.startsWith(BASIC)) {
                 return;
             }
             String token = authHeader.split(" ")[1];
