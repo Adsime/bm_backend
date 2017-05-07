@@ -31,6 +31,11 @@ public class RequestFilter implements ContainerRequestFilter {
     @Inject
     private ContextUser contextUser;
 
+    /**
+     * Intercepts all incoming requests to ensure they are allowed.
+     * @param context ContainerRequestContext.
+     * @throws IOException defaults in case an unhandled error occurs.
+     */
     @Override
     public void filter(final ContainerRequestContext context) throws IOException {
 
