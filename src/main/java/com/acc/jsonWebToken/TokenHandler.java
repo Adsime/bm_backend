@@ -1,5 +1,8 @@
 package com.acc.jsonWebToken;
 
+import com.acc.database.repository.AccountRepository;
+import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.models.Token;
 import com.acc.models.User;
 import com.acc.requestContext.BMSecurityContext;
@@ -13,6 +16,8 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import javax.inject.Inject;
+import javax.ws.rs.container.ContainerRequestContext;
+import java.io.InterruptedIOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +36,10 @@ public class TokenHandler {
     public static final String USER = "USER";
 
     @Inject
-    private ContextUser user;
+    private ContextUser contextUser;
+
+    @Inject
+    private UserRepository repo;
 
     public TokenHandler() {
 
@@ -78,38 +86,36 @@ public class TokenHandler {
         }
     }
 
-    public ContextUser getUserAllowance(String token) {
-        DecodedJWT jwt = decode(token);
-        Claim ual = jwt.getClaim(USER_ACCESS_LEVEL);
-        Claim un = jwt.getClaim(USER);
-        int accessLevel = Integer.parseInt(ual.asString());
-        user.setName(un.asString());
-        switch (accessLevel) {
+    private void getUserAllowance(User user, ContainerRequestContext context) throws Exception {
+        contextUser.setName(user.getEnterpriseID());
+        switch (Integer.parseInt(user.getAccessLevel())) {
             case BMSecurityContext.ADMIN: {
-                user.setRole("admin");
+                contextUser.setRole("admin");
                 break;
             }
             case BMSecurityContext.SUPERVISOR: {
-                user.setRole("supervisor");
+                contextUser.setRole("supervisor");
                 break;
             }
             case BMSecurityContext.USER: {
-                user.setRole("user");
+                contextUser.setRole("user");
                 break;
             }
             case BMSecurityContext.STUDENT: {
-                user.setRole("student");
+                contextUser.setRole("student");
                 break;
             }
         }
-        return user;
+        context.setSecurityContext(new BMSecurityContext(contextUser));
     }
 
-    public boolean verify(String token) {
+    public boolean verify(String token, ContainerRequestContext context) {
         try {
             DecodedJWT jwt = decode(token);
             Date expiresAt = jwt.getExpiresAt();
+            User user = repo.getQuery(new GetUserByEIdSpec(jwt.getClaim(USER).toString())).get(0);
             if (expiresAt.after(new Date())) {
+                getUserAllowance(user, context);
                 return true;
             }
         } catch (Exception e) {

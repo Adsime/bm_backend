@@ -47,8 +47,7 @@ public class RequestFilter implements ContainerRequestFilter {
                 return;
             }
             String token = authHeader.split(" ")[1];
-            if(authHeader.startsWith(BEARER) && tokenHandler.verify(token)) {
-                context.setSecurityContext(new BMSecurityContext(tokenHandler.getUserAllowance(token)));
+            if(authHeader.startsWith(BEARER) && tokenHandler.verify(token, context)) {
                 return;
             }
         }
