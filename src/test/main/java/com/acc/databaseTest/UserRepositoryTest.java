@@ -90,7 +90,7 @@ public class UserRepositoryTest {
     public void updateUserSuccess(){
 
         //Set Up
-        User testUser = TestHibernateData.getUser();
+        User testUser = TestHibernateData.getContextUser();
 
         when(mockSessionFactory.openSession()).thenReturn(mockSession);
         when(mockSession.beginTransaction()).thenReturn(mockTransaction);

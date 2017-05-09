@@ -34,36 +34,36 @@ public class UserResourceTest {
         userResource = new UserResource();
     }
 
-    // Start getUser Tests
+    // Start getContextUser Tests
 
     /*@Test
     public void getUserSuccess() {
         userResource.service = service;
-        when(service.getUser(0)).thenReturn(TestData.testUsers().get(0));
+        when(service.getContextUser(0)).thenReturn(TestData.testUsers().get(0));
         expected = HttpStatus.OK_200;
-        actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
+        actual = userResource.getContextUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }*/
 
     /*@Test
     public void getUserNoEntries() {
         userResource.service = service;
-        when(service.getUser(0)).thenReturn(null);
+        when(service.getContextUser(0)).thenReturn(null);
         expected = HttpStatus.BAD_REQUEST_400;
-        actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
+        actual = userResource.getContextUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }
 
     @Test
     public void getUserInternalError() {
         userResource.service = service;
-        when(service.getUser(0)).thenThrow(new InternalServerErrorException());
+        when(service.getContextUser(0)).thenThrow(new InternalServerErrorException());
         expected = HttpStatus.INTERNAL_SERVER_ERROR_500;
-        actual = userResource.getUser(0, TestData.testCredentials()).getStatus();
+        actual = userResource.getContextUser(0, TestData.testCredentials()).getStatus();
         assertEquals(expected, actual);
     }*/
 
-    // End getUser Tests
+    // End getContextUser Tests
     // Start newUser Tests
 
     /*@Test

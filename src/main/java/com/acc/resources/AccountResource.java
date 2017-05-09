@@ -28,6 +28,7 @@ public class  AccountResource {
 
     @GET
     @Path("login")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response login() {
         User user = service.verifyUser(context.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0));
         if(user != null) {

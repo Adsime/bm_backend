@@ -72,7 +72,7 @@ public class FileService extends GeneralService {
 
     public Response getFolderContent(String id) {
         try {
-            ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+            ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getContextUser();
             User user  = userRepo.getQuery(new GetUserByEIdSpec(contextUser.getName())).get(0);
             List<GoogleItem> files = fileHandler.getFolder(id, user, contextUser.hasRole("admin"));
             List<String> ids = new ArrayList<>();
@@ -146,7 +146,7 @@ public class FileService extends GeneralService {
             Docx4J.save(wordprocessingMLPackage, file, Docx4J.FLAG_SAVE_ZIP_FILE);
             fileHandler.createFile(id, file);
 
-            return getFileAsHtml(file)
+            return getFileAsHtml(file);
         } catch (IOException ioe) {
 
         } catch (Docx4JException de) {
@@ -199,29 +199,23 @@ public class FileService extends GeneralService {
         return null;
     }
 
+    /**
+     * Ensure that any file uploaded to the API as an update has its metadata saved to the database
+     * and a physical copy on drive.
+     * @param content InputStream
+     * @param fileDetail FormDataContentDisposition
+     * @param id String
+     * @param tagIdList List<Integer>
+     * @return Response
+     */
     public Response updateFile(InputStream content, FormDataContentDisposition fileDetail, String id, List<Integer> tagIdList) {
         String fileName = fileDetail.getFileName();
         String[] split = fileName.split("\\.");
         String extension = "." + split[split.length - 1];
         java.io.File file;
 
-
-        User user = ((BMSecurityContext)context.getSecurityContext()).get;
-        String authorEId = contextUser.getName();
-        int authorId;
-        Document readDocument;
-        try {
-            authorId = documentRepository.findAuthorId(authorEId);
-        } catch (EntityNotFoundException enfe) {
-            return Response.status(HttpStatus.UNAUTHORIZED_401).entity("Denne brukeren eksisterer ikke lenger").build();
-        }
-        try {
-            readDocument = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
-        }catch (EntityNotFoundException enfe){
-            readDocument = createDocument(authorId, fileName, id, tagIdList);
-            saveToDB(readDocument);
-            readDocument = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
-        }
+        User user = ((BMSecurityContext)context.getSecurityContext()).getAccountUser();
+        Document readDocument = getDocFromDb(id, user.getId(), fileName, tagIdList);
 
         if(extension.equals(".html")) {
             file = createFileFromHtml(content, fileDetail.getName(), extension);
@@ -230,7 +224,7 @@ public class FileService extends GeneralService {
         }
 
         //updating the database
-        Document newDocument = new Document(readDocument.getId() ,authorId,fileName,"", id, toTagList(tagIdList));
+        Document newDocument = new Document(readDocument.getId(), user.getId(), fileName,"", id, toTagList(tagIdList));
         try{
             documentRepository.update(newDocument);
         }catch (EntityNotFoundException enfe) {
@@ -241,6 +235,18 @@ public class FileService extends GeneralService {
         fileHandler.updateAnyFile(file, id, findType(extension, false));
         file.delete();
         return Response.ok().build();
+    }
+
+    private Document getDocFromDb(String id, int userId, String fileName, List<Integer> tags) {
+        Document doc;
+        try {
+            doc = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
+        }catch (EntityNotFoundException enfe){
+            doc = createDocument(userId, fileName, id, tags);
+            saveToDB(doc);
+            doc = documentRepository.getQuery(new GetDocumentWithPathSpec(id)).get(0);
+        }
+        return doc;
     }
 
     private java.io.File createFileFromHtml(InputStream content, String name, String extension) {
@@ -310,15 +316,7 @@ public class FileService extends GeneralService {
         String type = findType(fileName, true);
         String originalType = findType(fileName, false);
 
-        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
-        String authorEId = contextUser.getName();
-        int authorId;
-        try {
-            authorId = documentRepository.findAuthorId(authorEId);
-        }catch (EntityNotFoundException enfe){
-            Feedback error = new Feedback(enfe.getMessage());
-            return Response.status(HttpStatus.UNAUTHORIZED_401).entity(error.toJson()).build();
-        }
+        User user = ((BMSecurityContext)context.getSecurityContext()).getAccountUser();
 
         if ((type == null || originalType == null) && !extension.equals(".html")) {
             return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
@@ -331,7 +329,7 @@ public class FileService extends GeneralService {
         }
 
         if(extension.toLowerCase().equals(".html")) {
-            Response response = uploadAsHtml(uploadedInputStream, fileName.replace(".html", ""), parent, authorId, tagIdList);
+            Response response = uploadAsHtml(uploadedInputStream, fileName.replace(".html", ""), parent, user.getId(), tagIdList);
             return response;
         }
 
@@ -339,10 +337,9 @@ public class FileService extends GeneralService {
         java.io.File file = createTempFile(fileName, uploadedInputStream);
         String apiId = saveFile(file, fileName, type, originalType, parent);
         file.delete();
-        String output = "File successfully uploaded to : " + fileName;
         Document document;
 
-        document = createDocument(authorId, fileName, apiId, tagIdList);
+        document = createDocument(user.getId(), fileName, apiId, tagIdList);
         Feedback feedback = saveToDB(document);
 
         return Response.status(feedback.getStatus()).entity(feedback.getMessage()).build();

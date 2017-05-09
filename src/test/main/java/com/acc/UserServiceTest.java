@@ -45,31 +45,31 @@ public class UserServiceTest {
         service.userRepository = userRepository;
     }
 
-    //Start getUser()
+    //Start getContextUser()
 
     /*@Test
     public void getUserSuccessTest() {
         when(userRepository.getQuery(any())).thenReturn(TestData.testUsers());
         User expected = TestData.testUsers().get(0);
-        User actual = service.getUser(0);
+        User actual = service.getContextUser(0);
         assertEquals(expected.toString(), actual.toString());
     }*/
 
     /*@Test(expected = InternalServerErrorException.class)
     public void getUserInternalError() {
         when(userRepository.getQuery(any())).thenThrow(new InternalServerErrorException());
-        service.getUser(0);
+        service.getContextUser(0);
     }
 */
     /*@Test
     public void getUserNoEntryException() {
         when(userRepository.getQuery(any())).thenThrow(new NoSuchEntityException());
         User expected = null;
-        User actual = service.getUser(0);
+        User actual = service.getContextUser(0);
         assertEquals(expected, actual);
     }*/
 
-    //End getUser()
+    //End getContextUser()
     //Start getAllUsers()
 
     /*@Test

@@ -1,5 +1,7 @@
 package com.acc.requestContext;
 
+import com.acc.models.User;
+
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
 
@@ -10,14 +12,12 @@ public class BMSecurityContext implements SecurityContext {
 
     public static final int ADMIN = 9, SUPERVISOR = 2, USER = 1, STUDENT = 0;
 
-    private final ContextUser user;
+    private final ContextUser contextUser;
+    private final User accountUser;
 
-    public BMSecurityContext(final ContextUser user) {
-        this.user = user;
-    }
-
-    public ContextUser getUser() {
-        return user;
+    public BMSecurityContext(final ContextUser contextUser, final User accountUser) {
+        this.contextUser = contextUser;
+        this.accountUser = accountUser;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class BMSecurityContext implements SecurityContext {
 
     @Override
     public boolean isUserInRole(String role) {
-        return user.hasRole(role);
+        return contextUser.hasRole(role);
     }
 
     @Override
@@ -38,5 +38,13 @@ public class BMSecurityContext implements SecurityContext {
     @Override
     public String getAuthenticationScheme() {
         return null;
+    }
+
+    public ContextUser getContextUser() {
+        return contextUser;
+    }
+
+    public User getAccountUser() {
+        return accountUser;
     }
 }
