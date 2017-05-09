@@ -60,7 +60,7 @@ public class TagService extends GeneralService {
         try {
             tagRepository.remove((long)id);
             return Response.status(HttpStatus.NO_CONTENT_204).build();
-        }catch (EntityNotFoundException enfe) {
+        }catch (EntityNotFoundException | IllegalArgumentException enfe) {
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
         }
     }

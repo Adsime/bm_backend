@@ -42,15 +42,22 @@ public class FileResource {
     @GET
     @Path("/folder/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFolderContent(@PathParam("id") String id, @Context HttpHeaders headers) {
+    public Response getFolderContent(@PathParam("id") String id) {
         return service.getFolderContent(id);
     }
 
     @GET
     @Path("/folder")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getFolderContent(@Context HttpHeaders headers) {
+    public Response getFolderContent() {
         return service.getFolderContent(null);
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFileMetadata(@PathParam("id") long id) {
+        return service.getFileMetadata(id);
     }
 
     @GET

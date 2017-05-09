@@ -29,7 +29,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     @Override
     public Tag add(Tag tag) throws IllegalArgumentException{
         if(tag.getName().equals("") || tag.getType().equals(""))throw new IllegalArgumentException("Feil i registrering av tag: \nFyll ut alle nødvendige felter!");
-        if(isDistinctTagName(tag.getName())) throw new IllegalArgumentException("Feil i registrering av tag: \nTag med navn: " + tag.getName() + " finnes allerde!");
+        if(!isDistinctTagName(tag.getName())) throw new IllegalArgumentException("Feil i registrering av tag: \nTag med navn: " + tag.getName() + " finnes allerde!");
 
         HbnTag mappedTag = new HbnTag(
                 tag.getName(),

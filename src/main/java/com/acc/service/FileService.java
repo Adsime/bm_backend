@@ -3,6 +3,7 @@ package com.acc.service;
 import com.acc.database.repository.DocumentRepository;
 import com.acc.database.repository.TagRepository;
 import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetDocumentByIdSpec;
 import com.acc.database.specification.GetDocumentWithPathSpec;
 import com.acc.database.specification.GetTagsWithDocumentIdsSpec;
 import com.acc.database.specification.GetUserByEIdSpec;
@@ -137,35 +138,47 @@ public class FileService extends GeneralService {
     }
 
     public String getFileAsHtml(String id) {
+        java.io.File file = null;
         try {
             Logger.getRootLogger().setLevel(Level.ERROR);
             WordprocessingMLPackage wordprocessingMLPackage = WordprocessingMLPackage.createPackage();
-            java.io.File file = java.io.File.createTempFile("asdasd", ".docx");
+            file = java.io.File.createTempFile("asdasd", ".docx");
             Docx4J.save(wordprocessingMLPackage, file, Docx4J.FLAG_SAVE_ZIP_FILE);
             fileHandler.createFile(id, file);
 
-            WordprocessingMLPackage out = Docx4J.load(file);
-            HTMLSettings htmlSettings = Docx4J.createHTMLSettings();
-
-            String inputfilepath = file.getPath();
-
-            htmlSettings.setImageDirPath(inputfilepath + "_files");
-            htmlSettings.setImageTargetUri(inputfilepath.substring(inputfilepath.lastIndexOf("/")+1)
-                    + "_files");
-            htmlSettings.setWmlPackage(out);
-
-            OutputStream os = new ByteArrayOutputStream();
-
-            Docx4jProperties.setProperty("docx4j.Convert.Out.HTML.OutputMethodXML", true);
-            Docx4J.toHTML(htmlSettings, os, Docx4J.FLAG_EXPORT_PREFER_XSL);
-            file.delete();
-            return os.toString();
+            return getFileAsHtml(file)
         } catch (IOException ioe) {
 
         } catch (Docx4JException de) {
 
+        } finally {
+            if(file != null) {
+                file.delete();
+            }
         }
         return null;
+    }
+
+    private String getFileAsHtml(File file) throws Docx4JException {
+        WordprocessingMLPackage out = Docx4J.load(file);
+        String path = file.getPath();
+
+        HTMLSettings settings = Docx4J.createHTMLSettings();
+        settings.setImageDirPath(path + "_files");
+        settings.setImageTargetUri(path.substring(path.lastIndexOf("/")+1)
+                + "_files");
+
+        settings.setWmlPackage(out);
+
+        return getFileAsHtml(settings);
+    }
+
+    private String getFileAsHtml(HTMLSettings settings) throws Docx4JException {
+        OutputStream os = new ByteArrayOutputStream();
+        Docx4jProperties.setProperty("docx4j.Convert.Out.HTML.OutputMethodXML", true);
+        Docx4J.toHTML(settings, os, Docx4J.FLAG_EXPORT_PREFER_XSL);
+
+        return os.toString();
     }
 
     public OutputStream getOutputStreamFromFile(String id, String type) {
@@ -192,7 +205,8 @@ public class FileService extends GeneralService {
         String extension = "." + split[split.length - 1];
         java.io.File file;
 
-        ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getUser();
+
+        User user = ((BMSecurityContext)context.getSecurityContext()).get;
         String authorEId = contextUser.getName();
         int authorId;
         Document readDocument;
@@ -274,6 +288,17 @@ public class FileService extends GeneralService {
 
         }
         return null;
+    }
+
+    public Response getFileMetadata(long id) {
+        try {
+            Document doc = documentRepository.getQuery(new GetDocumentByIdSpec(id)).get(0);
+            return Response.status(HttpStatus.OK_200).entity(doc.toJson()).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity("Var ikke i stand til å finne fil med ID: " + id).build();
+        }
+
     }
 
     public Response upLoadAnyFile(InputStream uploadedInputStream,
