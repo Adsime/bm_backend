@@ -1,9 +1,6 @@
 package com.acc.resources;
 
-import com.acc.models.Token;
-import com.acc.models.User;
 import com.acc.service.AccountService;
-import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
@@ -30,13 +27,7 @@ public class  AccountResource {
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
     public Response login() {
-        User user = service.verifyUser(context.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0));
-        if(user != null) {
-            Token token = service.getToken(user);
-            token.setToken(token.getToken());
-            return Response.ok(token.toString()).build();
-        }
-        return Response.status(HttpStatus.NOT_FOUND_404).build();
+        return service.verifyUser(context.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0));
     }
 
     @POST
