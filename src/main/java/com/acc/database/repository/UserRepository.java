@@ -26,19 +26,13 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     }
 
     @Override
+    // TODO: 10.05.2017 CHECK EID
     public User add(User user) throws EntityNotFoundException, IllegalArgumentException{
         if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")){
             throw new IllegalArgumentException("Feil i registrering av bruker: \nFyll ut alle nødvendige felter! \n(Fornavn, Etternavn og E-Mail)");
         }
 
-        HbnUser mappedUser = new HbnUser(
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getTelephone(),
-                user.getEnterpriseID(),
-                (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
-        );
+        HbnUser mappedUser = super.toHbnUser(user);
 
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
@@ -159,17 +153,8 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         for (HbnEntity entity : readData){
             HbnUser hbnUser = (HbnUser)entity;
+            User user = super.toUser(hbnUser);
 
-            User user = new User(
-                    (int)hbnUser.getId(),
-                    hbnUser.getFirstName(),
-                    hbnUser.getLastName(),
-                    hbnUser.getEmail(),
-                    hbnUser.getTelephone(),
-                    hbnUser.getEnterpriseId(),
-                    hbnUser.getAccessLevel(),
-                    hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
-            );
             List<String> pathList = new ArrayList<>();
             hbnUser.getDocuments().forEach(doc->pathList.add(doc.getPath()));
             user.setFiles(pathList);
@@ -197,15 +182,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         for (HbnEntity entity : readData){
             HbnUser hbnUser = (HbnUser)entity;
-
-            User user = new User();
-            user.setId((int)hbnUser.getId());
-            user.setFirstName(hbnUser.getFirstName());
-            user.setLastName(hbnUser.getLastName());
-            user.setTags(super.toTagList(hbnUser.getTags()));
-            user.setEmail(hbnUser.getEmail());
-            user.setAccessLevel(hbnUser.getAccessLevel());
-
+            User user = super.toUser(hbnUser);
             if (!user.getTags().isEmpty()) user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
             if (hbnUser.getGroups() != null) user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
             result.add(user);
@@ -213,7 +190,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         return result;
     }
 
-    public void updateUsername(String oldEID, String newEId, String salt){
+    private void updateUsername(String oldEID, String newEId, String salt){
         String oldHashedEId = BCrypt.hashpw(oldEID, salt);
         String newHashedEId = BCrypt.hashpw(newEId, salt);
 

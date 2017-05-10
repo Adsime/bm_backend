@@ -11,6 +11,7 @@ import com.acc.models.Tag;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by nguyen.duy.j.khac on 14.02.2017.
@@ -29,28 +30,15 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         if(tag.getName().equals("") || tag.getType().equals(""))throw new IllegalArgumentException("Feil i registrering av tag: \nFyll ut alle nødvendige felter!");
         if(isDistinctTagName(tag.getName())) throw new IllegalArgumentException("Feil i registrering av tag: \nTag med navn: " + tag.getName() + " finnes allerde!");
 
-        HbnTag mappedTag = new HbnTag(
-                tag.getName(),
-                tag.getDescription(),
-                tag.getType());
-
+        HbnTag mappedTag = toHbnTag(tag);
         int id = (int)super.addEntity(mappedTag);
-
-        return new Tag(
-                id,
-                tag.getName(),
-                tag.getType(),
-                tag.getDescription()
-        );
+        tag.setId(id);
+        return tag;
     }
 
     @Override
     public boolean update(Tag tag) throws EntityNotFoundException{
-        HbnTag mappedTag = new HbnTag(
-                tag.getName(),
-                tag.getDescription(),
-                tag.getType()
-        );
+        HbnTag mappedTag = toHbnTag(tag);
         mappedTag.setId(tag.getId());
 
         try {
@@ -82,16 +70,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         }
 
         List<Tag> result = new ArrayList<>();
-
-        for (HbnEntity entity : readData){
-            HbnTag hbnTag = (HbnTag) entity;
-            result.add( new Tag(
-                    (int)hbnTag.getId(),
-                    hbnTag.getTagName(),
-                    hbnTag.getType(),
-                    hbnTag.getDescription()
-            ));
-        }
+        readData.forEach(entity -> result.add(toTag((HbnTag) entity)));
         return result;
     }
 
@@ -105,14 +84,14 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         }
 
         List<Tag> result = new ArrayList<>();
-
-        for (HbnEntity entity : readData){
+        readData.forEach(entity -> {
             HbnTag hbnTag = (HbnTag) entity;
             Tag tag = new Tag();
             tag.setId((int)hbnTag.getId());
             tag.setName(hbnTag.getTagName());
             tag.setType(hbnTag.getType());
-        }
+            result.add(tag);
+        });
         return result;
     }
 
@@ -121,7 +100,8 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         String name = tagName.toLowerCase();
         return existingTags.stream()
                 .filter(exTag->exTag.getName().toLowerCase().equals(name))
-                .findFirst() != null;
+                .findFirst() == null;
+
     }
 
     private boolean canDelete(HbnTag tag){
@@ -132,6 +112,22 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
             if (tag.getType().toLowerCase().equals(type)) return false;
         }
         return true;
+    }
+
+    private HbnTag toHbnTag (Tag tag){
+        return new HbnTag(
+                tag.getName(),
+                tag.getDescription(),
+                tag.getType());
+    }
+
+    private Tag toTag (HbnTag hbnTag){
+        return new Tag(
+                (int)hbnTag.getId(),
+                hbnTag.getTagName(),
+                hbnTag.getType(),
+                hbnTag.getDescription()
+        );
     }
 }
 

@@ -3,9 +3,11 @@ package com.acc.database.repository;
 import com.acc.database.entity.HbnBachelorGroup;
 import com.acc.database.entity.HbnEntity;
 import com.acc.database.entity.HbnTag;
+import com.acc.database.entity.HbnUser;
 import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.models.Tag;
+import com.acc.models.User;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -18,6 +20,7 @@ import java.util.*;
 
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
+ * Includes hibernate methods for CRUD, and utility methods
  */
 @SuppressWarnings("all")
 public abstract class AbstractRepository{
@@ -161,6 +164,30 @@ public abstract class AbstractRepository{
             ));
         }
         return tagList;
+    }
+
+    public HbnUser toHbnUser(User user){
+        return new HbnUser(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getTelephone(),
+                user.getEnterpriseID(),
+                user.getAccessLevel() == null ? "0" : user.getAccessLevel()
+        );
+    }
+
+    public User toUser(HbnUser hbnUser){
+        return new User(
+                (int)hbnUser.getId(),
+                hbnUser.getFirstName(),
+                hbnUser.getLastName(),
+                hbnUser.getEmail(),
+                hbnUser.getTelephone(),
+                hbnUser.getEnterpriseId(),
+                hbnUser.getAccessLevel(),
+                hbnUser.getTags() != null ? toTagList(hbnUser.getTags()) : new ArrayList<>()
+        );
     }
 
     public List<Integer> toGroupIdList(Set<HbnBachelorGroup> hbnBachelorGroupSet){
