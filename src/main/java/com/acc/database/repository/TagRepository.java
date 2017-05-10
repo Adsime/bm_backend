@@ -7,11 +7,9 @@ import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Tag;
-import org.apache.xmlgraphics.util.io.Finalizable;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
-import java.util.IllegalFormatWidthException;
 import java.util.List;
 
 /**
@@ -122,8 +120,8 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         List<Tag> existingTags = getQuery(new GetTagAllSpec());
         String name = tagName.toLowerCase();
         return existingTags.stream()
-                .filter(exTag->exTag.getName().equals(name))
-                .findFirst() == null;
+                .filter(exTag->exTag.getName().toLowerCase().equals(name))
+                .findFirst() != null;
     }
 
     private boolean canDelete(HbnTag tag){

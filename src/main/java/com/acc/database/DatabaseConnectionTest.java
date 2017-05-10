@@ -10,6 +10,7 @@ import com.acc.database.repository.*;
 import com.acc.database.specification.GetGroupByIdSpec;
 import com.acc.models.Document;
 import com.acc.models.Group;
+import com.acc.models.Tag;
 import com.acc.models.User;
 
 import javax.persistence.EntityNotFoundException;
@@ -29,10 +30,7 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            UR.remove(2);
-
-
-
+            TR.add(new Tag(0,"student","Rolle",""));
             //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*
             User merlin = UR.getQuery(new GetUserByIdSpec(1)).get(0);

@@ -19,8 +19,7 @@ import java.util.*;
 /**
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
-
-// TODO: 16.03.2017 Every registration must have a full rollback! (GROUP)
+@SuppressWarnings("all")
 public abstract class AbstractRepository{
 
     private static SessionFactory sessionFactory;
@@ -46,7 +45,12 @@ public abstract class AbstractRepository{
         return itemId;
     }
 
-
+    /**
+     * Updates an entity within a sessions's transaction scope with Hibernate
+     *
+     * @param item HbnEntity
+     * @return boolean
+     */
     public boolean updateEntity(HbnEntity item) {
         Transaction tx = null;
 
@@ -112,7 +116,6 @@ public abstract class AbstractRepository{
     }
 
     //To be able to do query of different types of objects in the repositories
-    // TODO: 24.03.2017 refactor name to reflect return type
     public Set<HbnEntity> queryToDb (List<HqlSpecification> specs){
         Set<HbnEntity> result = new HashSet<>();
         Transaction tx = null;
