@@ -1,33 +1,29 @@
 package com.acc.google;
 
-import com.acc.models.Folder;
 import com.acc.models.Document;
+import com.acc.models.Folder;
 import com.acc.models.GoogleItem;
 import com.acc.models.User;
-import com.acc.requestContext.BMSecurityContext;
-import com.acc.requestContext.ContextUser;
-import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.protocol.RequestContent;
-import org.glassfish.grizzly.streams.StreamOutput;
-import org.glassfish.jersey.hk2.RequestContext;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import static com.acc.google.GoogleService.authorize;
 import static com.acc.google.GoogleService.getDriveService;
 
 
@@ -35,6 +31,8 @@ import static com.acc.google.GoogleService.getDriveService;
  * Created by melsom.adrian on 09.03.2017.
  */
 public class FileHandler {
+
+    private static Logger LOGGER = Logger.getLogger("application");
 
     /**
      * Folder and file status codes
@@ -70,6 +68,15 @@ public class FileHandler {
         }
     }
 
+    /**
+     * Allows for any file to be uploaded to Drive
+     * @param file java.io.File
+     * @param name String
+     * @param type String
+     * @param originalType String
+     * @param parent String
+     * @return String
+     */
     public String uploadAnyFile(java.io.File file, String name, String type, String originalType, String parent) {
         try {
             Drive service = getDriveService();
@@ -83,7 +90,7 @@ public class FileHandler {
                     .execute();
             return retFile.getId();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Unable to upload to Drive.", e);
         }
         return null;
     }

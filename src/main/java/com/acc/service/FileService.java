@@ -6,11 +6,9 @@ import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetDocumentByIdSpec;
 import com.acc.database.specification.GetDocumentWithPathSpec;
 import com.acc.database.specification.GetTagsWithDocumentIdsSpec;
-import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.google.FileHandler;
 import com.acc.google.GoogleFolder;
 import com.acc.models.*;
-import com.acc.models.Feedback;
 import com.acc.providers.Responses;
 import com.acc.requestContext.BMSecurityContext;
 import com.acc.requestContext.ContextUser;
@@ -31,11 +29,9 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.persistence.EntityNotFoundException;
-
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +68,15 @@ public class FileService extends GeneralService {
         return fileHandler.uploadAnyFile(file, name, type, originalType, parent);
     }
 
+    /**
+     * Generates a response based on an array of files from FileHandler.
+     * @param id String
+     * @return Response
+     */
     public Response getFolderContent(String id) {
         try {
             ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getContextUser();
-            User user  = userRepo.getQuery(new GetUserByEIdSpec(contextUser.getName())).get(0);
+            User user  = ((BMSecurityContext)context.getSecurityContext()).getAccountUser();
             List<GoogleItem> files = fileHandler.getFolder(id, user, contextUser.hasRole("admin"));
             List<String> ids = new ArrayList<>();
             files.forEach(item -> ids.add(item.getFile().getId()));
@@ -83,7 +84,8 @@ public class FileService extends GeneralService {
                 try {
                     item.setTags(tagRepo.getQuery(new GetTagsWithDocumentIdsSpec(item.getFile().getId())));
                 } catch (EntityNotFoundException enfe) {
-
+                    LOGGER.error("There has been an issue in the persistence around tags. " +
+                            "Look into this immediately!", enfe);
                 }
             });
             return Response.status(HttpStatus.OK_200).entity(new Gson().toJson(files)).build();
