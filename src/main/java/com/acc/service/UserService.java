@@ -1,11 +1,14 @@
 package com.acc.service;
+
 import com.acc.Exceptions.MultipleChoiceException;
 import com.acc.database.repository.UserRepository;
-import com.acc.database.specification.*;
+import com.acc.database.specification.GetUserAllSpec;
+import com.acc.database.specification.GetUserByIdSpec;
+import com.acc.database.specification.GetUserByTagSpec;
 import com.acc.models.User;
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
-
 
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
@@ -18,6 +21,7 @@ import java.util.List;
  */
 public class UserService extends GeneralService {
 
+    private static Logger LOGGER = Logger.getLogger("application");
 
     @Inject
     public UserRepository userRepository;
@@ -92,7 +96,8 @@ public class UserService extends GeneralService {
 
     /**
      * Generates an appropriate response based on if the deletion og a user with a
-     * given ID could be done.
+     * given ID could be done. In the event that the user is the last member of a group,
+     * the forced boolean is mandatory to proceed, as the group will be deleted by this action.
      * @param id int
      * @param forced boolean
      * @return Response
@@ -102,8 +107,11 @@ public class UserService extends GeneralService {
             userRepository.remove((long)id, forced);
             return Response.status(HttpStatus.NO_CONTENT_204).build();
         }  catch (EntityNotFoundException enfe) {
+            LOGGER.error("Unable to find the user with id " + id, enfe);
             return Response.status(HttpStatus.BAD_REQUEST_400).entity(enfe.getMessage()).build();
         } catch (MultipleChoiceException mce) {
+            LOGGER.info("User with id " + id + " is the last member of its group.\n" +
+                    mce.getStatus() + " was returned to prompt the user to force the request.");
             return Response.status(mce.getStatus()).entity(mce.getMessage()).build();
         }
     }

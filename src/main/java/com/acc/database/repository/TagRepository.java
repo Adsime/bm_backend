@@ -7,11 +7,9 @@ import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
 import com.acc.database.specification.Specification;
 import com.acc.models.Tag;
-import org.apache.xmlgraphics.util.io.Finalizable;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
-import java.util.IllegalFormatWidthException;
 import java.util.List;
 
 /**
@@ -29,7 +27,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     @Override
     public Tag add(Tag tag) throws IllegalArgumentException{
         if(tag.getName().equals("") || tag.getType().equals(""))throw new IllegalArgumentException("Feil i registrering av tag: \nFyll ut alle nødvendige felter!");
-        if(isDistinctTagName(tag.getName())) throw new IllegalArgumentException("Feil i registrering av tag: \nTag med navn: " + tag.getName() + " finnes allerde!");
+        if(exists(tag.getName())) throw new IllegalArgumentException("Feil i registrering av tag: \nTag med navn: " + tag.getName() + " finnes allerede!");
 
         HbnTag mappedTag = new HbnTag(
                 tag.getName(),
@@ -118,12 +116,12 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         return result;
     }
 
-    private boolean isDistinctTagName(String tagName){
+    private boolean exists(String tagName){
         List<Tag> existingTags = getQuery(new GetTagAllSpec());
         String name = tagName.toLowerCase();
-        return existingTags.stream()
-                .filter(exTag->exTag.getName().equals(name))
-                .findFirst() == null;
+        return existingTags
+                .stream()
+                .anyMatch(tag -> tag.getName().toLowerCase().equals(name));
     }
 
     private boolean canDelete(HbnTag tag){

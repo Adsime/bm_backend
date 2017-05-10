@@ -1,20 +1,9 @@
 package com.acc.database;
 
-import com.acc.database.entity.HbnUser;
-import com.acc.database.repository.GroupRepository;
-import com.acc.database.repository.DocumentRepository;
-import com.acc.database.repository.TagRepository;
-import com.acc.database.repository.UserRepository;
-import com.acc.database.specification.*;
 import com.acc.database.repository.*;
-import com.acc.database.specification.GetGroupByIdSpec;
-import com.acc.models.Document;
-import com.acc.models.Group;
-import com.acc.models.User;
+import com.acc.models.Tag;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by nguyen.duy.j.khac on 07.02.2017.
@@ -29,9 +18,9 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            UR.remove(2);
+            //UR.remove(2);
 
-
+            TR.add(new Tag(0, "AdrianTest", "Rolle", "asdasdasd"));
 
             //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*
@@ -39,8 +28,7 @@ public class DatabaseConnectionTest {
             String username = merlin.getEnterpriseID();
             String password = "admin";
             System.out.println("UN: " + username );
-            AR.register(username, password,merlin);
-            System.out.println("you're logged in fucker");*/
+            AR.register(username, password,merlin);*/
         } catch (IllegalArgumentException iae){
             System.out.println(iae.getMessage());
         } catch (EntityNotFoundException enf){

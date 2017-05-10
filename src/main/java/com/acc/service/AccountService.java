@@ -86,23 +86,35 @@ public class AccountService {
         return Response.status(status).entity(content).build();
     }
 
+    /**
+     * Uses a predefined string of html to create an email message object
+     * which is handed to MailHandler for sending.
+     * @param id long
+     * @return Response
+     */
     public Response resetPassword(long id) {
-        User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
-        Token token = tokenHandler.generateRefreshToken(user);
         try {
+            User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
+            Token token = tokenHandler.generateRefreshToken(user);
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
                     "potasian17@gmail.com",
                     "Password reset",
                     "<h1>Password reset - Bachelor manager</h1>" +
                             "</br></br>" +
                             "<p>Trykk på følgende link for å sette ditt nye passord:</p>" +
-                            "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +  "\">Linken</a> er aktiv i 30 minutter</p>");
+                            "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +
+                            "\">Linken</a> er aktiv i 30 minutter</p>");
             mailHandler.sendMessage("potasian17@gmail.com", message);
-            return Response.ok("Mail sendt!").build();
+        }catch (EntityNotFoundException enfe) {
+            LOGGER.error("Attempt to get user failed in AccountService.resetPassword", enfe);
+            // No special message to retain integrity of the application. It will look as if a message was sent
         }catch (MessagingException | IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Unable to process the email", e);
+            return Response.status(HttpStatus.SERVICE_UNAVAILABLE_503)
+                    .entity("Var ikke i stand til å sende mail.")
+                    .build();
         }
-        return Response.status(HttpStatus.SERVICE_UNAVAILABLE_503).entity("Var ikke i stand til å sende mail.").build();
+        return Response.ok("Mail sendt!").build();
     }
 
     public void temp(long id, String password) {
