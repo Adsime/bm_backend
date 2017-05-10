@@ -118,10 +118,9 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
 
     private boolean exists(String tagName){
         List<Tag> existingTags = getQuery(new GetTagAllSpec());
-        String name = tagName.toLowerCase();
         return existingTags
                 .stream()
-                .anyMatch(tag -> tag.getName().toLowerCase().equals(name));
+                .anyMatch(tag -> tag.getName().toLowerCase().equals(tagName.toLowerCase()));
     }
 
     private boolean canDelete(HbnTag tag){

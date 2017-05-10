@@ -19,3 +19,5 @@
         <mapping class="com.acc.database.entity.HbnUser"/>
     </session-factory>
 </hibernate-configuration>
+
+

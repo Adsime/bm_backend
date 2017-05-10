@@ -16,3 +16,5 @@ public interface Repository<T> {
     //Entities have minimal information required for a list view in front-end
     List<T> getMinimalQuery(Specification specification);
 }
+
+
