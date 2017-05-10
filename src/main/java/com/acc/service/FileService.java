@@ -11,6 +11,7 @@ import com.acc.google.FileHandler;
 import com.acc.google.GoogleFolder;
 import com.acc.models.*;
 import com.acc.models.Feedback;
+import com.acc.providers.Responses;
 import com.acc.requestContext.BMSecurityContext;
 import com.acc.requestContext.ContextUser;
 import com.google.gson.Gson;
@@ -44,6 +45,8 @@ import java.util.List;
  */
 public class FileService extends GeneralService {
 
+    private static Logger LOGGER = Logger.getLogger("application");
+
     public static final String DELETED = "deleted";
 
     @Inject
@@ -65,9 +68,8 @@ public class FileService extends GeneralService {
         this.fileHandler = fileHandler;
     }
 
-    public String saveFile(java.io.File file, String name, String type, String originalType, String parent) {
-        String res = fileHandler.uploadAnyFile(file, name, type, originalType, parent);
-        return res;
+    private String saveFile(java.io.File file, String name, String type, String originalType, String parent) {
+        return fileHandler.uploadAnyFile(file, name, type, originalType, parent);
     }
 
     public Response getFolderContent(String id) {
@@ -84,9 +86,10 @@ public class FileService extends GeneralService {
 
                 }
             });
-            Response response = Response.status(HttpStatus.OK_200).entity(new Gson().toJson(files)).build();
-            return response;
+            return Response.status(HttpStatus.OK_200).entity(new Gson().toJson(files)).build();
         } catch (Exception e) {
+            LOGGER.error("Invalid file ID was provided: " + id);
+            LOGGER.error("Trace", e);
             return Response.status(HttpStatus.BAD_REQUEST_400).entity("Invalid folder ID provided.").build();
         }
     }
@@ -96,9 +99,11 @@ public class FileService extends GeneralService {
         int status = (created == FileHandler.CREATED_201) ? HttpStatus.OK_200
                 : (created == FileHandler.EXISTS_400) ? HttpStatus.MULTIPLE_CHOICES_300
                 : HttpStatus.BAD_REQUEST_400;
+
         String entity = (created == FileHandler.CREATED_201) ? folder.getName() + " er opprettet!"
                 : (created == FileHandler.EXISTS_400) ? folder.getName() + " eksisterer allerede. \nØnkser du å opprette en mappe med samme navn?"
                 : "Var ikke i stand til å opprette " + folder.getName();
+
         return Response
                 .status(status)
                 .entity(entity)
@@ -137,9 +142,17 @@ public class FileService extends GeneralService {
                 .entity(os == null ? "Var ikke i stand til å hente filen" : osPart).build();
     }
 
+    /**
+     *
+     * @param id String
+     * @return String
+     */
     public String getFileAsHtml(String id) {
         java.io.File file = null;
         try {
+            /* Log level changed manually here to prevent Docx4j from writing debug
+             * lines directly in the parsed file.
+             */
             Logger.getRootLogger().setLevel(Level.ERROR);
             WordprocessingMLPackage wordprocessingMLPackage = WordprocessingMLPackage.createPackage();
             file = java.io.File.createTempFile("asdasd", ".docx");
@@ -148,9 +161,9 @@ public class FileService extends GeneralService {
 
             return getFileAsHtml(file);
         } catch (IOException ioe) {
-
+            LOGGER.error("Error while creating the temporary file.", ioe);
         } catch (Docx4JException de) {
-
+            LOGGER.error("Error while parsing from .docx to html", de);
         } finally {
             if(file != null) {
                 file.delete();
@@ -159,7 +172,14 @@ public class FileService extends GeneralService {
         return null;
     }
 
-    private String getFileAsHtml(File file) throws Docx4JException {
+    /**
+     * Handles the packaging of the file
+     * @param file File
+     * @return String
+     * @throws Docx4JException to be handled in method call
+     * @throws IOException to be handled in method call
+     */
+    private String getFileAsHtml(File file) throws Docx4JException, IOException {
         WordprocessingMLPackage out = Docx4J.load(file);
         String path = file.getPath();
 
@@ -173,12 +193,21 @@ public class FileService extends GeneralService {
         return getFileAsHtml(settings);
     }
 
-    private String getFileAsHtml(HTMLSettings settings) throws Docx4JException {
+    /**
+     * Takes HtmlSettings and creates a outputstream which is used to produce a string
+     * containing the contents of a file.
+     * @param settings HtmlSettings
+     * @return String
+     * @throws Docx4JException to be handled in method call
+     */
+    private String getFileAsHtml(HTMLSettings settings) throws Docx4JException, IOException {
         OutputStream os = new ByteArrayOutputStream();
         Docx4jProperties.setProperty("docx4j.Convert.Out.HTML.OutputMethodXML", true);
         Docx4J.toHTML(settings, os, Docx4J.FLAG_EXPORT_PREFER_XSL);
 
-        return os.toString();
+        String retString = os.toString();
+        os.close();
+        return retString;
     }
 
     public OutputStream getOutputStreamFromFile(String id, String type) {
@@ -249,6 +278,13 @@ public class FileService extends GeneralService {
         return doc;
     }
 
+    /**
+     * Creates a file locally that takes html and parses it to a .docx file.
+     * @param content InputStream
+     * @param name String
+     * @param extension String
+     * @return java.io.File
+     */
     private java.io.File createFileFromHtml(InputStream content, String name, String extension) {
         try {
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
@@ -260,8 +296,6 @@ public class FileService extends GeneralService {
 
             // Creates a new file
             java.io.File file = java.io.File.createTempFile(name, extension);
-            /*String filename = System.getProperty("user.dir") + "/" + name + ".docx";
-            java.io.File file = new java.io.File(filename);*/
 
             // Package with the inserted data
             WordprocessingMLPackage fin = mdp.convertAltChunks();
@@ -307,6 +341,15 @@ public class FileService extends GeneralService {
 
     }
 
+    /**
+     * Handles the persistence around uploading a file.
+     * @param uploadedInputStream InputStream
+     * @param fileDetail FormDataContentDisposition
+     * @param parent String
+     * @param forced boolean
+     * @param tagIdList List<Integer>
+     * @return Response
+     */
     public Response upLoadAnyFile(InputStream uploadedInputStream,
                                   FormDataContentDisposition fileDetail,
                                   String parent, boolean forced, List<Integer> tagIdList) {
@@ -320,37 +363,51 @@ public class FileService extends GeneralService {
 
         if ((type == null || originalType == null) && !extension.equals(".html")) {
             return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
-                    .entity(extension + " is currently not a supported file format. Please contact an admin for support.").build();
-        }
-
-        String existingId = fileHandler.exists(fileName, parent, false);
-        if(existingId != null && !forced) {
-            return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("Fil med samme navn eksisterer allerede i denne mappen!").build();
-        }
-
-        if(extension.toLowerCase().equals(".html")) {
-            Response response = uploadAsHtml(uploadedInputStream, fileName.replace(".html", ""), parent, user.getId(), tagIdList);
+                    .entity(extension + " " + Responses.getResponse("formatNotSupported")).build();
+        } if(fileHandler.exists(fileName, parent, false) != null && !forced) {
+            return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("nameTaken").build();
+        } if(extension.toLowerCase().equals(".html")) {
+            Response response = uploadAsHtml(uploadedInputStream,
+                    fileName.replace(".html", ""),
+                    parent, user.getId(), tagIdList);
             return response;
         }
 
         //saving file
-        java.io.File file = createTempFile(fileName, uploadedInputStream);
+        Feedback feedback = uploadAnyFile(user.getId(), fileName, uploadedInputStream, type,
+                originalType, parent, tagIdList);
+        return Response.status(feedback.getStatus()).entity(feedback.getMessage()).build();
+    }
+
+    private Feedback uploadAnyFile(int userId, String fileName, InputStream stream, String type, String originalType, String parent, List<Integer> tagIdList) {
+        java.io.File file = createTempFile(fileName, stream);
         String apiId = saveFile(file, fileName, type, originalType, parent);
         file.delete();
         Document document;
 
-        document = createDocument(user.getId(), fileName, apiId, tagIdList);
-        Feedback feedback = saveToDB(document);
-
-        return Response.status(feedback.getStatus()).entity(feedback.getMessage()).build();
+        document = createDocument(userId, fileName, apiId, tagIdList);
+        return saveToDB(document);
     }
 
-    public Response uploadAsHtml(InputStream content, String name, String parent, int authorId, List<Integer> tagIdList) {
+    /**
+     * Takes an input stream of html and uses a parsing method to get a .docx file.
+     * Then the file is uploaded to drive.
+     * @param content InputStream
+     * @param name String
+     * @param parent String
+     * @param authorId int
+     * @param tagIdList List<Integer>
+     * @return Response
+     */
+    @SuppressWarnings("all")
+    private Response uploadAsHtml(InputStream content, String name, String parent,
+                                  int authorId, List<Integer> tagIdList) {
 
         java.io.File file = createFileFromHtml(content, name, ".docx");
 
         if(file != null) {
-            String path = saveFile(file, name, findType(file.getName(), true), findType(file.getName(), false), parent);
+            String path = saveFile(file, name, findType(file.getName(), true),
+                    findType(file.getName(), false), parent);
             Document document = createDocument(authorId, name, path, tagIdList);
             Feedback feedback = saveToDB(document);
             file.delete();

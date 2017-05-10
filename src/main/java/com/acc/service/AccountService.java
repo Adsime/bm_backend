@@ -2,7 +2,6 @@ package com.acc.service;
 
 import com.acc.database.repository.AccountRepositoryImpl;
 import com.acc.database.repository.UserRepository;
-import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.google.GoogleService;
 import com.acc.google.MailHandler;
@@ -12,11 +11,11 @@ import com.acc.models.Credentials;
 import com.acc.models.Token;
 import com.acc.models.User;
 import com.acc.requestContext.BMSecurityContext;
-import com.acc.requestContext.ContextUser;
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
-import javax.mail.*;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -28,6 +27,8 @@ import java.io.IOException;
  * Created by melsom.adrian on 28.03.2017.
  */
 public class AccountService {
+
+    private static Logger LOGGER = Logger.getLogger("application");
 
     @Inject
     private AccountRepositoryImpl repo;
@@ -51,14 +52,16 @@ public class AccountService {
         this.userRepo = userRepo;
     }
 
-    public User verifyUser(String encodedCreds) {
+    public Response verifyUser(String encodedCreds) {
         try {
             Credentials credentials = new Credentials(encodedCreds);
-            return repo.matchPassword(credentials.getUsername(), credentials.getPassword());
-        } catch (IllegalArgumentException |EntityNotFoundException e) {
-            e.printStackTrace();
+            User user = repo.matchPassword(credentials.getUsername(), credentials.getPassword());
+            Token token = getToken(user);
+            return Response.ok(token.toString()).build();
+        } catch (IllegalArgumentException | EntityNotFoundException e) {
+            LOGGER.error("Exception in AccountService.verifyUser. Trace:\n", e);
+            return Response.status(HttpStatus.NOT_FOUND_404).entity(e.getMessage()).build();
         }
-        return null;
     }
 
     public Token getToken(User user) {
