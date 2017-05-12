@@ -79,21 +79,11 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
             }
 
             mappedUser.setSalt(salt);
-
             long id = super.addEntity(mappedUser);
             super.addEntity(mappedPassword);
 
-
-            return new User(
-                    (int) id,
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail(),
-                    user.getTelephone(),
-                    user.getEnterpriseID(),
-                    user.getAccessLevel(),
-                    user.getTags()
-            );
+            user.setId((int)id);
+            return user;
         } else {
             newAccountUser.setSalt(salt);
             super.updateEntity(newAccountUser);

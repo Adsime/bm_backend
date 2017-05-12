@@ -23,7 +23,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
     @Override
     public Group add(Group group) throws EntityNotFoundException, IllegalArgumentException{
         if(group.getName().equals("")) throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut nødvendige felter!");
-
         HbnBachelorGroup mappedGroup = new HbnBachelorGroup(group.getName());
 
         try {
@@ -39,19 +38,18 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         }
         
         Set<HbnUser> groupAssociates = new HashSet<>();
-        // TODO: 18.04.2017 try catch for supervisor
-        if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
+        if (group.getSupervisors() != null) try {
+            groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
+        } catch (EntityNotFoundException enfe){
+            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nEn eller flere veiledere finnes ikke");
+        }
+
         if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
         mappedGroup.setUsers(groupAssociates);
 
-        long id = super.addEntity(mappedGroup);
-
-        return new Group(
-                (int)id,
-                group.getName(),
-                group.getStudents(),
-                group.getSupervisors()
-        );
+        int id = (int)super.addEntity(mappedGroup);
+        group.setId(id);
+        return group;
     }
 
     @Override
@@ -72,11 +70,14 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
             throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nEn eller flere oppgaver finnes ikke");
         }
 
-        // TODO: 18.04.2017 try catch for supervisor
-        if (group.getSupervisors() != null) groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
+        if (group.getSupervisors() != null) try {
+            groupAssociates.addAll(getHbnSupervisorSet(group.getSupervisors()));
+        } catch (EntityNotFoundException enfe){
+            throw new EntityNotFoundException("Feil i oppdatering av gruppe: \nEn eller flere veiledere finnes ikke");
+        }
+
         if (group.getStudents() != null) groupAssociates.addAll(addIfNotExist(group.getStudents()));
         hbnBachelorGroup.setUsers(groupAssociates);
-
         return super.updateEntity(hbnBachelorGroup);
     }
 
@@ -125,27 +126,12 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 groupDocuments.add(document);
             }
 
-            Group group = new Group(
-                    (int) hbnBachelorGroup.getId(),
-                    hbnBachelorGroup.getName(),
-                    new ArrayList<>(),
-                    new ArrayList<>()
-            );
+            Group group = toGroup(hbnBachelorGroup);
             group.setDocuments(groupDocuments);
             group.setAssignment(getAssignment(hbnDocuments));
 
             for (HbnUser hbnUser : hbnBachelorGroup.getUsers()){
-                User user = new User(
-                        (int)hbnUser.getId(),
-                        hbnUser.getFirstName(),
-                        hbnUser.getLastName(),
-                        hbnUser.getEmail(),
-                        hbnUser.getTelephone(),
-                        hbnUser.getEnterpriseId(),
-                        hbnUser.getAccessLevel(),
-                        super.toTagList(hbnUser.getTags())
-                );
-
+                User user = super.toUser(hbnUser);
                 if (hasStudentTag(hbnUser.getTags())) group.getStudents().add(user);
                 else group.getSupervisors().add(user);
             }
@@ -170,7 +156,6 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return result;
     }
 
-    // TODO: 18.04.2017 ASSIGN VALUE TO ASSIGNMET FOR GROUP MODEL
     @Override
     public List<Group> getMinimalQuery(Specification spec) throws EntityNotFoundException{
         List<HbnEntity> readData;
@@ -228,7 +213,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return false;
     }
 
-    private Set<HbnUser> getHbnSupervisorSet(List<User> users){
+    private Set<HbnUser> getHbnSupervisorSet(List<User> users) throws EntityNotFoundException{
         Set<HbnUser> supervisorSet = new HashSet<>();
         for (User supervisors : users){
             supervisorSet.add((HbnUser) super.queryToDb(new GetUserByIdSpec(supervisors.getId())).get(0));
@@ -245,13 +230,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                 if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")) {
                     throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!\n(Fornavn, Etternavn og E-Mail)");
                 }
-                HbnUser hbnUser = new HbnUser(
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        user.getTelephone(),
-                        user.getEnterpriseID(), (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
-                );
+                HbnUser hbnUser = toHbnUser(user);
 
                 try {
                     if (user.getTags() != null) hbnUser.setTags(super.getHbnTagSet(user.getTags()));
@@ -290,7 +269,7 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return groupAssociates;
     }
 
-    public String getAssignment(Set<HbnDocument> documents){
+    private String getAssignment(Set<HbnDocument> documents){
         if (documents != null) {
             for (HbnDocument hbnDocument : documents) {
                 if (hasAssignment(hbnDocument.getTags())) {
@@ -301,21 +280,18 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
         return "Ingen Oppgave";
     }
 
-    public boolean hasAssignment(Set<HbnTag> tags){
+    private boolean hasAssignment(Set<HbnTag> tags){
         for(HbnTag hbnTag : tags) if(hbnTag.getTagName().toLowerCase().equals("oppgave")) return true;
         return false;
     }
 
-    /*public boolean assignUserToGroup(long userId, long groupId){
-        HbnUser groupAssociate = (HbnUser) super.queryToDb(new GetUserByIdSpec(userId));
-        HbnBachelorGroup group = (HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(groupId));
-        group.getUsers().add(groupAssociate);
-        return super.updateEntity(group);
+    private Group toGroup (HbnBachelorGroup hbnBachelorGroup){
+        return new Group(
+                (int) hbnBachelorGroup.getId(),
+                hbnBachelorGroup.getName(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
     }
-    public boolean assignDocumentToGroup(long documentId, long groupId){
-        HbnDocument document = (HbnDocument) super.queryToDb(new GetDocumentByIdSpec(documentId));
-        HbnBachelorGroup group = (HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(groupId));
-        group.setDocument(document);
-        return super.updateEntity(group);
-    }*/
 }

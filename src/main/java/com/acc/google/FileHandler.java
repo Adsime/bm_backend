@@ -37,13 +37,13 @@ public class FileHandler {
     /**
      * Folder and file status codes
      */
-    public static final int EXISTS_400 = 400;
-    public static final int AVAILABLE_200 = 200;
-    public static final int CREATED_201 = 201;
-    public static final int ERROR_500 = 500;
-    public static final int DELETED_204 = 204;
-    public static final int MULTIPLE_CHOICES_300 = 300;
-    public static final int NOT_FOUND_404 = 404;
+    public static final int EXISTS = 400;
+    public static final int AVAILABLE = 200;
+    public static final int CREATED = 201;
+    public static final int ERROR = 500;
+    public static final int DELETED = 204;
+    public static final int MULTIPLE_CHOICES = 300;
+    public static final int NOT_FOUND = 404;
 
     @Context
     private ContainerRequestContext context;
@@ -64,7 +64,7 @@ public class FileHandler {
             Collections.reverse(files);
             return build(files, files.get(0).getParents().get(0));
         } catch (IOException ioe) {
-            return Arrays.asList();
+            return Collections.emptyList();
         }
     }
 
@@ -109,25 +109,30 @@ public class FileHandler {
         return null;
     }
 
+    /**
+     * Responsible for creating a folder on Drive
+     * @param folder Folder
+     * @return int
+     */
     public int createFolder(Folder folder) {
         try {
             Drive service = getDriveService();
             if(exists(folder.getName(), folder.getParent(), true) != null && !folder.isForced()) {
-                return EXISTS_400;
+                return EXISTS;
             }
             File fileMetadata = new File();
             fileMetadata.setName(folder.getName());
             fileMetadata.setParents(Lists.newArrayList(folder.getParent()));
             fileMetadata.setMimeType("application/vnd.google-apps.folder");
 
-            File file = service.files().create(fileMetadata)
+            service.files().create(fileMetadata)
                     .setFields("id")
                     .execute();
-            return CREATED_201;
+            return CREATED;
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            LOGGER.error("Unexpected error in FileHandler.createFolder", ioe);
         }
-        return ERROR_500;
+        return ERROR;
     }
 
     public String exists(String name, String parent, boolean folder) {
@@ -159,8 +164,8 @@ public class FileHandler {
             }
             FileList res = service.files().list()
                     .setQ("'" + id + "'" + " in parents" + " and trashed = false")
-                    .setFields("nextPageToken, files(id, name, mimeType, " +
-                            "iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
+                    .setFields("nextPageToken, files(id, name, mimeType, iconLink, " +
+                            "webViewLink, thumbnailLink, parents, hasThumbnail)")
                     .execute();
             File parent = service.files().get(id)
                     .setFields("id, name")
@@ -185,7 +190,7 @@ public class FileHandler {
 
     /**
      * Will update an existing file on Google Drive based on content and name.
-     * @param id
+     * @param id String
      * @param newName
      * @param newContent
      * @return boolean indicating if the action was successfull.
@@ -328,6 +333,12 @@ public class FileHandler {
         return new FileContent(type, file);
     }
 
+    /**
+     * Responsible for deleting an item defined by an id
+     * @param id String
+     * @param forced boolean
+     * @return int
+     */
      public int deleteItem(String id, boolean forced) {
         try {
             Drive service = getDriveService();
@@ -336,14 +347,15 @@ public class FileHandler {
                     .execute();
             if(files.getFiles().size() < 1 || forced) {
                 service.files().delete(id).execute();
-                return DELETED_204;
+                return DELETED;
             } else if(files.size() > 0) {
-                return MULTIPLE_CHOICES_300;
+                return MULTIPLE_CHOICES;
             }
         } catch (IOException ioe) {
-            return ERROR_500;
+            LOGGER.error("Unexpected error in FileHandler.deleteItem", ioe);
+            return ERROR;
         }
-        return NOT_FOUND_404;
+        return NOT_FOUND;
      }
 
     private List<GoogleFolder> build(List<File> list, String root) {

@@ -52,16 +52,9 @@ public class DocumentRepository extends AbstractRepository implements Repository
         }catch (EntityNotFoundException enfe){
             throw new EntityNotFoundException("Feil i registrering av fil: \nEn eller flere merknader finnes ikke");
         }
-        long id = super.addEntity(mappedDocument);
-
-        return new Document(
-                (int) id,
-                document.getAuthor(),
-                document.getTitle(),
-                document.getContent(),
-                document.getPath(),
-                document.getTags()
-        );
+        int id =(int) super.addEntity(mappedDocument);
+        document.setId(id);
+        return document;
     }
  
 
@@ -119,16 +112,7 @@ public class DocumentRepository extends AbstractRepository implements Repository
         List<Document> result = new ArrayList<>();
 
         for (HbnEntity entity : readData){
-            HbnDocument hbnDocument = (HbnDocument) entity;
-            Document document = new Document(
-                    (int) hbnDocument.getId(),
-                    (int) hbnDocument.getUser().getId(),
-                    hbnDocument.getTitle(),
-                    "",
-                    hbnDocument.getPath(),
-                    hbnDocument.getTags() != null ? super.toTagList(hbnDocument.getTags()) : new ArrayList<>()
-            );
-
+            Document document = toDocument((HbnDocument) entity);
             List<Integer> authorId = new ArrayList<>(document.getAuthor());
             document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
@@ -218,6 +202,17 @@ public class DocumentRepository extends AbstractRepository implements Repository
         }catch (EntityNotFoundException enf){
             throw new EntityNotFoundException("Feil i opplasting av fil: \nBruker finnes ikke: " + enterpriseId);
         }
+    }
+
+    private Document toDocument (HbnDocument hbnDocument){
+        return new Document(
+                (int) hbnDocument.getId(),
+                (int) hbnDocument.getUser().getId(),
+                hbnDocument.getTitle(),
+                "",
+                hbnDocument.getPath(),
+                hbnDocument.getTags() != null ? super.toTagList(hbnDocument.getTags()) : new ArrayList<>()
+        );
     }
 }
 
