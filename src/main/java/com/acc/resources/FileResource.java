@@ -2,28 +2,19 @@ package com.acc.resources;
 
 import com.acc.models.Folder;
 import com.acc.service.FileService;
-
-import java.io.*;
-import java.util.List;
-import javax.ejb.PrePassivate;
-import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.print.attribute.standard.Media;
-import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-
 import com.google.gson.Gson;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.protocol.HTTP;
+import org.eclipse.jetty.http.HttpStatus;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-
-import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
+
+import javax.inject.Inject;
+import javax.json.JsonObject;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.InputStream;
+import java.util.List;
 
 
 /**
@@ -67,6 +58,7 @@ public class FileResource {
         return Response.ok(service.getFileAsHtml(id)).build();
     }
 
+    //WIP
     @GET
     @Path("/download/{id}")
     @Produces(MediaType.MULTIPART_FORM_DATA)
@@ -125,7 +117,6 @@ public class FileResource {
                                @FormDataParam("file") FormDataContentDisposition fileDetail,
                                @DefaultValue("null") @PathParam("id") String id,
                                @QueryParam("tags") List<Integer> tagIdList) {
-
         return service.updateFile(uploadedInputStream, fileDetail, id, tagIdList);
     }
 

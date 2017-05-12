@@ -46,15 +46,4 @@ public class  AccountResource {
         service.resetPassword(id);
         return Response.ok("Mail sendt!").build();
     }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("noUse")
-    public Response temp(JsonObject o) {
-        long id = (long)o.getInt("id");
-        String password = o.getString("password");
-        service.temp(id, password);
-        return Response.ok().build();
-    }
-
 }

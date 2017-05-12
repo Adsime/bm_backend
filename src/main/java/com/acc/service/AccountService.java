@@ -76,11 +76,10 @@ public class AccountService {
             repo.register(user.getEnterpriseID(), password, user);
             content = "Passord endret.";
             status = HttpStatus.OK_200;
-        } catch (EntityNotFoundException enfe) {
-            content = enfe.getMessage();
-            status = HttpStatus.BAD_REQUEST_400;
-        } catch (IllegalArgumentException iae) {
-            content = iae.getMessage();
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            LOGGER.error("Unable to process the request. User might not exist, " +
+                    "or the data is in the wrong format", e);
+            content = e.getMessage();
             status = HttpStatus.BAD_REQUEST_400;
         }
         return Response.status(status).entity(content).build();
@@ -115,10 +114,5 @@ public class AccountService {
                     .build();
         }
         return Response.ok("Mail sendt!").build();
-    }
-
-    public void temp(long id, String password) {
-        User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
-        repo.register(user.getEnterpriseID(), password, user);
     }
 }

@@ -77,7 +77,7 @@ public class FileService extends GeneralService {
         try {
             ContextUser contextUser = ((BMSecurityContext)context.getSecurityContext()).getContextUser();
             User user  = ((BMSecurityContext)context.getSecurityContext()).getAccountUser();
-            List<GoogleItem> files = fileHandler.getFolder(id, user, contextUser.hasRole("admin"));
+            List<GoogleItem> files = fileHandler.getFolderContent(id, user, contextUser.hasRole("admin"));
             List<String> ids = new ArrayList<>();
             files.forEach(item -> ids.add(item.getFile().getId()));
             files.forEach(item -> {

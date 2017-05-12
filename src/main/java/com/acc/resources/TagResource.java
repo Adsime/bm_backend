@@ -3,19 +3,11 @@ package com.acc.resources;
 import com.acc.models.Tag;
 import com.acc.service.TagService;
 import com.google.gson.Gson;
-import com.sun.org.apache.regexp.internal.RE;
 import org.eclipse.jetty.http.HttpStatus;
-import org.junit.Before;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -30,9 +22,6 @@ public class TagResource {
     @Inject
     public TagService service;
 
-    @Before
-    public void setup() {}
-
     @GET
     @Path("ping")
     public String tagPong() {
@@ -42,10 +31,7 @@ public class TagResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    /**
-     *
-     */
-    public Response getTag(@PathParam("id") int id, @Context HttpHeaders headers) {
+    public Response getTag(@PathParam("id") int id) {
         System.out.println("ACTION: GET - tag | id = " + id);
         try {
             return service.getTag(id);
@@ -56,8 +42,7 @@ public class TagResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response queryTags(@Context HttpHeaders headers,
-                              @QueryParam("name") List<String> names) {
+    public Response queryTags(@QueryParam("name") List<String> names) {
         System.out.println("ACTION: GET - tag | query = " + names);
         try {
             return service.queryTags(names);
@@ -68,10 +53,7 @@ public class TagResource {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    /**
-     *
-     */
-    public Response newTag(JsonObject o, @Context HttpHeaders headers) {
+    public Response newTag(JsonObject o) {
         System.out.println("ACTION: POST - tag | tag = " + o.toString());
         try {
             return service.newTag(new Gson().fromJson(o.toString(), Tag.class));
@@ -82,10 +64,7 @@ public class TagResource {
 
     @DELETE
     @Path("{id}")
-    /**
-     *
-     */
-    public Response deleteTag(@PathParam("id") int id, @Context HttpHeaders headers) {
+    public Response deleteTag(@PathParam("id") int id) {
         System.out.println("ACTION: DELETE - tag | id = " + id);
         try {
             return service.deleteTag(id);
@@ -96,10 +75,7 @@ public class TagResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    /**
-     *
-     */
-    public Response updateTag(JsonObject o, @Context HttpHeaders headers) {
+    public Response updateTag(JsonObject o  ) {
         System.out.println("ACTION: UPDATE - tag | tag = " + o.toString());
         try {
             return service.updateTag(new Gson().fromJson(o.toString(), Tag.class));

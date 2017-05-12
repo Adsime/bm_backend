@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 29.04.2017.
  */
+@SuppressWarnings("all")
 public class GoogleService {
 
     public static final String applicationPath = "http://localhost:5555/resetPassord/";
@@ -33,11 +34,6 @@ public class GoogleService {
     /** Directory to store user credentials for this application. */
     public static final java.io.File DATA_STORE =
             new java.io.File(System.getProperty("user.home"), ".credentials/bm");
-            //new java.io.File("./src/main/java/com/acc/google/credentials/mail");
-
-    //public static final java.io.File DATA_STORE_DIR_FILES =
-            //new java.io.File(System.getProperty("user.home"), ".credentials/bachelor-manager");
-            //new java.io.File("./src/main/java/com/acc/google/credentials/files");
 
     /** Global instance of the {@link FileDataStoreFactory}. */
     private static FileDataStoreFactory DATA_STORE_FACTORY;
@@ -69,16 +65,14 @@ public class GoogleService {
 
     /**
      * Creates an authorized Credential object.
-     * @return an authorized Credential object.
-     * @throws IOException
+     * @return Credential
+     * @throws IOException to be handled at method call.
      */
-    public static Credential authorize() throws IOException {
+    private static Credential authorize() throws IOException {
 
         // Load client secrets.
         InputStream in =
                 GoogleService.class.getResourceAsStream("/client_secret.json");
-                //GoogleService.class.getResourceAsStream("/client_secret.json"); //API key
-                //GoogleService.class.getResourceAsStream("/local_key.json"); //Local key
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -90,16 +84,14 @@ public class GoogleService {
                         .setAccessType("offline")
                         .build();
 
-        Credential credential = new AuthorizationCodeInstalledApp(
+        return new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        return credential;
-
     }
 
     /**
      * Build and return an authorized Gmail client service.
-     * @return an authorized Gmail client service
-     * @throws IOException
+     * @return Gmail
+     * @throws IOException to be handlet at method call
      */
     public static Gmail getGmailService() throws IOException {
         Credential credential = authorize();
@@ -108,6 +100,11 @@ public class GoogleService {
                 .build();
     }
 
+    /**
+     * Build and return an authorized Drive client service.
+     * @return Drive
+     * @throws IOException to be handlet at method call
+     */
     public static Drive getDriveService() throws IOException {
         Credential credential = authorize();
         return new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)

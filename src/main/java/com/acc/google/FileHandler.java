@@ -146,10 +146,12 @@ public class FileHandler {
 
     /**
      * Finds the child items of a folder based on ID
-     * @param id
+     * @param id String
+     * @param user User
+     * @param isAdmin boolean
      * @return List of google files, which includes folders
      */
-    public List<GoogleItem> getFolder(String id, User user, boolean isAdmin) {
+    public List<GoogleItem> getFolderContent(String id, User user, boolean isAdmin) {
         try {
             Drive service = getDriveService();
             if(id == null) {
@@ -157,23 +159,28 @@ public class FileHandler {
             }
             FileList res = service.files().list()
                     .setQ("'" + id + "'" + " in parents" + " and trashed = false")
-                    .setFields("nextPageToken, files(id, name, mimeType, iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
+                    .setFields("nextPageToken, files(id, name, mimeType, " +
+                            "iconLink, webViewLink, thumbnailLink, parents, hasThumbnail)")
                     .execute();
             File parent = service.files().get(id)
                     .setFields("id, name")
                     .execute();
             List<File> files = res.getFiles();
             files.add(parent);
-            ArrayList<GoogleItem> items = new ArrayList<>();
-            files.forEach(file -> {
-                boolean canDelete = isAdmin || user.getFiles().contains(file.getId());
-                items.add(new GoogleItem(file, canDelete));
-            });
-            return Lists.reverse(items);
+            return setDeletePrivileges(files, user, isAdmin);
         } catch (IOException ioe) {
-            ioe.printStackTrace();
-            return Arrays.asList();
+            LOGGER.error("Unable to get items from Drive with the ID: " + id, ioe);
+            return Collections.emptyList();
         }
+    }
+
+    private List<GoogleItem> setDeletePrivileges(List<File> files, User user, boolean isAdmin) {
+        ArrayList<GoogleItem> items = new ArrayList<>();
+        files.forEach(file -> {
+            boolean canDelete = isAdmin || user.getFiles().contains(file.getId());
+            items.add(new GoogleItem(file, canDelete));
+        });
+        return Lists.reverse(items);
     }
 
     /**
