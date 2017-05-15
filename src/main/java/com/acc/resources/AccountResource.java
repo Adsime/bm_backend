@@ -43,7 +43,14 @@ public class  AccountResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("newUser/{id}")
     public Response createLogin(@PathParam("id") long id) {
-        service.resetPassword(id);
+        service.resetPassword(null, id);
         return Response.ok("Mail sendt!").build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response forgotPassword(JsonObject o) {
+        String email = o.getString("email");
+        return service.resetPassword(email);
     }
 }

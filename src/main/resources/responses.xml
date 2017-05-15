@@ -3,6 +3,6 @@
 <properties>
     <comment>Responses within the application</comment>
     <entry key="formatNotSupported">is currently not a supported file format. Please contact an admin for support.</entry>
-    <entry key="nameTaken">"Fil med samme navn eksisterer allerede i denne mappen!"</entry>
+    <entry key="nameTaken">Fil med samme navn eksisterer allerede i denne mappen!</entry>
     <entry key="favoriteDay">today</entry>
 </properties>
