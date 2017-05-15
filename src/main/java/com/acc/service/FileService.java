@@ -366,8 +366,13 @@ public class FileService extends GeneralService {
         if ((type == null || originalType == null) && !extension.equals(".html")) {
             return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
                     .entity(extension + " " + Responses.getResponse("formatNotSupported")).build();
-        } if(fileHandler.exists(fileName, parent, false) != null && !forced) {
-            return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("nameTaken").build();
+        }
+        String id = fileHandler.exists(fileName, parent, false);
+        if(id != null && !forced) {
+            Feedback feedback = new Feedback("Fil med samme navn eksisterer allerede i denne mappen!");
+            feedback.setId(id);
+            return Response.status(HttpStatus.MULTIPLE_CHOICES_300)
+                    .entity(feedback.toJson()).build();
         } if(extension.toLowerCase().equals(".html")) {
             Response response = uploadAsHtml(uploadedInputStream,
                     fileName.replace(".html", ""),

@@ -5,14 +5,17 @@ import com.acc.database.entity.HbnUser;
 import com.acc.database.specification.GetPasswordByEIdSpec;
 import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.models.User;
+import org.apache.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
+
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 
 /**
  * Created by nguyen.duy.j.khac on 28.03.2017.
  */
 public class AccountRepositoryImpl extends AbstractRepository implements AccountRepository {
+
+    private static Logger LOGGER = Logger.getLogger("application");
 
     @Override
     public User matchPassword(String username, String password) throws IllegalArgumentException {
@@ -29,16 +32,8 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
         }
 
         boolean match = BCrypt.checkpw(password, hbnPassword.getPassHash());
-        if (match) return new User(
-                (int)hbnUser.getId(),
-                hbnUser.getFirstName(),
-                hbnUser.getLastName(),
-                hbnUser.getEmail(),
-                hbnUser.getTelephone(),
-                hbnUser.getEnterpriseId(),
-                hbnUser.getAccessLevel(),
-                hbnUser.getTags() != null ? super.toTagList(hbnUser.getTags()) : new ArrayList<>()
-        );
+        if (match) return super.toUser(hbnUser);
+
         else {
             throw new IllegalArgumentException("Feil i logg inn av Konto: \nBrukernavn eller passord stemmer ikke");
         }
@@ -61,34 +56,30 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
         String hashedPassword = BCrypt.hashpw(password, salt);
         HbnPassword mappedPassword = new HbnPassword(hashedPassword,hashedEId);
 
-        if (newAccountUser == null){
-
-            HbnUser mappedUser = new HbnUser(
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail(),
-                    user.getTelephone(),
-                    user.getEnterpriseID(),
-                    (user.getAccessLevel() == null) ? "0" : user.getAccessLevel()
-            );
-
-            try {
-                if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
-            }catch (EntityNotFoundException enf){
-                throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
-            }
-
-            mappedUser.setSalt(salt);
-            long id = super.addEntity(mappedUser);
-            super.addEntity(mappedPassword);
-
-            user.setId((int)id);
-            return user;
-        } else {
-            newAccountUser.setSalt(salt);
-            super.updateEntity(newAccountUser);
-            super.addEntity(mappedPassword);
-        }
+        newAccountUser.setSalt(salt);
+        newAccountUser.setAccessLevel(
+                user.getAccessLevel() == null || user.getAccessLevel().equals("0") ? "1" : user.getAccessLevel()
+        );
+        super.updateEntity(newAccountUser);
+        super.addEntity(mappedPassword);
         return user;
+    }
+
+    @Override
+    public User getAccount(String username) {
+        try {
+            HbnUser accountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
+
+            if(accountUser.getSalt() == null) {
+                return null;
+            }
+            String hashedUN = BCrypt.hashpw(username, accountUser.getSalt());
+            if(super.queryToDb(new GetPasswordByEIdSpec(hashedUN)).get(0) != null) {
+                return super.toUser(accountUser);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Unable to get user with username " + username + " from the database.", e);
+        }
+        return null;
     }
 }

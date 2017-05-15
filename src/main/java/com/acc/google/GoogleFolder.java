@@ -9,27 +9,29 @@ import java.util.List;
  * Created by melsom.adrian on 08.03.2017.
  */
 public class GoogleFolder {
-    private File folder;
+    private String name;
+    private String id;
     private List<GoogleFolder> children;
+    private File folder;
 
     public GoogleFolder() {
     }
 
     public GoogleFolder(File folder) {
+        this.name = folder.getName();
+        this.id = folder.getId();
         this.folder = folder;
     }
 
     public GoogleFolder(File folder, List<GoogleFolder> googleFolders) {
+        this.name = folder.getName();
+        this.id = folder.getId();
         this.folder = folder;
         this.children = googleFolders;
     }
 
     public File getFolder() {
-        return folder;
-    }
-
-    public void setFolder(File folder) {
-        this.folder = folder;
+        return this.folder;
     }
 
     public List<GoogleFolder> getChildren() {

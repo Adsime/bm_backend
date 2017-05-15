@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 public class Feedback {
 
     private String message;
+    private String id;
     private int status;
 
     public Feedback(String message){
@@ -25,6 +26,10 @@ public class Feedback {
 
     public int getStatus() {
         return status;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String toJson() {

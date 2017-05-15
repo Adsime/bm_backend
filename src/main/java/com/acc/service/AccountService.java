@@ -85,15 +85,29 @@ public class AccountService {
         return Response.status(status).entity(content).build();
     }
 
+    public Response resetPassword(String email) {
+        try {
+            String eid = email.split("@")[0];
+            User user = repo.getAccount(eid);
+            return resetPassword(user, -1);
+        } catch (Exception e) {
+            LOGGER.error("Reset password attempt made on email: "
+                    + email + " while is not a registered email");
+        }
+        return Response.ok("Mail sendt!").build();
+    }
+
     /**
      * Uses a predefined string of html to create an email message object
      * which is handed to MailHandler for sending.
      * @param id long
      * @return Response
      */
-    public Response resetPassword(long id) {
+    public Response resetPassword(User user, long id) {
         try {
-            User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
+            if(user == null) {
+                user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
+            }
             Token token = tokenHandler.generateRefreshToken(user);
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
                     "potasian17@gmail.com",

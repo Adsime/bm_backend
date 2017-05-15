@@ -27,12 +27,12 @@ public class DriveApi {
         //FileService service = new FileService();
         //service.setFileHandler(fileHandler);
 
-        try {
+        /*try {
             mailHandler.sendMessage("potasian17@gmail.com",
                     mailHandler.createEmail("melsom.adrian@accenture.com", "potasian17@gmail.com", "test", "test"));
         } catch (Exception me) {
             me.printStackTrace();
-        }
+        }*/
         System.out.println(fileHandler.getTreeStructure());
 
         //service.getFileAsHtml("1DxwpUClmVaB_c4ieHS-NcELNNQ3gSU-iW1HbduZM7Dk");
