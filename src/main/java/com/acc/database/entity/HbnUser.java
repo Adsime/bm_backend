@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
+@SuppressWarnings("all")
 @Entity
 @Table(name = "USER")
 public class HbnUser implements Serializable, HbnEntity {

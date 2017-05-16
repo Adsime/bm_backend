@@ -17,7 +17,6 @@ import java.util.Set;
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
 
-// TODO: 15.03.2017 NO AUTO INCREMENT OF DOCUMENT
 public class DocumentRepository extends AbstractRepository implements Repository<Document> {
         
     public DocumentRepository() {

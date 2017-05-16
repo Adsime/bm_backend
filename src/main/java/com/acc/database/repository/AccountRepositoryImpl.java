@@ -11,8 +11,25 @@ import org.mindrot.jbcrypt.BCrypt;
 import javax.persistence.EntityNotFoundException;
 
 /**
- * Created by nguyen.duy.j.khac on 28.03.2017.
+ * Created by nguyen.duy.j.khac on 28.03.2017
+ *
+ * jBCrypt
+ * Copyright (c) 2006 Damien Miller <djm@mindrot.org>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
  */
+
 public class AccountRepositoryImpl extends AbstractRepository implements AccountRepository {
 
     private static Logger LOGGER = Logger.getLogger("application");
@@ -42,13 +59,13 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
     @Override
     public User register(String username, String password, User user) throws EntityNotFoundException, IllegalArgumentException{
         if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("") || user.getTelephone().equals("")){
-            throw new IllegalArgumentException("Feil i registrering av gruppe: \nFyll ut alle nødvendige felter for bruker!");
+            throw new IllegalArgumentException("Feil i registrering av konto: \nFyll ut alle nødvendige felter for bruker!");
         }
         HbnUser newAccountUser;
         try {
             newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
         } catch (EntityNotFoundException enfe){
-            newAccountUser = null;
+            throw new IllegalArgumentException("Feil i registrering av konto: \nBruker med id " + user.getId() + " finnes ikke!");
         }
 
         String salt = BCrypt.gensalt();
@@ -60,6 +77,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
         newAccountUser.setAccessLevel(
                 user.getAccessLevel() == null || user.getAccessLevel().equals("0") ? "1" : user.getAccessLevel()
         );
+
         super.updateEntity(newAccountUser);
         super.addEntity(mappedPassword);
         return user;
@@ -73,6 +91,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
             if(accountUser.getSalt() == null) {
                 return null;
             }
+
             String hashedUN = BCrypt.hashpw(username, accountUser.getSalt());
             if(super.queryToDb(new GetPasswordByEIdSpec(hashedUN)).get(0) != null) {
                 return super.toUser(accountUser);
