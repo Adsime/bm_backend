@@ -41,6 +41,9 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
 
         try {
             hbnUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
+            if(hbnUser.getSalt() == null) {
+                throw new EntityNotFoundException("Brukeren har ikke salt");
+            }
             String hashedEId = BCrypt.hashpw(username, hbnUser.getSalt());
             hbnPassword = (HbnPassword)super.queryToDb(new GetPasswordByEIdSpec(hashedEId)).get(0);
 
@@ -66,6 +69,19 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
             newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
         } catch (EntityNotFoundException enfe){
             throw new IllegalArgumentException("Feil i registrering av konto: \nBruker med id " + user.getId() + " finnes ikke!");
+        }
+        if(newAccountUser.getSalt() != null) {
+            HbnPassword hbnPassword;
+            String heid = BCrypt.hashpw(newAccountUser.getEnterpriseId(), newAccountUser.getSalt());
+            try {
+                hbnPassword = (HbnPassword)super.queryToDb(new GetPasswordByEIdSpec(heid)).get(0);
+            } catch (EntityNotFoundException enfe) {
+                hbnPassword = null;
+                LOGGER.info("Account for user " + username + " in creation");
+            }
+            if(hbnPassword != null) {
+                throw new IllegalArgumentException("User already has an account");
+            }
         }
 
         String salt = BCrypt.gensalt();
