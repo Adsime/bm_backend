@@ -2,6 +2,7 @@ package com.acc.service;
 
 import com.acc.database.repository.AccountRepositoryImpl;
 import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.google.GoogleService;
 import com.acc.google.MailHandler;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -43,6 +45,9 @@ public class AccountService {
 
     @Context
     private ContainerRequestContext context;
+
+    @Context
+    private HttpServletRequest request;
 
     public void setMailHandler(MailHandler mailHandler) {
         this.mailHandler = mailHandler;
@@ -128,5 +133,15 @@ public class AccountService {
                     .build();
         }
         return Response.ok("Mail sendt!").build();
+    }
+
+    public Response initApi() {
+        try {
+            User user = userRepo.getQuery(new GetUserByEIdSpec("admin")).get(0);
+            repo.register(user.getEnterpriseID(), "admin", user);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.status(HttpStatus.FORBIDDEN_403).build();
+        }
     }
 }

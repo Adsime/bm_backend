@@ -369,7 +369,9 @@ public class FileService extends GeneralService {
         }
         String id = fileHandler.exists(fileName, parent, false);
         if(id != null && !forced) {
-            Feedback feedback = new Feedback("Fil med samme navn eksisterer allerede i denne mappen!");
+            Feedback feedback = new Feedback("Fil med navnet " + fileName +
+                    " eksisterer allerede i denne mappen! " +
+                    "Ønsker du å opprette en ny eller overskrive eksisterende?");
             feedback.setId(id);
             return Response.status(HttpStatus.MULTIPLE_CHOICES_300)
                     .entity(feedback.toJson()).build();

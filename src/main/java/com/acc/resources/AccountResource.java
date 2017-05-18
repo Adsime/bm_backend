@@ -1,6 +1,7 @@
 package com.acc.resources;
 
 import com.acc.service.AccountService;
+import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
@@ -50,7 +51,19 @@ public class  AccountResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response forgotPassword(JsonObject o) {
-        String email = o.getString("email");
+        String email;
+        try {
+            email = o.getString("email");
+        } catch (Exception e) {
+            return Response.status(HttpStatus.BAD_REQUEST_400).entity("Feil format på forespørselen").build();
+        }
         return service.resetPassword(email);
+    }
+
+    @POST
+    @Path("init")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response initApi(JsonObject o) {
+        return service.initApi();
     }
 }
