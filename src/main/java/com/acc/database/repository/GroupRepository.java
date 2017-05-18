@@ -254,8 +254,13 @@ public class GroupRepository extends AbstractRepository implements Repository<Gr
                     throw new EntityNotFoundException("Feil i registrering av gruppe (ny bruker): \nEn eller flere merknader finnes ikke");
                 }
 
+                hbnUser.setFirstName(user.getFirstName());
+                hbnUser.setLastName(user.getLastName());
+                hbnUser.setEmail(user.getEmail());
+                hbnUser.setTelephone(user.getTelephone());
+                hbnUser.setEnterpriseId(user.getEnterpriseID());
+                hbnUser.setAccessLevel(user.getAccessLevel() == null ? "0" : user.getAccessLevel());
 
-                hbnUser = toHbnUser(user);
                 groupAssociates.add(hbnUser);
                 super.updateEntity(hbnUser);
             }

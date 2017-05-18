@@ -1,0 +1,93 @@
+2017-05-18 14:03:37 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:03:37 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:03:39 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:03:39 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:03:39 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:03:39 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:03:39 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:03:39 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:03:40 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2017-05-18 14:03:40 INFO  LobCreatorBuilderImpl:98 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2017-05-18 14:03:43 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2017-05-18 14:05:19 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:05:19 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:05:20 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:05:21 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:05:21 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:05:21 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:05:21 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:05:21 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:05:40 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:05:40 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:05:41 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:05:42 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:05:42 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:05:42 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:05:42 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:05:42 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:05:43 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2017-05-18 14:05:43 INFO  LobCreatorBuilderImpl:98 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2017-05-18 14:05:45 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2017-05-18 14:07:45 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:07:45 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:07:46 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:07:46 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:07:46 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:07:46 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:07:46 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:07:46 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:07:47 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2017-05-18 14:07:47 INFO  LobCreatorBuilderImpl:98 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2017-05-18 14:07:50 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2017-05-18 14:08:16 ERROR ExceptionMapperStandardImpl:39 - HHH000346: Error during managed flush [Batch update returned unexpected row count from update [0]; actual row count: 0; expected: 1]
+2017-05-18 14:08:16 INFO  AbstractBatchImpl:193 - HHH000010: On release of batch it still contained JDBC statements
+2017-05-18 14:08:39 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:08:39 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:08:40 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:08:41 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:08:41 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:08:41 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:08:41 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:08:41 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:08:42 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2017-05-18 14:08:42 INFO  LobCreatorBuilderImpl:98 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2017-05-18 14:08:43 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2017-05-18 14:09:20 ERROR ExceptionMapperStandardImpl:39 - HHH000346: Error during managed flush [Batch update returned unexpected row count from update [0]; actual row count: 0; expected: 1]
+2017-05-18 14:09:20 INFO  AbstractBatchImpl:193 - HHH000010: On release of batch it still contained JDBC statements
+2017-05-18 14:09:43 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:09:43 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:09:44 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:09:44 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:09:44 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:09:44 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:09:44 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:09:44 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:09:45 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2017-05-18 14:09:45 INFO  LobCreatorBuilderImpl:98 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2017-05-18 14:09:47 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2017-05-18 14:10:39 ERROR ExceptionMapperStandardImpl:39 - HHH000346: Error during managed flush [Batch update returned unexpected row count from update [0]; actual row count: 0; expected: 1]
+2017-05-18 14:10:39 INFO  AbstractBatchImpl:193 - HHH000010: On release of batch it still contained JDBC statements
+2017-05-18 14:11:17 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:11:17 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:11:19 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:11:19 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:11:19 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:11:19 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:11:19 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:11:19 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:11:20 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2017-05-18 14:11:20 INFO  LobCreatorBuilderImpl:98 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2017-05-18 14:11:22 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
+2017-05-18 14:12:10 ERROR ExceptionMapperStandardImpl:39 - HHH000346: Error during managed flush [Batch update returned unexpected row count from update [0]; actual row count: 0; expected: 1]
+2017-05-18 14:12:13 INFO  AbstractBatchImpl:193 - HHH000010: On release of batch it still contained JDBC statements
+2017-05-18 14:13:58 INFO  Version:45 - HHH000412: Hibernate Core {5.2.7.Final}
+2017-05-18 14:13:58 INFO  Environment:213 - HHH000206: hibernate.properties not found
+2017-05-18 14:13:59 INFO  Version:66 - HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2017-05-18 14:14:00 WARN  pooling:70 - HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+2017-05-18 14:14:00 INFO  pooling:126 - HHH10001005: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://52.210.65.16:80/bm_database]
+2017-05-18 14:14:00 INFO  pooling:135 - HHH10001001: Connection properties: {user=root, password=****}
+2017-05-18 14:14:00 INFO  pooling:140 - HHH10001003: Autocommit mode: false
+2017-05-18 14:14:00 INFO  DriverManagerConnectionProviderImpl:41 - HHH000115: Hibernate connection pool size: 20 (min=1)
+2017-05-18 14:14:00 INFO  Dialect:157 - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2017-05-18 14:14:01 INFO  LobCreatorBuilderImpl:98 - HHH000423: Disabling contextual LOB creation as JDBC driver reported JDBC version [3] less than 4
+2017-05-18 14:14:03 INFO  QueryTranslatorFactoryInitiator:47 - HHH000397: Using ASTQueryTranslatorFactory
