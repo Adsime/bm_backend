@@ -18,7 +18,6 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            TR.add(new Tag(0,"En Tag","Rolle","DETTE ER FRA DUY SIN TEST"));
 
             //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*

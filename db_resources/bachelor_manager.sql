@@ -204,26 +204,20 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- PRIVILEGES --
 USE bm_database;
--- GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'34.249.136.226' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'170.251.113.193' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'37.191.228.181' IDENTIFIED BY 'admin';
-GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'52.214.224.105' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'54.246.213.35' IDENTIFIED BY 'admin';
 
 -- DEFAULT DATA --
 INSERT INTO USER VALUES
-  (1, 'David', 'Silva', 'merlin@mcfc.co.uk','40404040', NULL , 'silva.david', '2'),
-  (2, 'Kevin', 'De Bruyne', 'gingerprince@mcfc.co.uk', '30303030',NULL, 'de.bruyne.kevin', '0'),
-  (3, 'Hakon', 'Smorvik', 'hakonsmorvik@hotmail.no', '98844823',NULL, 'smorvik.hakon', '0'),
-  (4, 'Duy', 'Nguyen', 'duynguyen@hotmail.no','94432647',NULL,'nguyen.duy','0'),
-  (5, 'Kim', 'Vu', 'kimvu@hotmail.no','42149144',NULL,'vu.kim','0'),
-  (6, 'Adrian', 'Melsom', 'adrianmelsom@hotmail.no','234792348',NULL,'melsom.adrian','0'),
-  (7, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','23580522',NULL,'guldal.jostein','2'),
-  (8, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','025839434',NULL,'kartveit.joakim','2'),
-  (9, 'admin', 'admin', 'admin@admin','94432647', NULL, 'admin', '9');
+  (1, 'Hakon', 'Smorvik', 'hakonsmorvik@hotmail.no', '98844823',NULL, 'smorvik.hakon', '0'),
+  (2, 'Duy', 'Nguyen', 'duynguyen@hotmail.no','94432647',NULL,'nguyen.duy','0'),
+  (3, 'Kim', 'Vu', 'kimvu@hotmail.no','42149144',NULL,'vu.kim','0'),
+  (4, 'Adrian', 'Melsom', 'adrianmelsom@hotmail.no','234792348',NULL,'melsom.adrian','0'),
+  (5, 'Jostein', 'Guldal', 'guldal.jostein@accenture.no','23580522',NULL,'guldal.jostein','2'),
+  (6, 'Joakim', 'Kartveit', 'kartveit.joakim@accenture.no','025839434',NULL,'kartveit.joakim','2'),
+  (7, 'admin', 'admin', 'admin@admin','94432647', NULL, 'admin', '9');
 
 INSERT INTO BACHELOR_GROUP VALUES
-  (1,'City', null),
-  (2,'Bachelor Manager', null);
+  (1,'Bachelor Manager', null);
 
 INSERT INTO TAG VALUES
   (1,'Student', '', 'Rolle'),
@@ -232,6 +226,10 @@ INSERT INTO TAG VALUES
   (4, 'Oppgave','','Dokument');
 
 
-INSERT INTO GROUP_ASSOCIATE VALUES (1,1),(1,2),(2,3),(2,4),(2,5),(2,6),(2,7),(2,8);
-INSERT INTO USER_TAG VALUES(1,2),(7,2),(8,2),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3),(7,3),(8 ,3),(2,1),(3,1),(4,1),(5,1),(6,1);
-INSERT INTO GROUP_TAG VALUE (2,4);
+INSERT INTO GROUP_ASSOCIATE VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6);
+INSERT INTO USER_TAG VALUES(1,1),(2,1),(3,1),(4,1),(5,2),(6,2),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3);
+INSERT INTO GROUP_TAG VALUE (1,3);
+
+-- GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'170.251.113.193' IDENTIFIED BY 'admin';
+-- GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'37.191.228.181' IDENTIFIED BY 'admin';
+-- GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'52.214.224.105' IDENTIFIED BY 'admin';

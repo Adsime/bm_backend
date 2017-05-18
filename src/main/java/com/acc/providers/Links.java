@@ -36,21 +36,12 @@ public class Links {
         switch (type) {
             case USER: {
                 ids.forEach(id -> retVal.add(new Link(type, USER_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }*/
                 break;
             } case GROUP: {
                 ids.forEach(id -> retVal.add(new Link(type, GROUP_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, GROUP_LINK + COMBINE + id));
-                }*/
                 break;
             } case TAG: {
                 ids.forEach(id -> retVal.add(new Link(type, TAG_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, TAG_LINK + COMBINE + id));
-                }*/
                 break;
             } case DOCUMENT: {
                 for(int id : ids) {
@@ -59,15 +50,9 @@ public class Links {
                 break;
             } case STUDENT: {
                 ids.forEach(id -> retVal.add(new Link(type, USER_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }*/
                 break;
             }case SUPERVISOR: {
                 ids.forEach(id -> retVal.add(new Link(type, USER_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }*/
                 break;
             }
         }

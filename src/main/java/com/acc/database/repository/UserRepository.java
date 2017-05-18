@@ -21,14 +21,13 @@ import java.util.*;
 
 public class UserRepository extends AbstractRepository implements Repository<User> {
 
-    public UserRepository(){
+    public UserRepository() {
         super();
     }
 
     @Override
-    // TODO: 10.05.2017 CHECK EID
-    public User add(User user) throws EntityNotFoundException, IllegalArgumentException{
-        if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")){
+    public User add(User user) throws EntityNotFoundException, IllegalArgumentException {
+        if (user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")) {
             throw new IllegalArgumentException("Feil i registrering av bruker: \nFyll ut alle nødvendige felter! \n(Fornavn, Etternavn og E-Mail)");
         }
 
@@ -36,23 +35,15 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
-        }catch (EntityNotFoundException ex){
+        } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i registrering av bruker: \nEn eller flere merknader finnes ikke");
         }
 
         long id = super.addEntity(mappedUser);
-
-        return new User(
-                (int) id,
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getTelephone(),
-                user.getEnterpriseID(),
-                user.getAccessLevel(),
-                user.getTags()
-        );
+        user.setId((int) id);
+        return user;
     }
+
     @Override
     public boolean update(User user) throws EntityNotFoundException {
         HbnUser mappedUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(user.getId())).get(0);
@@ -65,17 +56,17 @@ public class UserRepository extends AbstractRepository implements Repository<Use
 
         try {
             if (user.getTags() != null) mappedUser.setTags(super.getHbnTagSet(user.getTags()));
-        }catch (EntityNotFoundException ex){
+        } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i oppdatering av bruker: \nEn eller flere merknader finnes ikke");
         }
 
         mappedUser.setId(user.getId());
-        if(salt != null) updateUsername(oldEId, user.getEnterpriseID(), salt);
+        if (salt != null) updateUsername(oldEId, user.getEnterpriseID(), salt);
 
         try {
             return super.updateEntity(mappedUser);
 
-        }catch (EntityNotFoundException ex){
+        } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i oppdatering av bruker: \nBruker med id: " + user.getId() + " finnes ikke");
         }
     }
@@ -84,11 +75,11 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         HbnUser readUser;
         try {
             readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
-            if(!forced) {
+            if (!forced) {
                 readUser.getGroups().forEach(group -> {
                     ArrayList<HbnUser> students = new ArrayList<>();
                     group.getUsers().forEach(user -> {
-                        if(user.isStudent()) {
+                        if (user.isStudent()) {
                             students.add(user);
                         }
                     });
@@ -105,30 +96,30 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                 });
             }
             return remove(id);
-        }catch (EntityNotFoundException ex){
+        } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i sletting av bruker: \nBruker med id: " + id + " finnes ikke");
-        }catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException iae) {
             throw new MultipleChoiceException(iae.getMessage());
         }
     }
 
     @Override
-    public boolean remove(long id) throws EntityNotFoundException{
+    public boolean remove(long id) throws EntityNotFoundException {
         HbnUser readUser;
         try {
             readUser = (HbnUser) super.queryToDb(new GetUserByIdSpec(id)).get(0);
-        }catch (EntityNotFoundException ex){
+        } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i sletting av bruker: \nBruker med id: " + id + " finnes ikke");
         }
 
-        if (readUser.getDocuments() != null){
-            for (HbnDocument document : readUser.getDocuments()){
+        if (readUser.getDocuments() != null) {
+            for (HbnDocument document : readUser.getDocuments()) {
                 document.setUser(null);
 
                 try {
                     super.updateEntity(document);
-                }catch (EntityNotFoundException ex){
-                    throw new EntityNotFoundException("Feil i sletting av bruker: \nOppgave: \"" +  document.getTitle() + "\" , " + "til bruker finnes ikke");
+                } catch (EntityNotFoundException ex) {
+                    throw new EntityNotFoundException("Feil i sletting av bruker: \nOppgave: \"" + document.getTitle() + "\" , " + "til bruker finnes ikke");
                 }
             }
         }
@@ -144,28 +135,30 @@ public class UserRepository extends AbstractRepository implements Repository<Use
     public List<User> getQuery(Specification spec) throws EntityNotFoundException {
         List<HbnEntity> readData;
         try {
-           readData = super.queryToDb((HqlSpecification) spec);
-        }catch (EntityNotFoundException ex) {
+            readData = super.queryToDb((HqlSpecification) spec);
+        } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i henting av bruker: \nEn eller flere brukere finnes ikke!");
         }
 
-        List<User> result =  new ArrayList<>();
+        List<User> result = new ArrayList<>();
 
-        for (HbnEntity entity : readData){
-            HbnUser hbnUser = (HbnUser)entity;
+        for (HbnEntity entity : readData) {
+            HbnUser hbnUser = (HbnUser) entity;
             User user = super.toUser(hbnUser);
 
             List<String> pathList = new ArrayList<>();
-            hbnUser.getDocuments().forEach(doc->pathList.add(doc.getPath()));
+            hbnUser.getDocuments().forEach(doc -> pathList.add(doc.getPath()));
             user.setFiles(pathList);
 
             List<String> filePaths = new ArrayList<>();
-            hbnUser.getDocuments().forEach(doc->filePaths.add(doc.getPath()));
+            hbnUser.getDocuments().forEach(doc -> filePaths.add(doc.getPath()));
             user.setFiles(filePaths);
 
-           if (!user.getTags().isEmpty()) user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
-           if (hbnUser.getGroups() != null) user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
-           result.add(user);
+            if (!user.getTags().isEmpty())
+                user.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, user.getTagIdList()));
+            if (hbnUser.getGroups() != null)
+                user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
+            result.add(user);
         }
         return result;
     }
@@ -175,30 +168,32 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         List<HbnEntity> readData;
         try {
             readData = super.queryToDb((HqlSpecification) spec);
-        }catch (EntityNotFoundException ex) {
+        } catch (EntityNotFoundException ex) {
             throw new EntityNotFoundException("Feil i henting av bruker: \nEn eller flere brukere finnes ikke!");
         }
-        List<User> result =  new ArrayList<>();
+        List<User> result = new ArrayList<>();
 
-        for (HbnEntity entity : readData){
-            HbnUser hbnUser = (HbnUser)entity;
+        for (HbnEntity entity : readData) {
+            HbnUser hbnUser = (HbnUser) entity;
             User user = super.toUser(hbnUser);
-            if (!user.getTags().isEmpty()) user.addLinks(Links.TAGS,Links.generateLinks(Links.TAG, user.getTagIdList()));
-            if (hbnUser.getGroups() != null) user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
+            if (!user.getTags().isEmpty())
+                user.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, user.getTagIdList()));
+            if (hbnUser.getGroups() != null)
+                user.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, toGroupIdList(hbnUser.getGroups())));
             result.add(user);
         }
         return result;
     }
 
-    private void updateUsername(String oldEID, String newEId, String salt){
+    private void updateUsername(String oldEID, String newEId, String salt) {
         String oldHashedEId = BCrypt.hashpw(oldEID, salt);
         String newHashedEId = BCrypt.hashpw(newEId, salt);
 
-        try{
+        try {
             HbnPassword newHbnPassword = (HbnPassword) super.queryToDb(new GetPasswordByEIdSpec(oldHashedEId)).get(0);
             newHbnPassword.setEIdHash(newHashedEId);
             super.updateEntity(newHbnPassword);
-        } catch (EntityNotFoundException enfe){
+        } catch (EntityNotFoundException enfe) {
             throw new EntityNotFoundException("Feil i oppdatering av bruker: \nBruker med " + oldHashedEId + " finnes ikke!");
         }
     }
