@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
@@ -135,10 +136,12 @@ public class AccountService {
         return Response.ok("Mail sendt!").build();
     }
 
-    public Response initApi() {
+    public Response initApi(JsonObject o) {
         try {
-            User user = userRepo.getQuery(new GetUserByEIdSpec("admin")).get(0);
-            repo.register(user.getEnterpriseID(), "admin", user);
+            String eid = o.getString("username");
+            String pw = o.getString("password");
+            User user = userRepo.getQuery(new GetUserByEIdSpec(eid)).get(0);
+            repo.register(user.getEnterpriseID(), pw, user);
             return Response.ok().build();
         } catch (Exception e) {
             return Response.status(HttpStatus.FORBIDDEN_403).build();

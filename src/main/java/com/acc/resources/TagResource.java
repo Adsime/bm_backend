@@ -38,9 +38,10 @@ public class TagResource {
         LOGGER.info("ACTION: GET - tag | id = " + id);
         try {
             return service.getTag(id);
-       } catch (InternalServerErrorException isee) {
-           return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
-       }
+       } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+        }
     }
 
     @GET
@@ -49,7 +50,8 @@ public class TagResource {
         LOGGER.info("ACTION: GET - tag | query = " + names);
         try {
             return service.queryTags(names);
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -60,7 +62,8 @@ public class TagResource {
         LOGGER.info("ACTION: POST - tag | tag = " + o.toString());
         try {
             return service.newTag(new Gson().fromJson(o.toString(), Tag.class));
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -71,7 +74,8 @@ public class TagResource {
         LOGGER.info("ACTION: DELETE - tag | id = " + id);
         try {
             return service.deleteTag(id);
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -82,8 +86,8 @@ public class TagResource {
         LOGGER.info("ACTION: UPDATE - tag | tag = " + o.toString());
         try {
             return service.updateTag(new Gson().fromJson(o.toString(), Tag.class));
-        } catch (InternalServerErrorException isee) {
-            LOGGER.error("Unexpected error in TagResource.updateTag");
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
