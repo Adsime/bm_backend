@@ -1,6 +1,8 @@
 package com.acc.database;
 
 import com.acc.database.repository.*;
+import com.acc.database.specification.GetGroupByIdSpec;
+import com.acc.models.Group;
 import com.acc.models.Tag;
 
 import javax.persistence.EntityNotFoundException;
@@ -18,6 +20,12 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
+            Group group = GR.getQuery(new GetGroupByIdSpec(2)).get(0);
+            System.out.println("test");
+            group.getStudents().get(2).setTelephone("94432647");
+            GR.update(group);
+            group = GR.getQuery(new GetGroupByIdSpec(2)).get(0);
+            System.out.println("test");
 
             //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*
@@ -26,10 +34,8 @@ public class DatabaseConnectionTest {
             String password = "admin";
             System.out.println("UN: " + username );
             AR.register(username, password,merlin);*/
-        } catch (IllegalArgumentException iae){
+        } catch (IllegalArgumentException | EntityNotFoundException iae){
             System.out.println(iae.getMessage());
-        } catch (EntityNotFoundException enf){
-            System.out.println(enf.getMessage());
         }
     }
 }
