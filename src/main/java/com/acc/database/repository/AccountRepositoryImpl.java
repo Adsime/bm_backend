@@ -64,6 +64,7 @@ public class AccountRepositoryImpl extends AbstractRepository implements Account
         if(user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("") || user.getTelephone().equals("")){
             throw new IllegalArgumentException("Feil i registrering av konto: \nFyll ut alle nødvendige felter for bruker!");
         }
+
         HbnUser newAccountUser;
         try {
             newAccountUser = (HbnUser) super.queryToDb(new GetUserByEIdSpec(username)).get(0);
