@@ -222,12 +222,11 @@ INSERT INTO BACHELOR_GROUP VALUES
 INSERT INTO TAG VALUES
   (1,'Student', '', 'Rolle'),
   (2,'Veileder', '', 'Rolle'),
-  (3,'2017', '', 'År'),
-  (4, 'Oppgave','','Dokument');
+  (3,'Oppgave','','Dokument');
 
 
 INSERT INTO GROUP_ASSOCIATE VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(1,6);
-INSERT INTO USER_TAG VALUES(1,1),(2,1),(3,1),(4,1),(5,2),(6,2),(1,3),(2,3),(3,3),(4,3),(5,3),(6,3);
+INSERT INTO USER_TAG VALUES(1,1),(2,1),(3,1),(4,1),(5,2),(6,2);
 INSERT INTO GROUP_TAG VALUE (1,3);
 
 -- GRANT ALL PRIVILEGES ON bm_database.* TO 'root'@'170.251.113.193' IDENTIFIED BY 'admin';
