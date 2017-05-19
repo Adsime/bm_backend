@@ -454,6 +454,10 @@ public class FileService extends GeneralService {
         return new Document(0, authorId, fileName, "content", apiId, toTagList(tagIdList));
     }
 
+    public Response getRootFolder() {
+        return Response.ok("{ \"id\": '" + fileHandler.getRootFolder().getId() + "' }").build();
+    }
+
     private Feedback saveToDB(Document document) {
         try {
             documentRepository.add(document);

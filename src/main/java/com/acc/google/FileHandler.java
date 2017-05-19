@@ -60,7 +60,7 @@ public class FileHandler {
                     .setQ("trashed = false and mimeType = 'application/vnd.google-apps.folder'")
                     .setFields("files(id, name, parents, mimeType)")
                     .execute();
-            File file = service.files().get("root").setFields("id, name").execute();
+            File file = getRootFolder();
             List<File> files = result.getFiles();
             Collections.reverse(files);
             ArrayList<GoogleFolder> res = new ArrayList<>();
@@ -404,6 +404,15 @@ public class FileHandler {
 
         }
         return null;
+    }
+
+    public File getRootFolder() {
+         try {
+             Drive service = getDriveService();
+             return service.files().get("root").setFields("id, name").execute();
+         } catch (IOException ioe) {
+             return null;
+         }
     }
 
     public byte[] downloadTest(){
