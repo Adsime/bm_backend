@@ -391,6 +391,9 @@ public class FileService extends GeneralService {
     private Feedback uploadAnyFile(int userId, String fileName, InputStream stream, String type, String originalType, String parent, List<Integer> tagIdList) {
         java.io.File file = createTempFile(fileName, stream);
         String apiId = saveFile(file, fileName, type, originalType, parent);
+        if(apiId == null) {
+            return new Feedback("Ikke i stand til å laste opp til Drive", HttpStatus.SERVICE_UNAVAILABLE_503);
+        }
         file.delete();
         Document document;
 

@@ -3,10 +3,7 @@ package com.acc.service;
 import com.acc.database.repository.AccountRepositoryImpl;
 import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetUserByEIdSpec;
-import com.acc.database.specification.GetUserByIdSpec;
-import com.acc.google.GoogleService;
 import com.acc.google.MailHandler;
-import com.acc.jsonWebToken.Coder;
 import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.Credentials;
 import com.acc.models.Token;
@@ -17,14 +14,11 @@ import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 
 /**
  * Created by melsom.adrian on 28.03.2017.
@@ -110,7 +104,8 @@ public class AccountService {
      * @return Response
      */
     public Response resetPassword(User user, long id) {
-        try {
+        // TODO THIS IS COMMENTED OUT FOR TESTING
+        /*try {
             if(user == null) {
                 user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
             }
@@ -132,7 +127,7 @@ public class AccountService {
             return Response.status(HttpStatus.SERVICE_UNAVAILABLE_503)
                     .entity("Var ikke i stand til å sende mail.")
                     .build();
-        }
+        }*/
         return Response.ok("Mail sendt!").build();
     }
 
