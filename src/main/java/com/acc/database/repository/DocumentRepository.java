@@ -110,11 +110,16 @@ public class DocumentRepository extends AbstractRepository implements Repository
         List<Document> result = new ArrayList<>();
 
         for (HbnEntity entity : readData){
-            Document document = super.toDocument((HbnDocument) entity);
+            HbnDocument hbnDocument = (HbnDocument)entity;
+            Document document = super.toDocument(hbnDocument);
+
+            List<Integer> groupIdList = new ArrayList<>();
+            hbnDocument.getGroups().forEach(group->groupIdList.add((int)group.getId()));
+
             List<Integer> authorId = new ArrayList<>(document.getAuthor());
             document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
-            if (document.getGroups() != null) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
+            if (!groupIdList.isEmpty()) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, groupIdList));
             result.add(document);
         }
         return result;
@@ -139,10 +144,13 @@ public class DocumentRepository extends AbstractRepository implements Repository
                     hbnDocument.getTags() != null ? super.toTagList(hbnDocument.getTags()) : new ArrayList<>()
             );
 
+            List<Integer> groupIdList = new ArrayList<>();
+            hbnDocument.getGroups().forEach(group->groupIdList.add((int)group.getId()));
+
             List<Integer> authorId = new ArrayList<>(document.getAuthor());
             document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
-            if (document.getGroups() != null) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
+            if (!groupIdList.isEmpty()) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, groupIdList));
             result.add(document);
         }
         return result;
