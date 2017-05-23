@@ -21,8 +21,8 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     public TagRepository(){
         super();
     }
-    private final String[] OBLIGATORY_TAG_TYPES = {"student","veileder","bruker","oppgave"};
-    private final String[] OBLIGATORY_TAG_NAMES = {"år"};
+    private final String[] OBLIGATORY_TAG_NAMES = {"student","veileder","bruker","oppgave"};
+    private final String[] OBLIGATORY_TAG_TYPES = {"år"};
 
     @Override
     public Tag add(Tag tag) throws IllegalArgumentException{
@@ -102,10 +102,10 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     }
 
     private boolean canDelete(HbnTag tag){
-        for (String name : OBLIGATORY_TAG_NAMES){
+        for (String name : OBLIGATORY_TAG_TYPES){
             if (tag.getTagName().toLowerCase().equals(name)) return false;
         }
-        for (String type: OBLIGATORY_TAG_TYPES){
+        for (String type: OBLIGATORY_TAG_NAMES){
             if (tag.getType().toLowerCase().equals(type)) return false;
         }
         return true;
