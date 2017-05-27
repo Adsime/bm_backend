@@ -50,7 +50,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     @Override
     public boolean remove(long id) throws EntityNotFoundException, IllegalArgumentException{
         HbnTag mappedTag = (HbnTag)super.queryToDb(new GetTagByIdSpec(id)).get(0);
-        if (canDelete(mappedTag)) throw new IllegalArgumentException("Feil i sletting av tag: \nIkke tillat å slette " + mappedTag.getTagName() + "!");
+        if (!canDelete(mappedTag)) throw new IllegalArgumentException("Feil i sletting av tag: \nIkke tillat å slette " + mappedTag.getTagName() + "!");
 
         try{
             return super.removeEntity(mappedTag);
