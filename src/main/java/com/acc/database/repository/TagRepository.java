@@ -102,10 +102,10 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     }
 
     private boolean canDelete(HbnTag tag){
-        for (String name : OBLIGATORY_TAG_TYPES){
+        for (String name : OBLIGATORY_TAG_NAMES){
             if (tag.getTagName().toLowerCase().equals(name)) return false;
         }
-        for (String type: OBLIGATORY_TAG_NAMES){
+        for (String type: OBLIGATORY_TAG_TYPES){
             if (tag.getType().toLowerCase().equals(type)) return false;
         }
         return true;

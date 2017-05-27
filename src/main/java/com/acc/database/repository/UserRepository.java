@@ -30,7 +30,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         if (user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")) {
             throw new IllegalArgumentException("Feil i registrering av bruker: \nFyll ut alle nødvendige felter! \n(Fornavn, Etternavn og E-Mail)");
         }
-
+        // TODO: 27.05.2017 IMPLEMENT A GET FOR EXISTING EID
         HbnUser mappedUser = super.toHbnUser(user);
 
         try {
