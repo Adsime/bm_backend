@@ -92,7 +92,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                                 .append(readUser.getLastName())
                                 .append(" er siste medlem i gruppen \"")
                                 .append(group.getName())
-                                .append("\".\nVed å slette brukeren slettes også brukeren.\n\nØnsker du å gjennomføre slettingen?");
+                                .append("\".\nVed å slette brukeren slettes også gruppen.\n\nØnsker du å gjennomføre slettingen?");
                         throw new IllegalArgumentException(builder.toString());
                     }
                 });
