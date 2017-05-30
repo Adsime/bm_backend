@@ -30,7 +30,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
         if (user.getFirstName().equals("") || user.getLastName().equals("") || user.getEmail().equals("")) {
             throw new IllegalArgumentException("Feil i registrering av bruker: \nFyll ut alle nødvendige felter! \n(Fornavn, Etternavn og E-Mail)");
         }
-
+        // TODO: 27.05.2017 IMPLEMENT A GET FOR EXISTING EID
         HbnUser mappedUser = super.toHbnUser(user);
 
         try {
@@ -92,7 +92,7 @@ public class UserRepository extends AbstractRepository implements Repository<Use
                                 .append(readUser.getLastName())
                                 .append(" er siste medlem i gruppen \"")
                                 .append(group.getName())
-                                .append("\".\nVed å slette brukeren slettes også brukeren.\n\nØnsker du å gjennomføre slettingen?");
+                                .append("\".\nVed å slette brukeren slettes også gruppen.\n\nØnsker du å gjennomføre slettingen?");
                         throw new IllegalArgumentException(builder.toString());
                     }
                 });

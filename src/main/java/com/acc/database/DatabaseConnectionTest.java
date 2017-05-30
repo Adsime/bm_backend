@@ -20,13 +20,7 @@ public class DatabaseConnectionTest {
         AccountRepository AR = new AccountRepositoryImpl();
 
         try {
-            Group group = GR.getQuery(new GetGroupByIdSpec(2)).get(0);
-            System.out.println("test");
-            group.getStudents().get(2).setTelephone("94432647");
-            GR.update(group);
-            group = GR.getQuery(new GetGroupByIdSpec(2)).get(0);
-            System.out.println("test");
-
+            TR.remove(13);
             //PR.add(new Document(0,2,"Cray cray doc","this shit is legit lit", "//some:path",null));
             /*
             User merlin = UR.getQuery(new GetUserByIdSpec(1)).get(0);
