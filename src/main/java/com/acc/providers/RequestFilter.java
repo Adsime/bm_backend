@@ -41,7 +41,7 @@ public class RequestFilter implements ContainerRequestFilter {
         Response abort = null;
 
         //Currently allowing all headers, so pre-flights are approved immediately.
-        if(context.getMethod() == HttpMethod.OPTIONS) {
+        if(context.getMethod().equals(HttpMethod.OPTIONS)) {
             return;
         }
         try {

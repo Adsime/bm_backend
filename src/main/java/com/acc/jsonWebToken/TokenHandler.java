@@ -103,7 +103,6 @@ public class TokenHandler {
      * @param context ContainerRequestContent
      * @return boolean
      */
-    @SuppressWarnings("all")
     public boolean verify(String token, ContainerRequestContext context) throws LoginException {
         try {
             DecodedJWT jwt = decode(token);
@@ -133,7 +132,6 @@ public class TokenHandler {
      * @param token Token
      * @return DecodedJWT
      */
-    @SuppressWarnings("all")
     private DecodedJWT decode(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(API_SECRET);
@@ -141,7 +139,7 @@ public class TokenHandler {
             return verifier.verify(token);
 
         } catch (UnsupportedEncodingException | JWTVerificationException exception) {
-
+            LOGGER.error("Unable to decode token: " + token, exception);
         }
         return null;
     }
