@@ -3,9 +3,7 @@ package com.acc.providers;
 import org.apache.log4j.Logger;
 import sun.reflect.generics.reflectiveObjects.LazyReflectiveObjectGenerator;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -19,14 +17,13 @@ public class ConfigLoader {
 
     static {
         try {
-            ClassLoader cl = ConfigLoader.class.getClass().getClassLoader();
-            FileReader reader = new FileReader(cl.getResource(configFile).getFile());
+            InputStream is = ConfigLoader.class.getClassLoader().getResourceAsStream(configFile);
             properties = new Properties();
-            properties.load(reader);
+            properties.load(is);
         } catch (FileNotFoundException fnfe) {
-            LOGGER.error("Unable to load file '" + configFile + "' in class ConfigLoader");
-        } catch(IOException ioe) {
-            LOGGER.error("Unable to read file '" + configFile + "' in class ConfigLoader");
+            LOGGER.error("Unable to read file '" + configFile + "'");
+        } catch (IOException ioe) {
+            LOGGER.error("Unable to load resource '" + configFile + "'");
         }
     }
 

@@ -44,13 +44,13 @@ public class RequestFilter implements ContainerRequestFilter {
         if(context.getMethod().equals(HttpMethod.OPTIONS)) {
             return;
         }
+        if (context.getUriInfo().getPath().endsWith("accounts")) {
+            return;
+        }
         try {
             List<String> headers = context.getHeaders().get(HttpHeaders.AUTHORIZATION);
             if (headers != null && headers.size() > 0) {
                 String authHeader = headers.get(0);
-                if (context.getUriInfo().getPath().endsWith("/accounts")) {
-                    return;
-                }
                 if (context.getUriInfo().getPath().contains("accounts/login") && authHeader.startsWith(BASIC)) {
                     return;
                 }

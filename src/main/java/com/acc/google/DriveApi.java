@@ -4,6 +4,12 @@ package com.acc.google;
  * Created by melsom.adrian on 08.03.2017.
  */
 
+import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetDocumentByIdSpec;
+import com.acc.database.specification.GetUserByEIdSpec;
+import com.acc.jsonWebToken.TokenHandler;
+import com.acc.models.Token;
+
 import java.io.IOException;
  
 public class DriveApi {
@@ -33,7 +39,11 @@ public class DriveApi {
         } catch (Exception me) {
             me.printStackTrace();
         }*/
-        System.out.println(fileHandler.getTreeStructure());
+        //System.out.println(fileHandler.getTreeStructure());
+        TokenHandler tokenHandler = new TokenHandler();
+        UserRepository userRepository = new UserRepository();
+        Token token = tokenHandler.generateAccessToken(userRepository.getQuery(new GetUserByEIdSpec("admin")).get(0));
+        System.out.println(token);
 
         //service.getFileAsHtml("1DxwpUClmVaB_c4ieHS-NcELNNQ3gSU-iW1HbduZM7Dk");
         //service.getFile("1lTJHklu-hBklLkUUGxoq8eaENqT6FFMRbRNh7WjYhAM");

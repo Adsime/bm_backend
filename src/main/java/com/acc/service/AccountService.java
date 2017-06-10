@@ -116,8 +116,13 @@ public class AccountService {
                 user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
             }
             Token token = tokenHandler.generateRefreshToken(user);
+            String a = request.getRemoteHost();
+            String b = request.getRemoteAddr();
+            String c = request.getContextPath();
+            String d = request.getHeader("X-Forwarded-For").split(",")[0];
+            String mail = ConfigLoader.load("apiMail");
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
-                    ConfigLoader.load("apiMail"),
+                    mail,
                     "Password reset",
                     createMailBody(token));
             mailHandler.sendMessage("potasian17@gmail.com", message);
