@@ -8,4 +8,5 @@ import com.acc.models.User;
 public interface AccountRepository {
     User matchPassword(String username, String password);
     User register(String username, String password, User user);
+    User getAccount(String username);
 }

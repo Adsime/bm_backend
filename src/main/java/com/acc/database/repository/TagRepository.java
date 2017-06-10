@@ -21,8 +21,8 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     public TagRepository(){
         super();
     }
-    private final String[] OBLIGATORY_TAG_TYPES = {"student","veileder","bruker","oppgave"};
-    private final String[] OBLIGATORY_TAG_NAMES = {"år"};
+    private final String[] OBLIGATORY_TAG_NAMES = {"student","veileder","bruker","oppgave"};
+    private final String[] OBLIGATORY_TAG_TYPES = {"år"};
 
     @Override
     public Tag add(Tag tag) throws IllegalArgumentException{
@@ -50,7 +50,7 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
     @Override
     public boolean remove(long id) throws EntityNotFoundException, IllegalArgumentException{
         HbnTag mappedTag = (HbnTag)super.queryToDb(new GetTagByIdSpec(id)).get(0);
-        if (canDelete(mappedTag)) throw new IllegalArgumentException("Feil i sletting av tag: \nIkke tillat å slette " + mappedTag.getTagName() + "!");
+        if (!canDelete(mappedTag)) throw new IllegalArgumentException("Feil i sletting av tag: \nIkke tillat å slette " + mappedTag.getTagName() + "!");
 
         try{
             return super.removeEntity(mappedTag);

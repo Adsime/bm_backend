@@ -50,8 +50,8 @@ public class GroupResource {
         LOGGER.info("ACTION: GET - group | ID = " + id);
         try {
             return service.getGroup(id);
-        }catch(InternalServerErrorException isee) {
-            LOGGER.fatal("Unexpected exception!", isee);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -66,8 +66,8 @@ public class GroupResource {
                 return service.getAllGroups();
             }
             return service.getGroupByTags(tags, hasAll);
-        } catch (InternalServerErrorException isee) {
-            LOGGER.fatal("Unexpected exception!", isee);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -80,8 +80,8 @@ public class GroupResource {
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
             return service.newGroup(group);
-        } catch (InternalServerErrorException isee) {
-            LOGGER.fatal("Unexpected exception!", isee);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -92,8 +92,8 @@ public class GroupResource {
         LOGGER.info("ACTION: DELETE - user | ID = " + id);
         try {
             return service.deleteGroup(id);
-        } catch (InternalServerErrorException isee) {
-            LOGGER.fatal("Unexpected exception!", isee);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -105,8 +105,8 @@ public class GroupResource {
         try {
             Group group = new Gson().fromJson(o.toString(), Group.class);
             return service.updateGroup(group);
-        }catch (InternalServerErrorException isee) {
-            LOGGER.fatal("Unexpected exception!", isee);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }

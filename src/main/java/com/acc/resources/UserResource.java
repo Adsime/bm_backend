@@ -3,17 +3,16 @@ package com.acc.resources;
 import com.acc.models.User;
 import com.acc.service.UserService;
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
-import org.glassfish.jersey.logging.LoggingFeature;
 import org.junit.Before;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Created by melsom.adrian on 03.02.2017.
@@ -22,11 +21,7 @@ import java.util.logging.Logger;
 @Path("users")
 public class UserResource {
 
-    private static final Logger LOGGER = Logger.getLogger("user");
-
-    static {
-        LOGGER.setLevel(Level.INFO);
-    }
+    private static final Logger LOGGER = Logger.getLogger("application");
 
     @Inject
     public UserService service;
@@ -49,11 +44,11 @@ public class UserResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam("id") int id) {
-        LOGGER.log(Level.FINEST, "ACTION: GET - user | ID = " + id);
+        LOGGER.info("ACTION: GET - user | ID = " + id);
         try {
             return service.getUser(id);
-        } catch(InternalServerErrorException e) {
-            LOGGER.log(Level.SEVERE, "Unexpected exception caught in method getUser", e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -68,14 +63,14 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response queryUsers(@QueryParam("tags") List<String> tags,
                                @DefaultValue("true") @QueryParam("hasAll") boolean hasAll) {
-        LOGGER.log(Level.FINEST,"ACTION: GET - user | QUERY:\n" + tags);
+        LOGGER.info("ACTION: GET - user | QUERY:\n" + tags);
         try {
             if(tags.isEmpty()){
               return service.getAllUsers();
             }
             return service.getUserByTags(tags, hasAll);
-        } catch (InternalServerErrorException e) {
-            LOGGER.log(Level.SEVERE, "Unexpected exception caught in method queryUsers", e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -89,12 +84,12 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response newUser(JsonObject o) {
-        LOGGER.log(Level.FINEST,"ACTION: POST - user | ITEM =\n" + o.toString());
+        LOGGER.info("ACTION: POST - user | ITEM =\n" + o.toString());
         try {
             User user = new Gson().fromJson(o.toString(), User.class);
             return service.newUser(user);
-        } catch(InternalServerErrorException e) {
-            LOGGER.log(Level.SEVERE, "Unexpected exception caught in method newUser", e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -109,11 +104,11 @@ public class UserResource {
     @Path("{id}")
     public Response deleteUser(@PathParam("id") int id,
                                @DefaultValue("false") @QueryParam("forced") boolean forced) {
-        LOGGER.log(Level.FINEST,"ACTION: DELETE - user | ID = " + id);
+        LOGGER.info("ACTION: DELETE - user | ID = " + id);
         try {
             return service.deleteUser(id, forced);
-        } catch(InternalServerErrorException e) {
-            LOGGER.log(Level.SEVERE, "Unexpected exception caught in method deleteUser", e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -125,12 +120,12 @@ public class UserResource {
      */
     @PUT
     public Response updateUser(JsonObject o) {
-        LOGGER.log(Level.FINEST,"ACTION: PUT - user | ITEM = \n" + o.toString());
+        LOGGER.info("ACTION: PUT - user | ITEM = \n" + o.toString());
         try {
             User user = new Gson().fromJson(o.toString(), User.class);
             return service.updateUser(user);
-        } catch(InternalServerErrorException e) {
-            LOGGER.log(Level.SEVERE, "Unexpected exception caught in method updateUser", e);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }

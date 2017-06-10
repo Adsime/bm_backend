@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Created by nguyen.duy.j.khac on 08.02.2017.
  */
-// TODO: 15.03.2017 implement tag set 
+@SuppressWarnings("all")
 @Entity
 @Table(name = "BACHELOR_GROUP")
 public class HbnBachelorGroup implements Serializable, HbnEntity {

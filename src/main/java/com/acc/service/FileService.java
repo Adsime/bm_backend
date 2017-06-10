@@ -366,8 +366,15 @@ public class FileService extends GeneralService {
         if ((type == null || originalType == null) && !extension.equals(".html")) {
             return Response.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE_415)
                     .entity(extension + " " + Responses.getResponse("formatNotSupported")).build();
-        } if(fileHandler.exists(fileName, parent, false) != null && !forced) {
-            return Response.status(HttpStatus.MULTIPLE_CHOICES_300).entity("nameTaken").build();
+        }
+        String id = fileHandler.exists(fileName, parent, false);
+        if(id != null && !forced) {
+            Feedback feedback = new Feedback("Fil med navnet " + fileName +
+                    " eksisterer allerede i denne mappen! " +
+                    "Ønsker du å opprette en ny eller overskrive eksisterende?");
+            feedback.setId(id);
+            return Response.status(HttpStatus.MULTIPLE_CHOICES_300)
+                    .entity(feedback.toJson()).build();
         } if(extension.toLowerCase().equals(".html")) {
             Response response = uploadAsHtml(uploadedInputStream,
                     fileName.replace(".html", ""),
@@ -384,6 +391,9 @@ public class FileService extends GeneralService {
     private Feedback uploadAnyFile(int userId, String fileName, InputStream stream, String type, String originalType, String parent, List<Integer> tagIdList) {
         java.io.File file = createTempFile(fileName, stream);
         String apiId = saveFile(file, fileName, type, originalType, parent);
+        if(apiId == null) {
+            return new Feedback("Ikke i stand til å laste opp til Drive", HttpStatus.SERVICE_UNAVAILABLE_503);
+        }
         file.delete();
         Document document;
 
@@ -445,6 +455,10 @@ public class FileService extends GeneralService {
 
     private Document createDocument(int authorId, String fileName, String apiId, List<Integer> tagIdList) {
         return new Document(0, authorId, fileName, "content", apiId, toTagList(tagIdList));
+    }
+
+    public Response getRootFolder() {
+        return Response.ok("{ \"id\": '" + fileHandler.getRootFolder().getId() + "' }").build();
     }
 
     private Feedback saveToDB(Document document) {

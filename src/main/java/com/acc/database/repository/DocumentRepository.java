@@ -17,7 +17,6 @@ import java.util.Set;
  * Created by nguyen.duy.j.khac on 15.02.2017.
  */
 
-// TODO: 15.03.2017 NO AUTO INCREMENT OF DOCUMENT
 public class DocumentRepository extends AbstractRepository implements Repository<Document> {
         
     public DocumentRepository() {
@@ -46,7 +45,6 @@ public class DocumentRepository extends AbstractRepository implements Repository
             throw new EntityNotFoundException("Feil i registering av fil: \nEn eller flere grupper finnes ikke");
         }
 
-        // TODO: 02.05.2017 if before try?
         try {
             if (document.getTags() != null) mappedDocument.setTags(super.getHbnTagSet(document.getTags()));
         }catch (EntityNotFoundException enfe){
@@ -112,11 +110,16 @@ public class DocumentRepository extends AbstractRepository implements Repository
         List<Document> result = new ArrayList<>();
 
         for (HbnEntity entity : readData){
-            Document document = toDocument((HbnDocument) entity);
+            HbnDocument hbnDocument = (HbnDocument)entity;
+            Document document = super.toDocument(hbnDocument);
+
+            List<Integer> groupIdList = new ArrayList<>();
+            hbnDocument.getGroups().forEach(group->groupIdList.add((int)group.getId()));
+
             List<Integer> authorId = new ArrayList<>(document.getAuthor());
             document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
-            if (document.getGroups() != null) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
+            if (!groupIdList.isEmpty()) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, groupIdList));
             result.add(document);
         }
         return result;
@@ -141,10 +144,13 @@ public class DocumentRepository extends AbstractRepository implements Repository
                     hbnDocument.getTags() != null ? super.toTagList(hbnDocument.getTags()) : new ArrayList<>()
             );
 
+            List<Integer> groupIdList = new ArrayList<>();
+            hbnDocument.getGroups().forEach(group->groupIdList.add((int)group.getId()));
+
             List<Integer> authorId = new ArrayList<>(document.getAuthor());
             document.addLinks(Links.USERS, Links.generateLinks(Links.USER, authorId));
             if (document.getTags() != null) document.addLinks(Links.TAGS, Links.generateLinks(Links.TAG, document.getTagIdList()));
-            if (document.getGroups() != null) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, document.getGroupsIdList()));
+            if (!groupIdList.isEmpty()) document.addLinks(Links.GROUPS, Links.generateLinks(Links.GROUP, groupIdList));
             result.add(document);
         }
         return result;
@@ -193,26 +199,6 @@ public class DocumentRepository extends AbstractRepository implements Repository
             hbnBachelorGroups.add((HbnBachelorGroup) super.queryToDb(new GetGroupByIdSpec(group.getId())).get(0));
         }
         return hbnBachelorGroups;
-    }
-
-    public int findAuthorId(String enterpriseId){
-        try{
-            HbnUser foundUser = (HbnUser) queryToDb(new GetUserByEIdSpec(enterpriseId)).get(0);
-            return (int)foundUser.getId();
-        }catch (EntityNotFoundException enf){
-            throw new EntityNotFoundException("Feil i opplasting av fil: \nBruker finnes ikke: " + enterpriseId);
-        }
-    }
-
-    private Document toDocument (HbnDocument hbnDocument){
-        return new Document(
-                (int) hbnDocument.getId(),
-                (int) hbnDocument.getUser().getId(),
-                hbnDocument.getTitle(),
-                "",
-                hbnDocument.getPath(),
-                hbnDocument.getTags() != null ? super.toTagList(hbnDocument.getTags()) : new ArrayList<>()
-        );
     }
 }
 

@@ -11,13 +11,22 @@ import java.io.IOException;
  */
 
 @Provider
-public class Responsefilter implements ContainerResponseFilter {
+public class ResponseFilter implements ContainerResponseFilter {
+
+    /**
+     * Handles the pre-flight requests to the API. Currently allows any IP to make requests.
+     * @param requestContext ContainerRequestContext
+     * @param responseContext ContainerRequestContext
+     * @throws IOException defaults to jersey exception response
+     */
     @Override
-    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+            throws IOException {
         responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
         responseContext.getHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
         responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
         responseContext.getHeaders().add("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT");
         responseContext.getHeaders().add("Access-Control-Expose-Headers", "*");
     }
+
 }

@@ -100,12 +100,4 @@ public class Group extends HateOAS {
         if (documents != null) for (Document document : documents) idList.add(document.getId());
         return idList;
     }
-
-    public List<Integer> getUserIdList() {
-        List<Integer> idList = new ArrayList<>();
-        if (students != null) for (User student : students) idList.add(student.getId());
-        if (supervisors != null) for (User supervisor : supervisors) idList.add(supervisor.getId());
-        return idList;
-    }
-
 }

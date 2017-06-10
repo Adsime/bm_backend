@@ -19,5 +19,7 @@ target
 .orig
 bm-rest-api.iml
 
+application.log
+
 src/main/resources/hibernate.cfg.xml
 src/main/java/com/acc/database/DatabaseConenctionTest.java

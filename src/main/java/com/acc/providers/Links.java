@@ -31,43 +31,33 @@ public class Links {
 
     private static final String COMBINE = "/";
 
+    /**
+     * Generates a list of links which is used in a respons object
+     * to refer to related data.
+     * @param type String
+     * @param ids List<Integer>
+     * @return List<Link>
+     */
     public static List<Link> generateLinks(String type, List<Integer> ids) {
         List<Link> retVal = new ArrayList<>();
         switch (type) {
             case USER: {
                 ids.forEach(id -> retVal.add(new Link(type, USER_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }*/
                 break;
             } case GROUP: {
                 ids.forEach(id -> retVal.add(new Link(type, GROUP_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, GROUP_LINK + COMBINE + id));
-                }*/
                 break;
             } case TAG: {
                 ids.forEach(id -> retVal.add(new Link(type, TAG_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, TAG_LINK + COMBINE + id));
-                }*/
                 break;
             } case DOCUMENT: {
-                for(int id : ids) {
-                    retVal.add(new Link(type, DOCUMENT_LINK + COMBINE + id));
-                }
+                ids.forEach(id -> retVal.add(new Link(type, DOCUMENT_LINK + COMBINE + id)));
                 break;
             } case STUDENT: {
                 ids.forEach(id -> retVal.add(new Link(type, USER_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }*/
                 break;
             }case SUPERVISOR: {
                 ids.forEach(id -> retVal.add(new Link(type, USER_LINK + COMBINE + id)));
-                /*for(int id : ids) {
-                    retVal.add(new Link(type, USER_LINK + COMBINE + id));
-                }*/
                 break;
             }
         }

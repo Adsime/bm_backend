@@ -58,12 +58,17 @@ public class FileHandler {
             Drive service = getDriveService();
             FileList result = service.files().list()
                     .setQ("trashed = false and mimeType = 'application/vnd.google-apps.folder'")
-                    .setFields("nextPageToken, files(id, name, parents, mimeType)")
+                    .setFields("files(id, name, parents, mimeType)")
                     .execute();
+            File file = getRootFolder();
             List<File> files = result.getFiles();
             Collections.reverse(files);
-            return build(files, files.get(0).getParents().get(0));
+            ArrayList<GoogleFolder> res = new ArrayList<>();
+            res.add(new GoogleFolder(file, build(files, files.get(0).getParents().get(0))));
+            return res;
         } catch (IOException ioe) {
+            ioe.printStackTrace();
+            LOGGER.error("Unable to get folders", ioe);
             return Collections.emptyList();
         }
     }
@@ -142,7 +147,7 @@ public class FileHandler {
                     .setQ("'" + parent + "' in parents" + " and trashed = false and name = '" + name + "'" +
                             (folder ? " and mimeType = 'application/vnd.google-apps.folder'" : ""))
                     .execute();
-            return (files.getFiles().size() > 0) ? "exists" : null;
+            return (files.getFiles().size() > 0) ? files.getFiles().get(0).getId() : null;
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -399,6 +404,15 @@ public class FileHandler {
 
         }
         return null;
+    }
+
+    public File getRootFolder() {
+         try {
+             Drive service = getDriveService();
+             return service.files().get("root").setFields("id, name").execute();
+         } catch (IOException ioe) {
+             return null;
+         }
     }
 
     public byte[] downloadTest(){

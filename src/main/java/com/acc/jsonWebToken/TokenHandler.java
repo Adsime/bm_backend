@@ -1,6 +1,5 @@
 package com.acc.jsonWebToken;
 
-import com.acc.database.repository.AccountRepository;
 import com.acc.database.repository.UserRepository;
 import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.models.Token;
@@ -12,14 +11,12 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.junit.platform.commons.meta.API;
+import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 import javax.ws.rs.container.ContainerRequestContext;
-import java.io.InterruptedIOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,6 +26,7 @@ import java.util.Map;
  * Created by melsom.adrian on 29.03.2017.
  */
 public class TokenHandler {
+    private static Logger LOGGER = Logger.getLogger("application");
 
     public static final long DAY = 1000L * 60L * 60L * 24L;
     public static final long HOUR = DAY/24;
@@ -77,14 +75,14 @@ public class TokenHandler {
     /**
      * Responsible for generating tokens
      * @param user User
-     * @param timeExtention long
+     * @param timeExtension long
      * @return Token
      */
-    private Token generateToken(User user, long timeExtention) {
+    private Token generateToken(User user, long timeExtension) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(API_SECRET);
             Date date = new Date();
-            date.setTime(System.currentTimeMillis() + timeExtention);
+            date.setTime(System.currentTimeMillis() + timeExtension);
             String token = JWT.create()
                     .withExpiresAt(date)
                     .withClaim(USER_ACCESS_LEVEL, user.getAccessLevel())
@@ -93,6 +91,7 @@ public class TokenHandler {
                     .sign(algorithm);
             return new Token(token);
         } catch (UnsupportedEncodingException | JWTCreationException exception) {
+            LOGGER.error("Unable to generate token basen on " + user.toString(), exception);
             return null;
         }
     }
@@ -104,7 +103,6 @@ public class TokenHandler {
      * @param context ContainerRequestContent
      * @return boolean
      */
-    @SuppressWarnings("all")
     public boolean verify(String token, ContainerRequestContext context) throws LoginException {
         try {
             DecodedJWT jwt = decode(token);
@@ -134,7 +132,6 @@ public class TokenHandler {
      * @param token Token
      * @return DecodedJWT
      */
-    @SuppressWarnings("all")
     private DecodedJWT decode(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(API_SECRET);
@@ -142,7 +139,7 @@ public class TokenHandler {
             return verifier.verify(token);
 
         } catch (UnsupportedEncodingException | JWTVerificationException exception) {
-
+            LOGGER.error("Unable to decode token: " + token, exception);
         }
         return null;
     }

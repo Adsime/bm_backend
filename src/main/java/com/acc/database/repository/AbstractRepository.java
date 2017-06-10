@@ -1,11 +1,9 @@
 package com.acc.database.repository;
 
-import com.acc.database.entity.HbnBachelorGroup;
-import com.acc.database.entity.HbnEntity;
-import com.acc.database.entity.HbnTag;
-import com.acc.database.entity.HbnUser;
+import com.acc.database.entity.*;
 import com.acc.database.specification.GetTagByIdSpec;
 import com.acc.database.specification.HqlSpecification;
+import com.acc.models.Document;
 import com.acc.models.Tag;
 import com.acc.models.User;
 import org.hibernate.*;
@@ -13,6 +11,7 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.OptimisticLockException;
 import java.util.*;
@@ -23,7 +22,7 @@ import java.util.*;
  * Includes hibernate methods for CRUD, and utility methods
  */
 @SuppressWarnings("all")
-public abstract class AbstractRepository{
+public abstract class AbstractRepository {
 
     private static SessionFactory sessionFactory;
 
@@ -35,12 +34,11 @@ public abstract class AbstractRepository{
         long itemId;
         Transaction tx = null;
 
-        try( Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
             itemId = (long) session.save(item);
             tx.commit();
-        }
-        catch (HibernateException he) {
+        } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
             return 0;
@@ -57,13 +55,12 @@ public abstract class AbstractRepository{
     public boolean updateEntity(HbnEntity item) {
         Transaction tx = null;
 
-        try( Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
 
             tx = session.beginTransaction();
             session.update(item);
             tx.commit();
-        }
-        catch (OptimisticLockException ole){
+        } catch (OptimisticLockException ole) {
             throw new EntityNotFoundException();
 
         } catch (HibernateException he) {
@@ -75,30 +72,26 @@ public abstract class AbstractRepository{
     }
 
     public boolean removeEntity(HbnEntity item) {
-
         Transaction tx = null;
 
-        try ( Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
 
             tx = session.beginTransaction();
             session.delete(item);
             tx.commit();
-        }
-        catch(OptimisticLockException ole){
+        } catch (OptimisticLockException ole) {
             throw new EntityNotFoundException();
-        }
-        catch (HibernateException he){
+        } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
         }
         return true;
     }
 
-    public List<HbnEntity> queryToDb (HqlSpecification spec) {
+    public List<HbnEntity> queryToDb(HqlSpecification spec) {
         List result = new ArrayList<>();
         Transaction tx = null;
-        try( Session session = sessionFactory.openSession()){
-
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
             result = session
                     .createQuery(spec.toHqlQuery())
@@ -106,12 +99,10 @@ public abstract class AbstractRepository{
             tx.commit();
 
             if (result.isEmpty()) throw new EntityNotFoundException();
-        }
-        catch (OptimisticLockException ole){
+        } catch (OptimisticLockException ole) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
-        }
-        catch (HibernateException he) {
+        } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
         }
@@ -119,20 +110,21 @@ public abstract class AbstractRepository{
     }
 
     //To be able to do query of different types of objects in the repositories
-    public Set<HbnEntity> queryToDb (List<HqlSpecification> specs){
+    public Set<HbnEntity> queryToDb(List<HqlSpecification> specs) {
         Set<HbnEntity> result = new HashSet<>();
         Transaction tx = null;
 
-        try( Session session = sessionFactory.openSession()){
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
-            for (HqlSpecification spec : specs){
+            for (HqlSpecification spec : specs) {
                 result.add((HbnEntity) session
                         .createQuery(spec.toHqlQuery())
-                        .list().get(0));
+                        .list()
+                        .get(0));
             }
             tx.commit();
 
-        } catch (OptimisticLockException|IndexOutOfBoundsException ex){
+        } catch (OptimisticLockException | IndexOutOfBoundsException ex) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
         } catch (HibernateException he) {
@@ -143,19 +135,19 @@ public abstract class AbstractRepository{
     }
 
     //Finds the corresponding hibernate entity tags with the provided IDs
-    public Set<HbnTag> getHbnTagSet(List<Tag> userTags){
+    public Set<HbnTag> getHbnTagSet(List<Tag> userTags) {
         Set<HbnTag> hbnTagSet = new HashSet<>();
         List<HqlSpecification> specList = new ArrayList<>();
         for (Tag tags : userTags) specList.add(new GetTagByIdSpec(tags.getId()));
         Set<HbnEntity> hbnEntitySet = queryToDb(specList);
-        for (HbnEntity pojo : hbnEntitySet) hbnTagSet.add((HbnTag)pojo);
+        for (HbnEntity pojo : hbnEntitySet) hbnTagSet.add((HbnTag) pojo);
         return hbnTagSet;
     }
 
-    public List<Tag> toTagList(Set<HbnTag> tagSet){
+    public List<Tag> toTagList(Set<HbnTag> tagSet) {
         List<Tag> tagList = new ArrayList<>();
 
-        for (HbnTag hbnTag : tagSet){
+        for (HbnTag hbnTag : tagSet) {
             tagList.add(new Tag(
                     (int) hbnTag.getId(),
                     hbnTag.getTagName(),
@@ -166,7 +158,7 @@ public abstract class AbstractRepository{
         return tagList;
     }
 
-    public HbnUser toHbnUser(User user){
+    public HbnUser toHbnUser(User user) {
         return new HbnUser(
                 user.getFirstName(),
                 user.getLastName(),
@@ -177,9 +169,9 @@ public abstract class AbstractRepository{
         );
     }
 
-    public User toUser(HbnUser hbnUser){
+    public User toUser(HbnUser hbnUser) {
         return new User(
-                (int)hbnUser.getId(),
+                (int) hbnUser.getId(),
                 hbnUser.getFirstName(),
                 hbnUser.getLastName(),
                 hbnUser.getEmail(),
@@ -190,28 +182,38 @@ public abstract class AbstractRepository{
         );
     }
 
-    public List<Integer> toGroupIdList(Set<HbnBachelorGroup> hbnBachelorGroupSet){
+    public Document toDocument(HbnDocument hbnDocument) {
+        return new Document(
+                (int) hbnDocument.getId(),
+                (int) hbnDocument.getUser().getId(),
+                hbnDocument.getTitle(),
+                "",
+                hbnDocument.getPath(),
+                hbnDocument.getTags() != null ? toTagList(hbnDocument.getTags()) : new ArrayList<>()
+        );
+    }
+
+    public List<Integer> toGroupIdList(Set<HbnBachelorGroup> hbnBachelorGroupSet) {
         List<Integer> groupIdList = new ArrayList<>();
-        if (hbnBachelorGroupSet != null){
-            for(HbnBachelorGroup hbnBachelorGroup : hbnBachelorGroupSet){
+        if (hbnBachelorGroupSet != null) {
+            for (HbnBachelorGroup hbnBachelorGroup : hbnBachelorGroupSet) {
                 groupIdList.add((int) hbnBachelorGroup.getId());
             }
         }
         return groupIdList;
     }
 
-    private void buildSessionFactory(){
+    private void buildSessionFactory() {
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
-            sessionFactory = new MetadataSources( registry )
+            sessionFactory = new MetadataSources(registry)
                     .buildMetadata()
                     .buildSessionFactory();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            StandardServiceRegistryBuilder.destroy( registry );
+            StandardServiceRegistryBuilder.destroy(registry);
             throw new ExceptionInInitializerError(e);
         }
     }

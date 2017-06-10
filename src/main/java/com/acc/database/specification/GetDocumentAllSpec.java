@@ -7,8 +7,6 @@ import java.util.StringJoiner;
  * Created by nguyen.duy.j.khac on 21.02.2017.
  */
 public class GetDocumentAllSpec implements HqlSpecification  {
-
-
     List<String> tags;
 
     public GetDocumentAllSpec(List<String> tags) {

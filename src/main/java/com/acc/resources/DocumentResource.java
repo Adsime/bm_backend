@@ -3,6 +3,7 @@ package com.acc.resources;
 import com.acc.models.Document;
 import com.acc.service.DocumentService;
 import com.google.gson.Gson;
+import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Before;
 
@@ -22,6 +23,8 @@ import java.util.List;
 @Path("documents")
 public class DocumentResource {
 
+    private static Logger LOGGER = Logger.getLogger("application");
+
     @Inject
     public DocumentService service;
 
@@ -38,14 +41,15 @@ public class DocumentResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getDocument(@PathParam("id") int id, @Context HttpHeaders headers) {
-        System.out.println("ACTION: GET - document | id = " + id);
+        LOGGER.info("ACTION: GET - document | id = " + id);
         try {
             Document document = service.getDocument(id);
             if(document == null) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
             return Response.ok(document.toString()).build();
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -53,14 +57,15 @@ public class DocumentResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllDocuments(@Context HttpHeaders headers) {
-        System.out.println("ACTION: GET - document | ALL");
+        LOGGER.info("ACTION: GET - document | ALL");
         try {
             List<Document> documents = service.getAllDocuments();
             if(documents == null || documents.isEmpty()) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
             return Response.ok(new Gson().toJson(documents)).build();
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -68,7 +73,7 @@ public class DocumentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newDocument(@Context HttpHeaders headers, JsonObject o) {
-        System.out.println("ACTION: POST - document | document:\n" + o);
+        LOGGER.info("ACTION: POST - document | document:\n" + o);
         try {
             Document document = new Gson().fromJson(o.toString(), Document.class);
             document = service.newDocument(document);
@@ -77,7 +82,8 @@ public class DocumentResource {
             }
             return Response.status(HttpStatus.NOT_ACCEPTABLE_406).build();
 
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -85,14 +91,15 @@ public class DocumentResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateDocument(@Context HttpHeaders headers, JsonObject o) {
-        System.out.println("ACTION: UPDATE - document | document:\n" + o);
+        LOGGER.info("ACTION: UPDATE - document | document:\n" + o);
         try {
             Document document = new Gson().fromJson(o.toString(), Document.class);
             if(!service.updateDocument(document)) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
             return Response.ok().build();
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
@@ -100,13 +107,14 @@ public class DocumentResource {
     @DELETE
     @Path("{id}")
     public Response deleteDocument(@PathParam("id") int id, @Context HttpHeaders headers) {
-        System.out.println("ACTION: DELETE - document | id = " + id);
+        LOGGER.info("ACTION: DELETE - document | id = " + id);
         try {
             if(!service.deleteDocument(id)) {
                 return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
             return Response.status(HttpStatus.NO_CONTENT_204).build();
-        } catch (InternalServerErrorException isee) {
+        } catch (Exception e) {
+            LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }

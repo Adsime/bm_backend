@@ -2,6 +2,7 @@ package com.acc.service;
 
 import com.acc.database.repository.AccountRepositoryImpl;
 import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.google.GoogleService;
 import com.acc.google.MailHandler;
@@ -16,9 +17,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
 
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -44,6 +47,9 @@ public class AccountService {
 
     @Context
     private ContainerRequestContext context;
+
+    @Context
+    private HttpServletRequest request;
 
     public void setMailHandler(MailHandler mailHandler) {
         this.mailHandler = mailHandler;
@@ -86,15 +92,29 @@ public class AccountService {
         return Response.status(status).entity(content).build();
     }
 
+    public Response resetPassword(String email) {
+        try {
+            String eid = email.split("@")[0];
+            User user = repo.getAccount(eid);
+            return resetPassword(user, -1);
+        } catch (Exception e) {
+            LOGGER.error("Reset password attempt made on email: "
+                    + email + " while is not a registered email");
+        }
+        return Response.ok("Mail sendt!").build();
+    }
+
     /**
      * Uses a predefined string of html to create an email message object
      * which is handed to MailHandler for sending.
      * @param id long
      * @return Response
      */
-    public Response resetPassword(long id) {
+    public Response resetPassword(User user, long id) {
         try {
-            User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
+            if(user == null) {
+                user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
+            }
             Token token = tokenHandler.generateRefreshToken(user);
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
                     ConfigLoader.load("apiMail"),
@@ -125,5 +145,17 @@ public class AccountService {
                 "<p>Trykk på følgende link for å sette ditt nye passord:</p>" +
                 "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +
                 "\">Linken</a> er aktiv i 30 minutter</p>";
+    }
+
+    public Response initApi(JsonObject o) {
+        try {
+            String eid = o.getString("username");
+            String pw = o.getString("password");
+            User user = userRepo.getQuery(new GetUserByEIdSpec(eid)).get(0);
+            repo.register(user.getEnterpriseID(), pw, user);
+            return Response.ok().build();
+        } catch (Exception e) {
+            return Response.status(HttpStatus.FORBIDDEN_403).build();
+        }
     }
 }
