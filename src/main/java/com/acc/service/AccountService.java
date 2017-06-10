@@ -10,6 +10,7 @@ import com.acc.jsonWebToken.TokenHandler;
 import com.acc.models.Credentials;
 import com.acc.models.Token;
 import com.acc.models.User;
+import com.acc.providers.ConfigLoader;
 import com.acc.requestContext.BMSecurityContext;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.http.HttpStatus;
@@ -96,13 +97,9 @@ public class AccountService {
             User user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
             Token token = tokenHandler.generateRefreshToken(user);
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
-                    "potasian17@gmail.com",
+                    ConfigLoader.load("apiMail"),
                     "Password reset",
-                    "<h1>Password reset - Bachelor manager</h1>" +
-                            "</br></br>" +
-                            "<p>Trykk på følgende link for å sette ditt nye passord:</p>" +
-                            "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +
-                            "\">Linken</a> er aktiv i 30 minutter</p>");
+                    createMailBody(token));
             mailHandler.sendMessage("potasian17@gmail.com", message);
         }catch (EntityNotFoundException enfe) {
             LOGGER.error("Attempt to get user failed in AccountService.resetPassword", enfe);
@@ -112,7 +109,21 @@ public class AccountService {
             return Response.status(HttpStatus.SERVICE_UNAVAILABLE_503)
                     .entity("Var ikke i stand til å sende mail.")
                     .build();
+        } catch (Exception e) {
+            LOGGER.error("Unable to load property");
+            return Response.status(HttpStatus.SERVICE_UNAVAILABLE_503)
+                    .entity("Var ikke i stand til å sende mail på grunn av " +
+                            "intern error. Vennligst kontakt administrator.")
+                    .build();
         }
         return Response.ok("Mail sendt!").build();
+    }
+
+    private String createMailBody(Token token) {
+        return "<h1>Password reset - Bachelor manager</h1>" +
+                "</br></br>" +
+                "<p>Trykk på følgende link for å sette ditt nye passord:</p>" +
+                "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +
+                "\">Linken</a> er aktiv i 30 minutter</p>";
     }
 }
