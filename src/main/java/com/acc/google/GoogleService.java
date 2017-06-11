@@ -25,7 +25,7 @@ import java.util.List;
 @SuppressWarnings("all")
 public class GoogleService {
 
-    public static final String applicationPath = "http://localhost:5555/resetPassord/";
+    //public static final String applicationPath = "http://localhost:5555/resetPassord/";
 
     /** Application name. */
     private static final String APPLICATION_NAME =

@@ -38,6 +38,7 @@ public abstract class AbstractRepository {
             tx = session.beginTransaction();
             itemId = (long) session.save(item);
             tx.commit();
+            session.close();
         } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
@@ -60,6 +61,7 @@ public abstract class AbstractRepository {
             tx = session.beginTransaction();
             session.update(item);
             tx.commit();
+            session.close();
         } catch (OptimisticLockException ole) {
             throw new EntityNotFoundException();
 
@@ -79,6 +81,7 @@ public abstract class AbstractRepository {
             tx = session.beginTransaction();
             session.delete(item);
             tx.commit();
+            session.close();
         } catch (OptimisticLockException ole) {
             throw new EntityNotFoundException();
         } catch (HibernateException he) {
@@ -97,7 +100,7 @@ public abstract class AbstractRepository {
                     .createQuery(spec.toHqlQuery())
                     .list();
             tx.commit();
-
+            session.close();
             if (result.isEmpty()) throw new EntityNotFoundException();
         } catch (OptimisticLockException ole) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
@@ -123,7 +126,7 @@ public abstract class AbstractRepository {
                         .get(0));
             }
             tx.commit();
-
+            session.close();
         } catch (OptimisticLockException | IndexOutOfBoundsException ex) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
