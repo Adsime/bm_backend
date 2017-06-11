@@ -123,7 +123,7 @@ public class AccountService {
                     mail,
                     "Password reset",
                     createMailBody(token, url));
-            mailHandler.sendMessage("potasian17@gmail.com", message);
+            mailHandler.sendMessage(mail, message);
         }catch (EntityNotFoundException enfe) {
             LOGGER.error("Attempt to get user failed in AccountService.resetPassword", enfe);
             // No special message to retain integrity of the application. It will look as if a message was sent

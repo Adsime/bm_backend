@@ -8,6 +8,7 @@ import java.util.Base64;
 /**
  * Created by melsom.adrian on 10.02.2017.
  */
+@Deprecated
 public class GeneralService {
 
 

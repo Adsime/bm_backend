@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 23.03.2017.
  */
-public class FileService extends GeneralService {
+public class FileService {
 
     private static Logger LOGGER = Logger.getLogger("application");
 
@@ -84,8 +84,7 @@ public class FileService extends GeneralService {
                 try {
                     item.setTags(tagRepo.getQuery(new GetTagsWithDocumentIdsSpec(item.getFile().getId())));
                 } catch (EntityNotFoundException enfe) {
-                    LOGGER.error("There has been an issue in the persistence around tags. " +
-                            "Look into this immediately!", enfe);
+                    LOGGER.error("There has been an issue in the persistence around tags.", enfe);
                 }
             });
             return Response.status(HttpStatus.OK_200).entity(new Gson().toJson(files)).build();
@@ -161,7 +160,7 @@ public class FileService extends GeneralService {
             Logger.getRootLogger().setLevel(Level.ERROR);
             LOGGER.setLevel(Level.ERROR);
             WordprocessingMLPackage wordprocessingMLPackage = WordprocessingMLPackage.createPackage();
-            file = java.io.File.createTempFile("asdasd", ".docx");
+            file = java.io.File.createTempFile("temp", ".docx");
             Docx4J.save(wordprocessingMLPackage, file, Docx4J.FLAG_SAVE_ZIP_FILE);
             fileHandler.createFile(id, file);
 

@@ -20,6 +20,7 @@ import java.util.List;
  * Created by melsom.adrian on 03.02.2017.
  */
 
+@Deprecated
 @Path("documents")
 public class DocumentResource {
 

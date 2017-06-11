@@ -33,16 +33,18 @@ public abstract class AbstractRepository {
     public long addEntity(HbnEntity item) {
         long itemId;
         Transaction tx = null;
-
-        try (Session session = sessionFactory.openSession()) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             itemId = (long) session.save(item);
             tx.commit();
-            session.close();
         } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
             return 0;
+        } finally {
+            if(session != null) session.close();
         }
         return itemId;
     }
@@ -55,13 +57,12 @@ public abstract class AbstractRepository {
      */
     public boolean updateEntity(HbnEntity item) {
         Transaction tx = null;
-
-        try (Session session = sessionFactory.openSession()) {
-
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.update(item);
             tx.commit();
-            session.close();
         } catch (OptimisticLockException ole) {
             throw new EntityNotFoundException();
 
@@ -69,24 +70,27 @@ public abstract class AbstractRepository {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
             return false;
+        } finally {
+            if(session != null) session.close();
         }
         return true;
     }
 
     public boolean removeEntity(HbnEntity item) {
         Transaction tx = null;
-
-        try (Session session = sessionFactory.openSession()) {
-
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             session.delete(item);
             tx.commit();
-            session.close();
         } catch (OptimisticLockException ole) {
             throw new EntityNotFoundException();
         } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
+        } finally {
+            if(session != null) session.close();
         }
         return true;
     }
@@ -94,13 +98,14 @@ public abstract class AbstractRepository {
     public List<HbnEntity> queryToDb(HqlSpecification spec) {
         List result = new ArrayList<>();
         Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             result = session
                     .createQuery(spec.toHqlQuery())
                     .list();
             tx.commit();
-            session.close();
             if (result.isEmpty()) throw new EntityNotFoundException();
         } catch (OptimisticLockException ole) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
@@ -108,6 +113,8 @@ public abstract class AbstractRepository {
         } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
+        } finally {
+            if(session != null) session.close();
         }
         return result;
     }
@@ -116,8 +123,9 @@ public abstract class AbstractRepository {
     public Set<HbnEntity> queryToDb(List<HqlSpecification> specs) {
         Set<HbnEntity> result = new HashSet<>();
         Transaction tx = null;
-
-        try (Session session = sessionFactory.openSession()) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
             tx = session.beginTransaction();
             for (HqlSpecification spec : specs) {
                 result.add((HbnEntity) session
@@ -126,13 +134,14 @@ public abstract class AbstractRepository {
                         .get(0));
             }
             tx.commit();
-            session.close();
         } catch (OptimisticLockException | IndexOutOfBoundsException ex) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             throw new EntityNotFoundException();
         } catch (HibernateException he) {
             if (tx != null && tx.getStatus() == TransactionStatus.ACTIVE) tx.rollback();
             he.printStackTrace();
+        }finally {
+            if(session != null) session.close();
         }
         return result;
     }

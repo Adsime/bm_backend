@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 10.02.2017.
  */
-public class UserService extends GeneralService {
+public class UserService {
 
     private static Logger LOGGER = Logger.getLogger("application");
 

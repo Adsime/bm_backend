@@ -18,7 +18,7 @@ import java.util.List;
  * Created by melsom.adrian on 25.01.2017.
  */
 
-public class GroupService extends GeneralService{
+public class GroupService {
 
     @Inject
     public GroupRepository groupRepository;

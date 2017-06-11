@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by melsom.adrian on 10.02.2017.
  */
+@Deprecated
 public class DocumentService extends GeneralService {
 
     @Inject
