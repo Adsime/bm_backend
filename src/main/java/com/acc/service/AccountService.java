@@ -26,6 +26,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by melsom.adrian on 28.03.2017.
@@ -120,6 +121,7 @@ public class AccountService {
             String b = request.getRemoteAddr();
             String c = request.getContextPath();
             String d = request.getHeader("X-Forwarded-For").split(",")[0];
+            System.out.println(Arrays.asList(a,b,c,d));
             String mail = ConfigLoader.load("apiMail");
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
                     mail,

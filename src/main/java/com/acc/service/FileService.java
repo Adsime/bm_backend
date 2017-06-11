@@ -151,11 +151,15 @@ public class FileService extends GeneralService {
      */
     public String getFileAsHtml(String id) {
         java.io.File file = null;
+        Level rootLevel = Logger.getRootLogger().getLevel();
+        Level customLevel = LOGGER.getLevel();
+        Logger.getLogger("application").setLevel(Level.OFF);
         try {
             /* Log level changed manually here to prevent Docx4j from writing debug
              * lines directly in the parsed file.
              */
             Logger.getRootLogger().setLevel(Level.ERROR);
+            LOGGER.setLevel(Level.ERROR);
             WordprocessingMLPackage wordprocessingMLPackage = WordprocessingMLPackage.createPackage();
             file = java.io.File.createTempFile("asdasd", ".docx");
             Docx4J.save(wordprocessingMLPackage, file, Docx4J.FLAG_SAVE_ZIP_FILE);
@@ -167,6 +171,8 @@ public class FileService extends GeneralService {
         } catch (Docx4JException de) {
             LOGGER.error("Error while parsing from .docx to html", de);
         } finally {
+            LOGGER.setLevel(customLevel);
+            Logger.getRootLogger().setLevel(rootLevel);
             if(file != null) {
                 file.delete();
             }
@@ -288,7 +294,10 @@ public class FileService extends GeneralService {
      * @return java.io.File
      */
     private java.io.File createFileFromHtml(InputStream content, String name, String extension) {
+        Level level = LOGGER.getLevel();
         try {
+            LOGGER.setLevel(Level.OFF);
+            Logger.getRootLogger().setLevel(Level.OFF);
             WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
             // Main part of the document. Where the user info is put
             MainDocumentPart mdp = wordMLPackage.getMainDocumentPart();
@@ -305,12 +314,12 @@ public class FileService extends GeneralService {
 
             return file;
         } catch (Docx4JException de) {
-            Logger.getRootLogger().setLevel(Level.INFO);
             de.printStackTrace();
-            Logger.getRootLogger().setLevel(Level.ERROR);
         } catch (IOException ioe) {
 
         }
+        Logger.getRootLogger().setLevel(level);
+        LOGGER.setLevel(level);
         return null;
     }
 
@@ -358,8 +367,9 @@ public class FileService extends GeneralService {
         String fileName = fileDetail.getFileName();
         String[] split = fileName.split("\\.");
         String extension = "." + split[split.length - 1];
-        String type = findType(fileName, true);
-        String originalType = findType(fileName, false);
+        fileName = split[0];
+        String type = findType(fileName+extension, true);
+        String originalType = findType(fileName+extension, false);
 
         User user = ((BMSecurityContext)context.getSecurityContext()).getAccountUser();
 
@@ -377,8 +387,7 @@ public class FileService extends GeneralService {
                     .entity(feedback.toJson()).build();
         } if(extension.toLowerCase().equals(".html")) {
             Response response = uploadAsHtml(uploadedInputStream,
-                    fileName.replace(".html", ""),
-                    parent, user.getId(), tagIdList);
+                    fileName, parent, user.getId(), tagIdList);
             return response;
         }
 
@@ -420,6 +429,7 @@ public class FileService extends GeneralService {
         if(file != null) {
             String path = saveFile(file, name, findType(file.getName(), true),
                     findType(file.getName(), false), parent);
+            name = name.split("\\.")[0];
             Document document = createDocument(authorId, name, path, tagIdList);
             Feedback feedback = saveToDB(document);
             file.delete();

@@ -75,7 +75,9 @@ public class FileResource {
     @Produces(MediaType.TEXT_HTML)
     public Response getFileAsHtml(@PathParam("id") String id) {
         try {
-            return Response.ok(service.getFileAsHtml(id)).build();
+            String s = service.getFileAsHtml(id);
+            s.replace("TO HIDE THESE MESSAGES, TURN OFF debug level logging for org.docx4j.convert.out.common.writer.AbstractMessageWriter", "");
+            return Response.ok(s).build();
         } catch (Exception e) {
             LOGGER.error("Unexpected exception!", e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
