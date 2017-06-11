@@ -116,15 +116,12 @@ public class AccountService {
                 user = userRepo.getQuery(new GetUserByIdSpec(id)).get(0);
             }
             Token token = tokenHandler.generateRefreshToken(user);
-            String a = request.getRemoteHost();
-            String b = request.getRemoteAddr();
-            String c = request.getContextPath();
-            String d = request.getHeader("X-Forwarded-For").split(",")[0];
+            String url = ConfigLoader.load("appUrl");
             String mail = ConfigLoader.load("apiMail");
             MimeMessage message = mailHandler.createEmail(user.getEnterpriseID() + "@accenture.com",
                     mail,
                     "Password reset",
-                    createMailBody(token));
+                    createMailBody(token, url));
             mailHandler.sendMessage("potasian17@gmail.com", message);
         }catch (EntityNotFoundException enfe) {
             LOGGER.error("Attempt to get user failed in AccountService.resetPassword", enfe);
@@ -144,11 +141,11 @@ public class AccountService {
         return Response.ok("Mail sendt!").build();
     }
 
-    private String createMailBody(Token token) {
+    private String createMailBody(Token token, String url) {
         return "<h1>Password reset - Bachelor manager</h1>" +
                 "</br></br>" +
                 "<p>Trykk på følgende link for å sette ditt nye passord:</p>" +
-                "<p><a href=\"" + GoogleService.applicationPath + Coder.encode(token.getToken()) +
+                "<p><a href=\"" + url + Coder.encode(token.getToken()) +
                 "\">Linken</a> er aktiv i 30 minutter</p>";
     }
 
