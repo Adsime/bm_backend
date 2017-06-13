@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  database:
+    build: ./dbdir/
+    volumes:
+      - ./dbdir/database:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+
+  api:
+    image: payara/server-full
+    volumes:
+      - ./dep:/opt/payara41/glassfish/domains/domain1/.credentials/StoredCredential
+      - ./dep:/opt/payara41/glassfish/domains/domain1/autodeploy
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+
+  app:
+    build: ./fdep/
+    volumes:
+      - ./fdep/prod:/var/www/html
+    ports:
+      - 80:80
+    depends_on:
+      - api

@@ -77,11 +77,4 @@ public class  AccountResource {
         }
         return service.resetPassword(email);
     }
-
-    @POST
-    @Path("init")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response initApi(JsonObject o) {
-        return service.initApi(o);
-    }
 }

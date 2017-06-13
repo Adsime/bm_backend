@@ -94,11 +94,15 @@ public class TagRepository extends AbstractRepository implements Repository<Tag>
         return result;
     }
 
-    private boolean exists(String tagName){
-        List<Tag> existingTags = getQuery(new GetTagAllSpec());
-        return existingTags
-                .stream()
-                .anyMatch(tag -> tag.getName().toLowerCase().equals(tagName.toLowerCase()));
+    private boolean exists(String tagName) {
+        try {
+            List<Tag> existingTags = getQuery(new GetTagAllSpec());
+            return existingTags
+                    .stream()
+                    .anyMatch(tag -> tag.getName().toLowerCase().equals(tagName.toLowerCase()));
+        } catch (EntityNotFoundException enfe) {
+            return false;
+        }
     }
 
     private boolean canDelete(HbnTag tag){

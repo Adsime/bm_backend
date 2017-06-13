@@ -2,6 +2,7 @@ package com.acc.service;
 
 import com.acc.database.repository.AccountRepositoryImpl;
 import com.acc.database.repository.UserRepository;
+import com.acc.database.specification.GetUserAllSpec;
 import com.acc.database.specification.GetUserByEIdSpec;
 import com.acc.database.specification.GetUserByIdSpec;
 import com.acc.google.GoogleService;
@@ -27,6 +28,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by melsom.adrian on 28.03.2017.
@@ -61,15 +64,20 @@ public class AccountService {
     }
 
     public Response verifyUser(String encodedCreds) {
+        Credentials credentials = new Credentials(encodedCreds);
+        System.out.println(credentials);
+        User user;
+        String ret = null;
         try {
-            Credentials credentials = new Credentials(encodedCreds);
-            User user = repo.matchPassword(credentials.getUsername(), credentials.getPassword());
-            Token token = getToken(user);
-            return Response.ok(token.toString()).build();
+            user = repo.matchPassword(credentials.getUsername(), credentials.getPassword());
         } catch (IllegalArgumentException | EntityNotFoundException e) {
             LOGGER.error("Exception in AccountService.verifyUser. Trace:\n", e);
-            return Response.status(HttpStatus.NOT_FOUND_404).entity(e.getMessage()).build();
+            user = initApi(credentials);
+            ret = e.getMessage();
         }
+        if(user == null) return Response.status(HttpStatus.NOT_FOUND_404).entity(ret).build();
+        Token token = getToken(user);
+        return Response.ok(token.toString()).build();
     }
 
     public Token getToken(User user) {
@@ -150,15 +158,23 @@ public class AccountService {
                 "\">Linken</a> er aktiv i 30 minutter</p>";
     }
 
-    public Response initApi(JsonObject o) {
+    public User initApi(Credentials credentials) {
         try {
-            String eid = o.getString("username");
-            String pw = o.getString("password");
-            User user = userRepo.getQuery(new GetUserByEIdSpec(eid)).get(0);
-            repo.register(user.getEnterpriseID(), pw, user);
-            return Response.ok().build();
-        } catch (Exception e) {
-            return Response.status(HttpStatus.FORBIDDEN_403).build();
+            //Test to see if there are any users on the API
+            userRepo.getQuery(new GetUserAllSpec());
+            return null;
+        } catch (EntityNotFoundException enfe) {
+            try {
+                LOGGER.info("Initializing API");
+                String email = ConfigLoader.load("apiMail");
+                User user = new User(credentials.getUsername(), credentials.getUsername(), email,
+                        ConfigLoader.load("defaultPhone"), credentials.getUsername(), "9", Collections.emptyList());
+                repo.register(user.getEnterpriseID(), credentials.getPassword(), userRepo.add(user));
+                return user;
+            } catch (Exception e) {
+                LOGGER.error("Error initializing the API", e);
+                return null;
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ public class TokenHandler {
     public static final String USER_ACCESS_LEVEL = "UAL";
     public static final String USER = "USER";
 
-    public static final String API_SECRET = "secret";
+    public static final String API_SECRET = "ahahtthaejy36h3q636b63j6j6sjghdklustva";
 
     @Inject
     private ContextUser contextUser;
